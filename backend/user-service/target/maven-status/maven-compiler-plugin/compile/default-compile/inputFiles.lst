@@ -1,0 +1,16 @@
+C:\all\other\league-hub\backend\user-service\src\main\java\org\league\app\validation\EmailСustom.java
+C:\all\other\league-hub\backend\user-service\src\main\java\org\league\app\mapper\UserMapper.java
+C:\all\other\league-hub\backend\user-service\src\main\java\org\league\app\service\UserService.java
+C:\all\other\league-hub\backend\user-service\src\main\java\org\league\app\UserServiceApplication.java
+C:\all\other\league-hub\backend\user-service\src\main\java\org\league\app\validation\EditAction.java
+C:\all\other\league-hub\backend\user-service\src\main\java\org\league\app\database\entity\User.java
+C:\all\other\league-hub\backend\user-service\src\main\java\org\league\app\database\entity\Role.java
+C:\all\other\league-hub\backend\user-service\src\main\java\org\league\app\dto\UserCreateEditDto.java
+C:\all\other\league-hub\backend\user-service\src\main\java\org\league\app\controller\UserController.java
+C:\all\other\league-hub\backend\user-service\src\main\java\org\league\app\dto\UserReadDto.java
+C:\all\other\league-hub\backend\user-service\src\main\java\org\league\app\validation\CreateAction.java
+C:\all\other\league-hub\backend\user-service\src\main\java\org\league\app\database\repository\UserRepository.java
+C:\all\other\league-hub\backend\user-service\src\main\java\org\league\app\validation\AgeLimitValidator.java
+C:\all\other\league-hub\backend\user-service\src\main\java\org\league\app\validation\EmailCustomValidator.java
+C:\all\other\league-hub\backend\user-service\src\main\java\org\league\app\config\SecurityConfig.java
+C:\all\other\league-hub\backend\user-service\src\main\java\org\league\app\validation\AgeLimit.java
