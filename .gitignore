@@ -1,4 +1,5 @@
 # JetBrains IDEs
 .idea
 *.jar
+target/
 *.iml
