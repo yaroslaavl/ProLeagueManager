@@ -11,4 +11,5 @@ spring:
   config:
     import: 'consul:'
   application:
-    name: gateway
+    name: user-service
+
