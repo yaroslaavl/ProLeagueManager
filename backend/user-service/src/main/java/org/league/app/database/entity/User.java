@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -42,9 +41,9 @@ public class User {
     @Column(nullable = false, name = "birth_date")
     private LocalDate birthDate;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false, name = "role")
-    private Role role;
+    @ManyToOne
+    @JoinColumn(name = "role_group_id")
+    private RoleGroup roleGroup;
 
     @Column(name = "is_verified")
     private Boolean isVerified;
