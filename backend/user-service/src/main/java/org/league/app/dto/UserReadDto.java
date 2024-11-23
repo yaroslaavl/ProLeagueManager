@@ -1,7 +1,7 @@
 package org.league.app.dto;
 
 import lombok.Value;
-import org.league.app.database.entity.Role;
+import org.league.app.database.entity.RoleGroup;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
@@ -17,7 +17,7 @@ public class UserReadDto {
    String lastName;
    @DateTimeFormat(pattern = "yyyy-MM-dd")
    LocalDate birthDate;
-   Role role;
+   RoleGroup roleGroup;
    Boolean isVerified;
 
 }
