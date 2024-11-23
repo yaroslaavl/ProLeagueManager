@@ -2,11 +2,13 @@ package org.league.app.service;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.league.app.database.entity.Role;
+import org.league.app.database.entity.RoleGroup;
 import org.league.app.database.entity.User;
+import org.league.app.database.repository.RoleGroupRepository;
 import org.league.app.database.repository.UserRepository;
 import org.league.app.dto.UserCreateEditDto;
 import org.league.app.dto.UserReadDto;
+import org.league.app.handler.RoleGroupNotFound;
 import org.league.app.mapper.UserMapper;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -29,17 +31,20 @@ import java.util.UUID;
 public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
+    private final RoleGroupRepository roleGroupRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public UserReadDto create(UserCreateEditDto userCreateEditDto){
         String activationToken = UUID.randomUUID().toString();
+        RoleGroup user = roleGroupRepository.findByName("User")
+                .orElseThrow(() -> new RoleGroupNotFound("Group not found"));
 
         return Optional.of(userCreateEditDto)
                 .map(dto -> {
                     User entity = userMapper.toEntity(dto, passwordEncoder);
-                    entity.setRole(Role.USER);
+                    entity.setRoleGroup(user);
                     entity.setIsVerified(false);
                     entity.setEmailVerificationToken(activationToken);
                     return userRepository.saveAndFlush(entity);
@@ -56,7 +61,7 @@ public class UserService implements UserDetailsService {
         return userRepository.findByUsername(username)
                 .map(user -> {
                     Set<GrantedAuthority> authorities = new HashSet<>();
-                    authorities.add(new SimpleGrantedAuthority(user.getRole().toString()));
+                    authorities.add(new SimpleGrantedAuthority(user.getRoleGroup().getName()));
                     return new org.springframework.security.core.userdetails.User(
                             user.getUsername(),
                             user.getPassword(),

@@ -2,11 +2,8 @@ package org.league.app.dto;
 
 import jakarta.validation.constraints.*;
 import lombok.*;
-import org.league.app.database.entity.Role;
-import org.league.app.validation.AgeLimit;
-import org.league.app.validation.CreateAction;
-import org.league.app.validation.EditAction;
-import org.league.app.validation.EmailСustom;
+import org.league.app.database.entity.RoleGroup;
+import org.league.app.validation.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
@@ -46,7 +43,7 @@ public class UserCreateEditDto {
     @AgeLimit(minAge = 5, minYear = 1924, message = "User has incorrect birth day", groups = {CreateAction.class, EditAction.class})
     LocalDate birthDate;
 
-    Role role;
+    RoleGroup roleGroup;
 
     Boolean isVerified;
 
