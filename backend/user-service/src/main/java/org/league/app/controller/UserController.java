@@ -14,11 +14,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-
 @Slf4j
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/userLeague")
+@RequestMapping("/api/user")
 public class UserController {
 
     private final UserService userService;
@@ -44,5 +43,12 @@ public class UserController {
         }
         var userReadDto = userService.create(userCreateEditDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(userReadDto);
+    }
+
+    @GetMapping("/activate")
+    public ResponseEntity<Boolean> activate(@RequestParam("token") String token){
+        boolean confirmation = userService.emailConfirmation(token);
+        log.info("'{}' is activated",token);
+        return ResponseEntity.ok(confirmation);
     }
 }
