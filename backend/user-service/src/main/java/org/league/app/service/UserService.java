@@ -8,8 +8,11 @@ import org.league.app.database.repository.RoleGroupRepository;
 import org.league.app.database.repository.UserRepository;
 import org.league.app.dto.UserCreateEditDto;
 import org.league.app.dto.UserReadDto;
+import org.league.app.feign.EmailRequest;
+import org.league.app.feign.NotificationFeignClient;
 import org.league.app.handler.RoleGroupNotFound;
 import org.league.app.mapper.UserMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -34,14 +37,16 @@ public class UserService implements UserDetailsService {
     private final RoleGroupRepository roleGroupRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+    private final NotificationFeignClient notificationFeignClient;
 
     @Transactional
     public UserReadDto create(UserCreateEditDto userCreateEditDto){
         String activationToken = UUID.randomUUID().toString();
+
         RoleGroup user = roleGroupRepository.findByName("User")
                 .orElseThrow(() -> new RoleGroupNotFound("Group not found"));
 
-        return Optional.of(userCreateEditDto)
+        User newUser = Optional.of(userCreateEditDto)
                 .map(dto -> {
                     User entity = userMapper.toEntity(dto, passwordEncoder);
                     entity.setRoleGroup(user);
@@ -49,8 +54,21 @@ public class UserService implements UserDetailsService {
                     entity.setEmailVerificationToken(activationToken);
                     return userRepository.saveAndFlush(entity);
                 })
-                .map(userMapper::toDto)
                 .orElseThrow();
+
+        String confirmationLink = "http://localhost:8765/user/activate?token=" + activationToken;
+        notificationFeignClient.sendEmail(new EmailRequest(
+                userCreateEditDto.getEmail(),
+                "Confirm your email",
+                  "Click the link to confirm your account: " + confirmationLink
+        ));
+
+        log.info("Email: {}, Subject: {}, Body: {}",
+                userCreateEditDto.getEmail(),
+                "Confirm your email",
+                "Click the link to confirm your account: " + confirmationLink);
+
+        return userMapper.toDto(newUser);
     }
 
     @Override
@@ -69,5 +87,16 @@ public class UserService implements UserDetailsService {
                     );
                 })
                 .orElseThrow(() -> new UsernameNotFoundException("Failed to retrieve user:" + username));
+    }
+
+    @Transactional
+    public boolean emailConfirmation(String token){
+        User userByToken = userRepository.findByEmailVerificationToken(token)
+                .orElseThrow(() -> new UsernameNotFoundException("Email verification token not found"));
+
+            userByToken.setEmailVerificationToken(null);
+            userByToken.setIsVerified(true);
+            userRepository.saveAndFlush(userByToken);
+            return true;
     }
 }
