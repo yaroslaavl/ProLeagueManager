@@ -25,7 +25,7 @@ public class SecurityConfig {
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/userLeague/**","/api/userLeague/**", "/actuator/health").permitAll()
+                        .requestMatchers("/api/user/**", "/actuator/health").permitAll()
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults());
