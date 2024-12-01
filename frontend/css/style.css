@@ -1,0 +1,178 @@
+/* Общие стили */
+@font-face {
+  font-family: 'MyFont'; /* Уникальное имя для шрифта */
+  src: url('fonts/Inter-VariableFont_opsz,wght.ttf') format('ttf'),
+  url('fonts/Inter-Italic-VariableFont_opsz,wght.ttf') format('ttf'); /* Альтернативный формат */
+  font-weight: normal; /* Толщина шрифта */
+  font-style: normal;  /* Стиль шрифта */
+}
+
+/* Применение шрифта */
+
+
+body {
+  font-family: MyFont,sans-serif;
+  background-color: #f9f9f9;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.container {
+  width: 400px;
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.nav-links {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  font-weight: bold;
+  color: #333;
+}
+
+.nav-links a.active {
+  text-decoration: underline;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+form .form-row {
+  display: flex;
+  gap: 10px;
+}
+
+form .form-row input {
+  flex: 1;
+}
+
+form input {
+  display: flex;
+  width: 94.5%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+form button {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: #ffffff;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+form button:hover {
+  background-color: #0056b3;
+}
+
+/* Социальные кнопки */
+.social-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.social-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #ffffff;
+  color: #333333;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.social-button img {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+}
+
+.social-button.google {
+  border-color: #4285f4;
+}
+
+.social-button.google:hover {
+  background-color: #4285f4;
+  color: #ffffff;
+}
+
+.social-button.apple {
+  border-color: #333333;
+}
+
+.social-button.apple:hover {
+  background-color: #333333;
+  color: #ffffff;
+}
+
+/* Специальные элементы */
+.bold {
+  font-weight: bold;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 14px;
+  color: #007bff;
+}
+
+.link-row {
+  font-size: 12px;
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-decoration: none;
+}
+
+.link-row a {
+  text-decoration: none;
+  color: #007bff;
+}
+
+.link-row a:hover {
+  text-decoration: none;
+}
+form input:not(.exclude-style) {
+  display: flex;
+  width: 94.5%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}

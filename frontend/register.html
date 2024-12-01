@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/style.css">
+  <title>Rejestracja</title>
+</head>
+<body>
+<div class="container">
+  <div class="nav-links">
+    <a href="login.html">Logowanie</a>
+    <a href="#" class="active">Rejestracja</a>
+  </div>
+  <form action="#">
+    <input type="text" placeholder="Nazwa użytkownika" required>
+    <input type="email" placeholder="Adres e-mail" required>
+    <div class="form-row">
+      <input type="text" placeholder="Imię" required>
+      <input type="text" placeholder="Nazwisko" required>
+    </div>
+    <div class="form-row">
+      <input type="number" placeholder="Dzień" required>
+      <input type="number" placeholder="Miesiąc" required>
+      <input type="number" placeholder="Rok" required>
+    </div>
+    <input type="password" placeholder="Hasło" required>
+    <input type="password" placeholder="Powtórz hasło" required>
+    <button type="submit">Zarejestruj się</button>
+  </form>
+  <div class="social-buttons">
+    <button class="social-button google">
+      <img src="img/google-logo.png" alt="Google"> Kontynuuj z Google
+    </button>
+    <button class="social-button apple">
+      <img src="img/apple-logo.png" alt="Apple"> Kontynuuj z Apple
+    </button>
+  </div>
+  <div class="link-row"style="text-align: center;display: block">
+    <p>Masz konto? <a href="login.html">Zaloguj się</a></p>
+  </div>
+</div>
+</body>
+</html>
