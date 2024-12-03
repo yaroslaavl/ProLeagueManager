@@ -4,39 +4,58 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <script src="js/app.js" defer></script>
   <title>Logowanie</title>
 </head>
 <body>
 <div class="container">
   <div class="nav-links">
-    <a href="#" class="active">Logowanie</a>
-    <a href="register.html">Rejestracja</a>
+    <a href="#" class="link active">Logowanie</a>
+    <p>|</p>
+    <a href="register.html" class="link">Rejestracja</a>
   </div>
   <form action="#">
+
+
+
     <div style="position: relative;">
-      <p style="display:flex;margin:1px;font-size: 14px;font-weight:bold">Adres e-mail lub nazwa użytkownika</p>
-      <input type="text" placeholder="Adres e-mail lub nazwa użytkownika" required>
+
+      <div class="link-row" style="position: relative;">
+        <p style="margin: 1px;font-size: 16px;font-weight:bold">Adres e-mail lub nazwa użytkownika</p>
+      </div>
+
+      <div style="position: relative; display: flex; align-items: center;">
+        <input style="display: flex" type="text" placeholder="Adres e-mail lub nazwa użytkownika" required>
+      </div>
     </div>
+
     <div style="position: relative;">
 
       <div class="link-row" style="display: flex;text-align: right;margin: 1px">
-        <p style="margin: 1px;font-size: 14px;font-weight:bold">Hasło</p><a href="forgot-password.html">Nie pamiętasz hasła?</a>
+        <p style="margin: 1px;font-size: 16px;font-weight:bold">Hasło</p><a href="forgot-password.html">Nie pamiętasz hasła?</a>
       </div>
       <div style="position: relative; display: flex; align-items: center;">
         <input type="password" id="password" placeholder="Hasło" required style="padding-right: 30px; width: 100%;">
-        <img src="img/show-hide.png" alt="Pokaż/Ukryj" style="width: 20px; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;" onclick="togglePassword()">
+        <img src="img/show-hide.png" alt="Pokaż/Ukryj" style="width: 20px; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;" onclick="togglePassword('password', this)">
       </div>
     </div>
 
 
   </form>
-  <div class="exclude" style="margin-top: 1px; display: flex; ">
-    <input type="checkbox" id="remember-me" style="margin-top: 15px;margin-right: 5px;">
-    <label for="remember-me" style="margin-top: 14px; font-size: 14px; font-weight: bold;">Zapamiętaj mnie</label>
+  <div class="exclude" style="margin-top: 1px; display: flex; align-items: center;">
+    <input type="checkbox" id="remember-me">
+    <label for="remember-me" style="margin-top: 14px; font-size: 12px; margin-left: 5px;">Zapamiętaj mnie</label>
   </div>
+
   <form action="#"> <button style="margin-top: 15px" type="submit">Zaloguj się</button></form>
 
   <div class="social-buttons">
+    <div class="social-buttons">
+      <div class="line-text">
+        <p> Poprzez </p>
+      </div>
+
     <button class="social-button google">
       <img src="img/google-logo.png" alt="Google"> Kontynuuj z Google
     </button>
@@ -44,18 +63,13 @@
       <img src="img/apple-logo.png" alt="Apple"> Kontynuuj z Apple
     </button>
   </div>
-  <div class="link-row" style="text-align: center; margin: 10px 0;display: block">
+  <div class="link-row" style="text-align: center; margin: 0px 0;display: flex">
     <p style="text-align: center;">
-      Nie masz jesze konta? <a href="register.html" style="text-decoration: none; color: #007bff;">Załóż konto</a>
+      Nie masz jeszcze konta? <a href="register.html" style="text-decoration: none; color: #007bff;">Załóż konto</a>
     </p>
   </div>
 
 </div>
-<script>
-  function togglePassword() {
-    const passwordField = document.getElementById('password');
-    passwordField.type = passwordField.type === 'password' ? 'text' : 'password';
-  }
-</script>
+</div>
 </body>
 </html>

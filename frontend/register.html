@@ -3,32 +3,74 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+
+
   <link rel="stylesheet" href="css/style.css">
+  <script src="js/app.js" defer></script> <!-- Подключение скрипта -->
   <title>Rejestracja</title>
 </head>
 <body>
 <div class="container">
   <div class="nav-links">
-    <a href="login.html">Logowanie</a>
-    <a href="#" class="active">Rejestracja</a>
+
+      <a href="login.html" class="link" id="login">Logowanie</a>
+      <p>|</p>
+      <a href="#" class="link active" id="register">Rejestracja</a>
+
+
   </div>
   <form action="#">
+
+      <p style="display: block ;margin:0 0 -10px;font-size: 16px;font-weight:bold">Nazwa użytkownika</p>
     <input type="text" placeholder="Nazwa użytkownika" required>
+    <p style="display: block ;margin:0 0 -10px;font-size: 16px;font-weight:bold">Adres e-mail</p>
     <input type="email" placeholder="Adres e-mail" required>
+
+<div style="display: flex;gap: 175px">
+      <p style="display: block ;margin:0 0 -10px;font-size: 16px;font-weight:bold">Imię</p>
+      <p style="display: block ;margin:0 0 -10px;font-size: 16px;font-weight:bold">Nazwisko</p>
+</div>
+
     <div class="form-row">
-      <input type="text" placeholder="Imię" required>
+      <input  type="text" placeholder="Imię" required>
       <input type="text" placeholder="Nazwisko" required>
     </div>
+
+      <p style="display: block ;margin:0 0 -10px;font-size: 16px;font-weight:bold">Data urodzenia</p>
+
+
     <div class="form-row">
-      <input type="number" placeholder="Dzień" required>
-      <input type="number" placeholder="Miesiąc" required>
-      <input type="number" placeholder="Rok" required>
+      <input id="dayInput" type="number" min="1" max="31" placeholder="Dzień" required>
+      <input id="monthInput" type="number" min="1" max="12" placeholder="Miesiąc" required>
+      <input id="yearInput" type="number" min="1900" max="2100" placeholder="Rok" required>
     </div>
-    <input type="password" placeholder="Hasło" required>
-    <input type="password" placeholder="Powtórz hasło" required>
-    <button type="submit">Zarejestruj się</button>
+
+
+      <p  style="display: flex ;margin:0 0 -10px;font-size: 16px;font-weight:bold">Hasło</p>
+
+    <div style="position: relative;">
+      <input type="password" id="password1" placeholder="Hasło" required>
+      <img src="img/show-hide.png" alt="Pokaż hasło" class="password-toggle" style="width: 20px; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;"onclick="togglePassword('password1', this)">
+    </div>
+    <p style="display: block ;margin:0 0 -10px;font-size: 16px;font-weight:bold">Powtórz hasło</p>
+    <div style="position: relative;">
+
+      <input type="password" id="password2" placeholder="Powtórz hasło" required>
+      <img src="img/show-hide.png" alt="Pokaż hasło" class="password-toggle"style="width: 20px; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;" onclick="togglePassword('password2', this)">
+    </div>
+    <button type="submit" >Zarejestruj się</button>
   </form>
+
+
+
   <div class="social-buttons">
+    <div class="line-text">
+      <p> Poprzez </p>
+    </div>
+
+
     <button class="social-button google">
       <img src="img/google-logo.png" alt="Google"> Kontynuuj z Google
     </button>
@@ -36,7 +78,7 @@
       <img src="img/apple-logo.png" alt="Apple"> Kontynuuj z Apple
     </button>
   </div>
-  <div class="link-row"style="text-align: center;display: block">
+  <div class="link-row" style="text-align: center; display: block">
     <p>Masz konto? <a href="login.html">Zaloguj się</a></p>
   </div>
 </div>
