@@ -1,17 +1,32 @@
-/* Общие стили */
-@font-face {
-  font-family: 'MyFont'; /* Уникальное имя для шрифта */
-  src: url('fonts/Inter-VariableFont_opsz,wght.ttf') format('ttf'),
-  url('fonts/Inter-Italic-VariableFont_opsz,wght.ttf') format('ttf'); /* Альтернативный формат */
-  font-weight: normal; /* Толщина шрифта */
-  font-style: normal;  /* Стиль шрифта */
+body {
+  opacity: 0;
+  animation: fadeIn 0.3s forwards;
 }
 
-/* Применение шрифта */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
 
+.fade-out {
+  animation: fadeOut 0.3s forwards;
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
 
 body {
-  font-family: MyFont,sans-serif;
+  font-family: Inter,sans-serif;
   background-color: #f9f9f9;
   margin: 0;
   padding: 0;
@@ -19,13 +34,14 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
+
 }
 
 .container {
   width: 400px;
   background: #ffffff;
   padding: 20px;
-  border-radius: 8px;
+  border-radius: 12px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -36,18 +52,49 @@ h1 {
 
 .nav-links {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  align-items: center; /* Выравнивание элементов по вертикали */
+  gap: 10px; /* Уменьшенный зазор между элементами */
+  font-size: 30px; /* Размер шрифта для всего содержимого */
   margin-bottom: 20px;
 }
+
+.nav-links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.nav-links .link {
+  text-decoration: none;
+  font-weight: bold;
+  color: #000000;
+  transition: opacity 0.3s ease; /* Плавный переход прозрачности */
+}
+
+.nav-links .link.dimmed {
+
+  color: #CFD6E4/* Полупрозрачная ссылка */
+}
+
+.nav-links .link.active {
+  opacity: 1; /* Полностью видимая ссылка */
+}
+
+
+
 
 .nav-links a {
   text-decoration: none;
   font-weight: bold;
-  color: #333;
+  color: #000000;
 }
 
 .nav-links a.active {
   text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-decoration-color: rgba(56, 97, 251, 1);
 }
 
 form {
@@ -69,18 +116,19 @@ form input {
   display: flex;
   width: 94.5%;
   padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  border: 1px solid #808A9D;
+  border-radius: 12px;
 }
 
 form button {
   width: 100%;
   padding: 10px;
-  background-color: #007bff;
+  background-color: rgba(56, 97, 251, 1);
   color: #ffffff;
   font-weight: bold;
+  font-size: 14px;
   border: none;
-  border-radius: 5px;
+  border-radius: 12px;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
@@ -92,6 +140,7 @@ form button:hover {
 /* Социальные кнопки */
 .social-buttons {
   display: flex;
+  align-items: center;
   flex-direction: column;
   gap: 10px;
   margin-top: 10px;
@@ -101,13 +150,13 @@ form button:hover {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
+  width: 350px;
   padding: 10px;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 12px;
   background-color: #ffffff;
-  color: #333333;
-  font-size: 16px;
+  color: #000000;
+  font-size: 14px;
   font-weight: bold;
   cursor: pointer;
   transition: background-color 0.3s ease, color 0.3s ease;
@@ -120,20 +169,20 @@ form button:hover {
 }
 
 .social-button.google {
-  border-color: #4285f4;
+  border-color: #808A9D;
 }
 
 .social-button.google:hover {
-  background-color: #4285f4;
+  background-color: #3861FB;
   color: #ffffff;
 }
 
 .social-button.apple {
-  border-color: #333333;
+  border-color: #808A9D;
 }
 
 .social-button.apple:hover {
-  background-color: #333333;
+  background-color: #3861FB;
   color: #ffffff;
 }
 
@@ -149,7 +198,7 @@ form button:hover {
   transform: translateY(-50%);
   cursor: pointer;
   font-size: 14px;
-  color: #007bff;
+  color: rgba(56, 97, 251, 1);
 }
 
 .link-row {
@@ -159,11 +208,13 @@ form button:hover {
   justify-content: space-between;
   align-items: center;
   text-decoration: none;
+
 }
 
 .link-row a {
-  text-decoration: none;
-  color: #007bff;
+  text-decoration: underline;
+  color:rgba(56, 97, 251, 1);
+  font-weight: bold;
 }
 
 .link-row a:hover {
@@ -173,6 +224,106 @@ form input:not(.exclude-style) {
   display: flex;
   width: 94.5%;
   padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  border: 1px solid #808A9D;
+  border-radius: 12px;
+  outline: none;
+  transition: border-color 0.3s ease;
 }
+form input:focus {
+  border-color: blue;
+}
+.input-container {
+  margin-bottom: 15px; /* Расстояние между полями */
+}
+
+.input-container p {
+  margin: 0 0 5px; /* Отступ снизу, чтобы текст был чуть выше поля */
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.input-container input {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #808A9D;
+  border-radius: 12px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.input-container input:focus {
+  border-color: blue;
+}
+
+.form-row {
+  display: flex;
+  gap: 10px;
+}
+.line-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px; /* Расстояние между текстом и линиями */
+  opacity: 0.5;
+  font-size: 14px;
+}
+
+.line-text::before,
+.line-text::after {
+  content: "";
+  flex: 1; /* Линии занимают доступное пространство */
+  height: 1px;
+  width: 100px;
+  background-color: #333; /* Цвет линий */
+}
+/* Скрываем стандартный вид чекбокса */
+/* Скрываем стандартный вид чекбокса */
+#remember-me {
+  appearance: none;
+  margin-top: 15px;
+  width: 17px;
+  height: 17px;
+  border: 2px solid #333;
+  border-radius: 4px; /* Закругленные углы */
+  outline: none;
+  cursor: pointer;
+  position: relative; /* Для псевдоэлемента ::after */
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+/* Цвет чекбокса при активации */
+#remember-me:checked {
+  background-color: rgba(56, 97, 251, 1); /* Цвет при активации */
+  border-color: rgba(56, 97, 251, 1);
+}
+
+/* Галочка внутри чекбокса */
+#remember-me:checked::after {
+  content: '';
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(45deg);
+  width: 3px;
+  height: 7px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+}
+/* Устанавливаем отступы для текстового поля */
+input {
+  font-size: 14px; /* Размер шрифта */
+}
+
+/* Стилизуем сам текст placeholder */
+input::placeholder {
+  color: #808A9D; /* Цвет текста */
+  padding: 10px 8px; /* Отступы: сверху/снизу 10px, слева/справа 20px */
+
+  font-size: 12px; /* Размер шрифта */
+  opacity: 0.8; /* Прозрачность текста */
+}
+
+
+
+
