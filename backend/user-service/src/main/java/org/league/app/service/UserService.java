@@ -12,7 +12,6 @@ import org.league.app.feign.EmailRequest;
 import org.league.app.feign.NotificationFeignClient;
 import org.league.app.handler.RoleGroupNotFound;
 import org.league.app.mapper.UserMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -56,11 +55,11 @@ public class UserService implements UserDetailsService {
                 })
                 .orElseThrow();
 
-        String confirmationLink = "http://localhost:8765/user/activate?token=" + activationToken;
+        String confirmationLink = "http://localhost:8765/auth/activate?token=" + activationToken;
         notificationFeignClient.sendEmail(new EmailRequest(
                 userCreateEditDto.getEmail(),
                 "Confirm your email",
-                  "Click the link to confirm your account: " + confirmationLink
+                  "You have successfully registered! Verify your email for full access: " + confirmationLink
         ));
 
         log.info("Email: {}, Subject: {}, Body: {}",
@@ -79,7 +78,12 @@ public class UserService implements UserDetailsService {
         return userRepository.findByUsername(username)
                 .map(user -> {
                     Set<GrantedAuthority> authorities = new HashSet<>();
-                    authorities.add(new SimpleGrantedAuthority(user.getRoleGroup().getName()));
+                    RoleGroup roleGroup = user.getRoleGroup();
+                    if (roleGroup != null) {
+                        roleGroup.getRoles().forEach(role -> {
+                            authorities.add(new SimpleGrantedAuthority(role.getName()));
+                        });
+                    }
                     return new org.springframework.security.core.userdetails.User(
                             user.getUsername(),
                             user.getPassword(),
