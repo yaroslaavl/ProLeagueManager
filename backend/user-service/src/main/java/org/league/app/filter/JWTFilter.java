@@ -5,6 +5,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.league.app.rediscache.RedisCacheClient;
 import org.league.app.service.JWTService;
 import org.league.app.service.UserService;
 import org.springframework.context.annotation.Lazy;
@@ -23,24 +24,34 @@ public class JWTFilter extends OncePerRequestFilter {
 
     private final JWTService jwtService;
     private final UserService userService;
+    private final RedisCacheClient redisCacheClient;
 
-    public JWTFilter(@Lazy JWTService jwtService, UserService userService) {
+    public JWTFilter(@Lazy JWTService jwtService, UserService userService, RedisCacheClient redisCacheClient) {
         this.jwtService = jwtService;
         this.userService = userService;
+        this.redisCacheClient = redisCacheClient;
     }
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getServletPath();
-        return path.equals("/api/auth/login") || path.equals("/api/auth/registration") || path.equals("/api/auth/refresh-token") ;
+        return path.equals("/api/auth/login")
+                || path.equals("/api/auth/registration")
+                || path.equals("/api/auth/activate");
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-        String authorizationHeader = request.getHeader("Authorization");
 
+        String path = request.getServletPath();
+        if (path.equals("/api/auth/refresh-token")) {
+            handleRefreshToken(request, response, filterChain);
+            return;
+        }
+
+        String authorizationHeader = request.getHeader("Authorization");
         if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
@@ -60,7 +71,9 @@ public class JWTFilter extends OncePerRequestFilter {
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userService.loadUserByUsername(username);
 
-            if (jwtService.isTokenValid(jwtToken, userDetails) && jwtService.isAccessToken(jwtToken)) {
+            if (jwtService.isTokenValid(jwtToken, userDetails) && jwtService.isAccessToken(jwtToken) &&
+            redisCacheClient.get(
+                    "whitelist:" + userDetails.getUsername() + ":accessToken").equals(jwtToken)) {
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
@@ -70,6 +83,37 @@ public class JWTFilter extends OncePerRequestFilter {
                 response.getWriter().write("Invalid token");
                 return;
             }
+        }
+
+        filterChain.doFilter(request, response);
+    }
+
+    private void handleRefreshToken(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain filterChain) throws IOException, ServletException {
+        String authorizationHeader = request.getHeader("Authorization");
+        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("Missing or invalid Authorization header");
+            return;
+        }
+
+        String refreshToken = authorizationHeader.substring(7);
+        String username;
+
+        try {
+            username = jwtService.extractUsername(refreshToken);
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("Invalid or expired refresh token");
+            return;
+        }
+
+        String storedRefreshToken = redisCacheClient.get("whitelist:" + username + ":refreshToken");
+        if (storedRefreshToken == null || !storedRefreshToken.equals(refreshToken)) {
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            response.getWriter().write("Invalid or expired refresh token");
+            return;
         }
 
         filterChain.doFilter(request, response);
