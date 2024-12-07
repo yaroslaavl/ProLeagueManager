@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -17,7 +18,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-
 public class SecurityConfig {
 
     private final JWTFilter jwtFilter;
@@ -33,12 +33,20 @@ public class SecurityConfig {
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**", "/actuator/health").permitAll()
+                        .requestMatchers(
+                                "/api/auth/login",
+                                "/api/auth/registration",
+                                "/api/auth/activate",
+                                "/api/auth/refresh-token",
+                                "/actuator/health").permitAll()
+
                         .requestMatchers("/api/user/test").hasAuthority("User")
-                        .requestMatchers("/api/auth/refresh-token").authenticated()
+                        .requestMatchers("/api/auth/logout").authenticated()
                         .anyRequest().authenticated()
                 )
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         return httpSecurity.build();
     }
 

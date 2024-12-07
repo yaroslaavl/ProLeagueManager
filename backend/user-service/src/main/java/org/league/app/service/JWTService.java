@@ -8,8 +8,10 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.league.app.dto.AuthResponseDto;
+import org.league.app.rediscache.RedisCacheClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,20 +25,20 @@ import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class JWTService {
 
     @Value("${token.signing.key}")
     private String jwtSigningKey;
 
     private final UserService userService;
+    private final RedisCacheClient redisCacheClient;
 
-    public JWTService(UserService userService) {
-        this.userService = userService;
-    }
 
     public String generateToken(Authentication authentication) {
 
@@ -59,7 +61,7 @@ public class JWTService {
         return Jwts.builder()
                 .setSubject(authentication.getName())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 3))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7))
                 .signWith(SignatureAlgorithm.HS256, jwtSigningKey)
                 .compact();
     }
@@ -126,25 +128,28 @@ public class JWTService {
             return;
         }
 
+
         if (username != null) {
             var userDetails = userService.loadUserByUsername(username);
+                if (isTokenValid(refreshToken, userDetails)) {
+                    Authentication authentication = new UsernamePasswordAuthenticationToken(
+                            userDetails, null, userDetails.getAuthorities());
 
-            if (isTokenValid(refreshToken, userDetails)) {
-                Authentication authentication = new UsernamePasswordAuthenticationToken(
-                        userDetails, null, userDetails.getAuthorities());
+                    String accessToken = generateToken(authentication);
+                    AuthResponseDto authResponse = AuthResponseDto.builder()
+                            .accessToken(accessToken)
+                            .refreshToken(refreshToken)
+                            .build();
 
-                String accessToken = generateToken(authentication);
-                AuthResponseDto authResponse = AuthResponseDto.builder()
-                        .accessToken(accessToken)
-                        .refreshToken(refreshToken)
-                        .build();
+                    redisCacheClient.set(
+                            "whitelist:" + userDetails.getUsername() + ":accessToken", accessToken, 1, TimeUnit.MINUTES);
+                    new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
+                } else {
+                    log.error("Refresh token is invalid or expired for user: {}", username);
+                    response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                    response.getWriter().write("Invalid refresh token");
+                }
 
-                new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
-            } else {
-                log.error("Refresh token is invalid or expired for user: {}", username);
-                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-                response.getWriter().write("Invalid refresh token");
-            }
         } else {
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             response.getWriter().write("User not found");

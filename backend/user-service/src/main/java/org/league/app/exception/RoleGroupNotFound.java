@@ -1,4 +1,4 @@
-package org.league.app.handler;
+package org.league.app.exception;
 
 public class RoleGroupNotFound extends RuntimeException {
     public RoleGroupNotFound(String message) {

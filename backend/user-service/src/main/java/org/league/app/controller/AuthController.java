@@ -9,11 +9,11 @@ import org.league.app.dto.AuthResponseDto;
 import org.league.app.dto.LoginDto;
 import org.league.app.dto.UserCreateEditDto;
 import org.league.app.dto.UserReadDto;
+import org.league.app.rediscache.RedisCacheClient;
 import org.league.app.service.JWTService;
 import org.league.app.service.UserService;
 import org.league.app.validation.CreateAction;
 import org.league.app.validation.EditAction;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,6 +25,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @RestController
@@ -32,15 +33,11 @@ import java.io.IOException;
 @RequestMapping("/api/auth")
 public class AuthController {
 
-    @Autowired
-    private final AuthenticationManager authenticationManager;
-
-    @Autowired
     private final JWTService jwtService;
-
     private final UserService userService;
-
     private final UserRepository userRepository;
+    private final AuthenticationManager authenticationManager;
+    private final RedisCacheClient redisCacheClient;
 
     @PostMapping("/registration")
     public ResponseEntity<UserReadDto> registration(@RequestBody @Validated({CreateAction.class, EditAction.class}) UserCreateEditDto userCreateEditDto, BindingResult bindingResult){
@@ -75,10 +72,27 @@ public class AuthController {
         String refreshToken = jwtService.generateRefreshToken(authenticate);
         log.info("accessToken token: {}", accessToken);
         log.info("refreshToken token: {}", refreshToken);
+        redisCacheClient.set(
+                "whitelist:" + loginDto.getUsername() + ":accessToken", accessToken, 1, TimeUnit.MINUTES);
+        redisCacheClient.set(
+                "whitelist:" + loginDto.getUsername() + ":refreshToken", refreshToken, 7, TimeUnit.DAYS);
         return AuthResponseDto.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(@RequestHeader("Authorization") String token){
+        log.info("Logout endpoint reached with method POST");
+
+        String subToken = token.substring(7);
+        String extractedUsername = jwtService.extractUsername(subToken);
+
+        redisCacheClient.delete("whitelist:" + extractedUsername + ":accessToken");
+        redisCacheClient.delete("whitelist:" + extractedUsername + ":refreshToken");
+
+        return ResponseEntity.ok("Logout successful");
     }
 
     @PostMapping("/refresh-token")

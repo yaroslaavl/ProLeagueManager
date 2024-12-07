@@ -8,9 +8,10 @@ import org.league.app.database.repository.RoleGroupRepository;
 import org.league.app.database.repository.UserRepository;
 import org.league.app.dto.UserCreateEditDto;
 import org.league.app.dto.UserReadDto;
+import org.league.app.exception.UserAlreadyVerified;
 import org.league.app.feign.EmailRequest;
 import org.league.app.feign.NotificationFeignClient;
-import org.league.app.handler.RoleGroupNotFound;
+import org.league.app.exception.RoleGroupNotFound;
 import org.league.app.mapper.UserMapper;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -32,16 +33,15 @@ import java.util.UUID;
 @Transactional(readOnly = true)
 public class UserService implements UserDetailsService {
 
-    private final UserRepository userRepository;
-    private final RoleGroupRepository roleGroupRepository;
     private final UserMapper userMapper;
+    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final RoleGroupRepository roleGroupRepository;
     private final NotificationFeignClient notificationFeignClient;
 
     @Transactional
     public UserReadDto create(UserCreateEditDto userCreateEditDto){
         String activationToken = UUID.randomUUID().toString();
-
         RoleGroup user = roleGroupRepository.findByName("User")
                 .orElseThrow(() -> new RoleGroupNotFound("Group not found"));
 
@@ -98,9 +98,11 @@ public class UserService implements UserDetailsService {
         User userByToken = userRepository.findByEmailVerificationToken(token)
                 .orElseThrow(() -> new UsernameNotFoundException("Email verification token not found"));
 
-            userByToken.setEmailVerificationToken(null);
-            userByToken.setIsVerified(true);
-            userRepository.saveAndFlush(userByToken);
-            return true;
+        userByToken.setEmailVerificationToken(null);
+        userByToken.setIsVerified(true);
+        userRepository.saveAndFlush(userByToken);
+
+        return true;
     }
+
 }
