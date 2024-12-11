@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.league.app.database.repository.UserRepository;
 import org.league.app.dto.AuthResponseDto;
 import org.league.app.dto.LoginDto;
-import org.league.app.dto.UserCreateEditDto;
+import org.league.app.dto.UserCreateDto;
 import org.league.app.dto.UserReadDto;
 import org.league.app.rediscache.RedisCacheClient;
 import org.league.app.service.JWTService;
@@ -36,11 +36,11 @@ public class AuthController {
     private final JWTService jwtService;
     private final UserService userService;
     private final UserRepository userRepository;
-    private final AuthenticationManager authenticationManager;
     private final RedisCacheClient redisCacheClient;
+    private final AuthenticationManager authenticationManager;
 
     @PostMapping("/registration")
-    public ResponseEntity<UserReadDto> registration(@RequestBody @Validated({CreateAction.class, EditAction.class}) UserCreateEditDto userCreateEditDto, BindingResult bindingResult){
+    public ResponseEntity<UserReadDto> registration(@RequestBody @Validated({CreateAction.class, EditAction.class}) UserCreateDto userCreateEditDto, BindingResult bindingResult){
         if(userRepository.existsByEmail(userCreateEditDto.getEmail()) && userRepository.existsByUsername(userCreateEditDto.getUsername())){
             log.error("'{}' is already registered",userCreateEditDto.getEmail());
             log.error("'{}' is already in use",userCreateEditDto.getUsername());
@@ -64,7 +64,7 @@ public class AuthController {
     @PostMapping("/login")
     public AuthResponseDto login(@RequestBody LoginDto loginDto){
         Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                loginDto.getUsername(),
+                loginDto.getEmail(),
                 loginDto.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authenticate);
@@ -73,9 +73,9 @@ public class AuthController {
         log.info("accessToken token: {}", accessToken);
         log.info("refreshToken token: {}", refreshToken);
         redisCacheClient.set(
-                "whitelist:" + loginDto.getUsername() + ":accessToken", accessToken, 1, TimeUnit.MINUTES);
+                "whitelist:" + loginDto.getEmail() + ":accessToken", accessToken, 3, TimeUnit.MINUTES);
         redisCacheClient.set(
-                "whitelist:" + loginDto.getUsername() + ":refreshToken", refreshToken, 7, TimeUnit.DAYS);
+                "whitelist:" + loginDto.getEmail() + ":refreshToken", refreshToken, 7, TimeUnit.DAYS);
         return AuthResponseDto.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
@@ -87,7 +87,7 @@ public class AuthController {
         log.info("Logout endpoint reached with method POST");
 
         String subToken = token.substring(7);
-        String extractedUsername = jwtService.extractUsername(subToken);
+        String extractedUsername = jwtService.extractEmail(subToken);
 
         redisCacheClient.delete("whitelist:" + extractedUsername + ":accessToken");
         redisCacheClient.delete("whitelist:" + extractedUsername + ":refreshToken");
