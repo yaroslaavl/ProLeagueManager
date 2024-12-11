@@ -38,7 +38,7 @@ public class User {
     @Column(nullable = false, name = "last_name")
     private String lastName;
 
-    @Column(nullable = false, name = "birth_date")
+    @Column(name = "birth_date")
     private LocalDate birthDate;
 
     @ManyToOne
@@ -50,6 +50,9 @@ public class User {
 
     @Column(name = "email_verification_token")
     private String emailVerificationToken;
+
+    @Column(name = "user_image")
+    private String avatar;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)

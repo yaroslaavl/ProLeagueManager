@@ -58,18 +58,18 @@ public class JWTFilter extends OncePerRequestFilter {
         }
 
         String jwtToken = authorizationHeader.substring(7);
-        String username;
+        String email;
 
         try {
-            username = jwtService.extractUsername(jwtToken);
+            email = jwtService.extractEmail(jwtToken);
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().write("Invalid or expired JWT token: " + jwtToken);
             return;
         }
 
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = userService.loadUserByUsername(username);
+        if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            UserDetails userDetails = userService.loadUserByUsername(email);
 
             if (jwtService.isTokenValid(jwtToken, userDetails) && jwtService.isAccessToken(jwtToken) &&
             redisCacheClient.get(
@@ -99,17 +99,17 @@ public class JWTFilter extends OncePerRequestFilter {
         }
 
         String refreshToken = authorizationHeader.substring(7);
-        String username;
+        String email;
 
         try {
-            username = jwtService.extractUsername(refreshToken);
+            email = jwtService.extractEmail(refreshToken);
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().write("Invalid or expired refresh token");
             return;
         }
 
-        String storedRefreshToken = redisCacheClient.get("whitelist:" + username + ":refreshToken");
+        String storedRefreshToken = redisCacheClient.get("whitelist:" + email + ":refreshToken");
         if (storedRefreshToken == null || !storedRefreshToken.equals(refreshToken)) {
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             response.getWriter().write("Invalid or expired refresh token");

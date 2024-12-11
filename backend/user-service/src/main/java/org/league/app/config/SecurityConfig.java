@@ -38,9 +38,10 @@ public class SecurityConfig {
                                 "/api/auth/registration",
                                 "/api/auth/activate",
                                 "/api/auth/refresh-token",
+                                "/api/user/profile/public/**",
+                                "/api/user/avatar/**",
                                 "/actuator/health").permitAll()
 
-                        .requestMatchers("/api/user/test").hasAuthority("User")
                         .requestMatchers("/api/auth/logout").authenticated()
                         .anyRequest().authenticated()
                 )

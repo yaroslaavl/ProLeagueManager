@@ -1,35 +1,43 @@
 package org.league.app.service;
 
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.league.app.database.entity.RoleGroup;
 import org.league.app.database.entity.User;
 import org.league.app.database.repository.RoleGroupRepository;
 import org.league.app.database.repository.UserRepository;
-import org.league.app.dto.UserCreateEditDto;
-import org.league.app.dto.UserReadDto;
+import org.league.app.dto.*;
+import org.league.app.exception.InvalidPasswordException;
 import org.league.app.exception.UserAlreadyVerified;
+import org.league.app.exception.UserEmailNotFoundException;
 import org.league.app.feign.EmailRequest;
 import org.league.app.feign.NotificationFeignClient;
 import org.league.app.exception.RoleGroupNotFound;
 import org.league.app.mapper.UserMapper;
+import org.league.app.rediscache.RedisCacheClient;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
 
 @Slf4j
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class UserService implements UserDetailsService {
 
@@ -38,14 +46,18 @@ public class UserService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
     private final RoleGroupRepository roleGroupRepository;
     private final NotificationFeignClient notificationFeignClient;
+    private final RedisCacheClient redisCacheClient;
+
+    @Value("${app.image.uploadDir}")
+    private String uploadDir;
 
     @Transactional
-    public UserReadDto create(UserCreateEditDto userCreateEditDto){
+    public UserReadDto create(UserCreateDto userCreateDto){
         String activationToken = UUID.randomUUID().toString();
         RoleGroup user = roleGroupRepository.findByName("User")
                 .orElseThrow(() -> new RoleGroupNotFound("Group not found"));
 
-        User newUser = Optional.of(userCreateEditDto)
+        User newUser = Optional.of(userCreateDto)
                 .map(dto -> {
                     User entity = userMapper.toEntity(dto, passwordEncoder);
                     entity.setRoleGroup(user);
@@ -57,13 +69,13 @@ public class UserService implements UserDetailsService {
 
         String confirmationLink = "http://localhost:8765/auth/activate?token=" + activationToken;
         notificationFeignClient.sendEmail(new EmailRequest(
-                userCreateEditDto.getEmail(),
+                userCreateDto.getEmail(),
                 "Confirm your email",
                   "You have successfully registered! Verify your email for full access: " + confirmationLink
         ));
 
         log.info("Email: {}, Subject: {}, Body: {}",
-                userCreateEditDto.getEmail(),
+                userCreateDto.getEmail(),
                 "Confirm your email",
                 "Click the link to confirm your account: " + confirmationLink);
 
@@ -71,11 +83,11 @@ public class UserService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        if (username == null || username.isEmpty()) {
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        if (email == null || email.isEmpty()) {
             throw new UsernameNotFoundException("User not found");
         }
-        return userRepository.findByUsername(username)
+        return userRepository.findByEmail(email)
                 .map(user -> {
                     Set<GrantedAuthority> authorities = new HashSet<>();
                     RoleGroup roleGroup = user.getRoleGroup();
@@ -85,12 +97,12 @@ public class UserService implements UserDetailsService {
                         });
                     }
                     return new org.springframework.security.core.userdetails.User(
-                            user.getUsername(),
+                            user.getEmail(),
                             user.getPassword(),
                             authorities
                     );
                 })
-                .orElseThrow(() -> new UsernameNotFoundException("Failed to retrieve user:" + username));
+                .orElseThrow(() -> new UsernameNotFoundException("Failed to retrieve user:" + email));
     }
 
     @Transactional
@@ -105,4 +117,136 @@ public class UserService implements UserDetailsService {
         return true;
     }
 
+    @Transactional
+    public void delete(UserDeleteDto userDeleteDto) {
+        User user = userRepository.findByEmail(securityContext())
+                .orElseThrow(() -> new UserEmailNotFoundException("User with email: " + securityContext() + " not found"));
+
+        if (!passwordEncoder.matches(userDeleteDto.getPassword(), user.getPassword())) {
+            throw new InvalidPasswordException("The provided password is incorrect.");
+        }
+
+        redisCacheClient.delete("whitelist:" + user.getEmail() + ":accessToken");
+        redisCacheClient.delete("whitelist:" + user.getEmail() + ":refreshToken");
+
+        userRepository.delete(user);
+    }
+
+    @Transactional
+    public void changePassword(UserChangePasswordDto userChangePasswordDto) {
+        User user = userRepository.findByEmail(securityContext())
+                .orElseThrow(() -> new UserEmailNotFoundException("User with e  mail: " + securityContext() + " not found"));
+
+        if(passwordEncoder.matches(userChangePasswordDto.getOldPassword(), user.getPassword())){
+            if(!userChangePasswordDto.getOldPassword().equals(userChangePasswordDto.getNewPassword())){
+                user.setPassword(passwordEncoder.encode(userChangePasswordDto.getNewPassword()));
+
+                redisCacheClient.delete("whitelist:" + user.getEmail() + ":accessToken");
+                redisCacheClient.delete("whitelist:" + user.getEmail() + ":refreshToken");
+
+            } else {
+                throw new InvalidPasswordException("The new password cannot be the same as the old password.");
+            }
+        }
+    }
+
+    @Transactional
+    public UserReadDto changeUserPersonalData(UserPersonalDataDto userPersonalDataDto) {
+        User user = userRepository.findByEmail(securityContext())
+                .orElseThrow(() -> new UserEmailNotFoundException("User with email: " + securityContext() + " not found"));
+
+        if (userPersonalDataDto.getUsername() != null
+                && !userPersonalDataDto.getUsername().equals(user.getUsername())
+                && userRepository.existsByUsername(userPersonalDataDto.getUsername())) {
+            throw new UserAlreadyVerified("Username already exists");
+        }
+
+        Optional.ofNullable(userPersonalDataDto.getUsername()).ifPresent(user::setUsername);
+        Optional.ofNullable(userPersonalDataDto.getFirstName()).ifPresent(user::setFirstName);
+        Optional.ofNullable(userPersonalDataDto.getLastName()).ifPresent(user::setLastName);
+        Optional.ofNullable(userPersonalDataDto.getBirthDate()).ifPresent(user::setBirthDate);
+
+        User updatedUser = userRepository.saveAndFlush(user);
+        return userMapper.toDto(updatedUser);
+    }
+
+    @Transactional
+    public String uploadAvatar(ImageUploadDto imageUploadDto) throws IOException {
+        User user = userRepository.findByEmail(securityContext())
+                .orElseThrow(() -> new UserEmailNotFoundException("User with email: " + securityContext() + " not found"));
+
+        MultipartFile file = imageUploadDto.getAvatar();
+
+        if (file != null && !file.isEmpty()) {
+            String extension = Objects.requireNonNull(file.getOriginalFilename()).substring(file.getOriginalFilename().lastIndexOf("."));
+            String filename = user.getEmail() + "_avatar" + extension;
+
+            Path path = Paths.get(uploadDir, filename);
+
+            if (Files.exists(path)) {
+                Files.delete(path);
+            }
+
+            File directory = new File(uploadDir);
+            if (!directory.exists()) {
+                directory.mkdirs();
+            }
+            Files.write(path, file.getBytes());
+
+            user.setAvatar(filename);
+            userRepository.save(user);
+
+            return filename;
+        }
+
+        return null;
+    }
+
+    public byte[] getUserImage(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserEmailNotFoundException("User with username: " + username + " not found"));
+
+        if (user.getAvatar() != null) {
+            Path path = Paths.get(uploadDir, user.getAvatar());
+            try {
+
+                return Files.readAllBytes(path);
+            } catch (IOException e) {
+                log.error("Failed to read user image: {}", e.getMessage());
+            }
+        }
+         return getDefaultImage();
+    }
+
+    private byte[] getDefaultImage() {
+        Path defaultImagePath = Paths.get("E:/important/league-hub/backend/images/user_avatar/default-avatar.jpg");
+        try {
+            return Files.readAllBytes(defaultImagePath);
+        } catch (IOException e) {
+            log.error("Failed to load default avatar: {}", e.getMessage());
+            return new byte[0];
+        }
+    }
+
+    public UserReadDto getUserByEmail() {
+        String email = securityContext();
+        return userRepository.findByEmail(email)
+                .map(userMapper::toDto)
+                .orElseThrow(() -> new UserEmailNotFoundException("User with email: " + email + " not found"));
+    }
+
+    public UserPublicProfileDto getUserPublicProfileByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .map(userMapper::toPublicProfileDto)
+                .orElseThrow(() -> new UserEmailNotFoundException("User with username: " + username + " not found"));
+    }
+
+    public RoleGroup getRoleGroupByEmail() {
+        String email = securityContext();
+         return roleGroupRepository.findRoleGroupByEmailWithRoles(email);
+    }
+
+    private String securityContext() {
+        return SecurityContextHolder.getContext().getAuthentication().getName();
+    }
 }

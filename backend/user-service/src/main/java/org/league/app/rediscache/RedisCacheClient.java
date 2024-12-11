@@ -26,9 +26,4 @@ public class RedisCacheClient {
         redisTemplate.delete(key);
     }
 
-    public boolean isUserTokenInWhiteList(String username, String token) {
-        String tokenFromRedis = get("whitelist: " + username);
-        return tokenFromRedis != null && tokenFromRedis.equals(token);
-    }
-
 }

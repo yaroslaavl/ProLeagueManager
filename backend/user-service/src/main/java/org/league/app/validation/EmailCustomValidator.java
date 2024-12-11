@@ -11,12 +11,12 @@ public class EmailCustomValidator implements ConstraintValidator<EmailСustom, S
     public boolean isValid(String email, ConstraintValidatorContext context) {
         if(email == null){
             return false;
-        } else {
-            var pattern = Pattern.compile("^(?=.{1,64}@)[A-Za-z0-9_-]" +
+        }
+        var pattern = Pattern.compile("^(?=.{1,64}@)[A-Za-z0-9_-]" +
                     "+(\\.[A-Za-z0-9_-]+)*@" +
                     "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$");
-            var matcher = pattern.matcher(email);
-            return matcher.matches();
-        }
+
+        var matcher = pattern.matcher(email);
+        return matcher.matches();
     }
 }

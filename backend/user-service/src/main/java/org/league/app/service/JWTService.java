@@ -51,7 +51,7 @@ public class JWTService {
                 .addClaims(claims)
                 .setSubject(authentication.getName())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 3))
                 .signWith(SignatureAlgorithm.HS256, jwtSigningKey)
                 .compact();
     }
@@ -89,20 +89,20 @@ public class JWTService {
         return expiration.before(new Date());
     }
 
-    public String extractUsername(String token) {
+    public String extractEmail(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
-        String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        String email = extractEmail(token);
+        return (email.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
     public boolean isAccessToken(String token) {
         Claims claims = extractAllClaims(token);
         Date expiration = claims.getExpiration();
         long now = System.currentTimeMillis();
-        long accessTokenExpiryThreshold = 1000 * 60;
+        long accessTokenExpiryThreshold = 1000 * 60 * 3;
 
         return expiration != null && expiration.getTime() - now < accessTokenExpiryThreshold;
     }
@@ -116,21 +116,20 @@ public class JWTService {
         }
 
         String refreshToken = authorizationHeader.substring(7);
-        String username;
+        String email;
 
         try {
-            username = extractUsername(refreshToken);
-            log.info("Extracted username: {}", username);
+            email = extractEmail(refreshToken);
+            log.info("Extracted email: {}", email);
         } catch (Exception e) {
-            log.error("Failed to extract username from refresh token", e);
+            log.error("Failed to extract email from refresh token", e);
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.getWriter().write("Invalid or expired JWT token");
             return;
         }
 
-
-        if (username != null) {
-            var userDetails = userService.loadUserByUsername(username);
+        if (email != null) {
+            var userDetails = userService.loadUserByUsername(email);
                 if (isTokenValid(refreshToken, userDetails)) {
                     Authentication authentication = new UsernamePasswordAuthenticationToken(
                             userDetails, null, userDetails.getAuthorities());
@@ -142,10 +141,11 @@ public class JWTService {
                             .build();
 
                     redisCacheClient.set(
-                            "whitelist:" + userDetails.getUsername() + ":accessToken", accessToken, 1, TimeUnit.MINUTES);
+                            "whitelist:" + userDetails.getUsername() + ":accessToken", accessToken, 3, TimeUnit.MINUTES);
+
                     new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
                 } else {
-                    log.error("Refresh token is invalid or expired for user: {}", username);
+                    log.error("Refresh token is invalid or expired for user: {}", email);
                     response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                     response.getWriter().write("Invalid refresh token");
                 }
