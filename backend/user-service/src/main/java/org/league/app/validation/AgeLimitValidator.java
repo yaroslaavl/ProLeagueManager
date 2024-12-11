@@ -18,12 +18,14 @@ public class AgeLimitValidator implements ConstraintValidator<AgeLimit, LocalDat
 
     @Override
     public boolean isValid(LocalDate localDate, ConstraintValidatorContext constraintValidatorContext) {
-        if (localDate != null) {
-            var now = LocalDate.now();
-            var minAgeOfUser = now.minusYears(this.minAge);
-            var minYearDate = LocalDate.of(this.minYear, 1, 1);
-            return localDate.isBefore(minAgeOfUser) && localDate.isAfter(minYearDate);
+        if (localDate == null) {
+            return true;
         }
-        return false;
+
+        var now = LocalDate.now();
+        var minAgeOfUser = now.minusYears(this.minAge);
+        var minYearDate = LocalDate.of(this.minYear, 1, 1);
+
+        return localDate.isBefore(minAgeOfUser) && localDate.isAfter(minYearDate);
     }
 }
