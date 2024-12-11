@@ -1,0 +1,17 @@
+package org.league.app.dto;
+
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+import lombok.Data;
+import org.league.app.validation.CreateAction;
+import org.league.app.validation.EditAction;
+
+@Data
+public class UserChangePasswordDto {
+
+    private String oldPassword;
+
+    @Size(min = 8, max = 20, message = "User has incorrect password size. Size should be between 8 and 20 letters", groups = EditAction.class)
+    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$", message = "User has incorrect password pattern", groups = EditAction.class)
+    private String newPassword;
+}

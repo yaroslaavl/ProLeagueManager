@@ -6,7 +6,7 @@ import org.league.app.database.entity.RoleGroup;
 @Data
 public class LoginDto {
 
-    private String username;
+    private String email;
     private String password;
     private RoleGroup roleGroup;
 }

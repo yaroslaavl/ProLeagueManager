@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserCreateEditDto {
+public class UserCreateDto {
 
     Long id;
 
