@@ -120,7 +120,7 @@ public class UserService implements UserDetailsService {
             throw new TokenException("Email verification has expired. Please resend the activation message to your email address.");
         }
 
-        redisCacheClient.delete("activationToken");
+        redisCacheClient.delete(userByToken.getEmail() + ":activationToken");
         userByToken.setEmailVerificationToken(null);
         userByToken.setIsVerified(true);
         userRepository.saveAndFlush(userByToken);
