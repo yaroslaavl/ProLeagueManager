@@ -83,5 +83,11 @@ public class UserController {
         return ResponseEntity.notFound().build();
     }
 
+    @PostMapping("/resend-activation-email")
+    public ResponseEntity<String> resendActivationEmail() {
+        userService.resendEmailConfirmation();
+        return ResponseEntity.ok("Resend activation email has been sent");
+    }
+
 }
 
