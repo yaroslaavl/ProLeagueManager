@@ -1,7 +1,7 @@
 package org.league.app.service;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.league.app.exception.*;
 import org.springframework.beans.factory.annotation.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.league.app.database.entity.RoleGroup;
@@ -9,12 +9,8 @@ import org.league.app.database.entity.User;
 import org.league.app.database.repository.RoleGroupRepository;
 import org.league.app.database.repository.UserRepository;
 import org.league.app.dto.*;
-import org.league.app.exception.InvalidPasswordException;
-import org.league.app.exception.UserAlreadyVerified;
-import org.league.app.exception.UserEmailNotFoundException;
 import org.league.app.feign.EmailRequest;
 import org.league.app.feign.NotificationFeignClient;
-import org.league.app.exception.RoleGroupNotFound;
 import org.league.app.mapper.UserMapper;
 import org.league.app.rediscache.RedisCacheClient;
 import org.springframework.security.core.GrantedAuthority;
@@ -34,6 +30,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Service
@@ -74,6 +71,8 @@ public class UserService implements UserDetailsService {
                   "You have successfully registered! Verify your email for full access: " + confirmationLink
         ));
 
+        redisCacheClient.set(newUser.getEmail() + ":activationToken", activationToken, 1, TimeUnit.DAYS);
+
         log.info("Email: {}, Subject: {}, Body: {}",
                 userCreateDto.getEmail(),
                 "Confirm your email",
@@ -106,15 +105,57 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public boolean emailConfirmation(String token){
+    public boolean emailConfirmation(String token) {
         User userByToken = userRepository.findByEmailVerificationToken(token)
                 .orElseThrow(() -> new UsernameNotFoundException("Email verification token not found"));
 
+        String storedToken = redisCacheClient.get(userByToken.getEmail() + ":activationToken");
+        if (storedToken == null) {
+            log.error("Token has expired or does not exist in Redis: {}", token);
+            throw new TokenException("Email verification has expired. Please resend the activation message to your email address.");
+        }
+
+        if (!storedToken.equals(token)) {
+            log.error("Token mismatch: expected {} but found {}", token, storedToken);
+            throw new TokenException("Email verification has expired. Please resend the activation message to your email address.");
+        }
+
+        redisCacheClient.delete("activationToken");
         userByToken.setEmailVerificationToken(null);
         userByToken.setIsVerified(true);
         userRepository.saveAndFlush(userByToken);
 
         return true;
+    }
+
+    @Transactional
+    public void resendEmailConfirmation() {
+        User user = userRepository.findByEmail(securityContext())
+                .orElseThrow(() -> new UserEmailNotFoundException("User with email: " + securityContext() + " not found"));
+
+        if (user.getIsVerified()) {
+            throw new UserAlreadyVerified("User is already verified");
+        }
+
+        String activationToken = UUID.randomUUID().toString();
+
+        String confirmationLink = "http://localhost:8765/auth/activate?token=" + activationToken;
+        notificationFeignClient.sendEmail(new EmailRequest(
+                user.getEmail(),
+                "Confirm your email",
+                "You have got a new email verification link to activate your account." +
+                        " Please click the link below to confirm your email address and complete your registration: " + confirmationLink
+        ));
+
+        log.info("Email: {}, Body: {}",
+                user.getEmail(),
+                "You have got a new email verification link to activate your account." +
+                        " Please click the link below to confirm your email address and complete your registration: " + confirmationLink);
+
+        redisCacheClient.set(user.getEmail() + ":activationToken", activationToken, 1, TimeUnit.DAYS);
+
+        user.setEmailVerificationToken(activationToken);
+        userRepository.saveAndFlush(user);
     }
 
     @Transactional
