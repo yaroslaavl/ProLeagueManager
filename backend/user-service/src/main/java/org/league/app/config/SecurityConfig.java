@@ -40,6 +40,11 @@ public class SecurityConfig {
                                 "/api/auth/refresh-token",
                                 "/api/user/profile/public/**",
                                 "/api/user/avatar/**",
+                                "/api/auth/extract-email",
+                                "/api/auth/get-token",
+                                "/api/auth/is-access-token",
+                                "/api/auth/load-user-by-email",
+                                "/api/auth/validate-token",
                                 "/actuator/health").permitAll()
 
                         .requestMatchers("/api/auth/logout").authenticated()
