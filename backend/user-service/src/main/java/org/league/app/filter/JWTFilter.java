@@ -37,7 +37,10 @@ public class JWTFilter extends OncePerRequestFilter {
         String path = request.getServletPath();
         return path.equals("/api/auth/login")
                 || path.equals("/api/auth/registration")
-                || path.equals("/api/auth/activate");
+                || path.equals("/api/auth/activate")
+                || path.equals("/actuator/health")
+                || path.equals("/api/user/profile/public/")
+                || path.equals("/api/user/avatar/");
     }
 
     @Override
@@ -52,6 +55,7 @@ public class JWTFilter extends OncePerRequestFilter {
         }
 
         String authorizationHeader = request.getHeader("Authorization");
+        log.info("Authorization header received: {}", authorizationHeader);
         if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;

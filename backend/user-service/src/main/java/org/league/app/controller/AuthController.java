@@ -9,23 +9,28 @@ import org.league.app.dto.AuthResponseDto;
 import org.league.app.dto.LoginDto;
 import org.league.app.dto.UserCreateDto;
 import org.league.app.dto.UserReadDto;
+import org.league.app.feign.UserDto;
 import org.league.app.rediscache.RedisCacheClient;
 import org.league.app.service.JWTService;
 import org.league.app.service.UserService;
 import org.league.app.validation.CreateAction;
-import org.league.app.validation.EditAction;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -40,16 +45,16 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
 
     @PostMapping("/registration")
-    public ResponseEntity<UserReadDto> registration(@RequestBody @Validated({CreateAction.class, EditAction.class}) UserCreateDto userCreateEditDto, BindingResult bindingResult){
-        if(userRepository.existsByEmail(userCreateEditDto.getEmail()) && userRepository.existsByUsername(userCreateEditDto.getUsername())){
-            log.error("'{}' is already registered",userCreateEditDto.getEmail());
-            log.error("'{}' is already in use",userCreateEditDto.getUsername());
+    public ResponseEntity<UserReadDto> registration(@RequestBody @Validated(CreateAction.class) UserCreateDto userCreate, BindingResult bindingResult){
+        if(userRepository.existsByEmail(userCreate.getEmail()) && userRepository.existsByUsername(userCreate.getUsername())){
+            log.error("'{}' is already registered",userCreate.getEmail());
+            log.error("'{}' is already in use",userCreate.getUsername());
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
 
-        if(userRepository.existsByEmail(userCreateEditDto.getEmail()) || userRepository.existsByUsername(userCreateEditDto.getUsername())){
+        if(userRepository.existsByEmail(userCreate.getEmail()) || userRepository.existsByUsername(userCreate.getUsername())){
             log.error("'{}' is already exist",
-                    userRepository.existsByEmail(userCreateEditDto.getEmail()) ? userCreateEditDto.getEmail() : userCreateEditDto.getUsername());
+                    userRepository.existsByEmail(userCreate.getEmail()) ? userCreate.getEmail() : userCreate.getUsername());
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
 
@@ -57,7 +62,7 @@ public class AuthController {
             bindingResult.getFieldErrors().forEach(fieldError -> log.error(fieldError.getField() + ": " + fieldError.getDefaultMessage()));
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        var userReadDto = userService.create(userCreateEditDto);
+        var userReadDto = userService.create(userCreate);
         return ResponseEntity.status(HttpStatus.CREATED).body(userReadDto);
     }
 
@@ -106,4 +111,42 @@ public class AuthController {
         log.info("'{}' is activated",token);
         return ResponseEntity.ok(confirmation);
     }
+
+    @PostMapping("/extract-email")
+    public String extractEmail(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+        return jwtService.extractEmail(token);
+    }
+
+    @PostMapping("/validate-token")
+    public boolean validateToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestParam("email") String email) {
+        UserDetails userDetails = userService.loadUserByUsername(email);
+
+        return jwtService.isTokenValid(token, userDetails);
+    }
+
+    @PostMapping("/is-access-token")
+    public boolean isAccessToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+        return jwtService.isAccessToken(token);
+    }
+
+    @GetMapping("/get-token")
+    public String getToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestParam("key") String key) {
+        return redisCacheClient.get(key);
+
+    }
+
+    @GetMapping("/load-user-by-email")
+    public UserDto loadUserByEmail(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestParam("email") String email) {
+        UserDetails user = userService.loadUserByUsername(email);
+        List<String> roles = user.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList());
+        return UserDto.builder()
+                .email(user.getUsername())
+                .username(user.getUsername())
+                .roles(roles)
+                .build();
+    }
+
+
 }
