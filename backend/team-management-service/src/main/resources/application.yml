@@ -11,5 +11,5 @@ spring:
   config:
     import: 'consul:'
   application:
-    name: user-service
+    name: team-management-service
 
