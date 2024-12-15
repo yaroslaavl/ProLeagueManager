@@ -9,6 +9,6 @@ import org.league.app.validation.EditAction;
 public class UserDeleteDto {
 
     @Size(min = 8, max = 20, message = "User has incorrect password size. Size should be between 8 and 20 letters", groups = EditAction.class)
-    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$", message = "User has incorrect password pattern", groups = EditAction.class)
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*(),.?\":{}|<>]).{8,}$", message = "User has incorrect password pattern", groups = EditAction.class)
     private String password;
 }

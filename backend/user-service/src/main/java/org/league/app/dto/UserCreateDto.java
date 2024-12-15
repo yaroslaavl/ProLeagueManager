@@ -26,7 +26,7 @@ public class UserCreateDto {
 
     @NotEmpty(groups = CreateAction.class)
     @Size(min = 8, max = 20, message = "User has incorrect password size. Size should be between 8 and 20 letters", groups = CreateAction.class)
-    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$", message = "User has incorrect password pattern", groups = CreateAction.class)
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*(),.?\":{}|<>]).{8,}$", message = "User has incorrect password pattern", groups = CreateAction.class)
     String password;
 
     @NotEmpty(groups = CreateAction.class)
@@ -40,7 +40,7 @@ public class UserCreateDto {
     String lastName;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @AgeLimit(minAge = 5, minYear = 1924, message = "User has incorrect birth day", groups = {CreateAction.class, EditAction.class})
+    @AgeLimit(minAge = 5, minYear = 1924, message = "User has incorrect birth day", groups = CreateAction.class)
     LocalDate birthDate;
 
     RoleGroup roleGroup;
