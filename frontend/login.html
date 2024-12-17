@@ -16,60 +16,59 @@
     <a href="register.html" class="link">Rejestracja</a>
   </div>
   <form action="#">
-
-
-
     <div style="position: relative;">
-
-      <div class="link-row" style="position: relative;">
-        <p style="margin: 1px;font-size: 16px;font-weight:bold">Adres e-mail lub nazwa użytkownika</p>
+      <div class="link-row" style="position: relative;text-align: left">
+        <p class="login-p">Adres e-mail lub nazwa użytkownika</p>
       </div>
-
       <div style="position: relative; display: flex; align-items: center;">
-        <input style="display: flex" type="text" placeholder="Adres e-mail lub nazwa użytkownika" required>
+        <input maxlength="64" style="display: flex" type="email" id="emailOrUsername" placeholder="Adres e-mail lub nazwa użytkownika" required>
       </div>
     </div>
-
     <div style="position: relative;">
-
       <div class="link-row" style="display: flex;text-align: right;margin: 1px">
-        <p style="margin: 1px;font-size: 16px;font-weight:bold">Hasło</p><a href="forgot-password.html">Nie pamiętasz hasła?</a>
+        <p class="login-p">Hasło</p><a href="forgot-password.html">Nie pamiętasz hasła?</a>
       </div>
       <div style="position: relative; display: flex; align-items: center;">
-        <input type="password" id="password" placeholder="Hasło" required style="padding-right: 30px; width: 100%;">
-        <img src="img/show-hide.png" alt="Pokaż/Ukryj" style="width: 20px; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;" onclick="togglePassword('password', this)">
+        <input maxlength="32" type="password" id="password" placeholder="Hasło" required>
+        <img src="img/eye-close.svg" alt="Pokaż/Ukryj" class="password-toggle" onclick="togglePassword('password', this)">
       </div>
     </div>
-
-
+    <div class="exclude" style="margin: -2px; display: inline-flex; align-items: center;">
+      <input type="checkbox" id="remember-me">
+      <label for="remember-me" style="margin-top: 14px; font-size: 12px; margin-left: 5px;">Zapamiętaj mnie</label>
+    </div>
+    <button id="loginBtn" style=" opacity: 0.5; cursor: not-allowed;" type="submit" disabled>Zaloguj się</button>
   </form>
-  <div class="exclude" style="margin-top: 1px; display: flex; align-items: center;">
-    <input type="checkbox" id="remember-me">
-    <label for="remember-me" style="margin-top: 14px; font-size: 12px; margin-left: 5px;">Zapamiętaj mnie</label>
-  </div>
-
-  <form action="#"> <button style="margin-top: 15px" type="submit">Zaloguj się</button></form>
-
   <div class="social-buttons">
     <div class="social-buttons">
       <div class="line-text">
         <p> Poprzez </p>
       </div>
-
-    <button class="social-button google">
-      <img src="img/google-logo.png" alt="Google"> Kontynuuj z Google
-    </button>
-    <button class="social-button apple">
-      <img src="img/apple-logo.png" alt="Apple"> Kontynuuj z Apple
-    </button>
+      <button class="social-button google">
+        <img src="img/google-logo.svg" alt="Google"> Kontynuuj z Google
+      </button>
+      <button class="social-button apple">
+        <img src="img/apple-logo.svg" alt="Apple" style="width: 5%"> Kontynuuj z Apple
+      </button>
+    </div>
   </div>
-  <div class="link-row" style="text-align: center; margin: 0px 0;display: flex">
+  <div class="link-row" style="text-align: center;display: flex">
     <p style="text-align: center;">
       Nie masz jeszcze konta? <a href="register.html" style="text-decoration: none; color: #007bff;">Załóż konto</a>
     </p>
   </div>
-
 </div>
-</div>
+<footer>
+  <div class="footer-content">
+    <span>Wspierane przez <a href="https://zut.edu.pl" target="_blank">ZUT</a></span>
+    <span>Wersja: <a href="#">1.22.1</a></span>
+    <span>Strona: 2ms</span>
+    <span>Szablon: 0ms</span>
+  </div>
+  <div class="footer-links">
+    <a href="#">Licencje</a>
+    <a href="#">API</a>
+  </div>
+</footer>
 </body>
 </html>

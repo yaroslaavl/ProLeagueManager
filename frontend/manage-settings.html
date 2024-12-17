@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/profile.css">
+  <script src="js/profile.js" defer></script> <!-- Подключение скрипта -->
+  <title>Profile</title>
+</head>
+<body>
+<div class="container">
+  <header class="header">
+
+    <div class="header-center">
+      <a href="main.html"><img src="img/blogo_text.svg" alt="Logo" class="logo"></a>
+      <nav class="nav">
+        <a href="main.html" class="nav-link">Sporty</a>
+        <a href="main.html" class="nav-link">e-Sporty</a>
+      </nav>
+      <div class="search-container">
+        <img src="img/search.svg" alt="Szukaj" class="search-icon">
+        <input type="text" placeholder="Szukaj" class="search-input">
+      </div>
+
+      <button class="icon-btn notification-btn">
+        <img src="img/notification-bell.svg" alt="Powiadomienia">
+      </button>
+      <button class="icon-btn menu-btn">
+        <img src="img/menu-hamburger.svg" alt="Menu">
+      </button>
+      <button class="icon-btn profile-btn">
+        <a href="profile-settings.html"><img src="img/profile.svg" alt="Profil"></a>
+      </button>
+    </div>
+  </header>
+
+
+  <main class="main">
+    <div class="side-bar-left">
+      <nav class="nav">
+        <a href="profile-settings.html" class="nav-link">
+          <img  src="img/profile.svg" alt="Profil" class="nav-icon"> Profil
+        </a>
+        <a href="private-settings.html" class="nav-link">
+          <img src="img/lock-circle.svg" alt="Bezpieczeństwo" class="nav-icon"> Bezpieczeństwo
+        </a>
+        <a href="alerts-settings.html" class="nav-link">
+          <img src="img/notification-bell.svg" alt="Powiadomienia" class="nav-icon"> Powiadomienia
+        </a>
+        <a href="#" class="nav-link active">
+          <img src="img/key.svg" alt="Uprawnienia" class="nav-icon"> Uprawnienia
+        </a>
+      </nav>
+
+    </div>
+    <div class="side-bar-right">
+      <h2 class="form-title">Profil</h2>
+      <p style="font-weight: bold">Zdjęcie profilowe</p>
+      <div class="edit-profile-img">
+        <img id="avatarPreview" src="img/profile.svg" alt="Avatar" />
+        <button type="button" id="editAvatarBtn">Edytuj</button>
+        <input type="file" id="avatarInput" accept="image/*" style="display: none;">
+      </div>
+
+      <div class="username_input">
+        <div class="input-group">
+          <p>Nazwa użytkownika</p>
+          <input maxlength="64" type="text" placeholder="Nickname" required>
+        </div>
+      </div>
+      <div class="email_input">
+        <div class="input-group">
+          <p>Adres e-mail</p>
+          <input maxlength="64" type="email" placeholder="example@gmail.com" disabled>
+        </div>
+      </div>
+      <div class="imie_nazwisko_input">
+        <div class="input-group">
+          <p>Imię</p>
+          <input maxlength="64" type="text" placeholder="Imię" required>
+        </div>
+        <div class="input-group">
+          <p>Nazwisko</p>
+          <input maxlength="64" type="text" placeholder="Nazwisko" required>
+        </div>
+      </div>
+      <div class="birthdate_input">
+        <div class="input-group">
+          <p>Dzień</p>
+          <input id="dayInput" type="number" placeholder="Dzień" required>
+        </div>
+        <div class="input-group">
+          <p>Miesiąc</p>
+          <input id="monthInput" type="number" placeholder="Miesiąc" required>
+        </div>
+        <div class="input-group">
+          <p>Rok</p>
+          <input id="yearInput" type="number" placeholder="Rok" required>
+        </div>
+      </div>
+
+      <!-- Добавляем кнопку "Zapisz" -->
+      <div class="save-btn-container">
+        <button type="submit" class="save-btn">Zapisz</button>
+      </div>
+    </div>
+
+
+
+
+
+
+  </main>
+
+
+
+
+  <footer>
+    <div class="footer-content">
+      <span>Wspierane przez <a href="https://zut.edu.pl" target="_blank">ZUT</a></span>
+      <span>Wersja: <a href="#">1.22.1</a></span>
+      <span>Strona: 2ms</span>
+      <span>Szablon: 0ms</span>
+    </div>
+    <div class="footer-links">
+      <a href="#">Licencje</a>
+      <a href="#">API</a>
+    </div>
+  </footer>
+</div>
+</body>
+</html>
