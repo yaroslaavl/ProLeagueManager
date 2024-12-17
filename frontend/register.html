@@ -12,59 +12,48 @@
   <title>Rejestracja</title>
 </head>
 <body>
-<div class="container">
-  <div class="nav-links">
-
+  <div class="container">
+    <div class="nav-links">
       <a href="login.html" class="link" id="login">Logowanie</a>
       <p>|</p>
       <a href="#" class="link active" id="register">Rejestracja</a>
-
-
-  </div>
-  <form action="#">
-
-      <p style="display: block ;margin:0 0 -10px;font-size: 16px;font-weight:bold">Nazwa użytkownika</p>
-    <input type="text" placeholder="Nazwa użytkownika" required>
-    <p style="display: block ;margin:0 0 -10px;font-size: 16px;font-weight:bold">Adres e-mail</p>
-    <input type="email" placeholder="Adres e-mail" required>
-
-<div style="display: flex;gap: 175px">
-      <p style="display: block ;margin:0 0 -10px;font-size: 16px;font-weight:bold">Imię</p>
-      <p style="display: block ;margin:0 0 -10px;font-size: 16px;font-weight:bold">Nazwisko</p>
-</div>
-
-    <div class="form-row">
-      <input  type="text" placeholder="Imię" required>
-      <input type="text" placeholder="Nazwisko" required>
     </div>
-
-      <p style="display: block ;margin:0 0 -10px;font-size: 16px;font-weight:bold">Data urodzenia</p>
-
-
+  <form action="#">
+    <p class="register-p">Nazwa użytkownika</p>
+    <input type="text" maxlength="32" placeholder="Nazwa użytkownika" required>
+    <p class="register-p">Adres e-mail</p>
+    <input type="email" maxlength="64" placeholder="Adres e-mail" required>
+    <div style="display: flex;gap: 175px">
+      <p class="register-p">Imię</p>
+      <p class="register-p">Nazwisko</p>
+    </div>
+    <div class="form-row">
+      <input  type="text" maxlength="32" placeholder="Imię" required>
+      <input type="text" maxlength="32" placeholder="Nazwisko" required>
+    </div>
+      <p class="register-p">Data urodzenia</p>
     <div class="form-row">
       <input id="dayInput" type="number" min="1" max="31" placeholder="Dzień" required>
       <input id="monthInput" type="number" min="1" max="12" placeholder="Miesiąc" required>
       <input id="yearInput" type="number" min="1900" max="2100" placeholder="Rok" required>
     </div>
-
-
-      <p  style="display: flex ;margin:0 0 -10px;font-size: 16px;font-weight:bold">Hasło</p>
-
+      <p class="register-p">Hasło</p>
     <div style="position: relative;">
-      <input type="password" id="password1" placeholder="Hasło" required>
-      <img src="img/show-hide.png" alt="Pokaż hasło" class="password-toggle" style="width: 20px; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;"onclick="togglePassword('password1', this)">
+      <input type="password" maxlength="32" id="password1" placeholder="Hasło" required>
+      <img src="img/eye-close.svg" alt="Pokaż hasło" class="password-toggle" onclick="togglePassword('password1', this)">
+      <div class="error-message" id="password1-error"></div>
     </div>
-    <p style="display: block ;margin:0 0 -10px;font-size: 16px;font-weight:bold">Powtórz hasło</p>
+    <p class="register-p">Powtórz hasło</p>
     <div style="position: relative;">
-
-      <input type="password" id="password2" placeholder="Powtórz hasło" required>
-      <img src="img/show-hide.png" alt="Pokaż hasło" class="password-toggle"style="width: 20px; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer;" onclick="togglePassword('password2', this)">
+      <input type="password" maxlength="32" id="password2" placeholder="Powtórz hasło" required>
+      <img src="img/eye-close.svg" alt="Pokaż hasło" class="password-toggle" onclick="togglePassword('password2', this)">
+      <div class="error-message" id="password2-error"></div>
     </div>
-    <button type="submit" >Zarejestruj się</button>
+
+
+
+    <button type="submit" id="register-btn" disabled style="opacity: 0.5; cursor: not-allowed;">Zarejestruj się</button>
   </form>
-
-
-
   <div class="social-buttons">
     <div class="line-text">
       <p> Poprzez </p>
@@ -72,15 +61,30 @@
 
 
     <button class="social-button google">
-      <img src="img/google-logo.png" alt="Google"> Kontynuuj z Google
+      <img src="img/google-logo.svg" alt="Google"> Kontynuuj z Google
     </button>
     <button class="social-button apple">
-      <img src="img/apple-logo.png" alt="Apple"> Kontynuuj z Apple
+      <img src="img/apple-logo.svg" alt="Apple" style="width: 5%" > Kontynuuj z Apple
     </button>
   </div>
-  <div class="link-row" style="text-align: center; display: block">
+  <div class="link-row">
     <p>Masz konto? <a href="login.html">Zaloguj się</a></p>
   </div>
 </div>
+
+  <footer>
+    <div class="footer-content">
+      <span>Wspierane przez <a href="https://zut.edu.pl" target="_blank">ZUT</a></span>
+      <span>Wersja: <a href="#">1.22.1</a></span>
+      <span>Strona: 2ms</span>
+      <span>Szablon: 0ms</span>
+    </div>
+    <div class="footer-links">
+      <a href="#">Licencje</a>
+      <a href="#">API</a>
+    </div>
+  </footer>
+
+
 </body>
 </html>

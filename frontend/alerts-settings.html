@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/alerts.css">
+  <script src="js/alerts.js" defer></script> <!-- Подключение скрипта -->
+  <title>Profile</title>
+</head>
+<body>
+<div class="container">
+  <header class="header">
+
+    <div class="header-center">
+      <a href="main.html"><img src="img/blogo_text.svg" alt="Logo" class="logo"></a>
+      <nav class="nav">
+        <a href="main.html" class="nav-link">Sporty</a>
+        <a href="main.html" class="nav-link">e-Sporty</a>
+      </nav>
+      <div class="search-container">
+        <img src="img/search.svg" alt="Szukaj" class="search-icon">
+        <input type="text" placeholder="Szukaj" class="search-input">
+      </div>
+
+      <button class="icon-btn notification-btn">
+        <img src="img/notification-bell.svg" alt="Powiadomienia">
+      </button>
+      <button class="icon-btn menu-btn">
+        <img src="img/menu-hamburger.svg" alt="Menu">
+      </button>
+      <button class="icon-btn profile-btn">
+        <a href="profile-settings.html"><img src="img/profile.svg" alt="Profil"></a>
+      </button>
+    </div>
+  </header>
+
+
+  <main class="main">
+    <div class="side-bar-left">
+      <nav class="nav">
+        <a href="profile-settings.html" class="nav-link">
+          <img  src="img/profile.svg" alt="Profil" class="nav-icon"> Profil
+        </a>
+        <a href="private-settings.html" class="nav-link">
+          <img src="img/lock-circle.svg" alt="Bezpieczeństwo" class="nav-icon"> Bezpieczeństwo
+        </a>
+        <a href="#" class="nav-link active">
+          <img src="img/notification-bell.svg" alt="Powiadomienia" class="nav-icon"> Powiadomienia
+        </a>
+        <a href="#" class="nav-link">
+          <img src="img/key.svg" alt="Uprawnienia" class="nav-icon"> Uprawnienia
+        </a>
+      </nav>
+
+    </div>
+    <div class="side-bar-right">
+      <h2 class="form-title">Ustawienia powiadomień</h2>
+      <div class="Global">
+        <p>Globalne</p>
+        <p>Aktualizacje i promocje</p>
+        <div style="display: flex" class ="akt-prom">
+          <p class="under-text">Otrzymuj powiadomienia o ważnych<br>aktualizacjach i promocjach</p>
+          <div class="toggle-container">
+            <input type="checkbox" id="toggle1" class="toggle-checkbox">
+            <label for="toggle1" class="toggle-switch"></label>
+          </div>
+        </div>
+        <p>Polubienia</p>
+        <div style="display: flex" class="liked">
+          <p class="under-text">Otrzymasz powiadomienie, gdy ktoś<br> polubi Twój post.</p>
+          <div class="toggle-container">
+            <input type="checkbox" id="toggle2" class="toggle-checkbox">
+            <label for="toggle2" class="toggle-switch"></label>
+          </div>
+        </div>
+      </div>
+
+      <div class="Community">
+        <p>Społeczność</p>
+        <p>Polubienia</p>
+        <div style="display: flex" class="akt-prom">
+          <p class="under-text">Otrzymasz powiadomienie, gdy ktoś<br> polubi Twój post.</p>
+          <div class="toggle-container">
+            <input type="checkbox" id="toggle3" class="toggle-checkbox">
+            <label for="toggle3" class="toggle-switch"></label>
+          </div>
+        </div>
+        <p>Hasło</p>
+        <div style="display: flex" class="liked">
+          <p class="under-text">Set a unique password for better protection</p>
+          <div style= "margin-left: 140px" class="toggle-container">
+            <input type="checkbox" id="toggle4" class="toggle-checkbox">
+            <label for="toggle4" class="toggle-switch"></label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+
+  </main>
+
+
+
+
+  <footer>
+    <div class="footer-content">
+      <span>Wspierane przez <a href="https://zut.edu.pl" target="_blank">ZUT</a></span>
+      <span>Wersja: <a href="#">1.22.1</a></span>
+      <span>Strona: 2ms</span>
+      <span>Szablon: 0ms</span>
+    </div>
+    <div class="footer-links">
+      <a href="#">Licencje</a>
+      <a href="#">API</a>
+    </div>
+  </footer>
+</div>
+</body>
+</html>
