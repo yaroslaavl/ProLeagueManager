@@ -51,13 +51,13 @@ public class UserService implements UserDetailsService {
     @Transactional
     public UserReadDto create(UserCreateDto userCreateDto){
         String activationToken = UUID.randomUUID().toString();
-        RoleGroup user = roleGroupRepository.findByName("User")
+        RoleGroup userRoleGroup = roleGroupRepository.findByName("USER")
                 .orElseThrow(() -> new RoleGroupNotFound("Group not found"));
 
         User newUser = Optional.of(userCreateDto)
                 .map(dto -> {
                     User entity = userMapper.toEntity(dto, passwordEncoder);
-                    entity.setRoleGroup(user);
+                    entity.setRoleGroup(userRoleGroup);
                     entity.setIsVerified(false);
                     entity.setEmailVerificationToken(activationToken);
                     return userRepository.saveAndFlush(entity);
@@ -121,10 +121,15 @@ public class UserService implements UserDetailsService {
         }
 
         redisCacheClient.delete(userByToken.getEmail() + ":activationToken");
+
         userByToken.setEmailVerificationToken(null);
         userByToken.setIsVerified(true);
-        userRepository.saveAndFlush(userByToken);
+        RoleGroup roleGroup = roleGroupRepository.findByName("VERIFIED_USER")
+                .orElseThrow(() -> new RoleGroupNotFound("Group not found"));
+        userByToken.setRoleGroup(roleGroup);
 
+        userRepository.saveAndFlush(userByToken);
+        log.info("User {} has been verified", userByToken.getEmail());
         return true;
     }
 
