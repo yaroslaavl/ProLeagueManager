@@ -9,6 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.league.app.database.entity.enums.TeamStatus;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Data
 @Entity
@@ -19,15 +20,16 @@ import java.time.LocalDateTime;
 public class Team {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
-    @Column(name = "team_name", nullable = false)
+    @Column(name = "team_name", nullable = false, unique = true)
     private String teamName;
 
     @Column(name = "team_image")
     private String teamImage;
 
+    @Column(name = "team_status")
     @Enumerated(EnumType.STRING)
     private TeamStatus teamStatus;
 
