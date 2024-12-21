@@ -60,9 +60,9 @@ public class JWTFilter extends OncePerRequestFilter {
             log.info("User email: {}", email);
             var userDetails = authClientFeign.loadUserByEmail(jwtToken, email);
 
-            if (authClientFeign.validateToken(jwtToken, userDetails.getUsername()) && authClientFeign.isAccessToken(jwtToken) &&
+            if (authClientFeign.validateToken(jwtToken, userDetails.getEmail()) && authClientFeign.isAccessToken(jwtToken) &&
                     authClientFeign.getToken(jwtToken,
-                            "whitelist:" + userDetails.getUsername() + ":accessToken").equals(jwtToken)) {
+                            "whitelist:" + userDetails.getEmail() + ":accessToken").equals(jwtToken)) {
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getRoles().stream()
                         .map(SimpleGrantedAuthority::new)
