@@ -4,11 +4,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.league.app.database.entity.Role;
 import org.league.app.database.repository.UserRepository;
 import org.league.app.dto.AuthResponseDto;
 import org.league.app.dto.LoginDto;
 import org.league.app.dto.UserCreateDto;
 import org.league.app.dto.UserReadDto;
+import org.league.app.exception.UserEmailNotFoundException;
 import org.league.app.feign.UserDto;
 import org.league.app.rediscache.RedisCacheClient;
 import org.league.app.service.JWTService;
@@ -59,7 +61,7 @@ public class AuthController {
         }
 
         if(bindingResult.hasErrors()){
-            bindingResult.getFieldErrors().forEach(fieldError -> log.error(fieldError.getField() + ": " + fieldError.getDefaultMessage()));
+            bindingResult.getFieldErrors().forEach(fieldError -> log.error("{}: {}", fieldError.getField(), fieldError.getDefaultMessage()));
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         var userReadDto = userService.create(userCreate);
@@ -78,9 +80,9 @@ public class AuthController {
         log.info("accessToken token: {}", accessToken);
         log.info("refreshToken token: {}", refreshToken);
         redisCacheClient.set(
-                "whitelist:" + loginDto.getEmail() + ":accessToken", accessToken, 3, TimeUnit.MINUTES);
+                "whitelist:" + loginDto.getEmail() + ":accessToken", accessToken, 15, TimeUnit.MINUTES);
         redisCacheClient.set(
-                "whitelist:" + loginDto.getEmail() + ":refreshToken", refreshToken, 7, TimeUnit.DAYS);
+                "whitelist:" + loginDto.getEmail() + ":refreshToken", refreshToken, 1, TimeUnit.DAYS);
         return AuthResponseDto.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
@@ -143,10 +145,17 @@ public class AuthController {
                 .collect(Collectors.toList());
         return UserDto.builder()
                 .email(user.getUsername())
-                .username(user.getUsername())
                 .roles(roles)
                 .build();
     }
 
-
+    @GetMapping("/get-user-by-email")
+    public UserDto getUserByEmail(@RequestParam("email") String email) {
+        return userRepository.findByEmail(email)
+                .map(user -> new UserDto(user.getId(), user.getEmail(),
+                        user.getRoleGroup().getRoles().stream()
+                                .map(Role::getName)
+                                .collect(Collectors.toList())))
+                .orElseThrow(() -> new UserEmailNotFoundException("User not found: " + email));
+    }
 }
