@@ -51,7 +51,7 @@ public class JWTService {
                 .addClaims(claims)
                 .setSubject(authentication.getName())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 3))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 15))
                 .signWith(SignatureAlgorithm.HS256, jwtSigningKey)
                 .compact();
     }
@@ -61,7 +61,7 @@ public class JWTService {
         return Jwts.builder()
                 .setSubject(authentication.getName())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24))
                 .signWith(SignatureAlgorithm.HS256, jwtSigningKey)
                 .compact();
     }
@@ -102,7 +102,7 @@ public class JWTService {
         Claims claims = extractAllClaims(token);
         Date expiration = claims.getExpiration();
         long now = System.currentTimeMillis();
-        long accessTokenExpiryThreshold = 1000 * 60 * 3;
+        long accessTokenExpiryThreshold = 1000 * 60 * 15;
 
         return expiration != null && expiration.getTime() - now < accessTokenExpiryThreshold;
     }
@@ -141,7 +141,7 @@ public class JWTService {
                             .build();
 
                     redisCacheClient.set(
-                            "whitelist:" + userDetails.getUsername() + ":accessToken", accessToken, 3, TimeUnit.MINUTES);
+                            "whitelist:" + userDetails.getUsername() + ":accessToken", accessToken, 15, TimeUnit.MINUTES);
 
                     new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
                 } else {

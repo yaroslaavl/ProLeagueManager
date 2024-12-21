@@ -21,5 +21,8 @@ public interface AuthClientFeign {
 
     @GetMapping("/api/auth/load-user-by-email")
     UserDto loadUserByEmail(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestParam("email") String email);
+
+    @GetMapping("/api/auth/get-user-by-email")
+    UserDto getUserByEmail(@RequestParam("email") String email);
 }
 
