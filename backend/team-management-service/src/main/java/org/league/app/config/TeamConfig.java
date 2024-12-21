@@ -27,7 +27,7 @@ public class TeamConfig {
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/team/get-teams").authenticated()
+                        .requestMatchers("/api/team/create-team").hasAuthority("AUTHORISED_USER")
                         .requestMatchers("/api/team/players","/actuator/health").permitAll())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(session ->
