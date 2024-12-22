@@ -43,8 +43,10 @@ public class TeamService {
                 .map(dto -> {
                     Team entity = teamMapper.toEntity(dto);
                     entity.setTeamStatus(TeamStatus.INACTIVE);
-                    return teamRepository.saveAndFlush(entity);
+                    return entity;
                 }).orElseThrow();
+
+        teamRepository.save(team);
 
         TeamMember teamMember = TeamMember.builder()
                 .team(team)
@@ -53,9 +55,7 @@ public class TeamService {
                 .isSubstitute(false)
                 .build();
 
-        teamRepository.saveAndFlush(team);
         teamMemberRepository.save(teamMember);
-
         return teamMapper.toDto(team);
     }
 
