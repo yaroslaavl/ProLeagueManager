@@ -1,4 +1,4 @@
-package org.league.app.dto;
+package org.league.app.feign;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
