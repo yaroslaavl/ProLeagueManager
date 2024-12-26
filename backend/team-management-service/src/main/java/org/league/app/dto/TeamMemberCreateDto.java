@@ -1,17 +1,23 @@
 package org.league.app.dto;
 
 import lombok.Data;
+import lombok.Value;
 import org.league.app.database.entity.Team;
 import org.league.app.database.entity.enums.TeamRole;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Data
 public class TeamMemberCreateDto {
 
-    Team team;
+    private UUID teamId;
 
-    Integer userId;
+    private Long userId;
 
-    TeamRole teamRole;
+    private TeamRole teamRole;
 
-    Boolean isSubstitute;
+    private Boolean isSubstitute;
+
+    private LocalDateTime joinedAt;
 }
