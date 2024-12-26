@@ -15,6 +15,9 @@ public interface UserMapper {
 
     @Mappings({
             @Mapping(target = "password", expression = "java(passwordEncoder.encode(userCreateEditDto.getPassword()))"),
+            @Mapping(target = "avatar", ignore = true),
+            @Mapping(target = "createdAt", ignore = true),
+            @Mapping(target = "updatedAt", ignore = true)
     })
     User toEntity(UserCreateDto userCreateEditDto, @Context PasswordEncoder passwordEncoder);
 
