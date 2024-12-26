@@ -3,7 +3,7 @@ package org.league.app.controller;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.league.app.dto.EmailRequest;
+import org.league.app.feign.EmailRequest;
 import org.league.app.service.MailSenderService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
