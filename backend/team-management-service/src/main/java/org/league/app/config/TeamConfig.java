@@ -28,7 +28,8 @@ public class TeamConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/team/create-team").hasAuthority("AUTHORISED_USER")
-                        .requestMatchers("/api/team/players","/actuator/health").permitAll())
+                        .requestMatchers("/api/team/update-team-name", "/api/team/upload-team-logo").authenticated()
+                        .requestMatchers("/api/team/allTeams", "/api/team/currentTeam/**","/actuator/health", "/api/team/*/user-role", "/api/team/team-logo/**").permitAll())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
