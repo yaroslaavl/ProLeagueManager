@@ -28,7 +28,9 @@ public class JWTFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getServletPath();
-        return path.equals("/api/team/players")
+        return path.equals("/api/team/allTeams")
+                || path.equals("/api/team/currentTeam/")
+                || path.equals("/api/team/team-logo/")
                 || path.equals("/actuator/health");
     }
 
