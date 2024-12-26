@@ -55,7 +55,6 @@ public class JWTFilter extends OncePerRequestFilter {
         }
 
         String authorizationHeader = request.getHeader("Authorization");
-        log.info("Authorization header received: {}", authorizationHeader);
         if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
