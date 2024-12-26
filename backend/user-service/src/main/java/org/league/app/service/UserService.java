@@ -227,6 +227,13 @@ public class UserService implements UserDetailsService {
             String extension = Objects.requireNonNull(file.getOriginalFilename()).substring(file.getOriginalFilename().lastIndexOf("."));
             String filename = user.getEmail() + "_avatar" + extension;
 
+            String oldFileName = user.getAvatar();
+            if (oldFileName != null && !oldFileName.isEmpty()) {
+                Path oldPath = Paths.get(uploadDir, oldFileName);
+                if (Files.exists(oldPath)) {
+                    Files.delete(oldPath);
+                }
+            }
             Path path = Paths.get(uploadDir, filename);
 
             if (Files.exists(path)) {
@@ -265,7 +272,7 @@ public class UserService implements UserDetailsService {
     }
 
     private byte[] getDefaultImage() {
-        Path defaultImagePath = Paths.get("E:/important/league-hub/backend/images/user_avatar/default-avatar.jpg");
+        Path defaultImagePath = Paths.get(uploadDir, "default-avatar.png");
         try {
             return Files.readAllBytes(defaultImagePath);
         } catch (IOException e) {
