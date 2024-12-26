@@ -13,7 +13,7 @@ public class ImageCustomValidator implements ConstraintValidator<ImageCustom, Mu
     @Override
     public boolean isValid(MultipartFile file, ConstraintValidatorContext constraintValidatorContext) {
         if (file == null || file.isEmpty()) {
-            return false; // Не передан файл
+            return false;
         }
 
         String contentType = file.getContentType();
