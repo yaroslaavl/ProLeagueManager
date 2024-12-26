@@ -81,6 +81,57 @@ public class UserService implements UserDetailsService {
         return userMapper.toDto(newUser);
     }
 
+    public boolean sendPasswordResetEmail(EmailResetPasswordDto emailResetPasswordDto) {
+        if (emailResetPasswordDto.getEmail() == null || !userRepository.existsByEmail(emailResetPasswordDto.getEmail())) {
+            throw new UsernameNotFoundException("User not found");
+        }
+
+        String resetToken = UUID.randomUUID().toString();
+        String resetUrl = "http://localhost:8765/auth/reset-password?token=" + resetToken;
+
+        try {
+            notificationFeignClient.sendEmail(new EmailRequest(
+                    emailResetPasswordDto.getEmail(),
+                    "Password Reset Request",
+                    "Click the link to reset your password: " + resetUrl
+            ));
+
+            redisCacheClient.set(emailResetPasswordDto.getEmail() + ":resetPasswordToken", resetToken, 5, TimeUnit.MINUTES);
+            redisCacheClient.set(resetToken, emailResetPasswordDto.getEmail(), 5,TimeUnit.MINUTES);
+
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Transactional
+    public void resetPassword(ResetPasswordDto resetPasswordDto, String token) {
+        if (token == null || token.isEmpty()) {
+            throw new IllegalArgumentException("Invalid or missing token");
+        }
+
+        String userEmail = redisCacheClient.get(token);
+        if (userEmail == null) {
+            throw new IllegalArgumentException("Invalid or expired token");
+        }
+
+        String storedToken = redisCacheClient.get(userEmail + ":resetPasswordToken");
+        if (storedToken == null || !storedToken.equals(token)) {
+            throw new IllegalArgumentException("Invalid or expired token");
+        }
+
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new UserEmailNotFoundException("User not found"));
+
+        user.setPassword(passwordEncoder.encode(resetPasswordDto.getNewPassword()));
+        userRepository.save(user);
+
+        redisCacheClient.delete(userEmail + ":resetPasswordToken");
+        redisCacheClient.delete(token);
+    }
+
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         if (email == null || email.isEmpty()) {
