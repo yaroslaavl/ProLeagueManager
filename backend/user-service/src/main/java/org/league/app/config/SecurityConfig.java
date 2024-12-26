@@ -87,13 +87,6 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/logout").authenticated()
                         .anyRequest().authenticated()
                 )
-                .exceptionHandling(exception -> exception
-                        .authenticationEntryPoint((request, response, authException) -> {
-                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                            response.setContentType("application/json");
-                            response.getWriter().write("{\"error\": \"Unauthorized\", \"message\": \"Invalid credentials\"}");
-                        })
-                )
                 .oauth2Login(oauth2 -> oauth2
                         .userInfoEndpoint(userInfo -> userInfo.oidcUserService(oidcUserService()))
                         .successHandler((request, response, authentication) -> {
@@ -134,8 +127,8 @@ public class SecurityConfig {
 
                 String fullName = userRequest.getIdToken().getFullName();
                 String[] parts = fullName.split(" ");
-                String firstName = parts[0];
-                String lastName = parts[1];
+                String firstName = parts.length > 0 ? parts[0] : "Unknown";
+                String lastName = parts.length > 1 ? parts[1] : "";
 
                 UserCreateDto user = UserCreateDto.builder()
                         .username(username)
