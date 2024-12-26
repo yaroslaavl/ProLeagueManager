@@ -10,8 +10,9 @@ import org.mapstruct.Mapping;
 public interface TeamMapper {
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "teamStatus", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "teamImage", ignore = true)
+    @Mapping(target = "teamStatus", ignore = true)
     Team toEntity(TeamCreateEditDto teamCreateDto);
 
     TeamReadDto toDto(Team team);
