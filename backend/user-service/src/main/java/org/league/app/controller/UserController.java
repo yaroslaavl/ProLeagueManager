@@ -7,9 +7,13 @@ import org.league.app.database.entity.User;
 import org.league.app.database.repository.UserRepository;
 import org.league.app.dto.*;
 import org.league.app.exception.UserEmailNotFoundException;
+import org.league.app.mapper.UserMapper;
 import org.league.app.service.UserService;
 import org.league.app.validation.CreateAction;
 import org.league.app.validation.EditAction;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -26,6 +30,7 @@ public class UserController {
 
     private final UserService userService;
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
     @DeleteMapping("/delete-user-account")
     public ResponseEntity<?> deleteUser(@RequestBody @Validated({EditAction.class}) UserDeleteDto userDeleteDto) {
@@ -48,6 +53,13 @@ public class UserController {
     @GetMapping("/profile")
     public ResponseEntity<UserReadDto> getProfile() {
         return ResponseEntity.ok(userService.getUserByEmail());
+    }
+
+    @GetMapping("/allUsers")
+    public Page<UserReadDto> findAllUsers(@RequestParam("page") int page,
+                                   @RequestParam("size") int size,
+                                   Pageable pageable) {
+        return userRepository.findAll(pageable).map(userMapper::toDto);
     }
 
     @GetMapping("/profile/public/{username}")
@@ -87,6 +99,28 @@ public class UserController {
     public ResponseEntity<String> resendActivationEmail() {
         userService.resendEmailConfirmation();
         return ResponseEntity.ok("Resend activation email has been sent");
+    }
+
+    @PostMapping("/send-reset-password")
+    public ResponseEntity<String> sendResetPasswordEmail(@RequestBody EmailResetPasswordDto emailResetPasswordDto) {
+        boolean success = userService.sendPasswordResetEmail(emailResetPasswordDto);
+        if (success) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @PostMapping("/set-new-password/{token}")
+    public ResponseEntity<String> setNewPassword(@PathVariable("token") String token,
+                                                 @RequestBody @Validated(EditAction.class) ResetPasswordDto resetPasswordDto) {
+        try {
+            userService.resetPassword(resetPasswordDto, token);
+            return ResponseEntity.ok("Your password has been changed");
+        } catch (IllegalArgumentException e){
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
 }
