@@ -1,0 +1,15 @@
+spring:
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        enabled: true
+      config:
+        enabled: true
+        format: yaml
+  config:
+    import: 'consul:'
+  application:
+    name: sport-service
+

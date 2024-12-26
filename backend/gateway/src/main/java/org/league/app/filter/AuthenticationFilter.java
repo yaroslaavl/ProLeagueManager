@@ -76,7 +76,14 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
                 "/team/allTeams",
                 "/team/currentTeam/*",
                 "/team/*/user-role",
-                "/team/team-logo/*"
+                "/team/team-logo/*",        
+                "/user/allUsers",
+                "/user/send-reset-password",
+                "/user/set-new-password/*",
+                "/sport/allSports",
+                "/sport/regular-sports",
+                "/sport/e-sports",
+                "/sport/exact-sport/*"
         );
     }
 }
