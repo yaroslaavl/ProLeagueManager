@@ -1,3 +1,837 @@
+2024-12-25T16:31:22.306+01:00  INFO 20144 --- [team-management-service] [main] o.l.a.TeamManagementServiceApplication   : Starting TeamManagementServiceApplication using Java 21.0.5 with PID 20144 (E:\important\league-hub\backend\team-management-service\target\classes started by ylopa in E:\important\league-hub)
+2024-12-25T16:31:22.317+01:00  INFO 20144 --- [team-management-service] [main] o.l.a.TeamManagementServiceApplication   : No active profile set, falling back to 1 default profile: "default"
+2024-12-25T16:31:23.541+01:00  INFO 20144 --- [team-management-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-12-25T16:31:23.680+01:00  INFO 20144 --- [team-management-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 131 ms. Found 2 JPA repository interfaces.
+2024-12-25T16:31:23.979+01:00  INFO 20144 --- [team-management-service] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=eea7ec31-ce8e-37c8-a8a5-2986a3e7cd85
+2024-12-25T16:31:24.276+01:00  WARN 20144 --- [team-management-service] [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig' of type [org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). The currently created BeanPostProcessor [lbRestClientPostProcessor] is declared through a non-static factory method on that class; consider declaring it as static instead.
+2024-12-25T16:31:24.281+01:00  WARN 20144 --- [team-management-service] [main] trationDelegate$BeanPostProcessorChecker : Bean 'deferringLoadBalancerInterceptor' of type [org.springframework.cloud.client.loadbalancer.DeferringLoadBalancerInterceptor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected into a currently created BeanPostProcessor [lbRestClientPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies.
+2024-12-25T16:31:24.543+01:00  INFO 20144 --- [team-management-service] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8082 (http)
+2024-12-25T16:31:24.559+01:00  INFO 20144 --- [team-management-service] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-12-25T16:31:24.560+01:00  INFO 20144 --- [team-management-service] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.30]
+2024-12-25T16:31:24.627+01:00  INFO 20144 --- [team-management-service] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-12-25T16:31:24.627+01:00  INFO 20144 --- [team-management-service] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2252 ms
+2024-12-25T16:31:24.874+01:00  INFO 20144 --- [team-management-service] [main] o.s.c.openfeign.FeignClientFactoryBean   : For 'user-service' URL not provided. Will try picking an instance via load-balancing.
+2024-12-25T16:31:26.071+01:00  INFO 20144 --- [team-management-service] [main] o.s.cloud.commons.util.InetUtils         : Cannot determine local hostname
+2024-12-25T16:31:26.277+01:00  INFO 20144 --- [team-management-service] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-12-25T16:31:26.341+01:00  INFO 20144 --- [team-management-service] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.3.Final
+2024-12-25T16:31:26.382+01:00  INFO 20144 --- [team-management-service] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-12-25T16:31:26.673+01:00  INFO 20144 --- [team-management-service] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-12-25T16:31:26.701+01:00  INFO 20144 --- [team-management-service] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-12-25T16:31:26.855+01:00  INFO 20144 --- [team-management-service] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@673a5aa7
+2024-12-25T16:31:26.856+01:00  INFO 20144 --- [team-management-service] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-12-25T16:31:27.824+01:00  INFO 20144 --- [team-management-service] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-12-25T16:31:27.936+01:00  INFO 20144 --- [team-management-service] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-12-25T16:31:28.323+01:00  WARN 20144 --- [team-management-service] [main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: e8cfa68b-d18a-4f63-be1d-786cfbe5b877
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2024-12-25T16:31:28.339+01:00  INFO 20144 --- [team-management-service] [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2024-12-25T16:31:28.733+01:00  INFO 20144 --- [team-management-service] [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2024-12-25T16:31:30.129+01:00  INFO 20144 --- [team-management-service] [main] o.s.cloud.commons.util.InetUtils         : Cannot determine local hostname
+2024-12-25T16:31:30.198+01:00  WARN 20144 --- [team-management-service] [main] iguration$LoadBalancerCaffeineWarnLogger : Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2024-12-25T16:31:30.287+01:00  INFO 20144 --- [team-management-service] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8082 (http) with context path '/'
+2024-12-25T16:31:30.289+01:00  INFO 20144 --- [team-management-service] [main] o.s.c.c.s.ConsulServiceRegistry          : Registering service with consul: NewService{id='team-management-service-8082', name='team-management-service', tags=[], address='localhost', meta={secure=false}, port=8082, enableTagOverride=null, check=Check{script='null', dockerContainerID='null', shell='null', interval='10s', ttl='null', http='http://localhost:8082/actuator/health', method='null', header={}, tcp='null', timeout='null', deregisterCriticalServiceAfter='null', tlsSkipVerify=null, status='null', grpc='null', grpcUseTLS=null}, checks=null}
+2024-12-25T16:31:31.316+01:00  INFO 20144 --- [team-management-service] [main] o.s.cloud.commons.util.InetUtils         : Cannot determine local hostname
+2024-12-25T16:31:31.326+01:00  INFO 20144 --- [team-management-service] [main] o.l.a.TeamManagementServiceApplication   : Started TeamManagementServiceApplication in 11.061 seconds (process running for 12.276)
+2024-12-25T16:31:31.529+01:00  INFO 20144 --- [team-management-service] [RMI TCP Connection(3)-172.25.208.1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-12-25T16:31:31.529+01:00  INFO 20144 --- [team-management-service] [RMI TCP Connection(3)-172.25.208.1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-12-25T16:31:31.531+01:00  INFO 20144 --- [team-management-service] [RMI TCP Connection(3)-172.25.208.1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2024-12-25T16:35:07.459+01:00  WARN 20144 --- [team-management-service] [http-nio-8082-exec-1] ration$PageModule$WarningLoggingModifier : Serializing PageImpl instances as-is is not supported, meaning that there is no guarantee about the stability of the resulting JSON structure!
+	For a stable JSON structure, please use Spring Data's PagedModel (globally via @EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO))
+	or Spring HATEOAS and Spring Data's PagedResourcesAssembler as documented in https://docs.spring.io/spring-data/commons/reference/repositories/core-extensions.html#core.web.pageables.
+
+2024-12-25T16:35:14.346+01:00 ERROR 20144 --- [team-management-service] [http-nio-8082-exec-2] o.a.c.c.C.[.[.[/].[dispatcherServlet]    : Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed: org.league.app.exception.TeamAlreadyExistsException: Team name does not exist] with root cause
+
+org.league.app.exception.TeamAlreadyExistsException: Team name does not exist
+	at org.league.app.service.TeamService.getTeamByName(TeamService.java:112) ~[classes/:na]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[na:na]
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:355) ~[spring-aop-6.1.13.jar:6.1.13]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:196) ~[spring-aop-6.1.13.jar:6.1.13]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163) ~[spring-aop-6.1.13.jar:6.1.13]
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:768) ~[spring-aop-6.1.13.jar:6.1.13]
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:379) ~[spring-tx-6.1.13.jar:6.1.13]
+	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:119) ~[spring-tx-6.1.13.jar:6.1.13]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184) ~[spring-aop-6.1.13.jar:6.1.13]
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:768) ~[spring-aop-6.1.13.jar:6.1.13]
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:720) ~[spring-aop-6.1.13.jar:6.1.13]
+	at org.league.app.service.TeamService$$SpringCGLIB$$0.getTeamByName(<generated>) ~[classes/:na]
+	at org.league.app.controller.TeamController.getTeamByName(TeamController.java:39) ~[classes/:na]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[na:na]
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:255) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:188) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118) ~[spring-webmvc-6.1.13.jar:6.1.13]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:926) ~[spring-webmvc-6.1.13.jar:6.1.13]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:831) ~[spring-webmvc-6.1.13.jar:6.1.13]
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87) ~[spring-webmvc-6.1.13.jar:6.1.13]
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089) ~[spring-webmvc-6.1.13.jar:6.1.13]
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979) ~[spring-webmvc-6.1.13.jar:6.1.13]
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014) ~[spring-webmvc-6.1.13.jar:6.1.13]
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903) ~[spring-webmvc-6.1.13.jar:6.1.13]
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:564) ~[tomcat-embed-core-10.1.30.jar:6.0]
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885) ~[spring-webmvc-6.1.13.jar:6.1.13]
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658) ~[tomcat-embed-core-10.1.30.jar:6.0]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51) ~[tomcat-embed-websocket-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:110) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:231) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$FilterObservation$SimpleFilterObservation.lambda$wrap$1(ObservationFilterChainDecorator.java:479) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$AroundFilterObservation$SimpleAroundFilterObservation.lambda$wrap$1(ObservationFilterChainDecorator.java:340) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator.lambda$wrapSecured$0(ObservationFilterChainDecorator.java:82) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:128) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:100) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:126) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:120) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:131) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:85) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:179) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.league.app.filter.JWTFilter.doFilterInternal(JWTFilter.java:43) ~[classes/:na]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:107) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:93) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$AroundFilterObservation$SimpleAroundFilterObservation.lambda$wrap$0(ObservationFilterChainDecorator.java:323) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:224) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$3(HandlerMappingIntrospector.java:195) ~[spring-webmvc-6.1.13.jar:6.1.13]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:230) ~[spring-security-config-6.3.3.jar:6.3.3]
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:352) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:268) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.springframework.web.filter.ServerHttpObservationFilter.doFilterInternal(ServerHttpObservationFilter.java:113) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:384) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1741) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+
+2024-12-25T16:35:28.572+01:00  INFO 20144 --- [team-management-service] [http-nio-8082-exec-3] org.league.app.filter.JWTFilter          : Extracted email: ylopatkin@gmail.com
+2024-12-25T16:35:28.572+01:00  INFO 20144 --- [team-management-service] [http-nio-8082-exec-3] org.league.app.filter.JWTFilter          : User email: ylopatkin@gmail.com
+2024-12-25T16:35:51.577+01:00  INFO 20144 --- [team-management-service] [http-nio-8082-exec-4] org.league.app.filter.JWTFilter          : Extracted email: ylopatkin@gmail.com
+2024-12-25T16:35:51.577+01:00  INFO 20144 --- [team-management-service] [http-nio-8082-exec-4] org.league.app.filter.JWTFilter          : User email: ylopatkin@gmail.com
+2024-12-25T16:37:18.647+01:00 ERROR 20144 --- [team-management-service] [http-nio-8082-exec-7] org.league.app.service.TeamService       : Failed to load default team logo: src\main\resources\images\team_logo\default-team-logo.png
+2024-12-25T16:37:49.528+01:00 ERROR 20144 --- [team-management-service] [http-nio-8082-exec-8] org.league.app.service.TeamService       : Failed to load default team logo: src\main\resources\images\team_logo\default-team-logo.png
+2024-12-25T16:38:46.067+01:00  INFO 20144 --- [team-management-service] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-12-25T16:38:46.071+01:00  INFO 20144 --- [team-management-service] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2024-12-25T16:38:46.075+01:00  INFO 20144 --- [team-management-service] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2024-12-25T16:38:46.077+01:00  INFO 20144 --- [team-management-service] [SpringApplicationShutdownHook] o.s.c.c.s.ConsulServiceRegistry          : Deregistering service with consul: team-management-service-8082
+2024-12-25T16:38:51.115+01:00  INFO 10952 --- [team-management-service] [main] o.l.a.TeamManagementServiceApplication   : Starting TeamManagementServiceApplication using Java 21.0.5 with PID 10952 (E:\important\league-hub\backend\team-management-service\target\classes started by ylopa in E:\important\league-hub)
+2024-12-25T16:38:51.117+01:00  INFO 10952 --- [team-management-service] [main] o.l.a.TeamManagementServiceApplication   : No active profile set, falling back to 1 default profile: "default"
+2024-12-25T16:38:51.905+01:00  INFO 10952 --- [team-management-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-12-25T16:38:52.012+01:00  INFO 10952 --- [team-management-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 102 ms. Found 2 JPA repository interfaces.
+2024-12-25T16:38:52.201+01:00  INFO 10952 --- [team-management-service] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=eea7ec31-ce8e-37c8-a8a5-2986a3e7cd85
+2024-12-25T16:38:52.452+01:00  WARN 10952 --- [team-management-service] [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig' of type [org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). The currently created BeanPostProcessor [lbRestClientPostProcessor] is declared through a non-static factory method on that class; consider declaring it as static instead.
+2024-12-25T16:38:52.454+01:00  WARN 10952 --- [team-management-service] [main] trationDelegate$BeanPostProcessorChecker : Bean 'deferringLoadBalancerInterceptor' of type [org.springframework.cloud.client.loadbalancer.DeferringLoadBalancerInterceptor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected into a currently created BeanPostProcessor [lbRestClientPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies.
+2024-12-25T16:38:52.653+01:00  INFO 10952 --- [team-management-service] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8082 (http)
+2024-12-25T16:38:52.665+01:00  INFO 10952 --- [team-management-service] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-12-25T16:38:52.665+01:00  INFO 10952 --- [team-management-service] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.30]
+2024-12-25T16:38:52.728+01:00  INFO 10952 --- [team-management-service] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-12-25T16:38:52.728+01:00  INFO 10952 --- [team-management-service] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1562 ms
+2024-12-25T16:38:52.919+01:00  INFO 10952 --- [team-management-service] [main] o.s.c.openfeign.FeignClientFactoryBean   : For 'user-service' URL not provided. Will try picking an instance via load-balancing.
+2024-12-25T16:38:54.078+01:00  INFO 10952 --- [team-management-service] [main] o.s.cloud.commons.util.InetUtils         : Cannot determine local hostname
+2024-12-25T16:38:54.253+01:00  INFO 10952 --- [team-management-service] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-12-25T16:38:54.296+01:00  INFO 10952 --- [team-management-service] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.3.Final
+2024-12-25T16:38:54.320+01:00  INFO 10952 --- [team-management-service] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-12-25T16:38:54.530+01:00  INFO 10952 --- [team-management-service] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-12-25T16:38:54.552+01:00  INFO 10952 --- [team-management-service] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-12-25T16:38:54.682+01:00  INFO 10952 --- [team-management-service] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@1fc386f8
+2024-12-25T16:38:54.683+01:00  INFO 10952 --- [team-management-service] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-12-25T16:38:55.427+01:00  INFO 10952 --- [team-management-service] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-12-25T16:38:55.516+01:00  INFO 10952 --- [team-management-service] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-12-25T16:38:55.854+01:00  WARN 10952 --- [team-management-service] [main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: a9a1275f-9e17-4e60-ab96-7c22b4fac2bc
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2024-12-25T16:38:55.865+01:00  INFO 10952 --- [team-management-service] [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2024-12-25T16:38:56.225+01:00  INFO 10952 --- [team-management-service] [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2024-12-25T16:38:57.562+01:00  INFO 10952 --- [team-management-service] [main] o.s.cloud.commons.util.InetUtils         : Cannot determine local hostname
+2024-12-25T16:38:57.657+01:00  WARN 10952 --- [team-management-service] [main] iguration$LoadBalancerCaffeineWarnLogger : Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2024-12-25T16:38:57.754+01:00  INFO 10952 --- [team-management-service] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8082 (http) with context path '/'
+2024-12-25T16:38:57.757+01:00  INFO 10952 --- [team-management-service] [main] o.s.c.c.s.ConsulServiceRegistry          : Registering service with consul: NewService{id='team-management-service-8082', name='team-management-service', tags=[], address='localhost', meta={secure=false}, port=8082, enableTagOverride=null, check=Check{script='null', dockerContainerID='null', shell='null', interval='10s', ttl='null', http='http://localhost:8082/actuator/health', method='null', header={}, tcp='null', timeout='null', deregisterCriticalServiceAfter='null', tlsSkipVerify=null, status='null', grpc='null', grpcUseTLS=null}, checks=null}
+2024-12-25T16:38:58.807+01:00  INFO 10952 --- [team-management-service] [main] o.s.cloud.commons.util.InetUtils         : Cannot determine local hostname
+2024-12-25T16:38:58.818+01:00  INFO 10952 --- [team-management-service] [main] o.l.a.TeamManagementServiceApplication   : Started TeamManagementServiceApplication in 9.41 seconds (process running for 10.007)
+2024-12-25T16:38:59.163+01:00  INFO 10952 --- [team-management-service] [RMI TCP Connection(4)-172.25.208.1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-12-25T16:38:59.164+01:00  INFO 10952 --- [team-management-service] [RMI TCP Connection(4)-172.25.208.1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-12-25T16:38:59.167+01:00  INFO 10952 --- [team-management-service] [RMI TCP Connection(4)-172.25.208.1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 3 ms
+2024-12-25T16:39:20.479+01:00 ERROR 10952 --- [team-management-service] [http-nio-8082-exec-1] org.league.app.service.TeamService       : Failed to load default team logo: src\main\resources\images\team_logo\default-team-logo.png
+2024-12-25T16:48:11.041+01:00  INFO 10952 --- [team-management-service] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-12-25T16:48:11.044+01:00  INFO 10952 --- [team-management-service] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2024-12-25T16:48:11.049+01:00  INFO 10952 --- [team-management-service] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2024-12-25T16:48:11.051+01:00  INFO 10952 --- [team-management-service] [SpringApplicationShutdownHook] o.s.c.c.s.ConsulServiceRegistry          : Deregistering service with consul: team-management-service-8082
+2024-12-25T16:48:17.212+01:00  INFO 21272 --- [team-management-service] [main] o.l.a.TeamManagementServiceApplication   : Starting TeamManagementServiceApplication using Java 21.0.5 with PID 21272 (E:\important\league-hub\backend\team-management-service\target\classes started by ylopa in E:\important\league-hub)
+2024-12-25T16:48:17.214+01:00  INFO 21272 --- [team-management-service] [main] o.l.a.TeamManagementServiceApplication   : No active profile set, falling back to 1 default profile: "default"
+2024-12-25T16:48:18.155+01:00  INFO 21272 --- [team-management-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-12-25T16:48:18.286+01:00  INFO 21272 --- [team-management-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 124 ms. Found 2 JPA repository interfaces.
+2024-12-25T16:48:18.547+01:00  INFO 21272 --- [team-management-service] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=eea7ec31-ce8e-37c8-a8a5-2986a3e7cd85
+2024-12-25T16:48:18.892+01:00  WARN 21272 --- [team-management-service] [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig' of type [org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). The currently created BeanPostProcessor [lbRestClientPostProcessor] is declared through a non-static factory method on that class; consider declaring it as static instead.
+2024-12-25T16:48:18.895+01:00  WARN 21272 --- [team-management-service] [main] trationDelegate$BeanPostProcessorChecker : Bean 'deferringLoadBalancerInterceptor' of type [org.springframework.cloud.client.loadbalancer.DeferringLoadBalancerInterceptor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected into a currently created BeanPostProcessor [lbRestClientPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies.
+2024-12-25T16:48:19.177+01:00  INFO 21272 --- [team-management-service] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8082 (http)
+2024-12-25T16:48:19.193+01:00  INFO 21272 --- [team-management-service] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-12-25T16:48:19.194+01:00  INFO 21272 --- [team-management-service] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.30]
+2024-12-25T16:48:19.274+01:00  INFO 21272 --- [team-management-service] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-12-25T16:48:19.275+01:00  INFO 21272 --- [team-management-service] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2011 ms
+2024-12-25T16:48:19.532+01:00  INFO 21272 --- [team-management-service] [main] o.s.c.openfeign.FeignClientFactoryBean   : For 'user-service' URL not provided. Will try picking an instance via load-balancing.
+2024-12-25T16:48:20.754+01:00  INFO 21272 --- [team-management-service] [main] o.s.cloud.commons.util.InetUtils         : Cannot determine local hostname
+2024-12-25T16:48:20.972+01:00  INFO 21272 --- [team-management-service] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-12-25T16:48:21.029+01:00  INFO 21272 --- [team-management-service] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.3.Final
+2024-12-25T16:48:21.067+01:00  INFO 21272 --- [team-management-service] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-12-25T16:48:21.315+01:00  INFO 21272 --- [team-management-service] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-12-25T16:48:21.340+01:00  INFO 21272 --- [team-management-service] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-12-25T16:48:21.479+01:00  INFO 21272 --- [team-management-service] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@380e3122
+2024-12-25T16:48:21.480+01:00  INFO 21272 --- [team-management-service] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-12-25T16:48:22.241+01:00  INFO 21272 --- [team-management-service] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-12-25T16:48:22.335+01:00  INFO 21272 --- [team-management-service] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-12-25T16:48:22.701+01:00  WARN 21272 --- [team-management-service] [main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 11123215-54e0-43bf-b4f1-46c346c1a139
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2024-12-25T16:48:22.714+01:00  INFO 21272 --- [team-management-service] [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2024-12-25T16:48:23.098+01:00  INFO 21272 --- [team-management-service] [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2024-12-25T16:48:24.516+01:00  INFO 21272 --- [team-management-service] [main] o.s.cloud.commons.util.InetUtils         : Cannot determine local hostname
+2024-12-25T16:48:24.574+01:00  WARN 21272 --- [team-management-service] [main] iguration$LoadBalancerCaffeineWarnLogger : Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2024-12-25T16:48:24.666+01:00  INFO 21272 --- [team-management-service] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8082 (http) with context path '/'
+2024-12-25T16:48:24.668+01:00  INFO 21272 --- [team-management-service] [main] o.s.c.c.s.ConsulServiceRegistry          : Registering service with consul: NewService{id='team-management-service-8082', name='team-management-service', tags=[], address='localhost', meta={secure=false}, port=8082, enableTagOverride=null, check=Check{script='null', dockerContainerID='null', shell='null', interval='10s', ttl='null', http='http://localhost:8082/actuator/health', method='null', header={}, tcp='null', timeout='null', deregisterCriticalServiceAfter='null', tlsSkipVerify=null, status='null', grpc='null', grpcUseTLS=null}, checks=null}
+2024-12-25T16:48:25.693+01:00  INFO 21272 --- [team-management-service] [main] o.s.cloud.commons.util.InetUtils         : Cannot determine local hostname
+2024-12-25T16:48:25.704+01:00  INFO 21272 --- [team-management-service] [main] o.l.a.TeamManagementServiceApplication   : Started TeamManagementServiceApplication in 10.291 seconds (process running for 11.186)
+2024-12-25T16:48:25.931+01:00  INFO 21272 --- [team-management-service] [RMI TCP Connection(3)-172.25.208.1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-12-25T16:48:25.932+01:00  INFO 21272 --- [team-management-service] [RMI TCP Connection(3)-172.25.208.1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-12-25T16:48:25.933+01:00  INFO 21272 --- [team-management-service] [RMI TCP Connection(3)-172.25.208.1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2024-12-25T16:50:11.193+01:00  INFO 21272 --- [team-management-service] [configWatchTaskScheduler-1] o.s.cloud.commons.util.InetUtils         : Cannot determine local hostname
+2024-12-25T16:50:11.303+01:00  INFO 21272 --- [team-management-service] [configWatchTaskScheduler-1] o.s.c.e.event.RefreshEventListener       : Refresh keys changed: [app.image.uploadDir]
+2024-12-25T16:50:21.675+01:00  INFO 21272 --- [team-management-service] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-12-25T16:50:21.678+01:00  INFO 21272 --- [team-management-service] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2024-12-25T16:50:21.683+01:00  INFO 21272 --- [team-management-service] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2024-12-25T16:50:21.685+01:00  INFO 21272 --- [team-management-service] [SpringApplicationShutdownHook] o.s.c.c.s.ConsulServiceRegistry          : Deregistering service with consul: team-management-service-8082
+2024-12-25T16:50:25.463+01:00  INFO 20732 --- [team-management-service] [main] o.l.a.TeamManagementServiceApplication   : Starting TeamManagementServiceApplication using Java 21.0.5 with PID 20732 (E:\important\league-hub\backend\team-management-service\target\classes started by ylopa in E:\important\league-hub)
+2024-12-25T16:50:25.465+01:00  INFO 20732 --- [team-management-service] [main] o.l.a.TeamManagementServiceApplication   : No active profile set, falling back to 1 default profile: "default"
+2024-12-25T16:50:26.227+01:00  INFO 20732 --- [team-management-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-12-25T16:50:26.343+01:00  INFO 20732 --- [team-management-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 110 ms. Found 2 JPA repository interfaces.
+2024-12-25T16:50:26.532+01:00  INFO 20732 --- [team-management-service] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=eea7ec31-ce8e-37c8-a8a5-2986a3e7cd85
+2024-12-25T16:50:26.785+01:00  WARN 20732 --- [team-management-service] [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig' of type [org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). The currently created BeanPostProcessor [lbRestClientPostProcessor] is declared through a non-static factory method on that class; consider declaring it as static instead.
+2024-12-25T16:50:26.788+01:00  WARN 20732 --- [team-management-service] [main] trationDelegate$BeanPostProcessorChecker : Bean 'deferringLoadBalancerInterceptor' of type [org.springframework.cloud.client.loadbalancer.DeferringLoadBalancerInterceptor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected into a currently created BeanPostProcessor [lbRestClientPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies.
+2024-12-25T16:50:26.992+01:00  INFO 20732 --- [team-management-service] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8082 (http)
+2024-12-25T16:50:27.005+01:00  INFO 20732 --- [team-management-service] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-12-25T16:50:27.005+01:00  INFO 20732 --- [team-management-service] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.30]
+2024-12-25T16:50:27.063+01:00  INFO 20732 --- [team-management-service] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-12-25T16:50:27.063+01:00  INFO 20732 --- [team-management-service] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1555 ms
+2024-12-25T16:50:27.255+01:00  INFO 20732 --- [team-management-service] [main] o.s.c.openfeign.FeignClientFactoryBean   : For 'user-service' URL not provided. Will try picking an instance via load-balancing.
+2024-12-25T16:50:28.440+01:00  INFO 20732 --- [team-management-service] [main] o.s.cloud.commons.util.InetUtils         : Cannot determine local hostname
+2024-12-25T16:50:28.624+01:00  INFO 20732 --- [team-management-service] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-12-25T16:50:28.667+01:00  INFO 20732 --- [team-management-service] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.3.Final
+2024-12-25T16:50:28.691+01:00  INFO 20732 --- [team-management-service] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-12-25T16:50:28.911+01:00  INFO 20732 --- [team-management-service] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-12-25T16:50:28.935+01:00  INFO 20732 --- [team-management-service] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-12-25T16:50:29.066+01:00  INFO 20732 --- [team-management-service] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@36c1b6ff
+2024-12-25T16:50:29.067+01:00  INFO 20732 --- [team-management-service] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-12-25T16:50:29.798+01:00  INFO 20732 --- [team-management-service] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-12-25T16:50:29.891+01:00  INFO 20732 --- [team-management-service] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-12-25T16:50:30.230+01:00  WARN 20732 --- [team-management-service] [main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: dd83f3b3-b630-4811-9189-401db932b61f
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2024-12-25T16:50:30.241+01:00  INFO 20732 --- [team-management-service] [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2024-12-25T16:50:30.587+01:00  INFO 20732 --- [team-management-service] [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2024-12-25T16:50:31.968+01:00  INFO 20732 --- [team-management-service] [main] o.s.cloud.commons.util.InetUtils         : Cannot determine local hostname
+2024-12-25T16:50:32.022+01:00  WARN 20732 --- [team-management-service] [main] iguration$LoadBalancerCaffeineWarnLogger : Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2024-12-25T16:50:32.107+01:00  INFO 20732 --- [team-management-service] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8082 (http) with context path '/'
+2024-12-25T16:50:32.109+01:00  INFO 20732 --- [team-management-service] [main] o.s.c.c.s.ConsulServiceRegistry          : Registering service with consul: NewService{id='team-management-service-8082', name='team-management-service', tags=[], address='localhost', meta={secure=false}, port=8082, enableTagOverride=null, check=Check{script='null', dockerContainerID='null', shell='null', interval='10s', ttl='null', http='http://localhost:8082/actuator/health', method='null', header={}, tcp='null', timeout='null', deregisterCriticalServiceAfter='null', tlsSkipVerify=null, status='null', grpc='null', grpcUseTLS=null}, checks=null}
+2024-12-25T16:50:33.151+01:00  INFO 20732 --- [team-management-service] [main] o.s.cloud.commons.util.InetUtils         : Cannot determine local hostname
+2024-12-25T16:50:33.162+01:00  INFO 20732 --- [team-management-service] [main] o.l.a.TeamManagementServiceApplication   : Started TeamManagementServiceApplication in 9.501 seconds (process running for 10.367)
+2024-12-25T16:50:33.632+01:00  INFO 20732 --- [team-management-service] [RMI TCP Connection(3)-172.25.208.1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-12-25T16:50:33.632+01:00  INFO 20732 --- [team-management-service] [RMI TCP Connection(3)-172.25.208.1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-12-25T16:50:33.635+01:00  INFO 20732 --- [team-management-service] [RMI TCP Connection(3)-172.25.208.1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 3 ms
+2024-12-25T16:53:08.427+01:00  INFO 20732 --- [team-management-service] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-12-25T16:53:08.430+01:00  INFO 20732 --- [team-management-service] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2024-12-25T16:53:08.436+01:00  INFO 20732 --- [team-management-service] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2024-12-25T16:53:08.438+01:00  INFO 20732 --- [team-management-service] [SpringApplicationShutdownHook] o.s.c.c.s.ConsulServiceRegistry          : Deregistering service with consul: team-management-service-8082
+2024-12-25T16:53:13.599+01:00  INFO 9956 --- [team-management-service] [main] o.l.a.TeamManagementServiceApplication   : Starting TeamManagementServiceApplication using Java 21.0.5 with PID 9956 (E:\important\league-hub\backend\team-management-service\target\classes started by ylopa in E:\important\league-hub)
+2024-12-25T16:53:13.602+01:00  INFO 9956 --- [team-management-service] [main] o.l.a.TeamManagementServiceApplication   : No active profile set, falling back to 1 default profile: "default"
+2024-12-25T16:53:14.362+01:00  INFO 9956 --- [team-management-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-12-25T16:53:14.473+01:00  INFO 9956 --- [team-management-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 105 ms. Found 2 JPA repository interfaces.
+2024-12-25T16:53:14.678+01:00  INFO 9956 --- [team-management-service] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=eea7ec31-ce8e-37c8-a8a5-2986a3e7cd85
+2024-12-25T16:53:14.929+01:00  WARN 9956 --- [team-management-service] [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig' of type [org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). The currently created BeanPostProcessor [lbRestClientPostProcessor] is declared through a non-static factory method on that class; consider declaring it as static instead.
+2024-12-25T16:53:14.932+01:00  WARN 9956 --- [team-management-service] [main] trationDelegate$BeanPostProcessorChecker : Bean 'deferringLoadBalancerInterceptor' of type [org.springframework.cloud.client.loadbalancer.DeferringLoadBalancerInterceptor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected into a currently created BeanPostProcessor [lbRestClientPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies.
+2024-12-25T16:53:15.146+01:00  INFO 9956 --- [team-management-service] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8082 (http)
+2024-12-25T16:53:15.157+01:00  INFO 9956 --- [team-management-service] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-12-25T16:53:15.158+01:00  INFO 9956 --- [team-management-service] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.30]
+2024-12-25T16:53:15.215+01:00  INFO 9956 --- [team-management-service] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-12-25T16:53:15.215+01:00  INFO 9956 --- [team-management-service] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1577 ms
+2024-12-25T16:53:15.391+01:00  INFO 9956 --- [team-management-service] [main] o.s.c.openfeign.FeignClientFactoryBean   : For 'user-service' URL not provided. Will try picking an instance via load-balancing.
+2024-12-25T16:53:16.586+01:00  INFO 9956 --- [team-management-service] [main] o.s.cloud.commons.util.InetUtils         : Cannot determine local hostname
+2024-12-25T16:53:16.760+01:00  INFO 9956 --- [team-management-service] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-12-25T16:53:16.805+01:00  INFO 9956 --- [team-management-service] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.3.Final
+2024-12-25T16:53:16.828+01:00  INFO 9956 --- [team-management-service] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-12-25T16:53:17.046+01:00  INFO 9956 --- [team-management-service] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-12-25T16:53:17.069+01:00  INFO 9956 --- [team-management-service] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-12-25T16:53:17.206+01:00  INFO 9956 --- [team-management-service] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@73e63b4d
+2024-12-25T16:53:17.208+01:00  INFO 9956 --- [team-management-service] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-12-25T16:53:17.936+01:00  INFO 9956 --- [team-management-service] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-12-25T16:53:18.023+01:00  INFO 9956 --- [team-management-service] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-12-25T16:53:18.378+01:00  WARN 9956 --- [team-management-service] [main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: b54ded9f-a2a6-4af1-a7be-1576dd0f79aa
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2024-12-25T16:53:18.390+01:00  INFO 9956 --- [team-management-service] [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2024-12-25T16:53:18.744+01:00  INFO 9956 --- [team-management-service] [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2024-12-25T16:53:20.112+01:00  INFO 9956 --- [team-management-service] [main] o.s.cloud.commons.util.InetUtils         : Cannot determine local hostname
+2024-12-25T16:53:20.168+01:00  WARN 9956 --- [team-management-service] [main] iguration$LoadBalancerCaffeineWarnLogger : Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2024-12-25T16:53:20.250+01:00  INFO 9956 --- [team-management-service] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8082 (http) with context path '/'
+2024-12-25T16:53:20.252+01:00  INFO 9956 --- [team-management-service] [main] o.s.c.c.s.ConsulServiceRegistry          : Registering service with consul: NewService{id='team-management-service-8082', name='team-management-service', tags=[], address='localhost', meta={secure=false}, port=8082, enableTagOverride=null, check=Check{script='null', dockerContainerID='null', shell='null', interval='10s', ttl='null', http='http://localhost:8082/actuator/health', method='null', header={}, tcp='null', timeout='null', deregisterCriticalServiceAfter='null', tlsSkipVerify=null, status='null', grpc='null', grpcUseTLS=null}, checks=null}
+2024-12-25T16:53:21.280+01:00  INFO 9956 --- [team-management-service] [main] o.s.cloud.commons.util.InetUtils         : Cannot determine local hostname
+2024-12-25T16:53:21.293+01:00  INFO 9956 --- [team-management-service] [main] o.l.a.TeamManagementServiceApplication   : Started TeamManagementServiceApplication in 9.453 seconds (process running for 10.064)
+2024-12-25T16:53:21.597+01:00  INFO 9956 --- [team-management-service] [RMI TCP Connection(3)-172.25.208.1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-12-25T16:53:21.598+01:00  INFO 9956 --- [team-management-service] [RMI TCP Connection(3)-172.25.208.1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-12-25T16:53:21.600+01:00  INFO 9956 --- [team-management-service] [RMI TCP Connection(3)-172.25.208.1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2024-12-25T16:57:56.424+01:00  INFO 9956 --- [team-management-service] [http-nio-8082-exec-3] org.league.app.filter.JWTFilter          : Extracted email: ylopatkin@gmail.com
+2024-12-25T16:57:56.424+01:00  INFO 9956 --- [team-management-service] [http-nio-8082-exec-3] org.league.app.filter.JWTFilter          : User email: ylopatkin@gmail.com
+2024-12-25T16:57:56.590+01:00  INFO 9956 --- [team-management-service] [http-nio-8082-exec-3] org.league.app.service.TeamService       : Team found by team name: Team(id=bc103b1e-d507-43c9-8b80-de059932e4bd, teamName=jumpers, teamImage=null, teamStatus=INACTIVE, createdAt=2024-12-25T16:35:51.665010)
+2024-12-25T17:12:01.046+01:00  INFO 9956 --- [team-management-service] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-12-25T17:12:01.050+01:00  INFO 9956 --- [team-management-service] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2024-12-25T17:12:01.056+01:00  INFO 9956 --- [team-management-service] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2024-12-25T17:12:01.058+01:00  INFO 9956 --- [team-management-service] [SpringApplicationShutdownHook] o.s.c.c.s.ConsulServiceRegistry          : Deregistering service with consul: team-management-service-8082
+2024-12-25T17:12:04.611+01:00  INFO 21352 --- [team-management-service] [main] o.l.a.TeamManagementServiceApplication   : Starting TeamManagementServiceApplication using Java 21.0.5 with PID 21352 (E:\important\league-hub\backend\team-management-service\target\classes started by ylopa in E:\important\league-hub)
+2024-12-25T17:12:04.613+01:00  INFO 21352 --- [team-management-service] [main] o.l.a.TeamManagementServiceApplication   : No active profile set, falling back to 1 default profile: "default"
+2024-12-25T17:12:05.418+01:00  INFO 21352 --- [team-management-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-12-25T17:12:05.550+01:00  INFO 21352 --- [team-management-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 114 ms. Found 2 JPA repository interfaces.
+2024-12-25T17:12:05.765+01:00  INFO 21352 --- [team-management-service] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=eea7ec31-ce8e-37c8-a8a5-2986a3e7cd85
+2024-12-25T17:12:06.002+01:00  WARN 21352 --- [team-management-service] [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig' of type [org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). The currently created BeanPostProcessor [lbRestClientPostProcessor] is declared through a non-static factory method on that class; consider declaring it as static instead.
+2024-12-25T17:12:06.005+01:00  WARN 21352 --- [team-management-service] [main] trationDelegate$BeanPostProcessorChecker : Bean 'deferringLoadBalancerInterceptor' of type [org.springframework.cloud.client.loadbalancer.DeferringLoadBalancerInterceptor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected into a currently created BeanPostProcessor [lbRestClientPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies.
+2024-12-25T17:12:06.235+01:00  INFO 21352 --- [team-management-service] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8082 (http)
+2024-12-25T17:12:06.245+01:00  INFO 21352 --- [team-management-service] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-12-25T17:12:06.246+01:00  INFO 21352 --- [team-management-service] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.30]
+2024-12-25T17:12:06.305+01:00  INFO 21352 --- [team-management-service] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-12-25T17:12:06.306+01:00  INFO 21352 --- [team-management-service] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1650 ms
+2024-12-25T17:12:06.508+01:00  INFO 21352 --- [team-management-service] [main] o.s.c.openfeign.FeignClientFactoryBean   : For 'user-service' URL not provided. Will try picking an instance via load-balancing.
+2024-12-25T17:12:07.691+01:00  INFO 21352 --- [team-management-service] [main] o.s.cloud.commons.util.InetUtils         : Cannot determine local hostname
+2024-12-25T17:12:07.882+01:00  INFO 21352 --- [team-management-service] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-12-25T17:12:07.931+01:00  INFO 21352 --- [team-management-service] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.3.Final
+2024-12-25T17:12:07.957+01:00  INFO 21352 --- [team-management-service] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-12-25T17:12:08.201+01:00  INFO 21352 --- [team-management-service] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-12-25T17:12:08.223+01:00  INFO 21352 --- [team-management-service] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-12-25T17:12:08.353+01:00  INFO 21352 --- [team-management-service] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@6785786d
+2024-12-25T17:12:08.354+01:00  INFO 21352 --- [team-management-service] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-12-25T17:12:09.078+01:00  INFO 21352 --- [team-management-service] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-12-25T17:12:09.168+01:00  INFO 21352 --- [team-management-service] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-12-25T17:12:09.524+01:00  WARN 21352 --- [team-management-service] [main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: d716632a-d003-4e7a-b5d6-710f73cc5d6b
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2024-12-25T17:12:09.535+01:00  INFO 21352 --- [team-management-service] [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2024-12-25T17:12:09.894+01:00  INFO 21352 --- [team-management-service] [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2024-12-25T17:12:11.223+01:00  INFO 21352 --- [team-management-service] [main] o.s.cloud.commons.util.InetUtils         : Cannot determine local hostname
+2024-12-25T17:12:11.287+01:00  WARN 21352 --- [team-management-service] [main] iguration$LoadBalancerCaffeineWarnLogger : Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2024-12-25T17:12:11.379+01:00  INFO 21352 --- [team-management-service] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8082 (http) with context path '/'
+2024-12-25T17:12:11.383+01:00  INFO 21352 --- [team-management-service] [main] o.s.c.c.s.ConsulServiceRegistry          : Registering service with consul: NewService{id='team-management-service-8082', name='team-management-service', tags=[], address='localhost', meta={secure=false}, port=8082, enableTagOverride=null, check=Check{script='null', dockerContainerID='null', shell='null', interval='10s', ttl='null', http='http://localhost:8082/actuator/health', method='null', header={}, tcp='null', timeout='null', deregisterCriticalServiceAfter='null', tlsSkipVerify=null, status='null', grpc='null', grpcUseTLS=null}, checks=null}
+2024-12-25T17:12:12.421+01:00  INFO 21352 --- [team-management-service] [main] o.s.cloud.commons.util.InetUtils         : Cannot determine local hostname
+2024-12-25T17:12:12.434+01:00  INFO 21352 --- [team-management-service] [main] o.l.a.TeamManagementServiceApplication   : Started TeamManagementServiceApplication in 9.563 seconds (process running for 10.213)
+2024-12-25T17:12:12.566+01:00  INFO 21352 --- [team-management-service] [RMI TCP Connection(2)-172.25.208.1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-12-25T17:12:12.566+01:00  INFO 21352 --- [team-management-service] [RMI TCP Connection(2)-172.25.208.1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-12-25T17:12:12.568+01:00  INFO 21352 --- [team-management-service] [RMI TCP Connection(2)-172.25.208.1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2024-12-25T19:36:37.371+01:00  WARN 21352 --- [team-management-service] [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=2m29s480ms72µs300ns).
+2024-12-25T22:37:04.022+01:00  INFO 21352 --- [team-management-service] [http-nio-8082-exec-1] org.league.app.filter.JWTFilter          : Extracted email: ylopatkin@gmail.com
+2024-12-25T22:37:04.023+01:00  INFO 21352 --- [team-management-service] [http-nio-8082-exec-1] org.league.app.filter.JWTFilter          : User email: ylopatkin@gmail.com
+2024-12-25T22:40:14.409+01:00  INFO 21352 --- [team-management-service] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-12-25T22:40:14.412+01:00  INFO 21352 --- [team-management-service] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2024-12-25T22:40:14.415+01:00  INFO 21352 --- [team-management-service] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2024-12-25T22:40:14.417+01:00  INFO 21352 --- [team-management-service] [SpringApplicationShutdownHook] o.s.c.c.s.ConsulServiceRegistry          : Deregistering service with consul: team-management-service-8082
+2024-12-25T22:40:17.894+01:00  INFO 1200 --- [team-management-service] [main] o.l.a.TeamManagementServiceApplication   : Starting TeamManagementServiceApplication using Java 21.0.5 with PID 1200 (E:\important\league-hub\backend\team-management-service\target\classes started by ylopa in E:\important\league-hub)
+2024-12-25T22:40:17.895+01:00  INFO 1200 --- [team-management-service] [main] o.l.a.TeamManagementServiceApplication   : No active profile set, falling back to 1 default profile: "default"
+2024-12-25T22:40:18.689+01:00  INFO 1200 --- [team-management-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-12-25T22:40:18.812+01:00  INFO 1200 --- [team-management-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 117 ms. Found 2 JPA repository interfaces.
+2024-12-25T22:40:19.014+01:00  INFO 1200 --- [team-management-service] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=eea7ec31-ce8e-37c8-a8a5-2986a3e7cd85
+2024-12-25T22:40:19.241+01:00  WARN 1200 --- [team-management-service] [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig' of type [org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). The currently created BeanPostProcessor [lbRestClientPostProcessor] is declared through a non-static factory method on that class; consider declaring it as static instead.
+2024-12-25T22:40:19.243+01:00  WARN 1200 --- [team-management-service] [main] trationDelegate$BeanPostProcessorChecker : Bean 'deferringLoadBalancerInterceptor' of type [org.springframework.cloud.client.loadbalancer.DeferringLoadBalancerInterceptor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected into a currently created BeanPostProcessor [lbRestClientPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies.
+2024-12-25T22:40:19.438+01:00  INFO 1200 --- [team-management-service] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8082 (http)
+2024-12-25T22:40:19.450+01:00  INFO 1200 --- [team-management-service] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-12-25T22:40:19.450+01:00  INFO 1200 --- [team-management-service] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.30]
+2024-12-25T22:40:19.509+01:00  INFO 1200 --- [team-management-service] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-12-25T22:40:19.509+01:00  INFO 1200 --- [team-management-service] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1578 ms
+2024-12-25T22:40:19.690+01:00  INFO 1200 --- [team-management-service] [main] o.s.c.openfeign.FeignClientFactoryBean   : For 'user-service' URL not provided. Will try picking an instance via load-balancing.
+2024-12-25T22:40:20.848+01:00  INFO 1200 --- [team-management-service] [main] o.s.cloud.commons.util.InetUtils         : Cannot determine local hostname
+2024-12-25T22:40:21.036+01:00  INFO 1200 --- [team-management-service] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-12-25T22:40:21.079+01:00  INFO 1200 --- [team-management-service] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.3.Final
+2024-12-25T22:40:21.103+01:00  INFO 1200 --- [team-management-service] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-12-25T22:40:21.355+01:00  INFO 1200 --- [team-management-service] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-12-25T22:40:21.376+01:00  INFO 1200 --- [team-management-service] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-12-25T22:40:21.502+01:00  INFO 1200 --- [team-management-service] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@36c1b6ff
+2024-12-25T22:40:21.503+01:00  INFO 1200 --- [team-management-service] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-12-25T22:40:22.216+01:00  INFO 1200 --- [team-management-service] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-12-25T22:40:22.304+01:00  INFO 1200 --- [team-management-service] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-12-25T22:40:22.631+01:00  WARN 1200 --- [team-management-service] [main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: d0f56a2e-9931-480e-a925-ed928bf3fadc
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2024-12-25T22:40:22.642+01:00  INFO 1200 --- [team-management-service] [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2024-12-25T22:40:22.985+01:00  INFO 1200 --- [team-management-service] [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2024-12-25T22:40:24.375+01:00  INFO 1200 --- [team-management-service] [main] o.s.cloud.commons.util.InetUtils         : Cannot determine local hostname
+2024-12-25T22:40:24.426+01:00  WARN 1200 --- [team-management-service] [main] iguration$LoadBalancerCaffeineWarnLogger : Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2024-12-25T22:40:24.506+01:00  INFO 1200 --- [team-management-service] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8082 (http) with context path '/'
+2024-12-25T22:40:24.508+01:00  INFO 1200 --- [team-management-service] [main] o.s.c.c.s.ConsulServiceRegistry          : Registering service with consul: NewService{id='team-management-service-8082', name='team-management-service', tags=[], address='localhost', meta={secure=false}, port=8082, enableTagOverride=null, check=Check{script='null', dockerContainerID='null', shell='null', interval='10s', ttl='null', http='http://localhost:8082/actuator/health', method='null', header={}, tcp='null', timeout='null', deregisterCriticalServiceAfter='null', tlsSkipVerify=null, status='null', grpc='null', grpcUseTLS=null}, checks=null}
+2024-12-25T22:40:25.530+01:00  INFO 1200 --- [team-management-service] [main] o.s.cloud.commons.util.InetUtils         : Cannot determine local hostname
+2024-12-25T22:40:25.540+01:00  INFO 1200 --- [team-management-service] [main] o.l.a.TeamManagementServiceApplication   : Started TeamManagementServiceApplication in 9.389 seconds (process running for 10.075)
+2024-12-25T22:40:25.765+01:00  INFO 1200 --- [team-management-service] [RMI TCP Connection(4)-172.25.208.1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-12-25T22:40:25.765+01:00  INFO 1200 --- [team-management-service] [RMI TCP Connection(4)-172.25.208.1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-12-25T22:40:25.767+01:00  INFO 1200 --- [team-management-service] [RMI TCP Connection(4)-172.25.208.1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2024-12-25T22:41:39.712+01:00  INFO 1200 --- [team-management-service] [http-nio-8082-exec-1] org.league.app.filter.JWTFilter          : Extracted email: ylopatkin@gmail.com
+2024-12-25T22:41:39.712+01:00  INFO 1200 --- [team-management-service] [http-nio-8082-exec-1] org.league.app.filter.JWTFilter          : User email: ylopatkin@gmail.com
+2024-12-25T22:41:49.111+01:00  INFO 1200 --- [team-management-service] [http-nio-8082-exec-2] org.league.app.filter.JWTFilter          : Extracted email: ylopatkin@gmail.com
+2024-12-25T22:41:49.111+01:00  INFO 1200 --- [team-management-service] [http-nio-8082-exec-2] org.league.app.filter.JWTFilter          : User email: ylopatkin@gmail.com
+2024-12-25T22:41:55.896+01:00  INFO 1200 --- [team-management-service] [http-nio-8082-exec-4] org.league.app.filter.JWTFilter          : Extracted email: ylopatkin@gmail.com
+2024-12-25T22:41:55.896+01:00  INFO 1200 --- [team-management-service] [http-nio-8082-exec-4] org.league.app.filter.JWTFilter          : User email: ylopatkin@gmail.com
+2024-12-25T22:42:08.857+01:00  INFO 1200 --- [team-management-service] [http-nio-8082-exec-7] org.league.app.filter.JWTFilter          : Extracted email: ylopatkin@gmail.com
+2024-12-25T22:42:08.858+01:00  INFO 1200 --- [team-management-service] [http-nio-8082-exec-7] org.league.app.filter.JWTFilter          : User email: ylopatkin@gmail.com
+2024-12-25T22:42:54.273+01:00  INFO 1200 --- [team-management-service] [http-nio-8082-exec-5] org.league.app.filter.JWTFilter          : Extracted email: ylopatkin@gmail.com
+2024-12-25T22:42:54.273+01:00  INFO 1200 --- [team-management-service] [http-nio-8082-exec-5] org.league.app.filter.JWTFilter          : User email: ylopatkin@gmail.com
+2024-12-25T22:51:42.038+01:00  INFO 1200 --- [team-management-service] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-12-25T22:51:42.040+01:00  INFO 1200 --- [team-management-service] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2024-12-25T22:51:42.045+01:00  INFO 1200 --- [team-management-service] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2024-12-25T22:51:42.046+01:00  INFO 1200 --- [team-management-service] [SpringApplicationShutdownHook] o.s.c.c.s.ConsulServiceRegistry          : Deregistering service with consul: team-management-service-8082
+2024-12-25T22:51:47.192+01:00  INFO 8940 --- [team-management-service] [main] o.l.a.TeamManagementServiceApplication   : Starting TeamManagementServiceApplication using Java 21.0.5 with PID 8940 (E:\important\league-hub\backend\team-management-service\target\classes started by ylopa in E:\important\league-hub)
+2024-12-25T22:51:47.195+01:00  INFO 8940 --- [team-management-service] [main] o.l.a.TeamManagementServiceApplication   : No active profile set, falling back to 1 default profile: "default"
+2024-12-25T22:51:47.900+01:00  INFO 8940 --- [team-management-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-12-25T22:51:48.006+01:00  INFO 8940 --- [team-management-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 100 ms. Found 2 JPA repository interfaces.
+2024-12-25T22:51:48.194+01:00  INFO 8940 --- [team-management-service] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=eea7ec31-ce8e-37c8-a8a5-2986a3e7cd85
+2024-12-25T22:51:48.424+01:00  WARN 8940 --- [team-management-service] [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig' of type [org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). The currently created BeanPostProcessor [lbRestClientPostProcessor] is declared through a non-static factory method on that class; consider declaring it as static instead.
+2024-12-25T22:51:48.426+01:00  WARN 8940 --- [team-management-service] [main] trationDelegate$BeanPostProcessorChecker : Bean 'deferringLoadBalancerInterceptor' of type [org.springframework.cloud.client.loadbalancer.DeferringLoadBalancerInterceptor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected into a currently created BeanPostProcessor [lbRestClientPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies.
+2024-12-25T22:51:48.617+01:00  INFO 8940 --- [team-management-service] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8082 (http)
+2024-12-25T22:51:48.628+01:00  INFO 8940 --- [team-management-service] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-12-25T22:51:48.629+01:00  INFO 8940 --- [team-management-service] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.30]
+2024-12-25T22:51:48.684+01:00  INFO 8940 --- [team-management-service] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-12-25T22:51:48.684+01:00  INFO 8940 --- [team-management-service] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1456 ms
+2024-12-25T22:51:48.832+01:00  INFO 8940 --- [team-management-service] [main] o.s.c.openfeign.FeignClientFactoryBean   : For 'user-service' URL not provided. Will try picking an instance via load-balancing.
+2024-12-25T22:51:49.978+01:00  INFO 8940 --- [team-management-service] [main] o.s.cloud.commons.util.InetUtils         : Cannot determine local hostname
+2024-12-25T22:51:50.121+01:00  INFO 8940 --- [team-management-service] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-12-25T22:51:50.161+01:00  INFO 8940 --- [team-management-service] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.3.Final
+2024-12-25T22:51:50.186+01:00  INFO 8940 --- [team-management-service] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-12-25T22:51:50.422+01:00  INFO 8940 --- [team-management-service] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-12-25T22:51:50.444+01:00  INFO 8940 --- [team-management-service] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-12-25T22:51:50.572+01:00  INFO 8940 --- [team-management-service] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@72d7afff
+2024-12-25T22:51:50.573+01:00  INFO 8940 --- [team-management-service] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-12-25T22:51:51.280+01:00  INFO 8940 --- [team-management-service] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-12-25T22:51:51.363+01:00  INFO 8940 --- [team-management-service] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-12-25T22:51:51.678+01:00  WARN 8940 --- [team-management-service] [main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: b23a03c0-2617-4e50-9681-3ac295939c3d
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2024-12-25T22:51:51.693+01:00  INFO 8940 --- [team-management-service] [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2024-12-25T22:51:52.020+01:00  INFO 8940 --- [team-management-service] [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2024-12-25T22:51:53.366+01:00  INFO 8940 --- [team-management-service] [main] o.s.cloud.commons.util.InetUtils         : Cannot determine local hostname
+2024-12-25T22:51:53.421+01:00  WARN 8940 --- [team-management-service] [main] iguration$LoadBalancerCaffeineWarnLogger : Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2024-12-25T22:51:53.503+01:00  INFO 8940 --- [team-management-service] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8082 (http) with context path '/'
+2024-12-25T22:51:53.505+01:00  INFO 8940 --- [team-management-service] [main] o.s.c.c.s.ConsulServiceRegistry          : Registering service with consul: NewService{id='team-management-service-8082', name='team-management-service', tags=[], address='localhost', meta={secure=false}, port=8082, enableTagOverride=null, check=Check{script='null', dockerContainerID='null', shell='null', interval='10s', ttl='null', http='http://localhost:8082/actuator/health', method='null', header={}, tcp='null', timeout='null', deregisterCriticalServiceAfter='null', tlsSkipVerify=null, status='null', grpc='null', grpcUseTLS=null}, checks=null}
+2024-12-25T22:51:54.533+01:00  INFO 8940 --- [team-management-service] [main] o.s.cloud.commons.util.InetUtils         : Cannot determine local hostname
+2024-12-25T22:51:54.542+01:00  INFO 8940 --- [team-management-service] [main] o.l.a.TeamManagementServiceApplication   : Started TeamManagementServiceApplication in 9.002 seconds (process running for 9.571)
+2024-12-25T22:51:54.743+01:00  INFO 8940 --- [team-management-service] [RMI TCP Connection(3)-172.25.208.1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-12-25T22:51:54.743+01:00  INFO 8940 --- [team-management-service] [RMI TCP Connection(3)-172.25.208.1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-12-25T22:51:54.745+01:00  INFO 8940 --- [team-management-service] [RMI TCP Connection(3)-172.25.208.1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2024-12-25T22:53:00.257+01:00  INFO 8940 --- [team-management-service] [http-nio-8082-exec-1] org.league.app.filter.JWTFilter          : Extracted email: ylopatkin@gmail.com
+2024-12-25T22:53:00.257+01:00  INFO 8940 --- [team-management-service] [http-nio-8082-exec-1] org.league.app.filter.JWTFilter          : User email: ylopatkin@gmail.com
+2024-12-25T22:53:12.624+01:00  INFO 8940 --- [team-management-service] [http-nio-8082-exec-3] org.league.app.filter.JWTFilter          : Extracted email: ylopatkin@gmail.com
+2024-12-25T22:53:12.624+01:00  INFO 8940 --- [team-management-service] [http-nio-8082-exec-3] org.league.app.filter.JWTFilter          : User email: ylopatkin@gmail.com
+2024-12-25T22:53:12.692+01:00 ERROR 8940 --- [team-management-service] [http-nio-8082-exec-3] o.a.c.c.C.[.[.[/].[dispatcherServlet]    : Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed: org.league.app.exception.TeamAlreadyExistsException: Team name already exists] with root cause
+
+org.league.app.exception.TeamAlreadyExistsException: Team name already exists
+	at org.league.app.service.TeamService.updateTeamName(TeamService.java:84) ~[classes/:na]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[na:na]
+	at org.springframework.aop.support.AopUtils.invokeJoinpointUsingReflection(AopUtils.java:355) ~[spring-aop-6.1.13.jar:6.1.13]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.invokeJoinpoint(ReflectiveMethodInvocation.java:196) ~[spring-aop-6.1.13.jar:6.1.13]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163) ~[spring-aop-6.1.13.jar:6.1.13]
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:768) ~[spring-aop-6.1.13.jar:6.1.13]
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:379) ~[spring-tx-6.1.13.jar:6.1.13]
+	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:119) ~[spring-tx-6.1.13.jar:6.1.13]
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:184) ~[spring-aop-6.1.13.jar:6.1.13]
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:768) ~[spring-aop-6.1.13.jar:6.1.13]
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:720) ~[spring-aop-6.1.13.jar:6.1.13]
+	at org.league.app.service.TeamService$$SpringCGLIB$$0.updateTeamName(<generated>) ~[classes/:na]
+	at org.league.app.controller.TeamController.updateTeamName(TeamController.java:51) ~[classes/:na]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[na:na]
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:255) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:188) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:118) ~[spring-webmvc-6.1.13.jar:6.1.13]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:926) ~[spring-webmvc-6.1.13.jar:6.1.13]
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:831) ~[spring-webmvc-6.1.13.jar:6.1.13]
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87) ~[spring-webmvc-6.1.13.jar:6.1.13]
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089) ~[spring-webmvc-6.1.13.jar:6.1.13]
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979) ~[spring-webmvc-6.1.13.jar:6.1.13]
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014) ~[spring-webmvc-6.1.13.jar:6.1.13]
+	at org.springframework.web.servlet.FrameworkServlet.doPut(FrameworkServlet.java:925) ~[spring-webmvc-6.1.13.jar:6.1.13]
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:593) ~[tomcat-embed-core-10.1.30.jar:6.0]
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885) ~[spring-webmvc-6.1.13.jar:6.1.13]
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:658) ~[tomcat-embed-core-10.1.30.jar:6.0]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:195) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:51) ~[tomcat-embed-websocket-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:110) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:108) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.security.web.FilterChainProxy.lambda$doFilterInternal$3(FilterChainProxy.java:231) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$FilterObservation$SimpleFilterObservation.lambda$wrap$1(ObservationFilterChainDecorator.java:479) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$AroundFilterObservation$SimpleAroundFilterObservation.lambda$wrap$1(ObservationFilterChainDecorator.java:340) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator.lambda$wrapSecured$0(ObservationFilterChainDecorator.java:82) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:128) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.access.intercept.AuthorizationFilter.doFilter(AuthorizationFilter.java:100) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:126) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:120) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:131) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:85) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:100) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:179) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.league.app.filter.JWTFilter.doFilterInternal(JWTFilter.java:81) ~[classes/:na]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:107) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:93) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:82) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.context.SecurityContextHolderFilter.doFilter(SecurityContextHolderFilter.java:69) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$AroundFilterObservation$SimpleAroundFilterObservation.lambda$wrap$0(ObservationFilterChainDecorator.java:323) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:224) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$3(HandlerMappingIntrospector.java:195) ~[spring-webmvc-6.1.13.jar:6.1.13]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:230) ~[spring-security-config-6.3.3.jar:6.3.3]
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:352) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:268) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.springframework.web.filter.ServerHttpObservationFilter.doFilterInternal(ServerHttpObservationFilter.java:113) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:384) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1741) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+
+2024-12-25T22:53:59.420+01:00  INFO 8940 --- [team-management-service] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-12-25T22:53:59.421+01:00  INFO 8940 --- [team-management-service] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2024-12-25T22:53:59.425+01:00  INFO 8940 --- [team-management-service] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2024-12-25T22:53:59.426+01:00  INFO 8940 --- [team-management-service] [SpringApplicationShutdownHook] o.s.c.c.s.ConsulServiceRegistry          : Deregistering service with consul: team-management-service-8082
+2024-12-25T22:54:04.385+01:00  INFO 19864 --- [team-management-service] [main] o.l.a.TeamManagementServiceApplication   : Starting TeamManagementServiceApplication using Java 21.0.5 with PID 19864 (E:\important\league-hub\backend\team-management-service\target\classes started by ylopa in E:\important\league-hub)
+2024-12-25T22:54:04.387+01:00  INFO 19864 --- [team-management-service] [main] o.l.a.TeamManagementServiceApplication   : No active profile set, falling back to 1 default profile: "default"
+2024-12-25T22:54:05.162+01:00  INFO 19864 --- [team-management-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-12-25T22:54:05.287+01:00  INFO 19864 --- [team-management-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 120 ms. Found 2 JPA repository interfaces.
+2024-12-25T22:54:05.477+01:00  INFO 19864 --- [team-management-service] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=eea7ec31-ce8e-37c8-a8a5-2986a3e7cd85
+2024-12-25T22:54:05.697+01:00  WARN 19864 --- [team-management-service] [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig' of type [org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). The currently created BeanPostProcessor [lbRestClientPostProcessor] is declared through a non-static factory method on that class; consider declaring it as static instead.
+2024-12-25T22:54:05.699+01:00  WARN 19864 --- [team-management-service] [main] trationDelegate$BeanPostProcessorChecker : Bean 'deferringLoadBalancerInterceptor' of type [org.springframework.cloud.client.loadbalancer.DeferringLoadBalancerInterceptor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected into a currently created BeanPostProcessor [lbRestClientPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies.
+2024-12-25T22:54:05.890+01:00  INFO 19864 --- [team-management-service] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8082 (http)
+2024-12-25T22:54:05.901+01:00  INFO 19864 --- [team-management-service] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-12-25T22:54:05.901+01:00  INFO 19864 --- [team-management-service] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.30]
+2024-12-25T22:54:05.957+01:00  INFO 19864 --- [team-management-service] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-12-25T22:54:05.958+01:00  INFO 19864 --- [team-management-service] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1535 ms
+2024-12-25T22:54:06.116+01:00  INFO 19864 --- [team-management-service] [main] o.s.c.openfeign.FeignClientFactoryBean   : For 'user-service' URL not provided. Will try picking an instance via load-balancing.
+2024-12-25T22:54:07.281+01:00  INFO 19864 --- [team-management-service] [main] o.s.cloud.commons.util.InetUtils         : Cannot determine local hostname
+2024-12-25T22:54:07.428+01:00  INFO 19864 --- [team-management-service] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-12-25T22:54:07.467+01:00  INFO 19864 --- [team-management-service] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.3.Final
+2024-12-25T22:54:07.492+01:00  INFO 19864 --- [team-management-service] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-12-25T22:54:07.714+01:00  INFO 19864 --- [team-management-service] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-12-25T22:54:07.736+01:00  INFO 19864 --- [team-management-service] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-12-25T22:54:07.860+01:00  INFO 19864 --- [team-management-service] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@7ef3aa21
+2024-12-25T22:54:07.861+01:00  INFO 19864 --- [team-management-service] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-12-25T22:54:08.573+01:00  INFO 19864 --- [team-management-service] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-12-25T22:54:08.660+01:00  INFO 19864 --- [team-management-service] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-12-25T22:54:09.012+01:00  WARN 19864 --- [team-management-service] [main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 5d38b44e-f31d-4faf-9911-805d06a538f2
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2024-12-25T22:54:09.026+01:00  INFO 19864 --- [team-management-service] [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2024-12-25T22:54:09.397+01:00  INFO 19864 --- [team-management-service] [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2024-12-25T22:54:10.771+01:00  INFO 19864 --- [team-management-service] [main] o.s.cloud.commons.util.InetUtils         : Cannot determine local hostname
+2024-12-25T22:54:10.847+01:00  WARN 19864 --- [team-management-service] [main] iguration$LoadBalancerCaffeineWarnLogger : Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2024-12-25T22:54:10.935+01:00  INFO 19864 --- [team-management-service] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8082 (http) with context path '/'
+2024-12-25T22:54:10.937+01:00  INFO 19864 --- [team-management-service] [main] o.s.c.c.s.ConsulServiceRegistry          : Registering service with consul: NewService{id='team-management-service-8082', name='team-management-service', tags=[], address='localhost', meta={secure=false}, port=8082, enableTagOverride=null, check=Check{script='null', dockerContainerID='null', shell='null', interval='10s', ttl='null', http='http://localhost:8082/actuator/health', method='null', header={}, tcp='null', timeout='null', deregisterCriticalServiceAfter='null', tlsSkipVerify=null, status='null', grpc='null', grpcUseTLS=null}, checks=null}
+2024-12-25T22:54:11.726+01:00  INFO 19864 --- [team-management-service] [http-nio-8082-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-12-25T22:54:11.726+01:00  INFO 19864 --- [team-management-service] [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-12-25T22:54:11.728+01:00  INFO 19864 --- [team-management-service] [http-nio-8082-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2024-12-25T22:54:11.879+01:00  INFO 19864 --- [team-management-service] [http-nio-8082-exec-1] org.league.app.filter.JWTFilter          : Extracted email: ylopatkin@gmail.com
+2024-12-25T22:54:11.879+01:00  INFO 19864 --- [team-management-service] [http-nio-8082-exec-1] org.league.app.filter.JWTFilter          : User email: ylopatkin@gmail.com
+2024-12-25T22:54:11.962+01:00  INFO 19864 --- [team-management-service] [main] o.s.cloud.commons.util.InetUtils         : Cannot determine local hostname
+2024-12-25T22:54:11.974+01:00  INFO 19864 --- [team-management-service] [main] o.l.a.TeamManagementServiceApplication   : Started TeamManagementServiceApplication in 9.251 seconds (process running for 9.8)
+2024-12-25T22:54:41.663+01:00  INFO 19864 --- [team-management-service] [http-nio-8082-exec-3] org.league.app.filter.JWTFilter          : Extracted email: ylopatkin@gmail.com
+2024-12-25T22:54:41.664+01:00  INFO 19864 --- [team-management-service] [http-nio-8082-exec-3] org.league.app.filter.JWTFilter          : User email: ylopatkin@gmail.com
+2024-12-25T22:54:41.732+01:00  INFO 19864 --- [team-management-service] [http-nio-8082-exec-3] org.league.app.service.TeamService       : Team found by team name: Team(id=ac8a4e08-83dc-4b66-b3f5-3fe181549689, teamName=Scorpi, teamImage=null, teamStatus=INACTIVE, createdAt=2024-12-25T22:53:00.481095)
+2024-12-25T22:57:49.920+01:00  INFO 19864 --- [team-management-service] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-12-25T22:57:49.922+01:00  INFO 19864 --- [team-management-service] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2024-12-25T22:57:49.926+01:00  INFO 19864 --- [team-management-service] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2024-12-25T22:57:49.927+01:00  INFO 19864 --- [team-management-service] [SpringApplicationShutdownHook] o.s.c.c.s.ConsulServiceRegistry          : Deregistering service with consul: team-management-service-8082
+2024-12-25T22:57:54.949+01:00  INFO 10836 --- [team-management-service] [main] o.l.a.TeamManagementServiceApplication   : Starting TeamManagementServiceApplication using Java 21.0.5 with PID 10836 (E:\important\league-hub\backend\team-management-service\target\classes started by ylopa in E:\important\league-hub)
+2024-12-25T22:57:54.950+01:00  INFO 10836 --- [team-management-service] [main] o.l.a.TeamManagementServiceApplication   : No active profile set, falling back to 1 default profile: "default"
+2024-12-25T22:57:55.673+01:00  INFO 10836 --- [team-management-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-12-25T22:57:55.778+01:00  INFO 10836 --- [team-management-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 100 ms. Found 2 JPA repository interfaces.
+2024-12-25T22:57:55.955+01:00  INFO 10836 --- [team-management-service] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=eea7ec31-ce8e-37c8-a8a5-2986a3e7cd85
+2024-12-25T22:57:56.195+01:00  WARN 10836 --- [team-management-service] [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig' of type [org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). The currently created BeanPostProcessor [lbRestClientPostProcessor] is declared through a non-static factory method on that class; consider declaring it as static instead.
+2024-12-25T22:57:56.197+01:00  WARN 10836 --- [team-management-service] [main] trationDelegate$BeanPostProcessorChecker : Bean 'deferringLoadBalancerInterceptor' of type [org.springframework.cloud.client.loadbalancer.DeferringLoadBalancerInterceptor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected into a currently created BeanPostProcessor [lbRestClientPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies.
+2024-12-25T22:57:56.373+01:00  INFO 10836 --- [team-management-service] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8082 (http)
+2024-12-25T22:57:56.383+01:00  INFO 10836 --- [team-management-service] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-12-25T22:57:56.384+01:00  INFO 10836 --- [team-management-service] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.30]
+2024-12-25T22:57:56.441+01:00  INFO 10836 --- [team-management-service] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-12-25T22:57:56.441+01:00  INFO 10836 --- [team-management-service] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1449 ms
+2024-12-25T22:57:56.607+01:00  INFO 10836 --- [team-management-service] [main] o.s.c.openfeign.FeignClientFactoryBean   : For 'user-service' URL not provided. Will try picking an instance via load-balancing.
+2024-12-25T22:57:57.772+01:00  INFO 10836 --- [team-management-service] [main] o.s.cloud.commons.util.InetUtils         : Cannot determine local hostname
+2024-12-25T22:57:57.936+01:00  INFO 10836 --- [team-management-service] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-12-25T22:57:57.979+01:00  INFO 10836 --- [team-management-service] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.3.Final
+2024-12-25T22:57:58.005+01:00  INFO 10836 --- [team-management-service] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-12-25T22:57:58.222+01:00  INFO 10836 --- [team-management-service] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-12-25T22:57:58.244+01:00  INFO 10836 --- [team-management-service] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-12-25T22:57:58.369+01:00  INFO 10836 --- [team-management-service] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@311453ab
+2024-12-25T22:57:58.371+01:00  INFO 10836 --- [team-management-service] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-12-25T22:57:59.145+01:00  INFO 10836 --- [team-management-service] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-12-25T22:57:59.244+01:00  INFO 10836 --- [team-management-service] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-12-25T22:57:59.588+01:00  WARN 10836 --- [team-management-service] [main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: b916ffef-2857-4e63-8076-f70d2d551810
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2024-12-25T22:57:59.601+01:00  INFO 10836 --- [team-management-service] [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2024-12-25T22:57:59.943+01:00  INFO 10836 --- [team-management-service] [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2024-12-25T22:58:01.290+01:00  INFO 10836 --- [team-management-service] [main] o.s.cloud.commons.util.InetUtils         : Cannot determine local hostname
+2024-12-25T22:58:01.358+01:00  WARN 10836 --- [team-management-service] [main] iguration$LoadBalancerCaffeineWarnLogger : Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2024-12-25T22:58:01.449+01:00  INFO 10836 --- [team-management-service] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8082 (http) with context path '/'
+2024-12-25T22:58:01.451+01:00  INFO 10836 --- [team-management-service] [main] o.s.c.c.s.ConsulServiceRegistry          : Registering service with consul: NewService{id='team-management-service-8082', name='team-management-service', tags=[], address='localhost', meta={secure=false}, port=8082, enableTagOverride=null, check=Check{script='null', dockerContainerID='null', shell='null', interval='10s', ttl='null', http='http://localhost:8082/actuator/health', method='null', header={}, tcp='null', timeout='null', deregisterCriticalServiceAfter='null', tlsSkipVerify=null, status='null', grpc='null', grpcUseTLS=null}, checks=null}
+2024-12-25T22:58:02.485+01:00  INFO 10836 --- [team-management-service] [main] o.s.cloud.commons.util.InetUtils         : Cannot determine local hostname
+2024-12-25T22:58:02.495+01:00  INFO 10836 --- [team-management-service] [main] o.l.a.TeamManagementServiceApplication   : Started TeamManagementServiceApplication in 9.201 seconds (process running for 9.766)
+2024-12-25T22:58:03.027+01:00  INFO 10836 --- [team-management-service] [RMI TCP Connection(4)-172.25.208.1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-12-25T22:58:03.028+01:00  INFO 10836 --- [team-management-service] [RMI TCP Connection(4)-172.25.208.1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-12-25T22:58:03.030+01:00  INFO 10836 --- [team-management-service] [RMI TCP Connection(4)-172.25.208.1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2024-12-25T22:58:12.736+01:00  INFO 10836 --- [team-management-service] [http-nio-8082-exec-1] org.league.app.filter.JWTFilter          : Extracted email: ylopatkin@gmail.com
+2024-12-25T22:58:12.737+01:00  INFO 10836 --- [team-management-service] [http-nio-8082-exec-1] org.league.app.filter.JWTFilter          : User email: ylopatkin@gmail.com
+2024-12-25T22:58:13.013+01:00  INFO 10836 --- [team-management-service] [http-nio-8082-exec-1] org.league.app.service.TeamService       : Team found by team name: Team(id=ac8a4e08-83dc-4b66-b3f5-3fe181549689, teamName=Scorpi, teamImage=Scorpi_team-logo.jpg, teamStatus=INACTIVE, createdAt=2024-12-25T22:53:00.481095)
+2024-12-25T22:58:26.835+01:00  INFO 10836 --- [team-management-service] [http-nio-8082-exec-2] org.league.app.filter.JWTFilter          : Extracted email: ylopatkin@gmail.com
+2024-12-25T22:58:26.835+01:00  INFO 10836 --- [team-management-service] [http-nio-8082-exec-2] org.league.app.filter.JWTFilter          : User email: ylopatkin@gmail.com
+2024-12-25T22:59:08.976+01:00  INFO 10836 --- [team-management-service] [http-nio-8082-exec-3] org.league.app.filter.JWTFilter          : Extracted email: ylopatkin@gmail.com
+2024-12-25T22:59:08.976+01:00  INFO 10836 --- [team-management-service] [http-nio-8082-exec-3] org.league.app.filter.JWTFilter          : User email: ylopatkin@gmail.com
+2024-12-25T22:59:09.020+01:00  INFO 10836 --- [team-management-service] [http-nio-8082-exec-3] org.league.app.service.TeamService       : Team found by team name: Team(id=ac8a4e08-83dc-4b66-b3f5-3fe181549689, teamName=killers, teamImage=killers_team-logo.jpg, teamStatus=INACTIVE, createdAt=2024-12-25T22:53:00.481095)
+2024-12-25T23:02:23.517+01:00  INFO 10836 --- [team-management-service] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-12-25T23:02:23.518+01:00  INFO 10836 --- [team-management-service] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2024-12-25T23:02:23.523+01:00  INFO 10836 --- [team-management-service] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2024-12-25T23:02:23.524+01:00  INFO 10836 --- [team-management-service] [SpringApplicationShutdownHook] o.s.c.c.s.ConsulServiceRegistry          : Deregistering service with consul: team-management-service-8082
+2024-12-25T23:02:28.615+01:00  INFO 12064 --- [team-management-service] [main] o.l.a.TeamManagementServiceApplication   : Starting TeamManagementServiceApplication using Java 21.0.5 with PID 12064 (E:\important\league-hub\backend\team-management-service\target\classes started by ylopa in E:\important\league-hub)
+2024-12-25T23:02:28.617+01:00  INFO 12064 --- [team-management-service] [main] o.l.a.TeamManagementServiceApplication   : No active profile set, falling back to 1 default profile: "default"
+2024-12-25T23:02:29.353+01:00  INFO 12064 --- [team-management-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-12-25T23:02:29.458+01:00  INFO 12064 --- [team-management-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 100 ms. Found 2 JPA repository interfaces.
+2024-12-25T23:02:29.626+01:00  INFO 12064 --- [team-management-service] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=eea7ec31-ce8e-37c8-a8a5-2986a3e7cd85
+2024-12-25T23:02:29.861+01:00  WARN 12064 --- [team-management-service] [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig' of type [org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). The currently created BeanPostProcessor [lbRestClientPostProcessor] is declared through a non-static factory method on that class; consider declaring it as static instead.
+2024-12-25T23:02:29.863+01:00  WARN 12064 --- [team-management-service] [main] trationDelegate$BeanPostProcessorChecker : Bean 'deferringLoadBalancerInterceptor' of type [org.springframework.cloud.client.loadbalancer.DeferringLoadBalancerInterceptor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected into a currently created BeanPostProcessor [lbRestClientPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies.
+2024-12-25T23:02:30.048+01:00  INFO 12064 --- [team-management-service] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8082 (http)
+2024-12-25T23:02:30.059+01:00  INFO 12064 --- [team-management-service] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-12-25T23:02:30.059+01:00  INFO 12064 --- [team-management-service] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.30]
+2024-12-25T23:02:30.115+01:00  INFO 12064 --- [team-management-service] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-12-25T23:02:30.115+01:00  INFO 12064 --- [team-management-service] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1466 ms
+2024-12-25T23:02:30.289+01:00  INFO 12064 --- [team-management-service] [main] o.s.c.openfeign.FeignClientFactoryBean   : For 'user-service' URL not provided. Will try picking an instance via load-balancing.
+2024-12-25T23:02:31.452+01:00  INFO 12064 --- [team-management-service] [main] o.s.cloud.commons.util.InetUtils         : Cannot determine local hostname
+2024-12-25T23:02:31.610+01:00  INFO 12064 --- [team-management-service] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-12-25T23:02:31.653+01:00  INFO 12064 --- [team-management-service] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.3.Final
+2024-12-25T23:02:31.679+01:00  INFO 12064 --- [team-management-service] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-12-25T23:02:31.884+01:00  INFO 12064 --- [team-management-service] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-12-25T23:02:31.906+01:00  INFO 12064 --- [team-management-service] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-12-25T23:02:32.026+01:00  INFO 12064 --- [team-management-service] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@36c1b6ff
+2024-12-25T23:02:32.026+01:00  INFO 12064 --- [team-management-service] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-12-25T23:02:32.753+01:00  INFO 12064 --- [team-management-service] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-12-25T23:02:32.833+01:00  INFO 12064 --- [team-management-service] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-12-25T23:02:33.167+01:00  WARN 12064 --- [team-management-service] [main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 789bd508-b19c-46ee-b141-0e410045f25f
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2024-12-25T23:02:33.177+01:00  INFO 12064 --- [team-management-service] [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2024-12-25T23:02:33.505+01:00  INFO 12064 --- [team-management-service] [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2024-12-25T23:02:34.855+01:00  INFO 12064 --- [team-management-service] [main] o.s.cloud.commons.util.InetUtils         : Cannot determine local hostname
+2024-12-25T23:02:34.912+01:00  WARN 12064 --- [team-management-service] [main] iguration$LoadBalancerCaffeineWarnLogger : Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2024-12-25T23:02:35.006+01:00  INFO 12064 --- [team-management-service] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8082 (http) with context path '/'
+2024-12-25T23:02:35.006+01:00  INFO 12064 --- [team-management-service] [main] o.s.c.c.s.ConsulServiceRegistry          : Registering service with consul: NewService{id='team-management-service-8082', name='team-management-service', tags=[], address='localhost', meta={secure=false}, port=8082, enableTagOverride=null, check=Check{script='null', dockerContainerID='null', shell='null', interval='10s', ttl='null', http='http://localhost:8082/actuator/health', method='null', header={}, tcp='null', timeout='null', deregisterCriticalServiceAfter='null', tlsSkipVerify=null, status='null', grpc='null', grpcUseTLS=null}, checks=null}
+2024-12-25T23:02:36.039+01:00  INFO 12064 --- [team-management-service] [main] o.s.cloud.commons.util.InetUtils         : Cannot determine local hostname
+2024-12-25T23:02:36.040+01:00  INFO 12064 --- [team-management-service] [main] o.l.a.TeamManagementServiceApplication   : Started TeamManagementServiceApplication in 9.105 seconds (process running for 9.671)
+2024-12-25T23:02:36.300+01:00  INFO 12064 --- [team-management-service] [RMI TCP Connection(1)-172.25.208.1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-12-25T23:02:36.308+01:00  INFO 12064 --- [team-management-service] [RMI TCP Connection(1)-172.25.208.1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-12-25T23:02:36.314+01:00  INFO 12064 --- [team-management-service] [RMI TCP Connection(1)-172.25.208.1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 3 ms
+2024-12-25T23:02:58.594+01:00 ERROR 12064 --- [team-management-service] [http-nio-8082-exec-1] org.league.app.service.TeamService       : Failed to read team logo: E:\important\league-hub\backend\team-management-service\src\main\resources\images\team_logo
+2024-12-25T23:03:02.814+01:00  INFO 12064 --- [team-management-service] [http-nio-8082-exec-3] org.league.app.filter.JWTFilter          : Extracted email: ylopatkin@gmail.com
+2024-12-25T23:03:02.814+01:00  INFO 12064 --- [team-management-service] [http-nio-8082-exec-3] org.league.app.filter.JWTFilter          : User email: ylopatkin@gmail.com
+2024-12-25T23:03:02.927+01:00  INFO 12064 --- [team-management-service] [http-nio-8082-exec-3] org.league.app.service.TeamService       : Team found by team name: Team(id=ac8a4e08-83dc-4b66-b3f5-3fe181549689, teamName=killers, teamImage=, teamStatus=INACTIVE, createdAt=2024-12-25T22:53:00.481095)
+2024-12-25T23:03:50.485+01:00  INFO 12064 --- [team-management-service] [http-nio-8082-exec-2] org.league.app.filter.JWTFilter          : Extracted email: ylopatkin@gmail.com
+2024-12-25T23:03:50.485+01:00  INFO 12064 --- [team-management-service] [http-nio-8082-exec-2] org.league.app.filter.JWTFilter          : User email: ylopatkin@gmail.com
+2024-12-25T23:03:50.531+01:00  INFO 12064 --- [team-management-service] [http-nio-8082-exec-2] org.league.app.service.TeamService       : Team found by team name: Team(id=ac8a4e08-83dc-4b66-b3f5-3fe181549689, teamName=killers, teamImage=ac8a4e08-83dc-4b66-b3f5-3fe181549689_team-logo.jpg, teamStatus=INACTIVE, createdAt=2024-12-25T22:53:00.481095)
+2024-12-25T23:04:13.675+01:00  INFO 12064 --- [team-management-service] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-12-25T23:04:13.675+01:00  INFO 12064 --- [team-management-service] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2024-12-25T23:04:13.675+01:00  INFO 12064 --- [team-management-service] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2024-12-25T23:04:13.675+01:00  INFO 12064 --- [team-management-service] [SpringApplicationShutdownHook] o.s.c.c.s.ConsulServiceRegistry          : Deregistering service with consul: team-management-service-8082
+=======
 2024-12-26T02:07:27.751+01:00  INFO 17972 --- [team-management-service] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
 2024-12-26T02:07:27.782+01:00  INFO 17972 --- [team-management-service] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
 2024-12-26T02:07:27.788+01:00  INFO 17972 --- [team-management-service] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.

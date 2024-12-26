@@ -13,11 +13,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-public class TeamConfig {
+public class NotificationConfig {
 
     private final JWTFilter jwtFilter;
 
-    public TeamConfig(JWTFilter jwtFilter) {
+    public NotificationConfig(JWTFilter jwtFilter) {
         this.jwtFilter = jwtFilter;
     }
 
@@ -27,9 +27,9 @@ public class TeamConfig {
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/team/create-team").hasAuthority("AUTHORISED_USER")
-                        .requestMatchers("/api/team/update-team-name", "/api/team/upload-team-logo").authenticated()
-                        .requestMatchers("/api/team/allTeams", "/api/team/currentTeam/**","/actuator/health", "/api/team/*/user-role", "/api/team/team-logo/**").permitAll())
+                        .requestMatchers("/api/my-notifications/subscribe",
+                                "/api/my-notifications/subscriptionList").authenticated()
+                        .requestMatchers("/actuator/health", "/api/notification/send-email").permitAll())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

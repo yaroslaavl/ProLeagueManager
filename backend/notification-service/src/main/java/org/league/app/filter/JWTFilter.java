@@ -26,12 +26,9 @@ public class JWTFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) {
+    protected boolean shouldNotFilter(HttpServletRequest request)  {
         String path = request.getServletPath();
-        return path.equals("/api/team/allTeams")
-                || path.equals("/api/team/currentTeam/")
-                || path.equals("/api/team/team-logo/")
-                || path.equals("/actuator/health");
+        return path.equals("/actuator/health");
     }
 
     @Override
@@ -39,13 +36,13 @@ public class JWTFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
-        String authorizationHeader = request.getHeader("Authorization");
-        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+        String authorization = request.getHeader("Authorization");
+        if (authorization == null || !authorization.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
 
-        String jwtToken = authorizationHeader.substring(7);
+        String jwtToken = authorization.substring(7);
         String email;
 
         try {
@@ -62,7 +59,7 @@ public class JWTFilter extends OncePerRequestFilter {
             log.info("User email: {}", email);
             var userDetails = authClientFeign.loadUserByEmail(jwtToken, email);
 
-            if (authClientFeign.validateToken(jwtToken, userDetails.getEmail()) && authClientFeign.isAccessToken(jwtToken) &&
+            if(authClientFeign.validateToken(jwtToken, userDetails.getEmail()) && authClientFeign.isAccessToken(jwtToken) &&
                     authClientFeign.getToken(jwtToken,
                             "whitelist:" + userDetails.getEmail() + ":accessToken").equals(jwtToken)) {
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(

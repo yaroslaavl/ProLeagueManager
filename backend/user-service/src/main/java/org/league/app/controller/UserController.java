@@ -84,14 +84,24 @@ public class UserController {
 
         byte[] imageBytes = userService.getUserImage(username);
 
-        if (imageBytes != null) {
-            String avatar = user.getAvatar();
-            String contentType = "image/" + avatar.substring(avatar.lastIndexOf(".") + 1);
+        if (imageBytes != null && imageBytes.length > 0) {
+            String logo = user.getAvatar();
+            String fileExtension = (logo != null && logo.contains("."))
+                    ? logo.substring(logo.lastIndexOf(".") + 1).toLowerCase()
+                    : "png";
+
+            String contentType = switch (fileExtension) {
+                case "jpg", "jpeg" -> "image/jpeg";
+                case "png" -> "image/png";
+                case "svg" -> "image/svg+xml";
+                default -> "application/octet-stream";
+            };
 
             return ResponseEntity.ok()
                     .contentType(MediaType.parseMediaType(contentType))
                     .body(imageBytes);
         }
+
         return ResponseEntity.notFound().build();
     }
 

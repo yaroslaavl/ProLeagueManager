@@ -4,11 +4,11 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.web.multipart.MultipartFile;
 
-public class ImageCustomValidator implements ConstraintValidator<ImageCustom, MultipartFile> {
+public class TeamLogoCustomValidator implements ConstraintValidator<TeamLogoCustom, MultipartFile> {
 
-    private static final long MAX_SIZE = 2 * 1024 * 1024;
-    private static final String[] CONTENT_TYPES = {"image/jpeg", "image/png", "image/jpg"};
-    private static final String[] VALID_EXTENSIONS = {".jpeg", ".jpg", ".png"};
+    private static final long MAX_SIZE = 3 * 1024 * 1024;
+    private static final String[] CONTENT_TYPES = {"image/jpeg", "image/png", "image/jpg", "image/svg+xml"};
+    private static final String[] VALID_EXTENSIONS = {".jpeg", ".jpg", ".png", ".svg"};
 
     @Override
     public boolean isValid(MultipartFile file, ConstraintValidatorContext constraintValidatorContext) {
