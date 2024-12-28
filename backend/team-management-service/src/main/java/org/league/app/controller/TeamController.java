@@ -3,7 +3,6 @@ package org.league.app.controller;
 import lombok.RequiredArgsConstructor;
 import org.league.app.mapper.TeamMapper;
 import org.springframework.data.domain.Page;
-import org.league.app.database.entity.Team;
 import org.league.app.database.repository.TeamRepository;
 import org.league.app.dto.*;
 import org.league.app.service.TeamService;
@@ -69,7 +68,7 @@ public class TeamController {
         byte[] imageBytes = teamService.getTeamImage(teamName);
 
         if (imageBytes != null && imageBytes.length > 0) {
-            String logo = teamRepository.findTeamByTeamName(teamName).getTeamImage();
+            String logo = teamRepository.findTeamByTeamName(teamName).get().getTeamImage();
             String fileExtension = (logo != null && logo.contains("."))
                     ? logo.substring(logo.lastIndexOf(".") + 1).toLowerCase()
                     : "png";

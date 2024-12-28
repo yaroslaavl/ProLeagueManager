@@ -158,7 +158,7 @@ public class UserService implements UserDetailsService {
     @Transactional
     public boolean emailConfirmation(String token) {
         User userByToken = userRepository.findByEmailVerificationToken(token)
-                .orElseThrow(() -> new UsernameNotFoundException("Email verification token not found"));
+                .orElseThrow(() -> new UserEmailNotFoundException("Email verification token not found"));
 
         String storedToken = redisCacheClient.get(userByToken.getEmail() + ":activationToken");
         if (storedToken == null) {
@@ -234,8 +234,8 @@ public class UserService implements UserDetailsService {
         User user = userRepository.findByEmail(securityContext())
                 .orElseThrow(() -> new UserEmailNotFoundException("User with e  mail: " + securityContext() + " not found"));
 
-        if(passwordEncoder.matches(userChangePasswordDto.getOldPassword(), user.getPassword())){
-            if(!userChangePasswordDto.getOldPassword().equals(userChangePasswordDto.getNewPassword())){
+        if(passwordEncoder.matches(userChangePasswordDto.getOldPassword(), user.getPassword())) {
+            if (!userChangePasswordDto.getOldPassword().equals(userChangePasswordDto.getNewPassword())) {
                 user.setPassword(passwordEncoder.encode(userChangePasswordDto.getNewPassword()));
 
                 redisCacheClient.delete("whitelist:" + user.getEmail() + ":accessToken");
@@ -244,6 +244,8 @@ public class UserService implements UserDetailsService {
             } else {
                 throw new InvalidPasswordException("The new password cannot be the same as the old password.");
             }
+        } else {
+            throw new InvalidPasswordException("The provided old password is incorrect.");
         }
     }
 
@@ -255,7 +257,7 @@ public class UserService implements UserDetailsService {
         if (userPersonalDataDto.getUsername() != null
                 && !userPersonalDataDto.getUsername().equals(user.getUsername())
                 && userRepository.existsByUsername(userPersonalDataDto.getUsername())) {
-            throw new UserAlreadyVerified("Username already exists");
+            throw new UserAlreadyExists("Username already exists");
         }
 
         Optional.ofNullable(userPersonalDataDto.getUsername()).ifPresent(user::setUsername);

@@ -11,7 +11,8 @@ import org.league.app.database.entity.enums.TeamStatus;
 import org.league.app.database.repository.TeamMemberRepository;
 import org.league.app.database.repository.TeamRepository;
 import org.league.app.exception.NotManagerException;
-import org.league.app.exception.TeamAlreadyExistsException;
+import org.league.app.exception.TeamNameAlreadyExistsException;
+import org.league.app.exception.TeamNotFoundException;
 import org.league.app.feign.AuthClientFeign;
 import org.league.app.feign.UserDto;
 import org.league.app.mapper.TeamMapper;
@@ -50,10 +51,10 @@ public class TeamService {
     public TeamReadDto createTeam(TeamCreateEditDto teamCreateEditDto) {
         UserDto userByEmail = authClientFeign.getUserByEmail(securityContext());
 
-        Team existingTeam = teamRepository.findTeamByTeamName(teamCreateEditDto.getTeamName());
+        Optional<Team> existingTeam = teamRepository.findTeamByTeamName(teamCreateEditDto.getTeamName());
 
-        if(existingTeam != null) {
-            throw new TeamAlreadyExistsException("Team name already exists");
+        if(existingTeam.isPresent()) {
+            throw new TeamNameAlreadyExistsException("This teamName is already yours. Please choose another one");
         }
 
         Team team = Optional.of(teamCreateEditDto)
@@ -80,12 +81,12 @@ public class TeamService {
     public TeamReadDto updateTeamName(TeamCreateEditDto teamCreateEditDto) {
         Team team = getTeam();
 
-        if(team == null) {
-            throw new TeamAlreadyExistsException("Team name already exists");
+        if(team.getTeamName().equals(teamCreateEditDto.getTeamName())) {
+            throw new TeamNameAlreadyExistsException("This teamName is already yours. Please choose another one");
         }
 
         Team teamToUpdate = teamRepository.findTeamById(team.getId())
-                .orElseThrow(() -> new TeamAlreadyExistsException("Team does not exist"));
+                .orElseThrow(() -> new TeamNotFoundException("Team does not exist"));
 
         teamToUpdate.setTeamName(teamCreateEditDto.getTeamName());
 
@@ -94,17 +95,14 @@ public class TeamService {
     }
 
     public TeamMemberDto getTeamByName(String teamName) {
-        Team team = teamRepository.findTeamByTeamName(teamName);
-
-        if(team == null) {
-            throw new TeamAlreadyExistsException("Team name does not exist");
-        }
+        Team existingTeam = teamRepository.findTeamByTeamName(teamName)
+                .orElseThrow(() -> new TeamNotFoundException("Team does not exist"));
 
         List<TeamMemberCreateDto> members = teamMemberRepository
-                .findTeamMemberByTeamId(team.getId()).stream()
+                .findTeamMemberByTeamId(existingTeam.getId()).stream()
                 .map(member -> {
                     TeamMemberCreateDto dto = new TeamMemberCreateDto();
-                    dto.setTeamId(team.getId());
+                    dto.setTeamId(existingTeam.getId());
                     dto.setUserId(member.getUserId());
                     dto.setTeamRole(member.getTeamRole());
                     dto.setIsSubstitute(member.getIsSubstitute());
@@ -113,7 +111,7 @@ public class TeamService {
                 })
                 .toList();
 
-        TeamReadDto teamReadDto = teamMapper.toDto(team);
+        TeamReadDto teamReadDto = teamMapper.toDto(existingTeam);
         return new TeamMemberDto(teamReadDto, members);
     }
 
@@ -183,10 +181,11 @@ public class TeamService {
     }
 
     public byte[] getTeamImage(String teamName) {
-        Team team = teamRepository.findTeamByTeamName(teamName);
+        Team existingTeam = teamRepository.findTeamByTeamName(teamName)
+                .orElseThrow(() -> new TeamNotFoundException("Team does not exist"));
 
-        if (team.getTeamImage() != null) {
-            Path path = Paths.get(uploadDir, team.getTeamImage());
+        if (existingTeam.getTeamImage() != null) {
+            Path path = Paths.get(uploadDir, existingTeam.getTeamImage());
             try {
                 return Files.readAllBytes(path);
             } catch (IOException e) {
@@ -228,6 +227,7 @@ public class TeamService {
             throw new NotManagerException("Access denied: You are not a manager of this team.");
         }
 
-        return teamRepository.findTeamByTeamName(teamByUserId.get().getTeam().getTeamName());
+        return teamRepository.findTeamByTeamName(teamByUserId.get().getTeam().getTeamName())
+                .orElseThrow(() -> new TeamNotFoundException("Team does not exist"));
     }
 }

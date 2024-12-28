@@ -6,12 +6,15 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.league.app.feign.AuthClientFeign;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 import java.io.IOException;
 
@@ -21,6 +24,10 @@ public class JWTFilter extends OncePerRequestFilter {
 
     private final AuthClientFeign authClientFeign;
 
+    @Autowired
+    @Qualifier("requestMappingHandlerMapping")
+    private RequestMappingHandlerMapping handlerMapping;
+
     public JWTFilter(AuthClientFeign authClientFeign) {
         this.authClientFeign = authClientFeign;
     }
@@ -28,7 +35,8 @@ public class JWTFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request)  {
         String path = request.getServletPath();
-        return path.equals("/actuator/health");
+        return path.equals("/actuator/health")
+                || path.equals("/api/notification/send-email");
     }
 
     @Override
@@ -36,13 +44,30 @@ public class JWTFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
-        String authorization = request.getHeader("Authorization");
-        if (authorization == null || !authorization.startsWith("Bearer ")) {
-            filterChain.doFilter(request, response);
+        String path = request.getServletPath();
+        try {
+            if(handlerMapping.getHandler(request) == null) {
+                log.error("Path not found: {}", path);
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                response.setContentType("application/json");
+                response.getWriter().write("{\"error\": \"Not Found\", \"message\": \"The request path is not found. Please check the URL and try again.\"}");
+                return;
+            }
+        } catch (Exception e) {
+            log.error("Error while checking handler for path: {}", path, e);
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return;
         }
 
-        String jwtToken = authorization.substring(7);
+        String authorizationHeader = request.getHeader("Authorization");
+        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json");
+            response.getWriter().write("{\"error\": \"Unauthorized\", \"message\": \"Missing or invalid Authorization header\"}");
+            return;
+        }
+
+        String jwtToken = authorizationHeader.substring(7);
         String email;
 
         try {

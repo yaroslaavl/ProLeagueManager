@@ -8,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.league.app.rediscache.RedisCacheClient;
 import org.league.app.service.JWTService;
 import org.league.app.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,6 +17,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 import java.io.IOException;
 
@@ -26,6 +29,10 @@ public class JWTFilter extends OncePerRequestFilter {
     private final UserService userService;
     private final RedisCacheClient redisCacheClient;
 
+    @Autowired
+    @Qualifier("requestMappingHandlerMapping")
+    private RequestMappingHandlerMapping handlerMapping;
+
     public JWTFilter(@Lazy JWTService jwtService, UserService userService, RedisCacheClient redisCacheClient) {
         this.jwtService = jwtService;
         this.userService = userService;
@@ -35,12 +42,19 @@ public class JWTFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getServletPath();
-        return path.equals("/api/auth/login")
+        return path.equals("/api/user/allUsers")
+                ||path.equals("/api/auth/login")
                 || path.equals("/api/auth/registration")
                 || path.equals("/api/auth/activate")
                 || path.equals("/actuator/health")
-                || path.equals("/api/user/profile/public/")
-                || path.equals("/api/user/avatar/");
+                || path.startsWith("/api/user/profile/public/")
+                || path.startsWith("/api/user/avatar/")
+                || path.equals("/api/auth/extract-email")
+                || path.equals("/api/auth/get-token")
+                || path.equals("/api/auth/is-access-token")
+                || path.equals("/api/auth/load-user-by-email")
+                || path.equals("/api/auth/validate-token")
+                || path.equals("/api/auth/get-user-by-email");
     }
 
     @Override
@@ -48,7 +62,22 @@ public class JWTFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
+
         String path = request.getServletPath();
+        try {
+            if (handlerMapping.getHandler(request) == null) {
+                log.error("Path not found: {}", path);
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                response.setContentType("application/json");
+                response.getWriter().write("{\"error\": \"Not Found\", \"message\": \"The request path is not found. Please check the URL and try again.\"}");
+                return;
+            }
+        } catch (Exception e) {
+            log.error("Error while checking handler for path: {}", path, e);
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return;
+        }
+
         if (path.equals("/api/auth/refresh-token")) {
             handleRefreshToken(request, response, filterChain);
             return;
@@ -56,7 +85,9 @@ public class JWTFilter extends OncePerRequestFilter {
 
         String authorizationHeader = request.getHeader("Authorization");
         if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
-            filterChain.doFilter(request, response);
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json");
+            response.getWriter().write("{\"error\": \"Unauthorized\", \"message\": \"Missing or invalid Authorization header\"}");
             return;
         }
 
@@ -67,7 +98,8 @@ public class JWTFilter extends OncePerRequestFilter {
             email = jwtService.extractEmail(jwtToken);
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().write("Invalid or expired JWT token: " + jwtToken);
+            response.setContentType("application/json");
+            response.getWriter().write("{\"error\": \"Unauthorized\", \"message\": \"Invalid or expired JWT token\"}");
             return;
         }
 
@@ -83,7 +115,8 @@ public class JWTFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             } else {
                 response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-                response.getWriter().write("Invalid token");
+                response.setContentType("application/json");
+                response.getWriter().write("{\"error\": \"Forbidden\", \"message\": \"Missing or invalid token\"}");
                 return;
             }
         }
@@ -97,7 +130,8 @@ public class JWTFilter extends OncePerRequestFilter {
         String authorizationHeader = request.getHeader("Authorization");
         if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().write("Missing or invalid Authorization header");
+            response.setContentType("application/json");
+            response.getWriter().write("{\"error\": \"Unauthorized\", \"message\": \"Missing or invalid Authorization header\"}");
             return;
         }
 
@@ -108,14 +142,16 @@ public class JWTFilter extends OncePerRequestFilter {
             email = jwtService.extractEmail(refreshToken);
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().write("Invalid or expired refresh token");
+            response.setContentType("application/json");
+            response.getWriter().write("{\"error\": \"Unauthorized\", \"message\": \"Invalid or expired refresh token\"}");
             return;
         }
 
         String storedRefreshToken = redisCacheClient.get("whitelist:" + email + ":refreshToken");
         if (storedRefreshToken == null || !storedRefreshToken.equals(refreshToken)) {
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-            response.getWriter().write("Invalid or expired refresh token");
+            response.setContentType("application/json");
+            response.getWriter().write("{\"error\": \"Forbidden\", \"message\": \"Missing or invalid token\"}");
             return;
         }
 

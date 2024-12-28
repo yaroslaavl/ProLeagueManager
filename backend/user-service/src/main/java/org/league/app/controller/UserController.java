@@ -128,7 +128,6 @@ public class UserController {
             userService.resetPassword(resetPasswordDto, token);
             return ResponseEntity.ok("Your password has been changed");
         } catch (IllegalArgumentException e){
-            e.printStackTrace();
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
