@@ -54,15 +54,15 @@ public class SportService {
 
     @Transactional
     public SportReadDto edit(String sportName, SportCreateEditDto sportCreateEditDto) {
+        Sport sport = sportRepository.findByName(sportName)
+                .orElseThrow(() -> new SportNotFoundException("Sport not found: " + sportName));
+
         if (sportRepository.findByName(sportCreateEditDto.getName()).isPresent()) {
             throw new SportAlreadyExists("Sport already exists: " + sportCreateEditDto.getName());
         }
 
-        Sport sport = sportRepository.findByName(sportName)
-                .orElseThrow(() -> new SportNotFoundException("Sport not found: " + sportName));
-
-        sport.setName(sportCreateEditDto.getName());
-        sport.setIsEsport(sportCreateEditDto.getIsEsport());
+        Optional.ofNullable(sportCreateEditDto.getName()).ifPresent(sport::setName);
+        Optional.ofNullable(sportCreateEditDto.getIsEsport()).ifPresent(sport::setIsEsport);
 
         sportRepository.save(sport);
         return sportMapper.toDto(sport);
