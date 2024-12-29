@@ -29,9 +29,6 @@ public class JWTFilter extends OncePerRequestFilter {
     private final UserService userService;
     private final RedisCacheClient redisCacheClient;
 
-    @Autowired
-    @Qualifier("requestMappingHandlerMapping")
-    private RequestMappingHandlerMapping handlerMapping;
 
     public JWTFilter(@Lazy JWTService jwtService, UserService userService, RedisCacheClient redisCacheClient) {
         this.jwtService = jwtService;
@@ -64,19 +61,6 @@ public class JWTFilter extends OncePerRequestFilter {
 
 
         String path = request.getServletPath();
-        try {
-            if (handlerMapping.getHandler(request) == null) {
-                log.error("Path not found: {}", path);
-                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-                response.setContentType("application/json");
-                response.getWriter().write("{\"error\": \"Not Found\", \"message\": \"The request path is not found. Please check the URL and try again.\"}");
-                return;
-            }
-        } catch (Exception e) {
-            log.error("Error while checking handler for path: {}", path, e);
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            return;
-        }
 
         if (path.equals("/api/auth/refresh-token")) {
             handleRefreshToken(request, response, filterChain);
