@@ -24,10 +24,6 @@ public class JWTFilter extends OncePerRequestFilter {
 
     private final AuthClientFeign authClientFeign;
 
-    @Autowired
-    @Qualifier("requestMappingHandlerMapping")
-    private RequestMappingHandlerMapping handlerMapping;
-
     public JWTFilter(AuthClientFeign authClientFeign) {
         this.authClientFeign = authClientFeign;
     }
@@ -46,21 +42,6 @@ public class JWTFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-
-        String path = request.getServletPath();
-        try {
-            if (handlerMapping.getHandler(request) == null) {
-                log.error("Path not found: {}", path);
-                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-                response.setContentType("application/json");
-                response.getWriter().write("{\"error\": \"Not Found\", \"message\": \"The request path is not found. Please check the URL and try again.\"}");
-                return;
-            }
-        } catch (Exception e) {
-            log.error("Error while checking handler for path: {}", path, e);
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            return;
-        }
 
         String authorizationHeader = request.getHeader("Authorization");
         if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {

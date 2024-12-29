@@ -804,3 +804,170 @@ This generated password is for development use only. Your security configuration
 2024-12-28T03:16:14.674+01:00  INFO 36448 --- [sport-service] [http-nio-8083-exec-9] org.league.app.filter.JWTFilter          : Extracted email: ylopatkin@gmail.com
 2024-12-28T03:16:14.674+01:00  INFO 36448 --- [sport-service] [http-nio-8083-exec-9] org.league.app.filter.JWTFilter          : User email: ylopatkin@gmail.com
 2024-12-28T03:16:24.423+01:00 ERROR 36448 --- [sport-service] [http-nio-8083-exec-1] org.league.app.filter.JWTFilter          : Path not found: /api/sport/editf-sport/Cocc1
+2024-12-28T21:16:01.196+01:00  INFO 16596 --- [sport-service] [main] org.league.app.SportServiceApplication   : Starting SportServiceApplication using Java 21.0.5 with PID 16596 (E:\important\ProLeagueManager\backend\sport-service\target\classes started by ylopa in E:\important\ProLeagueManager)
+2024-12-28T21:16:01.198+01:00  INFO 16596 --- [sport-service] [main] org.league.app.SportServiceApplication   : No active profile set, falling back to 1 default profile: "default"
+2024-12-28T21:16:02.318+01:00  INFO 16596 --- [sport-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2024-12-28T21:16:02.321+01:00  INFO 16596 --- [sport-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-12-28T21:16:02.485+01:00  INFO 16596 --- [sport-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 153 ms. Found 1 JPA repository interface.
+2024-12-28T21:16:02.506+01:00  INFO 16596 --- [sport-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2024-12-28T21:16:02.507+01:00  INFO 16596 --- [sport-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2024-12-28T21:16:02.527+01:00  INFO 16596 --- [sport-service] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface org.league.app.database.repository.SportRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-28T21:16:02.528+01:00  INFO 16596 --- [sport-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 9 ms. Found 0 Redis repository interfaces.
+2024-12-28T21:16:02.800+01:00  INFO 16596 --- [sport-service] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=4ac5997d-6748-3720-9ff1-429f66a9b8ae
+2024-12-28T21:16:03.134+01:00  WARN 16596 --- [sport-service] [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig' of type [org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). The currently created BeanPostProcessor [lbRestClientPostProcessor] is declared through a non-static factory method on that class; consider declaring it as static instead.
+2024-12-28T21:16:03.139+01:00  WARN 16596 --- [sport-service] [main] trationDelegate$BeanPostProcessorChecker : Bean 'deferringLoadBalancerInterceptor' of type [org.springframework.cloud.client.loadbalancer.DeferringLoadBalancerInterceptor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected into a currently created BeanPostProcessor [lbRestClientPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies.
+2024-12-28T21:16:03.479+01:00  INFO 16596 --- [sport-service] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8083 (http)
+2024-12-28T21:16:03.496+01:00  INFO 16596 --- [sport-service] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-12-28T21:16:03.496+01:00  INFO 16596 --- [sport-service] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.30]
+2024-12-28T21:16:03.580+01:00  INFO 16596 --- [sport-service] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-12-28T21:16:03.581+01:00  INFO 16596 --- [sport-service] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2338 ms
+2024-12-28T21:16:03.814+01:00  INFO 16596 --- [sport-service] [main] o.s.c.openfeign.FeignClientFactoryBean   : For 'user-service' URL not provided. Will try picking an instance via load-balancing.
+2024-12-28T21:16:04.394+01:00  INFO 16596 --- [sport-service] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-12-28T21:16:04.462+01:00  INFO 16596 --- [sport-service] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.3.Final
+2024-12-28T21:16:04.507+01:00  INFO 16596 --- [sport-service] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-12-28T21:16:04.900+01:00  INFO 16596 --- [sport-service] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-12-28T21:16:04.946+01:00  INFO 16596 --- [sport-service] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-12-28T21:16:05.193+01:00  INFO 16596 --- [sport-service] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@5afa0b1a
+2024-12-28T21:16:05.195+01:00  INFO 16596 --- [sport-service] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-12-28T21:16:06.103+01:00  INFO 16596 --- [sport-service] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-12-28T21:16:06.197+01:00  INFO 16596 --- [sport-service] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-12-28T21:16:06.950+01:00  WARN 16596 --- [sport-service] [main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 3b337771-1cb7-4963-84ce-891de6842593
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2024-12-28T21:16:06.978+01:00  INFO 16596 --- [sport-service] [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2024-12-28T21:16:08.077+01:00  INFO 16596 --- [sport-service] [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2024-12-28T21:16:08.933+01:00  WARN 16596 --- [sport-service] [main] iguration$LoadBalancerCaffeineWarnLogger : Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2024-12-28T21:16:09.054+01:00  INFO 16596 --- [sport-service] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8083 (http) with context path '/'
+2024-12-28T21:16:09.058+01:00  INFO 16596 --- [sport-service] [main] o.s.c.c.s.ConsulServiceRegistry          : Registering service with consul: NewService{id='sport-service-8083', name='sport-service', tags=[], address='100.106.2.30', meta={secure=false}, port=8083, enableTagOverride=null, check=Check{script='null', dockerContainerID='null', shell='null', interval='10s', ttl='null', http='http://100.106.2.30:8083/actuator/health', method='null', header={}, tcp='null', timeout='null', deregisterCriticalServiceAfter='null', tlsSkipVerify=null, status='null', grpc='null', grpcUseTLS=null}, checks=null}
+2024-12-28T21:16:09.101+01:00  INFO 16596 --- [sport-service] [main] org.league.app.SportServiceApplication   : Started SportServiceApplication in 8.624 seconds (process running for 10.079)
+2024-12-28T21:16:09.636+01:00  INFO 16596 --- [sport-service] [RMI TCP Connection(3)-172.25.208.1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-12-28T21:16:09.636+01:00  INFO 16596 --- [sport-service] [RMI TCP Connection(3)-172.25.208.1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-12-28T21:16:09.639+01:00  INFO 16596 --- [sport-service] [RMI TCP Connection(3)-172.25.208.1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 3 ms
+2024-12-28T21:50:01.203+01:00  INFO 16596 --- [sport-service] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-12-28T21:50:01.208+01:00  INFO 16596 --- [sport-service] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2024-12-28T21:50:01.215+01:00  INFO 16596 --- [sport-service] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2024-12-28T21:50:01.216+01:00  INFO 16596 --- [sport-service] [SpringApplicationShutdownHook] o.s.c.c.s.ConsulServiceRegistry          : Deregistering service with consul: sport-service-8083
+2024-12-28T21:56:25.060+01:00  INFO 4896 --- [sport-service] [main] org.league.app.SportServiceApplication   : Starting SportServiceApplication using Java 21.0.5 with PID 4896 (E:\important\ProLeagueManager\backend\sport-service\target\classes started by ylopa in E:\important\ProLeagueManager)
+2024-12-28T21:56:25.064+01:00  INFO 4896 --- [sport-service] [main] org.league.app.SportServiceApplication   : No active profile set, falling back to 1 default profile: "default"
+2024-12-28T21:56:26.245+01:00  INFO 4896 --- [sport-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2024-12-28T21:56:26.247+01:00  INFO 4896 --- [sport-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-12-28T21:56:26.383+01:00  INFO 4896 --- [sport-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 129 ms. Found 1 JPA repository interface.
+2024-12-28T21:56:26.396+01:00  INFO 4896 --- [sport-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2024-12-28T21:56:26.398+01:00  INFO 4896 --- [sport-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2024-12-28T21:56:26.413+01:00  INFO 4896 --- [sport-service] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface org.league.app.database.repository.SportRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-28T21:56:26.414+01:00  INFO 4896 --- [sport-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 7 ms. Found 0 Redis repository interfaces.
+2024-12-28T21:56:26.707+01:00  INFO 4896 --- [sport-service] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=224f4688-2e23-3b9e-a51f-63dace2bbb58
+2024-12-28T21:56:27.096+01:00  WARN 4896 --- [sport-service] [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig' of type [org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). The currently created BeanPostProcessor [lbRestClientPostProcessor] is declared through a non-static factory method on that class; consider declaring it as static instead.
+2024-12-28T21:56:27.100+01:00  WARN 4896 --- [sport-service] [main] trationDelegate$BeanPostProcessorChecker : Bean 'deferringLoadBalancerInterceptor' of type [org.springframework.cloud.client.loadbalancer.DeferringLoadBalancerInterceptor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected into a currently created BeanPostProcessor [lbRestClientPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies.
+2024-12-28T21:56:27.448+01:00  INFO 4896 --- [sport-service] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8083 (http)
+2024-12-28T21:56:27.463+01:00  INFO 4896 --- [sport-service] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-12-28T21:56:27.464+01:00  INFO 4896 --- [sport-service] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.30]
+2024-12-28T21:56:27.550+01:00  INFO 4896 --- [sport-service] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-12-28T21:56:27.551+01:00  INFO 4896 --- [sport-service] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2441 ms
+2024-12-28T21:56:27.859+01:00  INFO 4896 --- [sport-service] [main] o.s.c.openfeign.FeignClientFactoryBean   : For 'user-service' URL not provided. Will try picking an instance via load-balancing.
+2024-12-28T21:56:28.607+01:00  INFO 4896 --- [sport-service] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-12-28T21:56:28.667+01:00  INFO 4896 --- [sport-service] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.3.Final
+2024-12-28T21:56:28.701+01:00  INFO 4896 --- [sport-service] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-12-28T21:56:29.028+01:00  INFO 4896 --- [sport-service] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-12-28T21:56:29.071+01:00  INFO 4896 --- [sport-service] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-12-28T21:56:29.287+01:00  INFO 4896 --- [sport-service] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@3958db82
+2024-12-28T21:56:29.290+01:00  INFO 4896 --- [sport-service] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-12-28T21:56:30.220+01:00  INFO 4896 --- [sport-service] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-12-28T21:56:30.290+01:00  INFO 4896 --- [sport-service] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-12-28T21:56:30.665+01:00  WARN 4896 --- [sport-service] [main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 65ca9cd0-6bdb-4ec5-a4dc-5de4649e12b3
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2024-12-28T21:56:30.679+01:00  INFO 4896 --- [sport-service] [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2024-12-28T21:56:31.441+01:00  INFO 4896 --- [sport-service] [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2024-12-28T21:56:32.332+01:00  WARN 4896 --- [sport-service] [main] iguration$LoadBalancerCaffeineWarnLogger : Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2024-12-28T21:56:32.505+01:00  INFO 4896 --- [sport-service] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8083 (http) with context path '/'
+2024-12-28T21:56:32.509+01:00  INFO 4896 --- [sport-service] [main] o.s.c.c.s.ConsulServiceRegistry          : Registering service with consul: NewService{id='sport-service-8083', name='sport-service', tags=[], address='100.106.2.30', meta={secure=false}, port=8083, enableTagOverride=null, check=Check{script='null', dockerContainerID='null', shell='null', interval='10s', ttl='null', http='http://100.106.2.30:8083/actuator/health', method='null', header={}, tcp='null', timeout='null', deregisterCriticalServiceAfter='null', tlsSkipVerify=null, status='null', grpc='null', grpcUseTLS=null}, checks=null}
+2024-12-28T21:56:32.555+01:00  INFO 4896 --- [sport-service] [main] org.league.app.SportServiceApplication   : Started SportServiceApplication in 8.296 seconds (process running for 8.969)
+2024-12-28T21:56:32.984+01:00  INFO 4896 --- [sport-service] [http-nio-8083-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-12-28T21:56:32.984+01:00  INFO 4896 --- [sport-service] [http-nio-8083-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-12-28T21:56:32.990+01:00  INFO 4896 --- [sport-service] [http-nio-8083-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 6 ms
+2024-12-28T21:56:33.045+01:00 ERROR 4896 --- [sport-service] [http-nio-8083-exec-1] org.league.app.filter.RouteFilter        : Path not found: /actuator/health
+2024-12-28T21:56:43.058+01:00 ERROR 4896 --- [sport-service] [http-nio-8083-exec-2] org.league.app.filter.RouteFilter        : Path not found: /actuator/health
+2024-12-28T21:56:53.063+01:00 ERROR 4896 --- [sport-service] [http-nio-8083-exec-3] org.league.app.filter.RouteFilter        : Path not found: /actuator/health
+2024-12-28T21:57:03.067+01:00 ERROR 4896 --- [sport-service] [http-nio-8083-exec-4] org.league.app.filter.RouteFilter        : Path not found: /actuator/health
+2024-12-28T21:57:13.074+01:00 ERROR 4896 --- [sport-service] [http-nio-8083-exec-5] org.league.app.filter.RouteFilter        : Path not found: /actuator/health
+2024-12-28T21:57:23.079+01:00 ERROR 4896 --- [sport-service] [http-nio-8083-exec-6] org.league.app.filter.RouteFilter        : Path not found: /actuator/health
+2024-12-28T21:57:33.084+01:00 ERROR 4896 --- [sport-service] [http-nio-8083-exec-7] org.league.app.filter.RouteFilter        : Path not found: /actuator/health
+2024-12-28T21:57:43.089+01:00 ERROR 4896 --- [sport-service] [http-nio-8083-exec-8] org.league.app.filter.RouteFilter        : Path not found: /actuator/health
+2024-12-28T21:57:53.094+01:00 ERROR 4896 --- [sport-service] [http-nio-8083-exec-9] org.league.app.filter.RouteFilter        : Path not found: /actuator/health
+2024-12-28T21:58:03.099+01:00 ERROR 4896 --- [sport-service] [http-nio-8083-exec-10] org.league.app.filter.RouteFilter        : Path not found: /actuator/health
+2024-12-28T21:58:13.104+01:00 ERROR 4896 --- [sport-service] [http-nio-8083-exec-1] org.league.app.filter.RouteFilter        : Path not found: /actuator/health
+2024-12-28T21:58:23.110+01:00 ERROR 4896 --- [sport-service] [http-nio-8083-exec-2] org.league.app.filter.RouteFilter        : Path not found: /actuator/health
+2024-12-28T21:58:33.114+01:00 ERROR 4896 --- [sport-service] [http-nio-8083-exec-3] org.league.app.filter.RouteFilter        : Path not found: /actuator/health
+2024-12-28T21:58:43.119+01:00 ERROR 4896 --- [sport-service] [http-nio-8083-exec-4] org.league.app.filter.RouteFilter        : Path not found: /actuator/health
+2024-12-28T21:58:53.125+01:00 ERROR 4896 --- [sport-service] [http-nio-8083-exec-5] org.league.app.filter.RouteFilter        : Path not found: /actuator/health
+2024-12-28T21:59:03.129+01:00 ERROR 4896 --- [sport-service] [http-nio-8083-exec-6] org.league.app.filter.RouteFilter        : Path not found: /actuator/health
+2024-12-28T21:59:13.134+01:00 ERROR 4896 --- [sport-service] [http-nio-8083-exec-7] org.league.app.filter.RouteFilter        : Path not found: /actuator/health
+2024-12-28T21:59:23.138+01:00 ERROR 4896 --- [sport-service] [http-nio-8083-exec-8] org.league.app.filter.RouteFilter        : Path not found: /actuator/health
+2024-12-28T21:59:33.143+01:00 ERROR 4896 --- [sport-service] [http-nio-8083-exec-9] org.league.app.filter.RouteFilter        : Path not found: /actuator/health
+2024-12-28T21:59:43.148+01:00 ERROR 4896 --- [sport-service] [http-nio-8083-exec-10] org.league.app.filter.RouteFilter        : Path not found: /actuator/health
+2024-12-28T21:59:53.153+01:00 ERROR 4896 --- [sport-service] [http-nio-8083-exec-1] org.league.app.filter.RouteFilter        : Path not found: /actuator/health
+2024-12-28T22:00:03.158+01:00 ERROR 4896 --- [sport-service] [http-nio-8083-exec-2] org.league.app.filter.RouteFilter        : Path not found: /actuator/health
+2024-12-28T22:00:13.163+01:00 ERROR 4896 --- [sport-service] [http-nio-8083-exec-3] org.league.app.filter.RouteFilter        : Path not found: /actuator/health
+2024-12-28T22:00:23.167+01:00 ERROR 4896 --- [sport-service] [http-nio-8083-exec-4] org.league.app.filter.RouteFilter        : Path not found: /actuator/health
+2024-12-28T22:00:33.171+01:00 ERROR 4896 --- [sport-service] [http-nio-8083-exec-5] org.league.app.filter.RouteFilter        : Path not found: /actuator/health
+2024-12-28T22:00:43.183+01:00 ERROR 4896 --- [sport-service] [http-nio-8083-exec-6] org.league.app.filter.RouteFilter        : Path not found: /actuator/health
+2024-12-28T22:00:51.782+01:00  INFO 4896 --- [sport-service] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-12-28T22:00:51.785+01:00  INFO 4896 --- [sport-service] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2024-12-28T22:00:51.795+01:00  INFO 4896 --- [sport-service] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2024-12-28T22:00:51.796+01:00  INFO 4896 --- [sport-service] [SpringApplicationShutdownHook] o.s.c.c.s.ConsulServiceRegistry          : Deregistering service with consul: sport-service-8083
+2024-12-28T22:01:05.491+01:00  INFO 15416 --- [sport-service] [main] org.league.app.SportServiceApplication   : Starting SportServiceApplication using Java 21.0.5 with PID 15416 (E:\important\ProLeagueManager\backend\sport-service\target\classes started by ylopa in E:\important\ProLeagueManager)
+2024-12-28T22:01:05.493+01:00  INFO 15416 --- [sport-service] [main] org.league.app.SportServiceApplication   : No active profile set, falling back to 1 default profile: "default"
+2024-12-28T22:01:06.319+01:00  INFO 15416 --- [sport-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2024-12-28T22:01:06.321+01:00  INFO 15416 --- [sport-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-12-28T22:01:06.441+01:00  INFO 15416 --- [sport-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 115 ms. Found 1 JPA repository interface.
+2024-12-28T22:01:06.452+01:00  INFO 15416 --- [sport-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2024-12-28T22:01:06.453+01:00  INFO 15416 --- [sport-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2024-12-28T22:01:06.466+01:00  INFO 15416 --- [sport-service] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface org.league.app.database.repository.SportRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2024-12-28T22:01:06.466+01:00  INFO 15416 --- [sport-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 7 ms. Found 0 Redis repository interfaces.
+2024-12-28T22:01:06.688+01:00  INFO 15416 --- [sport-service] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=224f4688-2e23-3b9e-a51f-63dace2bbb58
+2024-12-28T22:01:06.964+01:00  WARN 15416 --- [sport-service] [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig' of type [org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). The currently created BeanPostProcessor [lbRestClientPostProcessor] is declared through a non-static factory method on that class; consider declaring it as static instead.
+2024-12-28T22:01:06.966+01:00  WARN 15416 --- [sport-service] [main] trationDelegate$BeanPostProcessorChecker : Bean 'deferringLoadBalancerInterceptor' of type [org.springframework.cloud.client.loadbalancer.DeferringLoadBalancerInterceptor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected into a currently created BeanPostProcessor [lbRestClientPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies.
+2024-12-28T22:01:07.232+01:00  INFO 15416 --- [sport-service] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8083 (http)
+2024-12-28T22:01:07.245+01:00  INFO 15416 --- [sport-service] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-12-28T22:01:07.246+01:00  INFO 15416 --- [sport-service] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.30]
+2024-12-28T22:01:07.307+01:00  INFO 15416 --- [sport-service] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-12-28T22:01:07.307+01:00  INFO 15416 --- [sport-service] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1771 ms
+2024-12-28T22:01:07.492+01:00  INFO 15416 --- [sport-service] [main] o.s.c.openfeign.FeignClientFactoryBean   : For 'user-service' URL not provided. Will try picking an instance via load-balancing.
+2024-12-28T22:01:07.900+01:00  INFO 15416 --- [sport-service] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-12-28T22:01:07.939+01:00  INFO 15416 --- [sport-service] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.3.Final
+2024-12-28T22:01:07.963+01:00  INFO 15416 --- [sport-service] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2024-12-28T22:01:08.173+01:00  INFO 15416 --- [sport-service] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2024-12-28T22:01:08.201+01:00  INFO 15416 --- [sport-service] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-12-28T22:01:08.327+01:00  INFO 15416 --- [sport-service] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@522f74a1
+2024-12-28T22:01:08.328+01:00  INFO 15416 --- [sport-service] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-12-28T22:01:09.019+01:00  INFO 15416 --- [sport-service] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2024-12-28T22:01:09.076+01:00  INFO 15416 --- [sport-service] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-12-28T22:01:09.370+01:00  WARN 15416 --- [sport-service] [main] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 4c3e165a-0811-47f9-af9b-7ea69923db45
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2024-12-28T22:01:09.382+01:00  INFO 15416 --- [sport-service] [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2024-12-28T22:01:09.876+01:00  INFO 15416 --- [sport-service] [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2024-12-28T22:01:10.371+01:00  WARN 15416 --- [sport-service] [main] iguration$LoadBalancerCaffeineWarnLogger : Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2024-12-28T22:01:10.451+01:00  INFO 15416 --- [sport-service] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8083 (http) with context path '/'
+2024-12-28T22:01:10.454+01:00  INFO 15416 --- [sport-service] [main] o.s.c.c.s.ConsulServiceRegistry          : Registering service with consul: NewService{id='sport-service-8083', name='sport-service', tags=[], address='100.106.2.30', meta={secure=false}, port=8083, enableTagOverride=null, check=Check{script='null', dockerContainerID='null', shell='null', interval='10s', ttl='null', http='http://100.106.2.30:8083/actuator/health', method='null', header={}, tcp='null', timeout='null', deregisterCriticalServiceAfter='null', tlsSkipVerify=null, status='null', grpc='null', grpcUseTLS=null}, checks=null}
+2024-12-28T22:01:10.482+01:00  INFO 15416 --- [sport-service] [main] org.league.app.SportServiceApplication   : Started SportServiceApplication in 5.805 seconds (process running for 6.556)
+2024-12-28T22:01:10.887+01:00  INFO 15416 --- [sport-service] [RMI TCP Connection(4)-172.25.208.1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-12-28T22:01:10.887+01:00  INFO 15416 --- [sport-service] [RMI TCP Connection(4)-172.25.208.1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-12-28T22:01:10.889+01:00  INFO 15416 --- [sport-service] [RMI TCP Connection(4)-172.25.208.1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2024-12-28T22:02:21.942+01:00 ERROR 15416 --- [sport-service] [http-nio-8083-exec-1] org.league.app.filter.RouteFilter        : Path not found: /api/sport/exagct-sport/Football
+2024-12-28T22:02:28.288+01:00 ERROR 15416 --- [sport-service] [http-nio-8083-exec-4] org.league.app.filter.RouteFilter        : Path not found: /api/sport/regularf-sports
+2024-12-28T22:02:31.508+01:00 ERROR 15416 --- [sport-service] [http-nio-8083-exec-5] org.league.app.filter.RouteFilter        : Path not found: /api/sport/regular-sportsf
+2024-12-28T22:22:48.652+01:00  INFO 15416 --- [sport-service] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2024-12-28T22:22:48.656+01:00  INFO 15416 --- [sport-service] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2024-12-28T22:22:48.672+01:00  INFO 15416 --- [sport-service] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2024-12-28T22:22:48.673+01:00  INFO 15416 --- [sport-service] [SpringApplicationShutdownHook] o.s.c.c.s.ConsulServiceRegistry          : Deregistering service with consul: sport-service-8083
