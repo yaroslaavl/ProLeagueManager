@@ -2,6 +2,7 @@ package org.league.app.config;
 
 import lombok.SneakyThrows;
 import org.league.app.filter.JWTFilter;
+import org.league.app.filter.RouteFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -10,15 +11,18 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.context.SecurityContextHolderFilter;
 
 @Configuration
 @EnableWebSecurity
 public class TeamConfig {
 
     private final JWTFilter jwtFilter;
+    private final RouteFilter routeFilter;
 
-    public TeamConfig(JWTFilter jwtFilter) {
+    public TeamConfig(JWTFilter jwtFilter, RouteFilter routeFilter) {
         this.jwtFilter = jwtFilter;
+        this.routeFilter = routeFilter;
     }
 
     @Bean
@@ -30,6 +34,7 @@ public class TeamConfig {
                         .requestMatchers("/api/team/create-team").hasAuthority("AUTHORISED_USER")
                         .requestMatchers("/api/team/update-team-name", "/api/team/upload-team-logo").authenticated()
                         .requestMatchers("/api/team/allTeams", "/api/team/currentTeam/**","/actuator/health", "/api/team/*/user-role", "/api/team/team-logo/**").permitAll())
+                .addFilterBefore(routeFilter, SecurityContextHolderFilter.class)
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

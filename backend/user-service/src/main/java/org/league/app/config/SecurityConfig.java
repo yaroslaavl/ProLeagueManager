@@ -8,6 +8,7 @@ import org.league.app.database.repository.UserRepository;
 import org.league.app.dto.UserCreateDto;
 import org.league.app.exception.RoleGroupNotFound;
 import org.league.app.filter.JWTFilter;
+import org.league.app.filter.RouteFilter;
 import org.league.app.mapper.UserMapper;
 import org.league.app.rediscache.RedisCacheClient;
 import org.league.app.service.JWTService;
@@ -33,6 +34,7 @@ import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.context.SecurityContextHolderFilter;
 
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
@@ -49,8 +51,9 @@ public class SecurityConfig {
     private final UserMapper userMapper;
     private final RedisCacheClient redisCacheClient;
     private final JWTService jwtService;
+    private final RouteFilter routeFilter;
 
-    public SecurityConfig(@Lazy JWTFilter jwtFilter, @Lazy UserService userService, UserRepository userRepository, RoleGroupRepository roleGroupRepository, UserMapper userMapper, RedisCacheClient redisCacheClient, @Lazy JWTService jwtService) {
+    public SecurityConfig(@Lazy JWTFilter jwtFilter, @Lazy UserService userService, UserRepository userRepository, RoleGroupRepository roleGroupRepository, UserMapper userMapper, RedisCacheClient redisCacheClient, @Lazy JWTService jwtService, RouteFilter routeFilter) {
         this.jwtFilter = jwtFilter;
         this.userService = userService;
         this.userRepository = userRepository;
@@ -58,6 +61,7 @@ public class SecurityConfig {
         this.userMapper = userMapper;
         this.redisCacheClient = redisCacheClient;
         this.jwtService = jwtService;
+        this.routeFilter = routeFilter;
     }
 
     @Bean
@@ -90,13 +94,18 @@ public class SecurityConfig {
                 .oauth2Login(oauth2 -> oauth2
                         .userInfoEndpoint(userInfo -> userInfo.oidcUserService(oidcUserService()))
                         .successHandler((request, response, authentication) -> {
-                            String email = ((OidcUser) authentication.getPrincipal()).getEmail();
+                           try{ String email = ((OidcUser) authentication.getPrincipal()).getEmail();
                             String accessToken = redisCacheClient.get("whitelist:" + email + ":accessToken");
                             String refreshToken = redisCacheClient.get("whitelist:" + email + ":refreshToken");
 
                             response.sendRedirect("http://localhost:3000/callback?accessToken=" + accessToken + "&refreshToken=" + refreshToken);
+                           } catch (Exception e) {
+                               log.error(e.getMessage());
+                               response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+                           }
                         })
                 )
+                .addFilterBefore(routeFilter, SecurityContextHolderFilter.class)
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
