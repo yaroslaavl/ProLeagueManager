@@ -5,11 +5,9 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.league.app.rediscache.RedisCacheClient;
+import org.league.app.redisclient.RedisClient;
 import org.league.app.service.JWTService;
 import org.league.app.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,7 +15,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 import java.io.IOException;
 
@@ -27,13 +24,13 @@ public class JWTFilter extends OncePerRequestFilter {
 
     private final JWTService jwtService;
     private final UserService userService;
-    private final RedisCacheClient redisCacheClient;
+    private final RedisClient redisClient;
 
 
-    public JWTFilter(@Lazy JWTService jwtService, UserService userService, RedisCacheClient redisCacheClient) {
+    public JWTFilter(@Lazy JWTService jwtService, UserService userService, RedisClient redisClient) {
         this.jwtService = jwtService;
         this.userService = userService;
-        this.redisCacheClient = redisCacheClient;
+        this.redisClient = redisClient;
     }
 
     @Override
@@ -48,6 +45,8 @@ public class JWTFilter extends OncePerRequestFilter {
                 || path.startsWith("/api/user/avatar/")
                 || path.equals("/api/auth/extract-email")
                 || path.equals("/api/auth/get-token")
+                || path.equals("/api/auth/set-token")
+                || path.equals("/api/auth/delete-token")
                 || path.equals("/api/auth/is-access-token")
                 || path.equals("/api/auth/load-user-by-email")
                 || path.equals("/api/auth/validate-token")
@@ -91,7 +90,7 @@ public class JWTFilter extends OncePerRequestFilter {
             UserDetails userDetails = userService.loadUserByUsername(email);
 
             if (jwtService.isTokenValid(jwtToken, userDetails) && jwtService.isAccessToken(jwtToken) &&
-            redisCacheClient.get(
+                    redisClient.get(
                     "whitelist:" + userDetails.getUsername() + ":accessToken").equals(jwtToken)) {
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());
@@ -131,7 +130,7 @@ public class JWTFilter extends OncePerRequestFilter {
             return;
         }
 
-        String storedRefreshToken = redisCacheClient.get("whitelist:" + email + ":refreshToken");
+        String storedRefreshToken = redisClient.get("whitelist:" + email + ":refreshToken");
         if (storedRefreshToken == null || !storedRefreshToken.equals(refreshToken)) {
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             response.setContentType("application/json");

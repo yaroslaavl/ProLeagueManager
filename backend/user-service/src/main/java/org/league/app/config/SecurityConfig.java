@@ -6,11 +6,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.league.app.database.repository.RoleGroupRepository;
 import org.league.app.database.repository.UserRepository;
 import org.league.app.dto.UserCreateDto;
-import org.league.app.exception.RoleGroupNotFound;
+import org.league.app.exception.RoleGroupNotFoundException;
 import org.league.app.filter.JWTFilter;
 import org.league.app.filter.RouteFilter;
 import org.league.app.mapper.UserMapper;
-import org.league.app.rediscache.RedisCacheClient;
+import org.league.app.redisclient.RedisClient;
 import org.league.app.service.JWTService;
 import org.league.app.service.UserService;
 import org.springframework.context.annotation.Bean;
@@ -49,17 +49,17 @@ public class SecurityConfig {
     private final UserRepository userRepository;
     private final RoleGroupRepository roleGroupRepository;
     private final UserMapper userMapper;
-    private final RedisCacheClient redisCacheClient;
+    private final RedisClient redisClient;
     private final JWTService jwtService;
     private final RouteFilter routeFilter;
 
-    public SecurityConfig(@Lazy JWTFilter jwtFilter, @Lazy UserService userService, UserRepository userRepository, RoleGroupRepository roleGroupRepository, UserMapper userMapper, RedisCacheClient redisCacheClient, @Lazy JWTService jwtService, RouteFilter routeFilter) {
+    public SecurityConfig(@Lazy JWTFilter jwtFilter, @Lazy UserService userService, UserRepository userRepository, RoleGroupRepository roleGroupRepository, UserMapper userMapper, RedisClient redisClient, @Lazy JWTService jwtService, RouteFilter routeFilter) {
         this.jwtFilter = jwtFilter;
         this.userService = userService;
         this.userRepository = userRepository;
         this.roleGroupRepository = roleGroupRepository;
         this.userMapper = userMapper;
-        this.redisCacheClient = redisCacheClient;
+        this.redisClient = redisClient;
         this.jwtService = jwtService;
         this.routeFilter = routeFilter;
     }
@@ -83,6 +83,8 @@ public class SecurityConfig {
                                 "/api/user/set-new-password/**",
                                 "/api/user/change-user-password",
                                 "/api/auth/get-token",
+                                "/api/auth/set-token",
+                                "/api/auth/delete-token",
                                 "/api/auth/is-access-token",
                                 "/api/auth/load-user-by-email",
                                 "/api/auth/validate-token",
@@ -95,8 +97,8 @@ public class SecurityConfig {
                         .userInfoEndpoint(userInfo -> userInfo.oidcUserService(oidcUserService()))
                         .successHandler((request, response, authentication) -> {
                            try{ String email = ((OidcUser) authentication.getPrincipal()).getEmail();
-                            String accessToken = redisCacheClient.get("whitelist:" + email + ":accessToken");
-                            String refreshToken = redisCacheClient.get("whitelist:" + email + ":refreshToken");
+                            String accessToken = redisClient.get("whitelist:" + email + ":accessToken");
+                            String refreshToken = redisClient.get("whitelist:" + email + ":refreshToken");
 
                             response.sendRedirect("http://localhost:3000/callback?accessToken=" + accessToken + "&refreshToken=" + refreshToken);
                            } catch (Exception e) {
@@ -146,7 +148,7 @@ public class SecurityConfig {
                         .firstName(firstName)
                         .lastName(lastName)
                         .birthDate(null)
-                        .roleGroup(roleGroupRepository.findByName("VERIFIED_USER").orElseThrow(() -> new RoleGroupNotFound("Group not found")))
+                        .roleGroup(roleGroupRepository.findByName("VERIFIED_USER").orElseThrow(() -> new RoleGroupNotFoundException("Group not found")))
                         .isVerified(true)
                         .emailVerificationToken(null)
                         .build();
@@ -161,8 +163,8 @@ public class SecurityConfig {
             String accessToken = jwtService.generateToken(authentication);
             String refreshToken = jwtService.generateRefreshToken(authentication);
 
-            redisCacheClient.set("whitelist:" + email + ":accessToken", accessToken, 15, TimeUnit.MINUTES);
-            redisCacheClient.set("whitelist:" + email + ":refreshToken", refreshToken, 1, TimeUnit.DAYS);
+            redisClient.set("whitelist:" + email + ":accessToken", accessToken, 15, TimeUnit.MINUTES);
+            redisClient.set("whitelist:" + email + ":refreshToken", refreshToken, 1, TimeUnit.DAYS);
 
             return new DefaultOidcUser(userDetails.getAuthorities(), userRequest.getIdToken());
         };

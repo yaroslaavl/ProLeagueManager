@@ -11,7 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.league.app.dto.AuthResponseDto;
-import org.league.app.rediscache.RedisCacheClient;
+import org.league.app.redisclient.RedisClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -37,7 +37,7 @@ public class JWTService {
     private String jwtSigningKey;
 
     private final UserService userService;
-    private final RedisCacheClient redisCacheClient;
+    private final RedisClient redisClient;
 
 
     public String generateToken(Authentication authentication) {
@@ -140,7 +140,7 @@ public class JWTService {
                             .refreshToken(refreshToken)
                             .build();
 
-                    redisCacheClient.set(
+                    redisClient.set(
                             "whitelist:" + userDetails.getUsername() + ":accessToken", accessToken, 15, TimeUnit.MINUTES);
 
                     new ObjectMapper().writeValue(response.getOutputStream(), authResponse);

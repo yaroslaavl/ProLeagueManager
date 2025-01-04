@@ -2,6 +2,7 @@ package org.league.app.service;
 
 import lombok.RequiredArgsConstructor;
 import org.league.app.exception.*;
+import org.league.app.redisclient.RedisClient;
 import org.springframework.beans.factory.annotation.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.league.app.database.entity.RoleGroup;
@@ -12,7 +13,6 @@ import org.league.app.dto.*;
 import org.league.app.feign.EmailRequest;
 import org.league.app.feign.NotificationFeignClient;
 import org.league.app.mapper.UserMapper;
-import org.league.app.rediscache.RedisCacheClient;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -43,7 +43,7 @@ public class UserService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
     private final RoleGroupRepository roleGroupRepository;
     private final NotificationFeignClient notificationFeignClient;
-    private final RedisCacheClient redisCacheClient;
+    private final RedisClient redisClient;
 
     @Value("${app.image.uploadDir}")
     private String uploadDir;
@@ -52,7 +52,7 @@ public class UserService implements UserDetailsService {
     public UserReadDto create(UserCreateDto userCreateDto){
         String activationToken = UUID.randomUUID().toString();
         RoleGroup userRoleGroup = roleGroupRepository.findByName("USER")
-                .orElseThrow(() -> new RoleGroupNotFound("Group not found"));
+                .orElseThrow(() -> new RoleGroupNotFoundException("Group not found"));
 
         User newUser = Optional.of(userCreateDto)
                 .map(dto -> {
@@ -71,7 +71,7 @@ public class UserService implements UserDetailsService {
                   "You have successfully registered! Verify your email for full access: " + confirmationLink
         ));
 
-        redisCacheClient.set(newUser.getEmail() + ":activationToken", activationToken, 1, TimeUnit.DAYS);
+        redisClient.set(newUser.getEmail() + ":activationToken", activationToken, 1, TimeUnit.DAYS);
 
         log.info("Email: {}, Subject: {}, Body: {}",
                 userCreateDto.getEmail(),
@@ -96,8 +96,8 @@ public class UserService implements UserDetailsService {
                     "Click the link to reset your password: " + resetUrl
             ));
 
-            redisCacheClient.set(emailResetPasswordDto.getEmail() + ":resetPasswordToken", resetToken, 5, TimeUnit.MINUTES);
-            redisCacheClient.set(resetToken, emailResetPasswordDto.getEmail(), 5,TimeUnit.MINUTES);
+            redisClient.set(emailResetPasswordDto.getEmail() + ":resetPasswordToken", resetToken, 5, TimeUnit.MINUTES);
+            redisClient.set(resetToken, emailResetPasswordDto.getEmail(), 5,TimeUnit.MINUTES);
 
             return true;
         } catch (Exception e) {
@@ -112,12 +112,12 @@ public class UserService implements UserDetailsService {
             throw new IllegalArgumentException("Invalid or missing token");
         }
 
-        String userEmail = redisCacheClient.get(token);
+        String userEmail = redisClient.get(token);
         if (userEmail == null) {
             throw new IllegalArgumentException("Invalid or expired token");
         }
 
-        String storedToken = redisCacheClient.get(userEmail + ":resetPasswordToken");
+        String storedToken = redisClient.get(userEmail + ":resetPasswordToken");
         if (storedToken == null || !storedToken.equals(token)) {
             throw new IllegalArgumentException("Invalid or expired token");
         }
@@ -128,8 +128,8 @@ public class UserService implements UserDetailsService {
         user.setPassword(passwordEncoder.encode(resetPasswordDto.getNewPassword()));
         userRepository.save(user);
 
-        redisCacheClient.delete(userEmail + ":resetPasswordToken");
-        redisCacheClient.delete(token);
+        redisClient.delete(userEmail + ":resetPasswordToken");
+        redisClient.delete(token);
     }
 
     @Override
@@ -160,7 +160,7 @@ public class UserService implements UserDetailsService {
         User userByToken = userRepository.findByEmailVerificationToken(token)
                 .orElseThrow(() -> new UserEmailNotFoundException("Email verification token not found"));
 
-        String storedToken = redisCacheClient.get(userByToken.getEmail() + ":activationToken");
+        String storedToken = redisClient.get(userByToken.getEmail() + ":activationToken");
         if (storedToken == null) {
             log.error("Token has expired or does not exist in Redis: {}", token);
             throw new TokenException("Email verification has expired. Please resend the activation message to your email address.");
@@ -171,12 +171,12 @@ public class UserService implements UserDetailsService {
             throw new TokenException("Email verification has expired. Please resend the activation message to your email address.");
         }
 
-        redisCacheClient.delete(userByToken.getEmail() + ":activationToken");
+        redisClient.delete(userByToken.getEmail() + ":activationToken");
 
         userByToken.setEmailVerificationToken(null);
         userByToken.setIsVerified(true);
         RoleGroup roleGroup = roleGroupRepository.findByName("VERIFIED_USER")
-                .orElseThrow(() -> new RoleGroupNotFound("Group not found"));
+                .orElseThrow(() -> new RoleGroupNotFoundException("Group not found"));
         userByToken.setRoleGroup(roleGroup);
 
         userRepository.saveAndFlush(userByToken);
@@ -190,7 +190,7 @@ public class UserService implements UserDetailsService {
                 .orElseThrow(() -> new UserEmailNotFoundException("User with email: " + securityContext() + " not found"));
 
         if (user.getIsVerified()) {
-            throw new UserAlreadyVerified("User is already verified");
+            throw new UserAlreadyVerifiedException("User is already verified");
         }
 
         String activationToken = UUID.randomUUID().toString();
@@ -208,7 +208,7 @@ public class UserService implements UserDetailsService {
                 "You have got a new email verification link to activate your account." +
                         " Please click the link below to confirm your email address and complete your registration: " + confirmationLink);
 
-        redisCacheClient.set(user.getEmail() + ":activationToken", activationToken, 1, TimeUnit.DAYS);
+        redisClient.set(user.getEmail() + ":activationToken", activationToken, 1, TimeUnit.DAYS);
 
         user.setEmailVerificationToken(activationToken);
         userRepository.saveAndFlush(user);
@@ -223,8 +223,8 @@ public class UserService implements UserDetailsService {
             throw new InvalidPasswordException("The provided password is incorrect.");
         }
 
-        redisCacheClient.delete("whitelist:" + user.getEmail() + ":accessToken");
-        redisCacheClient.delete("whitelist:" + user.getEmail() + ":refreshToken");
+        redisClient.delete("whitelist:" + user.getEmail() + ":accessToken");
+        redisClient.delete("whitelist:" + user.getEmail() + ":refreshToken");
 
         userRepository.delete(user);
     }
@@ -238,8 +238,8 @@ public class UserService implements UserDetailsService {
             if (!userChangePasswordDto.getOldPassword().equals(userChangePasswordDto.getNewPassword())) {
                 user.setPassword(passwordEncoder.encode(userChangePasswordDto.getNewPassword()));
 
-                redisCacheClient.delete("whitelist:" + user.getEmail() + ":accessToken");
-                redisCacheClient.delete("whitelist:" + user.getEmail() + ":refreshToken");
+                redisClient.delete("whitelist:" + user.getEmail() + ":accessToken");
+                redisClient.delete("whitelist:" + user.getEmail() + ":refreshToken");
 
             } else {
                 throw new InvalidPasswordException("The new password cannot be the same as the old password.");
@@ -257,7 +257,7 @@ public class UserService implements UserDetailsService {
         if (userPersonalDataDto.getUsername() != null
                 && !userPersonalDataDto.getUsername().equals(user.getUsername())
                 && userRepository.existsByUsername(userPersonalDataDto.getUsername())) {
-            throw new UserAlreadyExists("Username already exists");
+            throw new UserAlreadyExistsException("Username already exists");
         }
 
         Optional.ofNullable(userPersonalDataDto.getUsername()).ifPresent(user::setUsername);
