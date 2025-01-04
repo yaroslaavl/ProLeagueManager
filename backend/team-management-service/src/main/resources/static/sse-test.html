@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSE Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+        }
+        li {
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #4CAF50;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<h1>SSE Test</h1>
+<p>Notifications:</p>
+<ul id="notifications"></ul>
+<p id="status" class="error"></p>
+
+<script>
+    console.log("Hello")
+
+    const eventSource = new EventSource("http://localhost:8765/my-notifications/subscribe/1");
+
+    eventSource.onopen = () => {
+        console.log("SSE connection opened.");
+        updateStatus("Connected to the server.", false);
+    };
+
+    eventSource.onmessage = (event) => {
+        console.log("Notification received: ", event.data);
+        displayNotification(event.data);
+    };
+
+    eventSource.onerror = () => {
+        console.error("Error with SSE connection.");
+        updateStatus("Connection lost. Retrying...", true);
+    };
+
+    function displayNotification(message) {
+        const notificationElement = document.createElement("li");
+        notificationElement.innerText = message;
+
+        const notificationsList = document.getElementById("notifications");
+        notificationsList.appendChild(notificationElement);
+
+        if (notificationsList.children.length > 20) {
+            notificationsList.removeChild(notificationsList.firstChild);
+        }
+    }
+
+    function updateStatus(message, isError) {
+        const statusElement = document.getElementById("status");
+        statusElement.innerText = message;
+        statusElement.style.color = isError ? "red" : "green";
+    }
+</script>
+</body>

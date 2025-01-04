@@ -1,6 +1,8 @@
 package org.league.app.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.league.app.database.entity.TeamRole;
+import org.league.app.database.repository.TeamRoleRepository;
 import org.league.app.mapper.TeamMapper;
 import org.springframework.data.domain.Page;
 import org.league.app.database.repository.TeamRepository;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import org.springframework.data.domain.Pageable;
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -26,6 +29,7 @@ public class TeamController {
     private final TeamMapper teamMapper;
     private final TeamService teamService;
     private final TeamRepository teamRepository;
+    private final TeamRoleRepository teamRoleRepository;
 
     @PostMapping("/create-team")
     public ResponseEntity<TeamReadDto> createTeam(@RequestBody @Validated(CreateAction.class) TeamCreateEditDto teamCreateDto) {
@@ -86,6 +90,41 @@ public class TeamController {
         }
 
         return ResponseEntity.notFound().build();
+    }
+
+    @PostMapping("/team-invite/{id}")
+    public ResponseEntity<String> teamInvitation(@PathVariable("id") Long id) {
+        teamService.teamInvitation(id);
+        return ResponseEntity.ok("Invitation sent successfully");
+    }
+
+    @PostMapping("/team-join-accept/{teamName}")
+    public ResponseEntity<String> teamJoinAccept(@PathVariable("teamName") String teamName) {
+        teamService.teamJoinRequest(teamName);
+        return ResponseEntity.ok("You accepted the invitation");
+    }
+
+    @PutMapping("/team-user-deletion/{id}")
+    public String kickOutUserFromTeam(@PathVariable("id") Long id) {
+        teamService.kickOutUserFromTeam(id);
+        return "User deleted from team";
+    }
+
+    @PutMapping("/team-leave")
+    public String leaveTeam() {
+        teamService.leaveTeam();
+        return "You left team";
+    }
+
+    @GetMapping("/get-all-teamRoles")
+    public List<TeamRole> getAllRoles() {
+        return teamRoleRepository.findAll();
+    }
+
+    @PutMapping("/update-team-member-role/{playerId}")
+    public ResponseEntity<String> updateTeamMemberRole(@PathVariable("playerId") Long playerId, @RequestBody TeamRoleUpdateDto teamRoleUpdateDto) {
+        teamService.updateTeamMemberRole(playerId, teamRoleUpdateDto);
+        return ResponseEntity.ok("Role updated successfully");
     }
 
 }

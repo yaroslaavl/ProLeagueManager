@@ -6,9 +6,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
-import org.league.app.database.entity.enums.TeamRole;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
@@ -29,8 +30,11 @@ public class TeamMember {
     @Column(name = "user_id", nullable = false)
     private Long userId;
 
-    @Enumerated(EnumType.STRING)
-    private TeamRole teamRole;
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @JoinTable(name = "team_member_role",
+            joinColumns = @JoinColumn(name = "team_member_id"),
+            inverseJoinColumns = @JoinColumn(name = "team_role_id"))
+    private List<TeamRole> roles = new ArrayList<>();
 
     @Column(name = "is_substitute")
     private Boolean isSubstitute;

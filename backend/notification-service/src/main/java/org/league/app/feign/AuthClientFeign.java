@@ -20,7 +20,7 @@ public interface AuthClientFeign {
     boolean isAccessToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String token);
 
     @GetMapping("/api/auth/get-token")
-    String getToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestParam("key") String key);
+    String getToken(@RequestParam("key") String key);
 
     @GetMapping("/api/auth/load-user-by-email")
     UserDto loadUserByEmail(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestParam("email") String email);

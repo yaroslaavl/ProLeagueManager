@@ -31,9 +31,15 @@ public class NotificationConfig {
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/my-notifications/subscribe",
-                                "/api/my-notifications/subscriptionList").authenticated()
-                        .requestMatchers("/actuator/health", "/api/notification/send-email").permitAll())
+                        .requestMatchers(
+                                "/api/my-notifications/subscribeToNotification",
+                                "/api/my-notifications/subscriptionList",
+                                "/api/my-notifications/get-all-notifications").authenticated()
+                        .requestMatchers(
+                                "/actuator/health",
+                                "/api/notification/send-email",
+                                "/api/my-notifications/send-notification",
+                                "/api/my-notifications/subscribe/**").permitAll())
                 .addFilterBefore(routeFilter, SecurityContextHolderFilter.class)
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(session ->

@@ -2,18 +2,25 @@ package org.league.app.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.league.app.database.entity.Notification;
 import org.league.app.database.entity.UserNotificationSubscription;
 import org.league.app.database.entity.enums.EventCategory;
+import org.league.app.database.repository.NotificationRepository;
 import org.league.app.database.repository.UserNotificationSubscriptionRepository;
+import org.league.app.dto.NotificationCreateDto;
+import org.league.app.dto.NotificationReadDto;
 import org.league.app.dto.UserNotificationSubscriptionReadDto;
+import org.league.app.exception.UserNotFoundException;
 import org.league.app.feign.AuthClientFeign;
 import org.league.app.feign.UserDto;
+import org.league.app.mapper.NotificationMapper;
 import org.league.app.mapper.UserNotificationSubscriptionMapper;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +31,8 @@ import java.util.Optional;
 public class NotificationService {
 
     private final AuthClientFeign authClientFeign;
+    private final NotificationMapper notificationMapper;
+    private final NotificationRepository notificationRepository;
     private final UserNotificationSubscriptionMapper userNotificationSubscriptionMapper;
     private final UserNotificationSubscriptionRepository userNotificationSubscriptionRepository;
 
@@ -70,6 +79,40 @@ public class NotificationService {
                     .toList();
     }
 
+    @Transactional
+    public NotificationReadDto createNotification(NotificationCreateDto notificationCreateDto, String notificationType) {
+
+        Notification notification = Optional.of(notificationCreateDto)
+                .map(dto -> {
+                    Notification entity = notificationMapper.toEntity(notificationCreateDto);
+                    entity.setUserId(notificationCreateDto.getUserId());
+                    entity.setMessage(notificationCreateDto.getMessage());
+                    entity.setEventType(notificationCreateDto.getEventType());
+                    entity.setIsRead(Boolean.FALSE);
+                    entity.setCreatedAt(LocalDateTime.now());
+                    return entity;
+                }).orElseThrow(() -> new IllegalArgumentException("Bad mapping"));
+
+        notificationRepository.save(notification);
+        return notificationMapper.toDto(notification);
+    }
+
+    @Transactional
+    public List<Notification> getAllNotifications() {
+        UserDto userByEmail = authClientFeign.getUserByEmail(securityContext());
+
+        if (userByEmail == null) {
+            throw new UserNotFoundException("User not found");
+        }
+
+        List<Notification> allByUserId = notificationRepository.findAllByUserId(userByEmail.getId());
+        allByUserId.stream()
+                .filter(notification -> !notification.getIsRead())
+                .forEach(notification -> notification.setIsRead(Boolean.TRUE));
+
+        return notificationRepository.saveAll(allByUserId);
+    }
+
     private String securityContext() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication.getPrincipal() instanceof UserDto) {
@@ -78,5 +121,4 @@ public class NotificationService {
         }
         return authentication.getName();
     }
-
 }

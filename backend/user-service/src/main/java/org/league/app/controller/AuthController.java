@@ -12,7 +12,7 @@ import org.league.app.dto.UserCreateDto;
 import org.league.app.dto.UserReadDto;
 import org.league.app.exception.UserEmailNotFoundException;
 import org.league.app.feign.UserDto;
-import org.league.app.rediscache.RedisCacheClient;
+import org.league.app.redisclient.RedisClient;
 import org.league.app.service.JWTService;
 import org.league.app.service.UserService;
 import org.league.app.validation.CreateAction;
@@ -43,7 +43,7 @@ public class AuthController {
     private final JWTService jwtService;
     private final UserService userService;
     private final UserRepository userRepository;
-    private final RedisCacheClient redisCacheClient;
+    private final RedisClient redisClient;
     private final AuthenticationManager authenticationManager;
 
     @PostMapping("/registration")
@@ -79,9 +79,9 @@ public class AuthController {
         String refreshToken = jwtService.generateRefreshToken(authenticate);
         log.info("accessToken token: {}", accessToken);
         log.info("refreshToken token: {}", refreshToken);
-        redisCacheClient.set(
+        redisClient.set(
                 "whitelist:" + loginDto.getEmail() + ":accessToken", accessToken, 15, TimeUnit.MINUTES);
-        redisCacheClient.set(
+        redisClient.set(
                 "whitelist:" + loginDto.getEmail() + ":refreshToken", refreshToken, 1, TimeUnit.DAYS);
         return AuthResponseDto.builder()
                 .accessToken(accessToken)
@@ -96,8 +96,8 @@ public class AuthController {
         String subToken = token.substring(7);
         String extractedUsername = jwtService.extractEmail(subToken);
 
-        redisCacheClient.delete("whitelist:" + extractedUsername + ":accessToken");
-        redisCacheClient.delete("whitelist:" + extractedUsername + ":refreshToken");
+        redisClient.delete("whitelist:" + extractedUsername + ":accessToken");
+        redisClient.delete("whitelist:" + extractedUsername + ":refreshToken");
 
         return ResponseEntity.ok("Logout successful");
     }
@@ -132,9 +132,24 @@ public class AuthController {
     }
 
     @GetMapping("/get-token")
-    public String getToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestParam("key") String key) {
-        return redisCacheClient.get(key);
+    public String getToken(@RequestParam("key") String key) {
+        return redisClient.get(key);
 
+    }
+
+    @PostMapping("/set-token")
+    public String setToken(@RequestParam("key") String key,
+                           @RequestParam("value") String value,
+                           @RequestParam("timeToLive") long timeToLive,
+                           @RequestParam("timeUnit") TimeUnit timeUnit) {
+        redisClient.set(key,value,timeToLive,timeUnit);
+        return "Token set successfully";
+    }
+
+    @PostMapping("/delete-token")
+    public String deleteToken(@RequestParam("key") String key) {
+        redisClient.delete(key);
+        return "Token deleted successfully";
     }
 
     @GetMapping("/load-user-by-email")

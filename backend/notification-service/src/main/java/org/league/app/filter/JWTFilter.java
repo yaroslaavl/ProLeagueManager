@@ -32,7 +32,9 @@ public class JWTFilter extends OncePerRequestFilter {
     protected boolean shouldNotFilter(HttpServletRequest request)  {
         String path = request.getServletPath();
         return path.equals("/actuator/health")
-                || path.equals("/api/notification/send-email");
+                || path.equals("/api/notification/send-email")
+                || path.startsWith("/api/my-notifications/subscribe/")
+                || path.equals("/api/my-notifications/send-notification");
     }
 
     @Override
@@ -66,7 +68,7 @@ public class JWTFilter extends OncePerRequestFilter {
             var userDetails = authClientFeign.loadUserByEmail(jwtToken, email);
 
             if(authClientFeign.validateToken(jwtToken, userDetails.getEmail()) && authClientFeign.isAccessToken(jwtToken) &&
-                    authClientFeign.getToken(jwtToken,
+                    authClientFeign.getToken(
                             "whitelist:" + userDetails.getEmail() + ":accessToken").equals(jwtToken)) {
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getRoles().stream()
