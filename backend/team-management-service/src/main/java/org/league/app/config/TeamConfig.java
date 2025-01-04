@@ -31,9 +31,23 @@ public class TeamConfig {
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/team/create-team").hasAuthority("AUTHORISED_USER")
-                        .requestMatchers("/api/team/update-team-name", "/api/team/upload-team-logo").authenticated()
-                        .requestMatchers("/api/team/allTeams", "/api/team/currentTeam/**","/actuator/health", "/api/team/*/user-role", "/api/team/team-logo/**").permitAll())
+                        .requestMatchers(
+                                "/api/team/create-team",
+                                "/api/team/team-join-accept/**").hasAuthority("AUTHORISED_USER")
+                        .requestMatchers(
+                                "/api/team/update-team-name",
+                                "/api/team/upload-team-logo",
+                                "/api/team/team-invite/**",
+                                "/api/team/team-user-deletion/**",
+                                "/api/team/team-leave",
+                                "/api/team/update-team-member-role/**").authenticated()
+                        .requestMatchers("/api/team/allTeams",
+                                "/api/team/currentTeam/**",
+                                "/actuator/health",
+                                "/api/team/*/user-role",
+                                "/api/team/team-logo/**",
+                                "/api/team/get-all-teamRoles").permitAll())
+
                 .addFilterBefore(routeFilter, SecurityContextHolderFilter.class)
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(session ->
