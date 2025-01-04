@@ -6,15 +6,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.league.app.feign.AuthClientFeign;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 import java.io.IOException;
 
@@ -68,7 +65,7 @@ public class JWTFilter extends OncePerRequestFilter {
             var userDetails = authClientFeign.loadUserByEmail(jwtToken, email);
 
             if (authClientFeign.validateToken(jwtToken, userDetails.getEmail()) && authClientFeign.isAccessToken(jwtToken) &&
-                    authClientFeign.getToken(jwtToken,
+                    authClientFeign.getToken(
                             "whitelist:" + userDetails.getEmail() + ":accessToken").equals(jwtToken)) {
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getRoles().stream()
