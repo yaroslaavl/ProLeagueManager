@@ -379,10 +379,12 @@ public class TeamService {
                             (getRolesByNames("CAPITAN"), teamWithAccessCheck.getId());
 
                     if (capitan != null && !capitan.getFirst().equals(teamMember)) {
-                        capitan.getFirst().getRoles().remove(getRolesByNames("CAPITAN").getFirst());
-                        teamMemberRepository.save(capitan.getFirst());
+                        TeamMember currentCapitan = capitan.getFirst();
+                        currentCapitan.getRoles().remove(getRolesByNames("CAPITAN").getFirst());
+                        teamMemberRepository.save(currentCapitan);
                     }
-                    updatedRoles.add(getRolesByNames(roleName).getFirst());
+                    updatedRoles.add(getRolesByNames("CAPITAN").getFirst());
+                    updatedRoles.add(getRolesByNames("PLAYER").getFirst());
                 }
 
                 if (!"MANAGER".equals(roleName) && !"CAPITAN".equals(roleName)) {
