@@ -1,6 +1,7 @@
 package org.league.app.database.repository;
 
 import org.league.app.database.entity.UserNotificationSubscription;
+import org.league.app.database.entity.enums.EventCategory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -14,4 +15,6 @@ public interface UserNotificationSubscriptionRepository extends JpaRepository<Us
     Optional<UserNotificationSubscription> findUserNotificationSubscriptionByUserId(Long userId);
 
     List<UserNotificationSubscription> findAllByUserId(Long userId);
+
+    Optional<UserNotificationSubscription> findUserNotificationSubscriptionByEventCategoryAndUserId(EventCategory eventCategory, Long userId);
 }
