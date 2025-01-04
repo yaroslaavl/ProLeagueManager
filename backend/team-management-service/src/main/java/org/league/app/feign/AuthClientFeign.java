@@ -4,6 +4,8 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.concurrent.TimeUnit;
+
 @FeignClient("user-service")
 public interface AuthClientFeign {
 
@@ -17,7 +19,16 @@ public interface AuthClientFeign {
     boolean isAccessToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String token);
 
     @GetMapping("/api/auth/get-token")
-    String getToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestParam("key") String key);
+    String getToken(@RequestParam("key") String key);
+
+    @PostMapping("/api/auth/set-token")
+    String setToken(@RequestParam("key") String key,
+                    @RequestParam("value") String value,
+                    @RequestParam("timeToLive") long timeToLive,
+                    @RequestParam("timeUnit") TimeUnit timeUnit);
+
+    @PostMapping("/api/auth/delete-token")
+    String deleteToken(@RequestParam("key") String key);
 
     @GetMapping("/api/auth/load-user-by-email")
     UserDto loadUserByEmail(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestParam("email") String email);
