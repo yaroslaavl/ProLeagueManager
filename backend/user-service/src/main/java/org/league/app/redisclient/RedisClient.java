@@ -1,4 +1,4 @@
-package org.league.app.rediscache;
+package org.league.app.redisclient;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit;
 
 @Component
 @RequiredArgsConstructor
-public class RedisCacheClient {
+public class RedisClient {
 
     @Autowired
     private final StringRedisTemplate redisTemplate;
