@@ -59,7 +59,7 @@ body {
   font-size: 14px;
 }
 .header-center {
-  gap: 40px;
+  gap: 20px;
   display: flex;
   justify-content: center;
 }
@@ -261,7 +261,7 @@ footer {
 .email_input,
 .imie_nazwisko_input,
 .birthdate_input {
- margin: 5px;
+  margin: 5px;
 }
 
 .input-group {
@@ -336,6 +336,7 @@ footer {
   display: flex;
   align-items: center;
   justify-content: left;
+
   width: 200px;
   height: 70px;
   gap: 10px; /* Отступ между иконкой и текстом */
@@ -345,10 +346,9 @@ footer {
   border-radius: 12px; /* Скруглённые углы */
   transition: background-color 0.3s ease;
   transition: color 0.3s ease, background-color 0.3s ease;
+
 }
-.nav-link img {
-  margin-left: 30px;
-}
+
 .nav-link.active {
   background-color: #EFF2F5; /* Слегка серый фон */
   font-weight: bold; /* Тёмно-серый цвет текста */
@@ -359,7 +359,9 @@ footer {
   background-color: #f1f1f1; /* Слегка серый фон при наведении */
   cursor: pointer;
 }
-
+.nav-link img {
+  margin-left: 30px;
+}
 /* Для мобильных устройств до 768px */
 @media (max-width: 768px) {
   .header {
@@ -440,6 +442,48 @@ footer {
   .save-btn {
     font-size: 16px;
   }
+}
+h3{
+  font-size: 20px;
+}
+p {
+  font-size: 16px;
+  font-weight: bold;
+}
+.group{
+  display: block;
+  justify-content: left;
+}
+.item{
+  margin-bottom: 40px;
+}
+.under-text{
+  margin-top: -30px ;
+  color: #808A9D;
+  font-size: 12px;
+  font-weight: normal;
+}
+
+.group_roles{
+  display: flex;
+  flex-direction: column;
+}
+.group_roles> p{
+  margin: 12px;
+  justify-content: space-between;
+}
+.inline-container {
+  display: flex;
+  align-items: center;
+  gap: 30px; /* Отступ между элементами */
+}
+.inline-container p {
+  margin: 0; /* Убираем отступы по умолчанию */
+}
+.inline-container span {
+  margin: 0; /* Убираем отступы по умолчанию */
+  margin-top: -10px;
+  color: #808A9D;
 }
 .header-right {
   display: flex;

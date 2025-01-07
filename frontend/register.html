@@ -20,16 +20,16 @@
     </div>
   <form action="#">
     <p class="register-p">Nazwa użytkownika</p>
-    <input type="text" maxlength="32" placeholder="Nazwa użytkownika" required>
+    <input type="text" id="username" maxlength="32" placeholder="Nazwa użytkownika" required>
     <p class="register-p">Adres e-mail</p>
-    <input type="email" maxlength="64" placeholder="Adres e-mail" required>
+    <input type="email" id="email" maxlength="64" placeholder="Adres e-mail" required>
     <div style="display: flex;gap: 175px">
       <p class="register-p">Imię</p>
       <p class="register-p">Nazwisko</p>
     </div>
     <div class="form-row">
-      <input  type="text" maxlength="32" placeholder="Imię" required>
-      <input type="text" maxlength="32" placeholder="Nazwisko" required>
+      <input  type="text" id="firstName" maxlength="32" placeholder="Imię" required>
+      <input type="text" id="lastName" maxlength="32" placeholder="Nazwisko" required>
     </div>
       <p class="register-p">Data urodzenia</p>
     <div class="form-row">
@@ -60,7 +60,7 @@
     </div>
 
 
-    <button class="social-button google">
+    <button id="googleAuth" class="social-button google">
       <img src="img/google-logo.svg" alt="Google"> Kontynuuj z Google
     </button>
     <button class="social-button apple">
@@ -85,6 +85,6 @@
     </div>
   </footer>
 
-
+<script src = "js/registerMethod.js"></script>
 </body>
 </html>

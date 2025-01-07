@@ -17,7 +17,7 @@ function enforceNumberLimits(input, min, max) {
 document.addEventListener('DOMContentLoaded', () => {
   enforceNumberLimits(document.getElementById('dayInput'), 1, 31);
   enforceNumberLimits(document.getElementById('monthInput'), 1, 12);
-  enforceNumberLimits(document.getElementById('yearInput'), 1900, 2100);
+  enforceNumberLimits(document.getElementById('yearInput'), 2000, 2024);
 });
 function togglePassword(inputId, toggleButton) {
   const passwordField = document.getElementById(inputId);

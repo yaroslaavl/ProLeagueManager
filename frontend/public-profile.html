@@ -4,14 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/manage.css">
-  <script src="js/manage.js" defer></script> <!-- Подключение скрипта -->
-  <title>Profile</title>
+  <link rel="stylesheet" href="css/publicProfile.css">
+  <link rel="stylesheet" href="css/burgerMenu.css"></link>
+  <script src="js/publicProfile.js" defer></script>
+  <script src="js/burgerMenu.js" defer></script>
+  <title>Public Profile</title>
 </head>
 <body>
 <div class="container">
   <header class="header">
-
     <div class="header-center">
       <a href="main.html"><img src="img/blogo_text.svg" alt="Logo" class="logo"></a>
       <nav class="nav">
@@ -22,7 +23,6 @@
         <img src="img/search.svg" alt="Szukaj" class="search-icon">
         <input type="text" placeholder="Szukaj" class="search-input">
       </div>
-
       <button style="background: none;" class="icon-btn notification-btn">
         <img src="img/notification-bell.svg" alt="Powiadomienia">
       </button>
@@ -53,60 +53,47 @@
           <a href="public-profile.html"><img src="img/profile.svg" alt="Profil"></a>
         </button>
       </div>
-
     </div>
   </header>
 
-
-  <main class="main">
-    <div class="side-bar-left">
-      <nav class="nav">
-        <a href="profile-settings.html" class="nav-link">
-          <img  src="img/profile.svg" alt="Profil" class="nav-icon"> Profil
-        </a>
-        <a href="private-settings.html" class="nav-link">
-          <img src="img/lock-circle.svg" alt="Bezpieczeństwo" class="nav-icon"> Bezpieczeństwo
-        </a>
-        <a href="alerts-settings.html" class="nav-link">
-          <img src="img/notification-bell.svg" alt="Powiadomienia" class="nav-icon"> Powiadomienia
-        </a>
-        <a href="#" class="nav-link active">
-          <img src="img/key.svg" alt="Uprawnienia" class="nav-icon"> Uprawnienia
-        </a>
-      </nav>
-
-    </div>
-    <div class="side-bar-right">
-      <h2>Uprawnienia</h2>
-      <div class="group">
-        <h3 class="item">Grupa</h3>
-        <p class="item">Nazwa grupy</p>
-        <p class = "under-text">Rola 1, Rola 2, Rola 3</p>
+  <main class="profile-container">
+    <section class="profile-header">
+      <div class="profile-avatar">
+        <img src="img/profile.svg" alt="Avatar" id="profile_img">
       </div>
-      <div class="group_roles">
-        <h3 class="item">Role grupy</h3>
-        <div class="inline-container">
-          <p class="item">Nazwa roly 1</p><span>Opis roly 1</span>
+      <div class="profile-info">
+        <h1 id ="first_last_name">Imię Nazwisko</h1>
+        <p class="nickname" id="nickname">Nickname</p>
+        <div style="display: flex;gap:20px">
+        <div class="profile-details">
+          <span style="color: #808A9D">Data urodzenia: </span>
+          <span id="date_of_birth" style="color: #000000;font-weight: bold">02.12.2004 (20 lat)</span>
         </div>
-        <div class="inline-container">
-          <p class="item">Nazwa roly 2</p><span>Opis roly 2</span>
-        </div>
-
+        <div class="profile-details">
+          <span style="color: #808A9D">Profil utworzony: </span>
+          <span id="creation-date" style="color: #000000;font-weight: bold">06.01.2025</span>
+          </div></div>
+      </div>
+      <div style="display: flex;margin-bottom: -70px">
+        <nav class="profile-tabs">
+          <button class="tab active">Drużyny</button>
+          <button class="tab">Mecze</button>
+          <button class="tab">Ligi</button>
+          <button class="tab">Turnieje</button>
+        </nav>
+      </div>
+      <div class="profile-settings">
+        <button class="settings-btn">
+          <a href="profile-settings.html"><img src="img/free-icon-gear-484613.png" alt="Settings"></a>
+        </button>
       </div>
 
-
-    </div>
-
+    </section>
 
 
-
-
-
+      <div class="content-placeholder"></div>
 
   </main>
-
-
-
 
   <footer>
     <div class="footer-content">
@@ -121,7 +108,6 @@
     </div>
   </footer>
 </div>
-<script src="js/burgerMenu.js"></script>
-<link rel="stylesheet" href="css/burgerMenu.css">
+
 </body>
 </html>

@@ -15,23 +15,45 @@
     <div class="header-center">
       <a href="main.html"><img src="img/blogo_text.svg" alt="Logo" class="logo"></a>
       <nav class="nav">
-        <a href="main.html" class="nav-link">Sporty</a>
-        <a href="main.html" class="nav-link">e-Sporty</a>
+        <a href="main.html" class="nav-link-header">Sporty</a>
+        <a href="main.html" class="nav-link-header">e-Sporty</a>
       </nav>
       <div class="search-container">
         <img src="img/search.svg" alt="Szukaj" class="search-icon">
         <input type="text" placeholder="Szukaj" class="search-input">
       </div>
 
-      <button class="icon-btn notification-btn">
+      <button style="background: none;" class="icon-btn notification-btn">
         <img src="img/notification-bell.svg" alt="Powiadomienia">
       </button>
-      <button class="icon-btn menu-btn">
-        <img src="img/menu-hamburger.svg" alt="Menu">
-      </button>
-      <button class="icon-btn profile-btn">
-        <a href="profile-settings.html"><img src="img/profile.svg" alt="Profil"></a>
-      </button>
+      <div class="header-right">
+        <div class="menu-container">
+          <button class="icon-btn menu-btn" onclick="toggleMenu()">
+            <img src="img/menu-hamburger.svg" alt="Menu">
+          </button>
+          <div class="menu-popup" id="menuPopup">
+            <a href="profile-settings.html">
+              <img src="img/profile.svg" alt="Profil"> Profil
+            </a>
+            <a href="private-settings.html">
+              <img src="img/lock-circle.svg" alt="Bezpieczeństwo"> Bezpieczeństwo
+            </a>
+            <a href="alerts-settings.html">
+              <img src="img/notification-bell.svg" alt="Powiadomienia"> Powiadomienia
+            </a>
+            <a href="manage-settings.html">
+              <img src="img/key.svg" alt="Uprawnienia"> Uprawnienia
+            </a>
+            <a href="#" id="log-out">
+              <img src="img/logout.png" alt="Log Out"> Log Out
+            </a>
+          </div>
+        </div>
+        <button class="icon-btn profile-btn">
+          <a href="public-profile.html"><img src="img/profile.svg" alt="Profil"></a>
+        </button>
+      </div>
+
     </div>
   </header>
 
@@ -48,7 +70,7 @@
         <a href="alerts-settings.html" class="nav-link">
           <img src="img/notification-bell.svg" alt="Powiadomienia" class="nav-icon"> Powiadomienia
         </a>
-        <a href="#" class="nav-link">
+        <a href="manage-settings.html" class="nav-link">
           <img src="img/key.svg" alt="Uprawnienia" class="nav-icon"> Uprawnienia
         </a>
       </nav>
@@ -129,5 +151,7 @@
     </div>
   </footer>
 </div>
+<script src="js/burgerMenu.js"></script>
+<link rel="stylesheet" href="css/burgerMenu.css">
 </body>
 </html>
