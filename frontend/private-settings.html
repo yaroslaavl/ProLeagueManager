@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/private.css">
-  <script src="js/profile.js" defer></script> <!-- Подключение скрипта -->
+  <script src="js/private.js" defer></script> <!-- Подключение скрипта -->
   <title>Bezpieczeństwo</title>
 </head>
 <body>
@@ -15,23 +15,45 @@
     <div class="header-center">
       <a href="main.html"><img src="img/blogo_text.svg" alt="Logo" class="logo"></a>
       <nav class="nav">
-        <a href="main.html" class="nav-link">Sporty</a>
-        <a href="main.html" class="nav-link">e-Sporty</a>
+        <a href="main.html" class="nav-link-header">Sporty</a>
+        <a href="main.html" class="nav-link-header">e-Sporty</a>
       </nav>
       <div class="search-container">
         <img src="img/search.svg" alt="Szukaj" class="search-icon">
         <input type="text" placeholder="Szukaj" class="search-input">
       </div>
 
-      <button class="icon-btn notification-btn">
+      <button style="background: none;" class="icon-btn notification-btn">
         <img src="img/notification-bell.svg" alt="Powiadomienia">
       </button>
-      <button class="icon-btn menu-btn">
-        <img src="img/menu-hamburger.svg" alt="Menu">
-      </button>
-      <button class="icon-btn profile-btn">
-        <a href="profile-settings.html"><img src="img/profile.svg" alt="Profil"></a>
-      </button>
+      <div class="header-right">
+        <div class="menu-container">
+          <button class="icon-btn menu-btn" onclick="toggleMenu()">
+            <img src="img/menu-hamburger.svg" alt="Menu">
+          </button>
+          <div class="menu-popup" id="menuPopup">
+            <a href="profile-settings.html">
+              <img src="img/profile.svg" alt="Profil"> Profil
+            </a>
+            <a href="private-settings.html">
+              <img src="img/lock-circle.svg" alt="Bezpieczeństwo"> Bezpieczeństwo
+            </a>
+            <a href="alerts-settings.html">
+              <img src="img/notification-bell.svg" alt="Powiadomienia"> Powiadomienia
+            </a>
+            <a href="manage-settings.html">
+              <img src="img/key.svg" alt="Uprawnienia"> Uprawnienia
+            </a>
+            <a href="#" id="log-out">
+              <img src="img/logout.png" alt="Log Out"> Log Out
+            </a>
+          </div>
+        </div>
+        <button class="icon-btn profile-btn">
+          <a href="public-profile.html"><img src="img/profile.svg" alt="Profil"></a>
+        </button>
+      </div>
+
     </div>
   </header>
 
@@ -42,13 +64,13 @@
         <a href="profile-settings.html" class="nav-link">
           <img  src="img/profile.svg" alt="Profil" class="nav-icon"> Profil
         </a>
-        <a href="#" class="nav-link active">
+        <a href="#" class="nav-link active" >
           <img src="img/lock-circle.svg" alt="Bezpieczeństwo" class="nav-icon"> Bezpieczeństwo
         </a>
         <a href="alerts-settings.html" class="nav-link">
           <img src="img/notification-bell.svg" alt="Powiadomienia" class="nav-icon"> Powiadomienia
         </a>
-        <a href="#" class="nav-link">
+        <a href="manage-settings.html" class="nav-link">
           <img src="img/key.svg" alt="Uprawnienia" class="nav-icon"> Uprawnienia
         </a>
       </nav>
@@ -60,12 +82,12 @@
         <p style="font-size: 16px">Adresy e-mail</p>
       <div class="mailblock">
         <p class="under-text">Jesli chcesz zmienié swój adres e-mail,<br>skontaktuj sie z Customer Service</p>
-        <p class="e-mail">example@icloud.com</p>
+        <p class="e-mail" id = "e-mail">example@icloud.com</p>
       </div>
         <p>Ustawienia zabezpieczen</p>
       <div class="verification" style="display: flex">
       <div class="ver-text">
-        <p>Weryfikacja adresu e-mail  <span style="margin-left: 40px">Status: <span style="color: #EA3943">Off</span></span></p>
+        <p>Weryfikacja adresu e-mail  <span style="margin-left: 40px">Status: <span style="color: #EA3943" id="status">Off</span></span></p>
         <div class="underver-text">
         <p class="under-text">Jesli chcesz zmienié swój adres e-mail,<br>skontaktuj sie z <a href="main.html">Customer Service</a></p>
         <button>Zweryfikować</button>
@@ -83,11 +105,18 @@
         <p>Usuwanie konta</p>
         <div style="display: flex">
           <p class="under-text">Usuwanie konta</p>
-          <button>Usuń konto</button>
+          <button id="deleteAcc">Usuń konto</button>
         </div>
       </div>
   </div>
-
+    <div id="passwordOverlay" class="overlay">
+      <div class="overlay-content">
+        <h2>Wprowadź hasło</h2>
+        <input type="password" class="password-input" placeholder="Hasło" id="pass">
+        <button class="delete-overlay-btn" onclick="delAcc()">Usunac</button>
+        <button class="close-overlay-btn" onclick="closeOverlay()">Zamknac</button>
+      </div>
+    </div>
 
 </main>
 </div>
@@ -114,5 +143,7 @@
     </div>
   </footer>
 </div>
+<script src="js/burgerMenu.js"></script>
+<link rel="stylesheet" href="css/burgerMenu.css">
 </body>
 </html>
