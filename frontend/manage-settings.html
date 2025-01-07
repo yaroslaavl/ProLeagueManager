@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/profile.css">
-  <script src="js/profile.js" defer></script> <!-- Подключение скрипта -->
+  <link rel="stylesheet" href="css/manage.css">
+  <script src="js/manage.js" defer></script> <!-- Подключение скрипта -->
   <title>Profile</title>
 </head>
 <body>
@@ -15,23 +15,45 @@
     <div class="header-center">
       <a href="main.html"><img src="img/blogo_text.svg" alt="Logo" class="logo"></a>
       <nav class="nav">
-        <a href="main.html" class="nav-link">Sporty</a>
-        <a href="main.html" class="nav-link">e-Sporty</a>
+        <a href="main.html" class="nav-link-header">Sporty</a>
+        <a href="main.html" class="nav-link-header">e-Sporty</a>
       </nav>
       <div class="search-container">
         <img src="img/search.svg" alt="Szukaj" class="search-icon">
         <input type="text" placeholder="Szukaj" class="search-input">
       </div>
 
-      <button class="icon-btn notification-btn">
+      <button style="background: none;" class="icon-btn notification-btn">
         <img src="img/notification-bell.svg" alt="Powiadomienia">
       </button>
-      <button class="icon-btn menu-btn">
-        <img src="img/menu-hamburger.svg" alt="Menu">
-      </button>
-      <button class="icon-btn profile-btn">
-        <a href="profile-settings.html"><img src="img/profile.svg" alt="Profil"></a>
-      </button>
+      <div class="header-right">
+        <div class="menu-container">
+          <button class="icon-btn menu-btn" onclick="toggleMenu()">
+            <img src="img/menu-hamburger.svg" alt="Menu">
+          </button>
+          <div class="menu-popup" id="menuPopup">
+            <a href="profile-settings.html">
+              <img src="img/profile.svg" alt="Profil"> Profil
+            </a>
+            <a href="private-settings.html">
+              <img src="img/lock-circle.svg" alt="Bezpieczeństwo"> Bezpieczeństwo
+            </a>
+            <a href="alerts-settings.html">
+              <img src="img/notification-bell.svg" alt="Powiadomienia"> Powiadomienia
+            </a>
+            <a href="manage-settings.html">
+              <img src="img/key.svg" alt="Uprawnienia"> Uprawnienia
+            </a>
+            <a href="#" id="log-out">
+              <img src="img/logout.png" alt="Log Out"> Log Out
+            </a>
+          </div>
+        </div>
+        <button class="icon-btn profile-btn">
+          <a href="public-profile.html"><img src="img/profile.svg" alt="Profil"></a>
+        </button>
+      </div>
+
     </div>
   </header>
 
@@ -55,56 +77,26 @@
 
     </div>
     <div class="side-bar-right">
-      <h2 class="form-title">Profil</h2>
-      <p style="font-weight: bold">Zdjęcie profilowe</p>
-      <div class="edit-profile-img">
-        <img id="avatarPreview" src="img/profile.svg" alt="Avatar" />
-        <button type="button" id="editAvatarBtn">Edytuj</button>
-        <input type="file" id="avatarInput" accept="image/*" style="display: none;">
+      <h2>Uprawnienia</h2>
+      <div class="group">
+        <h3 class="item">Grupa</h3>
+        <p class="item">Nazwa grupy</p>
+        <p class = "under-text">Rola 1, Rola 2, Rola 3</p>
+      </div>
+      <div class="group_roles">
+        <h3 class="item">Role grupy</h3>
+        <div class="inline-container">
+          <p class="item">Nazwa roly 1</p><span>Opis roly 1</span>
+        </div>
+        <div class="inline-container">
+          <p class="item">Nazwa roly 2</p><span>Opis roly 2</span>
+        </div>
+
       </div>
 
-      <div class="username_input">
-        <div class="input-group">
-          <p>Nazwa użytkownika</p>
-          <input maxlength="64" type="text" placeholder="Nickname" required>
-        </div>
-      </div>
-      <div class="email_input">
-        <div class="input-group">
-          <p>Adres e-mail</p>
-          <input maxlength="64" type="email" placeholder="example@gmail.com" disabled>
-        </div>
-      </div>
-      <div class="imie_nazwisko_input">
-        <div class="input-group">
-          <p>Imię</p>
-          <input maxlength="64" type="text" placeholder="Imię" required>
-        </div>
-        <div class="input-group">
-          <p>Nazwisko</p>
-          <input maxlength="64" type="text" placeholder="Nazwisko" required>
-        </div>
-      </div>
-      <div class="birthdate_input">
-        <div class="input-group">
-          <p>Dzień</p>
-          <input id="dayInput" type="number" placeholder="Dzień" required>
-        </div>
-        <div class="input-group">
-          <p>Miesiąc</p>
-          <input id="monthInput" type="number" placeholder="Miesiąc" required>
-        </div>
-        <div class="input-group">
-          <p>Rok</p>
-          <input id="yearInput" type="number" placeholder="Rok" required>
-        </div>
-      </div>
 
-      <!-- Добавляем кнопку "Zapisz" -->
-      <div class="save-btn-container">
-        <button type="submit" class="save-btn">Zapisz</button>
-      </div>
     </div>
+
 
 
 
@@ -129,5 +121,7 @@
     </div>
   </footer>
 </div>
+<script src="js/burgerMenu.js"></script>
+<link rel="stylesheet" href="css/burgerMenu.css">
 </body>
 </html>
