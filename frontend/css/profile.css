@@ -89,7 +89,7 @@ input
   outline: none;
   font-family: Inter, sans-serif;
   color: #808A9D;
-  width: 250px; /* Ширина поля */
+  width: 350px; /* Ширина поля */
   font-size: 14px;
 }
 .search-input::placeholder {
@@ -202,7 +202,7 @@ footer {
 .side-bar-left > nav {
   display: flex;
   flex-direction: column; /* Колонка для навигации */
-  row-gap: 40px; /* Отступ между элементами */
+  row-gap: 10px; /* Отступ между элементами */
   align-items: flex-start;
 }
 
@@ -335,6 +335,9 @@ footer {
 .nav-link {
   display: flex;
   align-items: center;
+  justify-content: left;
+  width: 200px;
+  height: 70px;
   gap: 10px; /* Отступ между иконкой и текстом */
   text-decoration: none;
   color: #000; /* Цвет текста */
@@ -343,10 +346,12 @@ footer {
   transition: background-color 0.3s ease;
   transition: color 0.3s ease, background-color 0.3s ease;
 }
-
+.nav-link img {
+  margin-left: 30px;
+}
 .nav-link.active {
-  background-color: #f1f1f1; /* Слегка серый фон */
-  color: #3861FB; /* Тёмно-серый цвет текста */
+  background-color: #EFF2F5; /* Слегка серый фон */
+  font-weight: bold; /* Тёмно-серый цвет текста */
 }
 
 .nav-link:hover {
@@ -436,5 +441,64 @@ footer {
     font-size: 16px;
   }
 }
+.header-right {
+  display: flex;
+  align-items: center; /* Выравнивание по вертикали */
+  justify-content: center;
+  justify-items: center;
+  margin-top: 15px;
+  gap: 10px; /* Отступ между иконками */
+  background: #EFF2F5;
+  width: 110px;
+  height: 50px;
+  border-radius: 10%;
+}
+.header-right > .icon-btn {
+  margin-bottom: 20px;
+}
+.icon-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #f0f2f5;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+.notification-btn{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
 
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+.icon-btn:hover {
+  background-color: #e0e0e0;
+}
 
+.icon-btn img {
+  width: 20px;
+  height: 20px;
+}
+
+.nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+}
+.nav-link-header {
+  text-decoration: none;
+  justify-content: center;
+  color: #000;
+  font-weight: bold;
+  font-size: 14px;
+}

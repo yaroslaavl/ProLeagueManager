@@ -1,0 +1,72 @@
+const accToken = localStorage.getItem("accToken");
+const refreshToken = localStorage.getItem("refToken");
+
+if(accToken === null || refreshToken === null){
+  window.location.href =
+    "main.html";
+}else{
+  getUserData();
+}
+
+
+async function getUserData() {
+  try {
+    const url = `http://localhost:8765/user/profile`;
+    const response = await fetch(url, {
+      method: "GET", // Указываем метод GET
+      headers: {
+        "Authorization": `Bearer ${accToken}`, // Добавляем заголовок Authorization
+        "Content-Type": "application/json" // Указываем формат данных
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json(); // Парсим JSON-ответ
+    console.log(data); // Выводим данные в консоль или используем их дальше
+    const userName = data.username;
+    const firstName = data.firstName;
+    const lastName = data.lastName;
+    const dateOfBirth = data.birthDate.split('-');
+    let createdAt = new Date(data.createdAt).toLocaleDateString();
+    let userImg;
+    try {
+      const res = await fetch(`http://localhost:8765/user/avatar/${userName}`);
+      const urlImg =res.url;
+      console.log(urlImg);
+      userImg = urlImg;
+    }catch (err){
+      console.error('User image are not received!');
+    }
+
+  console.log(firstName + " " + lastName)
+  document.getElementById('first_last_name').innerHTML = firstName + " " + lastName;
+  document.getElementById("nickname").innerHTML = userName;
+  document.getElementById("date_of_birth").innerHTML = dateOfBirth[2]+'.'+dateOfBirth[1]+'.'+dateOfBirth[0]
+  document.getElementById("creation-date").innerHTML = createdAt
+    document.getElementById('profile_img').src = userImg;
+  } catch (err) {
+    console.error(`Error: ${err}`);
+  }
+}
+async function logOut(){
+  try {
+    const response = await fetch('http://localhost:8765/auth/logout',{
+      method: 'POST',
+      headers: {
+        "Authorization": `Bearer ${accToken}`, // Добавляем заголовок Authorization
+        "Content-Type": "application/json" // Указываем формат данных
+      }
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    localStorage.clear();
+    window.location.href = "main.html";
+  }catch (err){
+    console.error(`${err}`);
+  }
+}
+const logOutBtn = document.getElementById('log-out').addEventListener('click',logOut);
