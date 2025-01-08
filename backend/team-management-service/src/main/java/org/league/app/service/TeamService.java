@@ -441,4 +441,15 @@ public class TeamService {
         return teamRepository.findTeamByTeamName(teamByUserId.get().getTeam().getTeamName())
                 .orElseThrow(() -> new TeamNotFoundException("Team does not exist"));
     }
+
+    @Transactional
+    public void deleteTeam() {
+        Team team = getTeamWithAccessCheck();
+
+        if (team != null) {
+            teamRepository.delete(team);
+        } else {
+            throw new TeamNotFoundException("Team does not exist");
+        }
+    }
 }

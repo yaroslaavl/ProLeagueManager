@@ -33,7 +33,8 @@ public class TeamConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/api/team/create-team",
-                                "/api/team/team-join-accept/**").hasAuthority("AUTHORISED_USER")
+                                "/api/team/team-join-accept/**",
+                                "/api/team/deleteTeam").hasAuthority("AUTHORISED_USER")
                         .requestMatchers(
                                 "/api/team/update-team-name",
                                 "/api/team/upload-team-logo",
