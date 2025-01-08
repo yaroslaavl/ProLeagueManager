@@ -3,6 +3,7 @@ package org.league.app.controller;
 import lombok.RequiredArgsConstructor;
 import org.league.app.database.entity.TeamRole;
 import org.league.app.database.repository.TeamRoleRepository;
+import org.league.app.exception.TeamNotFoundException;
 import org.league.app.mapper.TeamMapper;
 import org.springframework.data.domain.Page;
 import org.league.app.database.repository.TeamRepository;
@@ -125,6 +126,16 @@ public class TeamController {
     public ResponseEntity<String> updateTeamMemberRole(@PathVariable("playerId") Long playerId, @RequestBody TeamRoleUpdateDto teamRoleUpdateDto) {
         teamService.updateTeamMemberRole(playerId, teamRoleUpdateDto);
         return ResponseEntity.ok("Role updated successfully");
+    }
+
+    @PostMapping("/deleteTeam")
+    public ResponseEntity<String> deleteTeam() {
+        try{
+            teamService.deleteTeam();
+            return ResponseEntity.ok("Team deleted successfully");
+        } catch (Exception e){
+            throw new TeamNotFoundException("Team not found");
+        }
     }
 
 }
