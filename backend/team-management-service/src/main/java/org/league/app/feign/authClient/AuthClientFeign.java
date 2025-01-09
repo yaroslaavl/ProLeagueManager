@@ -1,4 +1,4 @@
-package org.league.app.feign;
+package org.league.app.feign.authClient;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.HttpHeaders;

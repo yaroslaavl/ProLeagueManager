@@ -1,4 +1,4 @@
-package org.league.app.feign;
+package org.league.app.feign.notificationClient;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
