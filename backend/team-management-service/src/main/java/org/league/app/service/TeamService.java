@@ -49,13 +49,6 @@ public class TeamService {
     @Value("${app.image.uploadDir}")
     private String uploadDir;
 
-    public List<TeamRole> getRolesByNames(String... roleNames) {
-        return Arrays.stream(roleNames)
-                .map(role -> teamRoleRepository.findByName(role)
-                        .orElseThrow(() -> new TeamRoleNotFoundException("Team role does not exist: " + role)))
-                .toList();
-    }
-
     @Transactional
     public TeamReadDto createTeam(TeamCreateEditDto teamCreateEditDto) {
         UserDto userByEmail = authClientFeign.getUserByEmail(securityContext());
@@ -205,16 +198,6 @@ public class TeamService {
         }
 
         return getDefaultImage();
-    }
-
-    private byte[] getDefaultImage() {
-        Path defaultImagePath = Paths.get(uploadDir, "default-team-logo.png");
-        try {
-            return Files.readAllBytes(defaultImagePath);
-        } catch (IOException e) {
-            log.error("Failed to load default team logo: {}", e.getMessage());
-            return new byte[0];
-        }
     }
 
     @Transactional
@@ -400,6 +383,27 @@ public class TeamService {
         sendNotificationMessage(manager.getFirst().getUserId(), "You have changed the role of your team member with ID: " + teamMember.getUserId(), "TEAM_ROLE_CHANGED");
     }
 
+    @Transactional
+    public void deleteTeam() {
+        Team team = getTeamWithAccessCheck();
+
+        if (team != null) {
+            teamRepository.delete(team);
+        } else {
+            throw new TeamNotFoundException("Team does not exist");
+        }
+    }
+
+    private byte[] getDefaultImage() {
+        Path defaultImagePath = Paths.get(uploadDir, "default-team-logo.png");
+        try {
+            return Files.readAllBytes(defaultImagePath);
+        } catch (IOException e) {
+            log.error("Failed to load default team logo: {}", e.getMessage());
+            return new byte[0];
+        }
+    }
+
     private void sendNotificationMessage(Long userId, String message, String eventType) {
         NotificationDto notification = NotificationDto.builder()
                 .id(UUID.randomUUID())
@@ -442,14 +446,10 @@ public class TeamService {
                 .orElseThrow(() -> new TeamNotFoundException("Team does not exist"));
     }
 
-    @Transactional
-    public void deleteTeam() {
-        Team team = getTeamWithAccessCheck();
-
-        if (team != null) {
-            teamRepository.delete(team);
-        } else {
-            throw new TeamNotFoundException("Team does not exist");
-        }
+    private List<TeamRole> getRolesByNames(String... roleNames) {
+        return Arrays.stream(roleNames)
+                .map(role -> teamRoleRepository.findByName(role)
+                        .orElseThrow(() -> new TeamRoleNotFoundException("Team role does not exist: " + role)))
+                .toList();
     }
 }
