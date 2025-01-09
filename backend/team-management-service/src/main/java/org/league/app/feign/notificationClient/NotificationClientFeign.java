@@ -1,4 +1,4 @@
-package org.league.app.feign;
+package org.league.app.feign.notificationClient;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
