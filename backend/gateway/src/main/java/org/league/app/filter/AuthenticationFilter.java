@@ -1,17 +1,12 @@
 package org.league.app.filter;
 
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.league.app.util.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import org.springframework.util.AntPathMatcher;
 import reactor.core.publisher.Mono;
-
-import java.util.List;
 
 @Slf4j
 @Component
