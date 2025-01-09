@@ -39,11 +39,11 @@ import java.util.concurrent.TimeUnit;
 public class UserService implements UserDetailsService {
 
     private final UserMapper userMapper;
+    private final RedisClient redisClient;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final RoleGroupRepository roleGroupRepository;
     private final NotificationFeignClient notificationFeignClient;
-    private final RedisClient redisClient;
 
     @Value("${app.image.uploadDir}")
     private String uploadDir;
@@ -324,16 +324,6 @@ public class UserService implements UserDetailsService {
          return getDefaultImage();
     }
 
-    private byte[] getDefaultImage() {
-        Path defaultImagePath = Paths.get(uploadDir, "default-avatar.png");
-        try {
-            return Files.readAllBytes(defaultImagePath);
-        } catch (IOException e) {
-            log.error("Failed to load default avatar: {}", e.getMessage());
-            return new byte[0];
-        }
-    }
-
     public UserReadDto getUserByEmail() {
         String email = securityContext();
         return userRepository.findByEmail(email)
@@ -354,5 +344,15 @@ public class UserService implements UserDetailsService {
 
     private String securityContext() {
         return SecurityContextHolder.getContext().getAuthentication().getName();
+    }
+
+    private byte[] getDefaultImage() {
+        Path defaultImagePath = Paths.get(uploadDir, "default-avatar.png");
+        try {
+            return Files.readAllBytes(defaultImagePath);
+        } catch (IOException e) {
+            log.error("Failed to load default avatar: {}", e.getMessage());
+            return new byte[0];
+        }
     }
 }
