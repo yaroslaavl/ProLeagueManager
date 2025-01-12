@@ -1,6 +1,9 @@
-const accToken = localStorage.getItem("accToken");
-const refreshToken = localStorage.getItem("refToken");
-if(accToken === null || refreshToken === null){
+
+
+let accToken = localStorage.getItem("accToken");
+let refToken = localStorage.getItem("refToken");
+
+if(accToken === null || refToken === null){
  var notifBtn = document.getElementById("notification_button");
  var burgerAndUser = document.getElementById("header_right");
   while (burgerAndUser.firstChild) {
@@ -13,8 +16,29 @@ if(accToken === null || refreshToken === null){
   <a href="register.html" class="registerBtn" style="width: 100%;height: 100%;cursor: pointer"><button class="register">Register</button></a>
   `
 }
+async function refreshToken(){
+  try {
+    const url = "http://localhost:8765/auth/refresh-token";
+    const refToken = localStorage.getItem("refToken");
+    const response = await fetch(url,{
+      method:"POST",
+      headers:{
+        "Authorization": `Bearer ${refToken}`,
+        "Content-Type": "application/json"
+      }
+    })
+    if(!response.ok)throw new Error("Error Refresh Token");
+    const Tokens = await response.json();
+    localStorage.setItem("accToken",Tokens.accessToken);
+    localStorage.setItem("refToken",Tokens.refreshToken);
+  }catch (err){
+    console.error(err);
+  }
+}
 async function logOut(){
   try {
+    let accToken = localStorage.getItem("accToken");
+    let refToken = localStorage.getItem("refToken");
     const response = await fetch('http://localhost:8765/auth/logout',{
       method: 'POST',
       headers: {

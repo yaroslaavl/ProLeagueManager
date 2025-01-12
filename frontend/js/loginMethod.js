@@ -22,6 +22,7 @@ async function Login() {
         console.log("Welcome!");
         localStorage.setItem("refToken", val.refreshToken);
         localStorage.setItem("accToken", val.accessToken);
+
         document.body.classList.add("fade-out");
 
         setTimeout(() => {
@@ -37,4 +38,6 @@ async function Login() {
     alert("Nie prawidlowo podane haslo lub e-mail!");
   }
 }
+
 submit.addEventListener("click", Login);
+

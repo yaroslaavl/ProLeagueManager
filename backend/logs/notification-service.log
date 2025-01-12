@@ -1,72 +1,99 @@
-2025-01-09T18:58:08.751+01:00  INFO 22100 --- [notification-service] [main] o.l.app.NotificationServiceApplication   : Starting NotificationServiceApplication using Java 21.0.5 with PID 22100 (D:\Java projects\ProLeagueManager\backend\notification-service\target\classes started by taran in D:\Java projects\ProLeagueManager)
-2025-01-09T18:58:08.757+01:00  INFO 22100 --- [notification-service] [main] o.l.app.NotificationServiceApplication   : No active profile set, falling back to 1 default profile: "default"
-2025-01-09T18:58:09.430+01:00  INFO 22100 --- [notification-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2025-01-09T18:58:09.529+01:00  INFO 22100 --- [notification-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 94 ms. Found 2 JPA repository interfaces.
-2025-01-09T18:58:09.694+01:00  INFO 22100 --- [notification-service] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=83f57e3f-71d1-34b6-a8f3-a30f75aa705f
-2025-01-09T18:58:09.937+01:00  WARN 22100 --- [notification-service] [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig' of type [org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). The currently created BeanPostProcessor [lbRestClientPostProcessor] is declared through a non-static factory method on that class; consider declaring it as static instead.
-2025-01-09T18:58:09.939+01:00  WARN 22100 --- [notification-service] [main] trationDelegate$BeanPostProcessorChecker : Bean 'deferringLoadBalancerInterceptor' of type [org.springframework.cloud.client.loadbalancer.DeferringLoadBalancerInterceptor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected into a currently created BeanPostProcessor [lbRestClientPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies.
-2025-01-09T18:58:10.114+01:00  INFO 22100 --- [notification-service] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8081 (http)
-2025-01-09T18:58:10.124+01:00  INFO 22100 --- [notification-service] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2025-01-09T18:58:10.124+01:00  INFO 22100 --- [notification-service] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.30]
-2025-01-09T18:58:10.181+01:00  INFO 22100 --- [notification-service] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2025-01-09T18:58:10.181+01:00  INFO 22100 --- [notification-service] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1380 ms
-2025-01-09T18:58:10.331+01:00  INFO 22100 --- [notification-service] [main] o.s.c.openfeign.FeignClientFactoryBean   : For 'user-service' URL not provided. Will try picking an instance via load-balancing.
-2025-01-09T18:58:10.696+01:00  INFO 22100 --- [notification-service] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2025-01-09T18:58:10.734+01:00  INFO 22100 --- [notification-service] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.3.Final
-2025-01-09T18:58:10.758+01:00  INFO 22100 --- [notification-service] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
-2025-01-09T18:58:10.960+01:00  INFO 22100 --- [notification-service] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2025-01-09T18:58:10.981+01:00  INFO 22100 --- [notification-service] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2025-01-09T18:58:11.117+01:00  INFO 22100 --- [notification-service] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@32153bbe
-2025-01-09T18:58:11.118+01:00  INFO 22100 --- [notification-service] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2025-01-09T18:58:11.775+01:00  INFO 22100 --- [notification-service] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2025-01-09T18:58:11.826+01:00  INFO 22100 --- [notification-service] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2025-01-09T18:58:12.023+01:00  INFO 22100 --- [notification-service] [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
-2025-01-09T18:58:12.388+01:00  WARN 22100 --- [notification-service] [main] .s.s.UserDetailsServiceAutoConfiguration : 
+2025-01-12T17:55:36.271+01:00  INFO 18848 --- [notification-service] [main] o.l.app.NotificationServiceApplication   : Starting NotificationServiceApplication using Java 23 with PID 18848 (C:\Users\huko2\IdeaProjects\ProLeagueManager\backend\notification-service\target\classes started by huko2 in C:\Users\huko2\IdeaProjects\ProLeagueManager)
+2025-01-12T17:55:36.289+01:00  INFO 18848 --- [notification-service] [main] o.l.app.NotificationServiceApplication   : No active profile set, falling back to 1 default profile: "default"
+2025-01-12T17:55:40.953+01:00  INFO 18848 --- [notification-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-01-12T17:55:41.598+01:00  INFO 18848 --- [notification-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 614 ms. Found 2 JPA repository interfaces.
+2025-01-12T17:55:42.326+01:00  INFO 18848 --- [notification-service] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=83f57e3f-71d1-34b6-a8f3-a30f75aa705f
+2025-01-12T17:55:43.611+01:00  WARN 18848 --- [notification-service] [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig' of type [org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). The currently created BeanPostProcessor [lbRestClientPostProcessor] is declared through a non-static factory method on that class; consider declaring it as static instead.
+2025-01-12T17:55:43.617+01:00  WARN 18848 --- [notification-service] [main] trationDelegate$BeanPostProcessorChecker : Bean 'deferringLoadBalancerInterceptor' of type [org.springframework.cloud.client.loadbalancer.DeferringLoadBalancerInterceptor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected into a currently created BeanPostProcessor [lbRestClientPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies.
+2025-01-12T17:55:44.425+01:00  INFO 18848 --- [notification-service] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8081 (http)
+2025-01-12T17:55:44.482+01:00  INFO 18848 --- [notification-service] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-01-12T17:55:44.484+01:00  INFO 18848 --- [notification-service] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.30]
+2025-01-12T17:55:44.706+01:00  INFO 18848 --- [notification-service] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-01-12T17:55:44.707+01:00  INFO 18848 --- [notification-service] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 8247 ms
+2025-01-12T17:55:45.436+01:00  INFO 18848 --- [notification-service] [main] o.s.c.openfeign.FeignClientFactoryBean   : For 'user-service' URL not provided. Will try picking an instance via load-balancing.
+2025-01-12T17:55:47.472+01:00  INFO 18848 --- [notification-service] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-01-12T17:55:47.869+01:00  INFO 18848 --- [notification-service] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.3.Final
+2025-01-12T17:55:48.040+01:00  INFO 18848 --- [notification-service] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-01-12T17:55:49.488+01:00  INFO 18848 --- [notification-service] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-01-12T17:55:49.603+01:00  INFO 18848 --- [notification-service] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-01-12T17:55:50.344+01:00  INFO 18848 --- [notification-service] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@4131261
+2025-01-12T17:55:50.348+01:00  INFO 18848 --- [notification-service] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-01-12T17:55:53.831+01:00  INFO 18848 --- [notification-service] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-01-12T17:55:54.148+01:00  INFO 18848 --- [notification-service] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-01-12T17:55:56.578+01:00  WARN 18848 --- [notification-service] [main] .s.s.UserDetailsServiceAutoConfiguration : 
 
-Using generated security password: d44c2981-7ad3-412b-9721-291120d60ebd
+Using generated security password: a5beb9fc-fc08-4c61-8c2d-8b78257ac62b
 
 This generated password is for development use only. Your security configuration must be updated before running your application in production.
 
-2025-01-09T18:58:12.399+01:00  INFO 22100 --- [notification-service] [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
-2025-01-09T18:58:12.674+01:00  INFO 22100 --- [notification-service] [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
-2025-01-09T18:58:13.024+01:00  WARN 22100 --- [notification-service] [main] iguration$LoadBalancerCaffeineWarnLogger : Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
-2025-01-09T18:58:13.093+01:00  INFO 22100 --- [notification-service] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8081 (http) with context path '/'
-2025-01-09T18:58:13.095+01:00  INFO 22100 --- [notification-service] [main] o.s.c.c.s.ConsulServiceRegistry          : Registering service with consul: NewService{id='notification-service-8081', name='notification-service', tags=[], address='host.docker.internal', meta={secure=false}, port=8081, enableTagOverride=null, check=Check{script='null', dockerContainerID='null', shell='null', interval='10s', ttl='null', http='http://host.docker.internal:8081/actuator/health', method='null', header={}, tcp='null', timeout='null', deregisterCriticalServiceAfter='null', tlsSkipVerify=null, status='null', grpc='null', grpcUseTLS=null}, checks=null}
-2025-01-09T18:58:13.135+01:00  INFO 22100 --- [notification-service] [main] o.l.app.NotificationServiceApplication   : Started NotificationServiceApplication in 4.982 seconds (process running for 5.531)
-2025-01-09T18:58:13.343+01:00  INFO 22100 --- [notification-service] [RMI TCP Connection(1)-100.106.0.116] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
-2025-01-09T18:58:13.343+01:00  INFO 22100 --- [notification-service] [RMI TCP Connection(1)-100.106.0.116] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
-2025-01-09T18:58:13.346+01:00  INFO 22100 --- [notification-service] [RMI TCP Connection(1)-100.106.0.116] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
-2025-01-09T19:01:41.295+01:00  INFO 22100 --- [notification-service] [http-nio-8081-exec-8] org.league.app.filter.JWTFilter          : Extracted email: taranenkozahar@gmail.com
-2025-01-09T19:01:41.296+01:00  INFO 22100 --- [notification-service] [http-nio-8081-exec-8] org.league.app.filter.JWTFilter          : User email: taranenkozahar@gmail.com
-2025-01-09T19:02:09.238+01:00  INFO 22100 --- [notification-service] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
-2025-01-09T19:02:09.239+01:00  INFO 22100 --- [notification-service] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
-2025-01-09T19:02:09.244+01:00  INFO 22100 --- [notification-service] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
-2025-01-09T19:02:09.244+01:00  INFO 22100 --- [notification-service] [SpringApplicationShutdownHook] o.s.c.c.s.ConsulServiceRegistry          : Deregistering service with consul: notification-service-8081
-2025-01-09T19:02:12.432+01:00  INFO 14468 --- [notification-service] [main] o.l.app.NotificationServiceApplication   : Starting NotificationServiceApplication using Java 21.0.5 with PID 14468 (D:\Java projects\ProLeagueManager\backend\notification-service\target\classes started by taran in D:\Java projects\ProLeagueManager)
-2025-01-09T19:02:12.433+01:00  INFO 14468 --- [notification-service] [main] o.l.app.NotificationServiceApplication   : No active profile set, falling back to 1 default profile: "default"
-2025-01-09T19:02:13.048+01:00  INFO 14468 --- [notification-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2025-01-09T19:02:13.156+01:00  INFO 14468 --- [notification-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 104 ms. Found 2 JPA repository interfaces.
-2025-01-09T19:02:13.311+01:00  INFO 14468 --- [notification-service] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=83f57e3f-71d1-34b6-a8f3-a30f75aa705f
-2025-01-09T19:02:13.515+01:00  WARN 14468 --- [notification-service] [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig' of type [org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). The currently created BeanPostProcessor [lbRestClientPostProcessor] is declared through a non-static factory method on that class; consider declaring it as static instead.
-2025-01-09T19:02:13.517+01:00  WARN 14468 --- [notification-service] [main] trationDelegate$BeanPostProcessorChecker : Bean 'deferringLoadBalancerInterceptor' of type [org.springframework.cloud.client.loadbalancer.DeferringLoadBalancerInterceptor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected into a currently created BeanPostProcessor [lbRestClientPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies.
-2025-01-09T19:02:13.692+01:00  INFO 14468 --- [notification-service] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8081 (http)
-2025-01-09T19:02:13.702+01:00  INFO 14468 --- [notification-service] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2025-01-09T19:02:13.702+01:00  INFO 14468 --- [notification-service] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.30]
-2025-01-09T19:02:13.752+01:00  INFO 14468 --- [notification-service] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2025-01-09T19:02:13.752+01:00  INFO 14468 --- [notification-service] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1283 ms
-2025-01-09T19:02:13.884+01:00  INFO 14468 --- [notification-service] [main] o.s.c.openfeign.FeignClientFactoryBean   : For 'user-service' URL not provided. Will try picking an instance via load-balancing.
-2025-01-09T19:02:14.211+01:00  INFO 14468 --- [notification-service] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2025-01-09T19:02:14.245+01:00  INFO 14468 --- [notification-service] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.3.Final
-2025-01-09T19:02:14.266+01:00  INFO 14468 --- [notification-service] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
-2025-01-09T19:02:14.457+01:00  INFO 14468 --- [notification-service] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2025-01-09T19:02:14.478+01:00  INFO 14468 --- [notification-service] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2025-01-09T19:02:14.592+01:00  INFO 14468 --- [notification-service] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@21251e43
-2025-01-09T19:02:14.593+01:00  INFO 14468 --- [notification-service] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2025-01-09T19:02:15.200+01:00  INFO 14468 --- [notification-service] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
-2025-01-09T19:02:15.250+01:00  INFO 14468 --- [notification-service] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2025-01-09T19:02:15.554+01:00  WARN 14468 --- [notification-service] [main] .s.s.UserDetailsServiceAutoConfiguration : 
+2025-01-12T17:55:56.644+01:00  INFO 18848 --- [notification-service] [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2025-01-12T17:55:58.808+01:00  INFO 18848 --- [notification-service] [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2025-01-12T17:56:01.409+01:00  WARN 18848 --- [notification-service] [main] iguration$LoadBalancerCaffeineWarnLogger : Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2025-01-12T17:56:01.845+01:00  INFO 18848 --- [notification-service] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8081 (http) with context path '/'
+2025-01-12T17:56:01.853+01:00  INFO 18848 --- [notification-service] [main] o.s.c.c.s.ConsulServiceRegistry          : Registering service with consul: NewService{id='notification-service-8081', name='notification-service', tags=[], address='DESKTOP-Q5L62V1', meta={secure=false}, port=8081, enableTagOverride=null, check=Check{script='null', dockerContainerID='null', shell='null', interval='10s', ttl='null', http='http://DESKTOP-Q5L62V1:8081/actuator/health', method='null', header={}, tcp='null', timeout='null', deregisterCriticalServiceAfter='null', tlsSkipVerify=null, status='null', grpc='null', grpcUseTLS=null}, checks=null}
+2025-01-12T17:56:01.961+01:00  INFO 18848 --- [notification-service] [main] o.l.app.NotificationServiceApplication   : Started NotificationServiceApplication in 28.171 seconds (process running for 30.305)
+2025-01-12T17:56:03.228+01:00  INFO 18848 --- [notification-service] [RMI TCP Connection(3)-26.155.219.88] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-01-12T17:56:03.228+01:00  INFO 18848 --- [notification-service] [RMI TCP Connection(3)-26.155.219.88] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-01-12T17:56:03.235+01:00  INFO 18848 --- [notification-service] [RMI TCP Connection(3)-26.155.219.88] o.s.web.servlet.DispatcherServlet        : Completed initialization in 5 ms
+2025-01-12T17:56:03.418+01:00  WARN 18848 --- [notification-service] [RMI TCP Connection(4)-26.155.219.88] o.s.b.actuate.mail.MailHealthIndicator   : Mail health check failed
 
-Using generated security password: 7a721864-6e84-48c9-86e0-518031caf77f
+org.eclipse.angus.mail.util.MailConnectException: Couldn't connect to host, port: smtp.gmail.com, 587; timeout -1
+	at org.eclipse.angus.mail.smtp.SMTPTransport.openServer(SMTPTransport.java:2243) ~[jakarta.mail-2.0.3.jar:na]
+	at org.eclipse.angus.mail.smtp.SMTPTransport.protocolConnect(SMTPTransport.java:729) ~[jakarta.mail-2.0.3.jar:na]
+	at jakarta.mail.Service.connect(Service.java:345) ~[jakarta.mail-2.0.3.jar:na]
+	at org.springframework.mail.javamail.JavaMailSenderImpl.connectTransport(JavaMailSenderImpl.java:480) ~[spring-context-support-6.1.13.jar:6.1.13]
+	at org.springframework.mail.javamail.JavaMailSenderImpl.testConnection(JavaMailSenderImpl.java:360) ~[spring-context-support-6.1.13.jar:6.1.13]
+	at org.springframework.boot.actuate.mail.MailHealthIndicator.doHealthCheck(MailHealthIndicator.java:52) ~[spring-boot-actuator-3.3.4.jar:3.3.4]
+	at org.springframework.boot.actuate.health.AbstractHealthIndicator.health(AbstractHealthIndicator.java:82) ~[spring-boot-actuator-3.3.4.jar:3.3.4]
+	at org.springframework.boot.actuate.health.HealthIndicator.getHealth(HealthIndicator.java:37) ~[spring-boot-actuator-3.3.4.jar:3.3.4]
+	at org.springframework.boot.actuate.health.HealthEndpoint.getHealth(HealthEndpoint.java:82) ~[spring-boot-actuator-3.3.4.jar:3.3.4]
+	at org.springframework.boot.actuate.health.HealthEndpoint.getHealth(HealthEndpoint.java:41) ~[spring-boot-actuator-3.3.4.jar:3.3.4]
+	at org.springframework.boot.actuate.health.HealthEndpointSupport.getLoggedHealth(HealthEndpointSupport.java:172) ~[spring-boot-actuator-3.3.4.jar:3.3.4]
+	at org.springframework.boot.actuate.health.HealthEndpointSupport.getContribution(HealthEndpointSupport.java:145) ~[spring-boot-actuator-3.3.4.jar:3.3.4]
+	at org.springframework.boot.actuate.health.HealthEndpointSupport.getAggregateContribution(HealthEndpointSupport.java:156) ~[spring-boot-actuator-3.3.4.jar:3.3.4]
+	at org.springframework.boot.actuate.health.HealthEndpointSupport.getContribution(HealthEndpointSupport.java:141) ~[spring-boot-actuator-3.3.4.jar:3.3.4]
+	at org.springframework.boot.actuate.health.HealthEndpointSupport.getHealth(HealthEndpointSupport.java:110) ~[spring-boot-actuator-3.3.4.jar:3.3.4]
+	at org.springframework.boot.actuate.health.HealthEndpointSupport.getHealth(HealthEndpointSupport.java:81) ~[spring-boot-actuator-3.3.4.jar:3.3.4]
+	at org.springframework.boot.actuate.health.HealthEndpoint.health(HealthEndpoint.java:76) ~[spring-boot-actuator-3.3.4.jar:3.3.4]
+	at org.springframework.boot.actuate.health.HealthEndpoint.health(HealthEndpoint.java:66) ~[spring-boot-actuator-3.3.4.jar:3.3.4]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[na:na]
+	at org.springframework.util.ReflectionUtils.invokeMethod(ReflectionUtils.java:281) ~[spring-core-6.1.13.jar:6.1.13]
+	at org.springframework.boot.actuate.endpoint.invoke.reflect.ReflectiveOperationInvoker.invoke(ReflectiveOperationInvoker.java:74) ~[spring-boot-actuator-3.3.4.jar:3.3.4]
+	at org.springframework.boot.actuate.endpoint.annotation.AbstractDiscoveredOperation.invoke(AbstractDiscoveredOperation.java:60) ~[spring-boot-actuator-3.3.4.jar:3.3.4]
+	at org.springframework.boot.actuate.endpoint.jmx.EndpointMBean.invoke(EndpointMBean.java:124) ~[spring-boot-actuator-3.3.4.jar:3.3.4]
+	at org.springframework.boot.actuate.endpoint.jmx.EndpointMBean.invoke(EndpointMBean.java:97) ~[spring-boot-actuator-3.3.4.jar:3.3.4]
+	at java.management/com.sun.jmx.interceptor.DefaultMBeanServerInterceptor.invoke(DefaultMBeanServerInterceptor.java:803) ~[na:na]
+	at java.management/com.sun.jmx.mbeanserver.JmxMBeanServer.invoke(JmxMBeanServer.java:802) ~[na:na]
+	at java.management.rmi/javax.management.remote.rmi.RMIConnectionImpl.doOperation(RMIConnectionImpl.java:1520) ~[na:na]
+	at java.management.rmi/javax.management.remote.rmi.RMIConnectionImpl$PrivilegedOperation.run(RMIConnectionImpl.java:1348) ~[na:na]
+	at java.management.rmi/javax.management.remote.rmi.RMIConnectionImpl.doPrivilegedOperation(RMIConnectionImpl.java:1435) ~[na:na]
+	at java.management.rmi/javax.management.remote.rmi.RMIConnectionImpl.invoke(RMIConnectionImpl.java:841) ~[na:na]
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103) ~[na:na]
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580) ~[na:na]
+	at java.rmi/sun.rmi.server.UnicastServerRef.dispatch(UnicastServerRef.java:360) ~[na:na]
+	at java.rmi/sun.rmi.transport.Transport$1.run(Transport.java:200) ~[na:na]
+	at java.rmi/sun.rmi.transport.Transport$1.run(Transport.java:197) ~[na:na]
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:714) ~[na:na]
+	at java.rmi/sun.rmi.transport.Transport.serviceCall(Transport.java:196) ~[na:na]
+	at java.rmi/sun.rmi.transport.tcp.TCPTransport.handleMessages(TCPTransport.java:598) ~[na:na]
+	at java.rmi/sun.rmi.transport.tcp.TCPTransport$ConnectionHandler.run0(TCPTransport.java:844) ~[na:na]
+	at java.rmi/sun.rmi.transport.tcp.TCPTransport$ConnectionHandler.lambda$run$0(TCPTransport.java:721) ~[na:na]
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400) ~[na:na]
+	at java.rmi/sun.rmi.transport.tcp.TCPTransport$ConnectionHandler.run(TCPTransport.java:720) ~[na:na]
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144) ~[na:na]
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642) ~[na:na]
+	at java.base/java.lang.Thread.run(Thread.java:1575) ~[na:na]
+Caused by: java.net.UnknownHostException: smtp.gmail.com
+	at java.base/sun.nio.ch.NioSocketImpl.connect(NioSocketImpl.java:567) ~[na:na]
+	at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:327) ~[na:na]
+	at java.base/java.net.Socket.connect(Socket.java:760) ~[na:na]
+	at java.base/java.net.Socket.connect(Socket.java:695) ~[na:na]
+	at org.eclipse.angus.mail.util.SocketFetcher.createSocket(SocketFetcher.java:368) ~[jakarta.mail-2.0.3.jar:na]
+	at org.eclipse.angus.mail.util.SocketFetcher.getSocket(SocketFetcher.java:243) ~[jakarta.mail-2.0.3.jar:na]
+	at org.eclipse.angus.mail.smtp.SMTPTransport.openServer(SMTPTransport.java:2193) ~[jakarta.mail-2.0.3.jar:na]
+	... 45 common frames omitted
+
 
 This generated password is for development use only. Your security configuration must be updated before running your application in production.
 

@@ -554,7 +554,7 @@ footer {
   font-size: 16px;
   margin-bottom: 15px;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 12px;
 }
 
 .delete-overlay-btn {
@@ -563,7 +563,7 @@ footer {
   border: none;
   padding: 10px 20px;
   font-size: 16px;
-  border-radius: 4px;
+  border-radius: 12px;
   cursor: pointer;
 }
 
@@ -578,7 +578,7 @@ footer {
   border: none;
   padding: 10px 20px;
   font-size: 16px;
-  border-radius: 4px;
+  border-radius: 12px;
   cursor: pointer;
 }
 
@@ -591,10 +591,19 @@ footer {
   border: none;
   padding: 10px 20px;
   font-size: 16px;
-  border-radius: 4px;
+  border-radius: 12px;
   cursor: pointer;
 }
 
 .close-overlay-btn:hover {
   background: #3861FB;
+}
+.submit{
+  background: #16C784;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 12px;
+  cursor: pointer;
 }

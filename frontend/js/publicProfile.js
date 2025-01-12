@@ -1,3 +1,4 @@
+refreshtoken();
 const accToken = localStorage.getItem("accToken");
 const refreshToken = localStorage.getItem("refToken");
 
@@ -8,7 +9,25 @@ if(accToken === null || refreshToken === null){
   getUserData();
 }
 
-
+async function refreshtoken(){
+  try {
+    const url = "http://localhost:8765/auth/refresh-token";
+    const refToken = localStorage.getItem("refToken");
+    const response = await fetch(url,{
+      method:"POST",
+      headers:{
+        "Authorization": `Bearer ${refToken}`,
+        "Content-Type": "application/json"
+      }
+    })
+    if(!response.ok)throw new Error("Error Refresh Token");
+    const Tokens = await response.json();
+    localStorage.setItem("accToken",Tokens.accessToken);
+    localStorage.setItem("refToken",Tokens.refreshToken);
+  }catch (err){
+    console.error(err);
+  }
+}
 async function getUserData() {
   try {
     const url = `http://localhost:8765/user/profile`;
@@ -53,6 +72,8 @@ async function getUserData() {
 }
 async function logOut(){
   try {
+    let accToken = localStorage.getItem("accToken");
+    let refToken = localStorage.getItem("refToken");
     const response = await fetch('http://localhost:8765/auth/logout',{
       method: 'POST',
       headers: {
