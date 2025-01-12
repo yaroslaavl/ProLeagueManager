@@ -1,11 +1,12 @@
 refreshToken();
+getUserData();
 const logOutBtn = document.getElementById('log-out').addEventListener('click',logOut);
 const accToken = localStorage.getItem('accToken');
 const deleteAcc = document.getElementById('deleteAcc').addEventListener('click',openOverlay);
 const changePasswordOverlay = document.getElementById('changePassword').addEventListener('click',changePasswordOpenOverlay);
 const verify = document.getElementById("verify").addEventListener('click',verifyEmail);
 const changePassword = document.getElementById("updatePassword").addEventListener('click',updatePassword);
-getUserData();
+
 async function delAcc() {
   try {
     const url = "http://localhost:8765/user/delete-user-account";
@@ -98,23 +99,26 @@ async function verifyEmail(){
 }
 async function updatePassword(){
   try {
+    const accToken = localStorage.getItem('accToken');
     const url = "http://localhost:8765/user/change-user-password";
     const oldPassword = document.getElementById("oldPass");
     const newPassword = document.getElementById("newPass");
-    const response = await fetch(url,{
-      method:"PUT",
-      body:{
-        oldPassword:oldPassword.value,
+    const response = await fetch(url, {
+      method: "PUT",
+      body: JSON.stringify({
+        oldPassword: oldPassword.value,
         newPassword: newPassword.value
-      },
-      headers:{
-        "Authorization": `Bearer ${accToken}`, // Добавляем заголовок Authorization
-
+      }),
+      headers: {
+        "Authorization": `Bearer ${accToken}`,
+        "Content-Type": "application/json"
       }
-    })
+    });
     if(!response.ok)throw new Error("Error HTTP Request");
     console.log(response);
     changePasswordCloseOverlay();
+    localStorage.clear();
+    window.location.href = "login.html";
   }catch (err){
     console.error(err);
   }

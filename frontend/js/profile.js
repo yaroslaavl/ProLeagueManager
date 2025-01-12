@@ -137,7 +137,7 @@ async function getUsername() {
 }
 async function updateUserProfile(){
   try {
-    const accToken = localStorage.getItem("accToken");
+    const accToken = localStorage.getItem('accToken');
     const url = "http://localhost:8765/user/update-user-personal-data";
     const firstName = document.getElementById("firstName");
     const lastName = document.getElementById("lastName");
@@ -145,21 +145,22 @@ async function updateUserProfile(){
     const day = document.getElementById("dayInput");
     const month = document.getElementById("monthInput");
     const year = document.getElementById("yearInput");
-    const response = await fetch(url,{
+    let birthDate = `${year.value}-${month.value.padStart(2, '0')}-${day.value.padStart(2, '0')}`;
+    const response = await fetch(url, {
       method: "PUT",
-      body:{
-        "username" : `${username.value}`,
-        "firstName": `${firstName.value}`,
-        "lastName": `${lastName.value}`,
-        "birthDate": `${year.value+"-"+month.value+"-"+day.value}`
-      },
-      headers:{
+      headers: {
         "Authorization": `Bearer ${accToken}`,
         "Content-Type": "application/json"
-      }
-    })
+      },
+      body: JSON.stringify({
+        username: username.value,
+        firstName: firstName.value,
+        lastName: lastName.value,
+        birthDate: `${birthDate}`
+      })
+    });
     if(!response.ok)throw new Error("Error HTTP Request");
-    console.log(response.json);
+    console.log(response);
   }catch (err){
     console.error(err);
   }

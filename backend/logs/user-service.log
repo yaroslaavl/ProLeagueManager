@@ -117,3 +117,711 @@
 2025-01-12T18:37:46.594+01:00  INFO 21420 --- [user-service] [http-nio-8080-exec-9] org.league.app.service.JWTService        : Extracted email: huko2990@gmail.com
 2025-01-12T18:39:23.951+01:00  INFO 21420 --- [user-service] [http-nio-8080-exec-2] org.league.app.service.JWTService        : Extracted email: huko2990@gmail.com
 2025-01-12T18:39:26.840+01:00  INFO 21420 --- [user-service] [http-nio-8080-exec-3] o.league.app.controller.AuthController   : Logout endpoint reached with method POST
+2025-01-12T18:51:06.222+01:00  INFO 21420 --- [user-service] [http-nio-8080-exec-5] o.league.app.controller.AuthController   : accessToken token: eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJBVVRIT1JJU0VEX1VTRVIiLCJVU0VSIl0sInN1YiI6Imh1a28yOTkwQGdtYWlsLmNvbSIsImlhdCI6MTczNjcwNDI2NiwiZXhwIjoxNzM2NzA1MTY2fQ.8kgtVqpqBty0zX-ZbRk1mqfgCFflv9VLxNVHZpzSDWc
+2025-01-12T18:51:06.241+01:00  INFO 21420 --- [user-service] [http-nio-8080-exec-5] o.league.app.controller.AuthController   : refreshToken token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJodWtvMjk5MEBnbWFpbC5jb20iLCJpYXQiOjE3MzY3MDQyNjYsImV4cCI6MTczNjc5MDY2Nn0.82B0f4RqCCC5QqQJ29LJMHi4KgwJ2vXS3A2LSPryFWk
+2025-01-12T18:51:11.393+01:00  INFO 21420 --- [user-service] [http-nio-8080-exec-1] org.league.app.service.JWTService        : Extracted email: huko2990@gmail.com
+2025-01-12T18:51:17.854+01:00  INFO 21420 --- [user-service] [http-nio-8080-exec-8] org.league.app.service.JWTService        : Extracted email: huko2990@gmail.com
+2025-01-12T18:51:20.990+01:00  INFO 21420 --- [user-service] [http-nio-8080-exec-9] org.league.app.service.JWTService        : Extracted email: huko2990@gmail.com
+2025-01-12T18:51:24.305+01:00  INFO 21420 --- [user-service] [http-nio-8080-exec-10] org.league.app.service.JWTService        : Extracted email: huko2990@gmail.com
+2025-01-12T18:53:29.795+01:00  WARN 21420 --- [user-service] [http-nio-8080-exec-1] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Cannot deserialize value of type `org.league.app.dto.UserPersonalDataDto` from Array value (token `JsonToken.START_ARRAY`)]
+2025-01-12T18:54:34.325+01:00  WARN 21420 --- [user-service] [http-nio-8080-exec-9] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Cannot deserialize value of type `org.league.app.dto.UserPersonalDataDto` from Array value (token `JsonToken.START_ARRAY`)]
+2025-01-12T18:55:11.408+01:00  INFO 21420 --- [user-service] [http-nio-8080-exec-7] org.league.app.service.JWTService        : Extracted email: huko2990@gmail.com
+2025-01-12T18:55:14.702+01:00  INFO 21420 --- [user-service] [http-nio-8080-exec-1] org.league.app.service.JWTService        : Extracted email: huko2990@gmail.com
+2025-01-12T18:55:17.301+01:00  WARN 21420 --- [user-service] [http-nio-8080-exec-4] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Cannot deserialize value of type `org.league.app.dto.UserPersonalDataDto` from Array value (token `JsonToken.START_ARRAY`)]
+2025-01-12T18:56:30.158+01:00  INFO 21420 --- [user-service] [http-nio-8080-exec-5] org.league.app.service.JWTService        : Extracted email: huko2990@gmail.com
+2025-01-12T18:56:32.378+01:00  INFO 21420 --- [user-service] [http-nio-8080-exec-1] org.league.app.service.JWTService        : Extracted email: huko2990@gmail.com
+2025-01-12T18:56:36.166+01:00  WARN 21420 --- [user-service] [http-nio-8080-exec-4] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Cannot deserialize value of type `org.league.app.dto.UserPersonalDataDto` from Array value (token `JsonToken.START_ARRAY`)]
+2025-01-12T18:56:57.443+01:00  INFO 21420 --- [user-service] [http-nio-8080-exec-6] org.league.app.service.JWTService        : Extracted email: huko2990@gmail.com
+2025-01-12T18:57:04.109+01:00  INFO 21420 --- [user-service] [http-nio-8080-exec-7] org.league.app.service.JWTService        : Extracted email: huko2990@gmail.com
+2025-01-12T18:57:50.874+01:00  INFO 21420 --- [user-service] [http-nio-8080-exec-1] org.league.app.service.JWTService        : Extracted email: huko2990@gmail.com
+2025-01-12T18:59:18.371+01:00  WARN 21420 --- [user-service] [http-nio-8080-exec-6] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.HttpMediaTypeNotSupportedException: Content-Type 'text/plain;charset=UTF-8' is not supported]
+2025-01-12T19:00:38.223+01:00  WARN 21420 --- [user-service] [http-nio-8080-exec-1] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Cannot deserialize value of type `org.league.app.dto.UserChangePasswordDto` from Array value (token `JsonToken.START_ARRAY`)]
+2025-01-12T19:06:45.588+01:00  WARN 21420 --- [user-service] [http-nio-8080-exec-2] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Cannot deserialize value of type `org.league.app.dto.UserChangePasswordDto` from Array value (token `JsonToken.START_ARRAY`)]
+2025-01-12T19:07:28.670+01:00  WARN 21420 --- [user-service] [http-nio-8080-exec-3] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Cannot deserialize value of type `org.league.app.dto.UserChangePasswordDto` from Array value (token `JsonToken.START_ARRAY`)]
+2025-01-12T19:08:17.674+01:00  INFO 21420 --- [user-service] [http-nio-8080-exec-7] o.league.app.controller.AuthController   : accessToken token: eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJBVVRIT1JJU0VEX1VTRVIiLCJVU0VSIl0sInN1YiI6Imh1a28yOTkwQGdtYWlsLmNvbSIsImlhdCI6MTczNjcwNTI5NywiZXhwIjoxNzM2NzA2MTk3fQ.vlaFHQtEBDrv6OblK8J2VnBdl7Ev1Dr4jqqhxkx6Ce8
+2025-01-12T19:08:17.675+01:00  INFO 21420 --- [user-service] [http-nio-8080-exec-7] o.league.app.controller.AuthController   : refreshToken token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJodWtvMjk5MEBnbWFpbC5jb20iLCJpYXQiOjE3MzY3MDUyOTcsImV4cCI6MTczNjc5MTY5N30.p15_ZKSuNXl8Z9ldcJY9Z4hU-S-bqHEDO6HejvUJ5O0
+2025-01-12T19:09:19.515+01:00  INFO 21420 --- [user-service] [http-nio-8080-exec-1] org.league.app.service.JWTService        : Extracted email: huko2990@gmail.com
+2025-01-12T19:10:39.630+01:00  INFO 21420 --- [user-service] [http-nio-8080-exec-10] org.league.app.service.JWTService        : Extracted email: huko2990@gmail.com
+2025-01-12T19:10:41.515+01:00  INFO 21420 --- [user-service] [http-nio-8080-exec-7] org.league.app.service.JWTService        : Extracted email: huko2990@gmail.com
+2025-01-12T19:10:55.309+01:00  INFO 21420 --- [user-service] [http-nio-8080-exec-8] org.league.app.service.JWTService        : Extracted email: huko2990@gmail.com
+2025-01-12T19:11:13.293+01:00 ERROR 21420 --- [user-service] [http-nio-8080-exec-4] org.league.app.filter.RouteFilter        : Error while checking handler for path: /api/user/change-user-password
+
+org.springframework.web.HttpRequestMethodNotSupportedException: Request method 'POST' is not supported
+	at org.springframework.web.servlet.mvc.method.RequestMappingInfoHandlerMapping.handleNoMatch(RequestMappingInfoHandlerMapping.java:267) ~[spring-webmvc-6.1.13.jar:6.1.13]
+	at org.springframework.web.servlet.handler.AbstractHandlerMethodMapping.lookupHandlerMethod(AbstractHandlerMethodMapping.java:441) ~[spring-webmvc-6.1.13.jar:6.1.13]
+	at org.springframework.web.servlet.handler.AbstractHandlerMethodMapping.getHandlerInternal(AbstractHandlerMethodMapping.java:382) ~[spring-webmvc-6.1.13.jar:6.1.13]
+	at org.springframework.web.servlet.mvc.method.RequestMappingInfoHandlerMapping.getHandlerInternal(RequestMappingInfoHandlerMapping.java:127) ~[spring-webmvc-6.1.13.jar:6.1.13]
+	at org.springframework.web.servlet.mvc.method.RequestMappingInfoHandlerMapping.getHandlerInternal(RequestMappingInfoHandlerMapping.java:68) ~[spring-webmvc-6.1.13.jar:6.1.13]
+	at org.springframework.web.servlet.handler.AbstractHandlerMapping.getHandler(AbstractHandlerMapping.java:507) ~[spring-webmvc-6.1.13.jar:6.1.13]
+	at org.league.app.filter.RouteFilter.doFilterInternal(RouteFilter.java:47) ~[classes/:na]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$AroundFilterObservation$SimpleAroundFilterObservation.lambda$wrap$0(ObservationFilterChainDecorator.java:323) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:224) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$3(HandlerMappingIntrospector.java:195) ~[spring-webmvc-6.1.13.jar:6.1.13]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:230) ~[spring-security-config-6.3.3.jar:6.3.3]
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:352) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:268) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.springframework.web.filter.ServerHttpObservationFilter.doFilterInternal(ServerHttpObservationFilter.java:113) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:384) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1741) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at java.base/java.lang.Thread.run(Thread.java:1575) ~[na:na]
+
+2025-01-12T19:11:47.347+01:00  INFO 21420 --- [user-service] [http-nio-8080-exec-6] o.league.app.controller.AuthController   : accessToken token: eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJBVVRIT1JJU0VEX1VTRVIiLCJVU0VSIl0sInN1YiI6Imh1a28yOTkwQGdtYWlsLmNvbSIsImlhdCI6MTczNjcwNTUwNywiZXhwIjoxNzM2NzA2NDA3fQ.oSKhXHtx7KV20CIK43tSQYeM-fPLx2kGo-YITmBJC5o
+2025-01-12T19:11:47.348+01:00  INFO 21420 --- [user-service] [http-nio-8080-exec-6] o.league.app.controller.AuthController   : refreshToken token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJodWtvMjk5MEBnbWFpbC5jb20iLCJpYXQiOjE3MzY3MDU1MDcsImV4cCI6MTczNjc5MTkwN30.xv-dt7oxwzoBll9vu6kwb3eUdtpIOynJzoPdpSI7sdg
+2025-01-12T19:12:11.569+01:00  INFO 21420 --- [user-service] [http-nio-8080-exec-10] org.league.app.service.JWTService        : Extracted email: huko2990@gmail.com
+2025-01-12T19:12:32.656+01:00 ERROR 21420 --- [user-service] [http-nio-8080-exec-7] org.league.app.filter.RouteFilter        : Error while checking handler for path: /api/user/change-user-password
+
+org.springframework.web.HttpRequestMethodNotSupportedException: Request method 'POST' is not supported
+	at org.springframework.web.servlet.mvc.method.RequestMappingInfoHandlerMapping.handleNoMatch(RequestMappingInfoHandlerMapping.java:267) ~[spring-webmvc-6.1.13.jar:6.1.13]
+	at org.springframework.web.servlet.handler.AbstractHandlerMethodMapping.lookupHandlerMethod(AbstractHandlerMethodMapping.java:441) ~[spring-webmvc-6.1.13.jar:6.1.13]
+	at org.springframework.web.servlet.handler.AbstractHandlerMethodMapping.getHandlerInternal(AbstractHandlerMethodMapping.java:382) ~[spring-webmvc-6.1.13.jar:6.1.13]
+	at org.springframework.web.servlet.mvc.method.RequestMappingInfoHandlerMapping.getHandlerInternal(RequestMappingInfoHandlerMapping.java:127) ~[spring-webmvc-6.1.13.jar:6.1.13]
+	at org.springframework.web.servlet.mvc.method.RequestMappingInfoHandlerMapping.getHandlerInternal(RequestMappingInfoHandlerMapping.java:68) ~[spring-webmvc-6.1.13.jar:6.1.13]
+	at org.springframework.web.servlet.handler.AbstractHandlerMapping.getHandler(AbstractHandlerMapping.java:507) ~[spring-webmvc-6.1.13.jar:6.1.13]
+	at org.league.app.filter.RouteFilter.doFilterInternal(RouteFilter.java:47) ~[classes/:na]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$AroundFilterObservation$SimpleAroundFilterObservation.lambda$wrap$0(ObservationFilterChainDecorator.java:323) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:224) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$3(HandlerMappingIntrospector.java:195) ~[spring-webmvc-6.1.13.jar:6.1.13]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:230) ~[spring-security-config-6.3.3.jar:6.3.3]
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:352) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:268) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.springframework.web.filter.ServerHttpObservationFilter.doFilterInternal(ServerHttpObservationFilter.java:113) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:384) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1741) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at java.base/java.lang.Thread.run(Thread.java:1575) ~[na:na]
+
+2025-01-12T19:16:29.166+01:00 ERROR 21420 --- [user-service] [http-nio-8080-exec-1] org.league.app.filter.RouteFilter        : Error while checking handler for path: /api/user/change-user-password
+
+org.springframework.web.HttpRequestMethodNotSupportedException: Request method 'POST' is not supported
+	at org.springframework.web.servlet.mvc.method.RequestMappingInfoHandlerMapping.handleNoMatch(RequestMappingInfoHandlerMapping.java:267) ~[spring-webmvc-6.1.13.jar:6.1.13]
+	at org.springframework.web.servlet.handler.AbstractHandlerMethodMapping.lookupHandlerMethod(AbstractHandlerMethodMapping.java:441) ~[spring-webmvc-6.1.13.jar:6.1.13]
+	at org.springframework.web.servlet.handler.AbstractHandlerMethodMapping.getHandlerInternal(AbstractHandlerMethodMapping.java:382) ~[spring-webmvc-6.1.13.jar:6.1.13]
+	at org.springframework.web.servlet.mvc.method.RequestMappingInfoHandlerMapping.getHandlerInternal(RequestMappingInfoHandlerMapping.java:127) ~[spring-webmvc-6.1.13.jar:6.1.13]
+	at org.springframework.web.servlet.mvc.method.RequestMappingInfoHandlerMapping.getHandlerInternal(RequestMappingInfoHandlerMapping.java:68) ~[spring-webmvc-6.1.13.jar:6.1.13]
+	at org.springframework.web.servlet.handler.AbstractHandlerMapping.getHandler(AbstractHandlerMapping.java:507) ~[spring-webmvc-6.1.13.jar:6.1.13]
+	at org.league.app.filter.RouteFilter.doFilterInternal(RouteFilter.java:47) ~[classes/:na]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$AroundFilterObservation$SimpleAroundFilterObservation.lambda$wrap$0(ObservationFilterChainDecorator.java:323) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:224) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$3(HandlerMappingIntrospector.java:195) ~[spring-webmvc-6.1.13.jar:6.1.13]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:230) ~[spring-security-config-6.3.3.jar:6.3.3]
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:352) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:268) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.springframework.web.filter.ServerHttpObservationFilter.doFilterInternal(ServerHttpObservationFilter.java:113) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:384) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1741) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at java.base/java.lang.Thread.run(Thread.java:1575) ~[na:na]
+
+2025-01-12T19:16:31.971+01:00  INFO 21420 --- [user-service] [http-nio-8080-exec-8] org.league.app.service.JWTService        : Extracted email: huko2990@gmail.com
+2025-01-12T19:16:52.435+01:00  INFO 21420 --- [user-service] [http-nio-8080-exec-6] org.league.app.service.JWTService        : Extracted email: huko2990@gmail.com
+2025-01-12T19:17:00.186+01:00  INFO 21420 --- [user-service] [http-nio-8080-exec-10] org.league.app.service.JWTService        : Extracted email: huko2990@gmail.com
+2025-01-12T19:17:02.333+01:00  INFO 21420 --- [user-service] [http-nio-8080-exec-2] org.league.app.service.JWTService        : Extracted email: huko2990@gmail.com
+2025-01-12T19:20:49.720+01:00  INFO 21420 --- [user-service] [http-nio-8080-exec-6] o.league.app.controller.AuthController   : Logout endpoint reached with method POST
+2025-01-12T19:21:51.574+01:00  INFO 21420 --- [user-service] [http-nio-8080-exec-5] org.league.app.service.UserService       : Email: taranenkozahar@gmail.com, Subject: Confirm your email, Body: Click the link to confirm your account: http://localhost:8765/auth/activate?token=013c4d27-21a3-4de3-85b9-53ccb6258582
+2025-01-12T19:22:28.938+01:00  INFO 21420 --- [user-service] [http-nio-8080-exec-7] o.league.app.controller.AuthController   : accessToken token: eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInN1YiI6InRhcmFuZW5rb3phaGFyQGdtYWlsLmNvbSIsImlhdCI6MTczNjcwNjE0OCwiZXhwIjoxNzM2NzA3MDQ4fQ.PHMXhfmx6IEC8uAOxXRVhrSL4Ik5EJva71Qje5EStm0
+2025-01-12T19:22:28.938+01:00  INFO 21420 --- [user-service] [http-nio-8080-exec-7] o.league.app.controller.AuthController   : refreshToken token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0YXJhbmVua296YWhhckBnbWFpbC5jb20iLCJpYXQiOjE3MzY3MDYxNDgsImV4cCI6MTczNjc5MjU0OH0.JKu34vY4-pC59MSYWrEXUZqbpzl_uN8k5_hhAO0NHo0
+2025-01-12T19:22:56.645+01:00  INFO 21420 --- [user-service] [http-nio-8080-exec-1] o.league.app.controller.AuthController   : accessToken token: eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInN1YiI6InRhcmFuZW5rb3phaGFyQGdtYWlsLmNvbSIsImlhdCI6MTczNjcwNjE3NiwiZXhwIjoxNzM2NzA3MDc2fQ.iXXgR0dno8-acj4a0LC1g921dAqnXcdSZy_3Nwi4NRw
+2025-01-12T19:22:56.645+01:00  INFO 21420 --- [user-service] [http-nio-8080-exec-1] o.league.app.controller.AuthController   : refreshToken token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0YXJhbmVua296YWhhckBnbWFpbC5jb20iLCJpYXQiOjE3MzY3MDYxNzYsImV4cCI6MTczNjc5MjU3Nn0.HR5D13nJuilCqLkPnLYGD1zIF24_0_kxb5DrGf6qezU
+2025-01-12T19:23:01.092+01:00  INFO 21420 --- [user-service] [http-nio-8080-exec-2] org.league.app.service.JWTService        : Extracted email: taranenkozahar@gmail.com
+2025-01-12T19:23:04.106+01:00  INFO 21420 --- [user-service] [http-nio-8080-exec-8] org.league.app.service.JWTService        : Extracted email: taranenkozahar@gmail.com
+2025-01-12T19:23:11.655+01:00  INFO 21420 --- [user-service] [http-nio-8080-exec-9] org.league.app.service.JWTService        : Extracted email: taranenkozahar@gmail.com
+2025-01-12T19:23:18.029+01:00  INFO 21420 --- [user-service] [http-nio-8080-exec-10] org.league.app.service.JWTService        : Extracted email: taranenkozahar@gmail.com
+2025-01-12T19:24:21.386+01:00 ERROR 21420 --- [user-service] [http-nio-8080-exec-4] org.league.app.filter.RouteFilter        : Error while checking handler for path: /api/user/change-user-password
+
+org.springframework.web.HttpRequestMethodNotSupportedException: Request method 'GET' is not supported
+	at org.springframework.web.servlet.mvc.method.RequestMappingInfoHandlerMapping.handleNoMatch(RequestMappingInfoHandlerMapping.java:267) ~[spring-webmvc-6.1.13.jar:6.1.13]
+	at org.springframework.web.servlet.handler.AbstractHandlerMethodMapping.lookupHandlerMethod(AbstractHandlerMethodMapping.java:441) ~[spring-webmvc-6.1.13.jar:6.1.13]
+	at org.springframework.web.servlet.handler.AbstractHandlerMethodMapping.getHandlerInternal(AbstractHandlerMethodMapping.java:382) ~[spring-webmvc-6.1.13.jar:6.1.13]
+	at org.springframework.web.servlet.mvc.method.RequestMappingInfoHandlerMapping.getHandlerInternal(RequestMappingInfoHandlerMapping.java:127) ~[spring-webmvc-6.1.13.jar:6.1.13]
+	at org.springframework.web.servlet.mvc.method.RequestMappingInfoHandlerMapping.getHandlerInternal(RequestMappingInfoHandlerMapping.java:68) ~[spring-webmvc-6.1.13.jar:6.1.13]
+	at org.springframework.web.servlet.handler.AbstractHandlerMapping.getHandler(AbstractHandlerMapping.java:507) ~[spring-webmvc-6.1.13.jar:6.1.13]
+	at org.league.app.filter.RouteFilter.doFilterInternal(RouteFilter.java:47) ~[classes/:na]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$AroundFilterObservation$SimpleAroundFilterObservation.lambda$wrap$0(ObservationFilterChainDecorator.java:323) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:224) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$3(HandlerMappingIntrospector.java:195) ~[spring-webmvc-6.1.13.jar:6.1.13]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:230) ~[spring-security-config-6.3.3.jar:6.3.3]
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:352) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:268) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.springframework.web.filter.ServerHttpObservationFilter.doFilterInternal(ServerHttpObservationFilter.java:113) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:384) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1741) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at java.base/java.lang.Thread.run(Thread.java:1575) ~[na:na]
+
+2025-01-12T19:25:39.664+01:00 ERROR 21420 --- [user-service] [http-nio-8080-exec-8] org.league.app.filter.RouteFilter        : Error while checking handler for path: /api/user/change-user-password
+
+org.springframework.web.HttpRequestMethodNotSupportedException: Request method 'GET' is not supported
+	at org.springframework.web.servlet.mvc.method.RequestMappingInfoHandlerMapping.handleNoMatch(RequestMappingInfoHandlerMapping.java:267) ~[spring-webmvc-6.1.13.jar:6.1.13]
+	at org.springframework.web.servlet.handler.AbstractHandlerMethodMapping.lookupHandlerMethod(AbstractHandlerMethodMapping.java:441) ~[spring-webmvc-6.1.13.jar:6.1.13]
+	at org.springframework.web.servlet.handler.AbstractHandlerMethodMapping.getHandlerInternal(AbstractHandlerMethodMapping.java:382) ~[spring-webmvc-6.1.13.jar:6.1.13]
+	at org.springframework.web.servlet.mvc.method.RequestMappingInfoHandlerMapping.getHandlerInternal(RequestMappingInfoHandlerMapping.java:127) ~[spring-webmvc-6.1.13.jar:6.1.13]
+	at org.springframework.web.servlet.mvc.method.RequestMappingInfoHandlerMapping.getHandlerInternal(RequestMappingInfoHandlerMapping.java:68) ~[spring-webmvc-6.1.13.jar:6.1.13]
+	at org.springframework.web.servlet.handler.AbstractHandlerMapping.getHandler(AbstractHandlerMapping.java:507) ~[spring-webmvc-6.1.13.jar:6.1.13]
+	at org.league.app.filter.RouteFilter.doFilterInternal(RouteFilter.java:47) ~[classes/:na]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$AroundFilterObservation$SimpleAroundFilterObservation.lambda$wrap$0(ObservationFilterChainDecorator.java:323) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:224) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$3(HandlerMappingIntrospector.java:195) ~[spring-webmvc-6.1.13.jar:6.1.13]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:230) ~[spring-security-config-6.3.3.jar:6.3.3]
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:352) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:268) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.springframework.web.filter.ServerHttpObservationFilter.doFilterInternal(ServerHttpObservationFilter.java:113) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:384) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1741) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at java.base/java.lang.Thread.run(Thread.java:1575) ~[na:na]
+
+2025-01-12T19:25:41.155+01:00 ERROR 21420 --- [user-service] [http-nio-8080-exec-3] org.league.app.filter.RouteFilter        : Error while checking handler for path: /api/user/change-user-password
+
+org.springframework.web.HttpRequestMethodNotSupportedException: Request method 'GET' is not supported
+	at org.springframework.web.servlet.mvc.method.RequestMappingInfoHandlerMapping.handleNoMatch(RequestMappingInfoHandlerMapping.java:267) ~[spring-webmvc-6.1.13.jar:6.1.13]
+	at org.springframework.web.servlet.handler.AbstractHandlerMethodMapping.lookupHandlerMethod(AbstractHandlerMethodMapping.java:441) ~[spring-webmvc-6.1.13.jar:6.1.13]
+	at org.springframework.web.servlet.handler.AbstractHandlerMethodMapping.getHandlerInternal(AbstractHandlerMethodMapping.java:382) ~[spring-webmvc-6.1.13.jar:6.1.13]
+	at org.springframework.web.servlet.mvc.method.RequestMappingInfoHandlerMapping.getHandlerInternal(RequestMappingInfoHandlerMapping.java:127) ~[spring-webmvc-6.1.13.jar:6.1.13]
+	at org.springframework.web.servlet.mvc.method.RequestMappingInfoHandlerMapping.getHandlerInternal(RequestMappingInfoHandlerMapping.java:68) ~[spring-webmvc-6.1.13.jar:6.1.13]
+	at org.springframework.web.servlet.handler.AbstractHandlerMapping.getHandler(AbstractHandlerMapping.java:507) ~[spring-webmvc-6.1.13.jar:6.1.13]
+	at org.league.app.filter.RouteFilter.doFilterInternal(RouteFilter.java:47) ~[classes/:na]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:62) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:227) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.session.DisableEncodeUrlFilter.doFilterInternal(DisableEncodeUrlFilter.java:42) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.wrapFilter(ObservationFilterChainDecorator.java:240) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$AroundFilterObservation$SimpleAroundFilterObservation.lambda$wrap$0(ObservationFilterChainDecorator.java:323) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$ObservationFilter.doFilter(ObservationFilterChainDecorator.java:224) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.ObservationFilterChainDecorator$VirtualFilterChain.doFilter(ObservationFilterChainDecorator.java:137) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:233) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:191) ~[spring-security-web-6.3.3.jar:6.3.3]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.web.servlet.handler.HandlerMappingIntrospector.lambda$createCacheFilter$3(HandlerMappingIntrospector.java:195) ~[spring-webmvc-6.1.13.jar:6.1.13]
+	at org.springframework.web.filter.CompositeFilter$VirtualFilterChain.doFilter(CompositeFilter.java:113) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.web.filter.CompositeFilter.doFilter(CompositeFilter.java:74) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.security.config.annotation.web.configuration.WebMvcSecurityConfiguration$CompositeFilterChainProxy.doFilter(WebMvcSecurityConfiguration.java:230) ~[spring-security-config-6.3.3.jar:6.3.3]
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:352) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:268) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.springframework.web.filter.ServerHttpObservationFilter.doFilterInternal(ServerHttpObservationFilter.java:113) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116) ~[spring-web-6.1.13.jar:6.1.13]
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:164) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:140) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:167) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:90) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:483) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:115) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:93) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:74) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:344) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:384) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:63) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:905) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1741) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:52) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1190) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:63) ~[tomcat-embed-core-10.1.30.jar:10.1.30]
+	at java.base/java.lang.Thread.run(Thread.java:1575) ~[na:na]
+
+2025-01-12T19:27:04.825+01:00  INFO 21420 --- [user-service] [http-nio-8080-exec-9] o.league.app.controller.AuthController   : accessToken token: eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInN1YiI6InRhcmFuZW5rb3phaGFyQGdtYWlsLmNvbSIsImlhdCI6MTczNjcwNjQyNCwiZXhwIjoxNzM2NzA3MzI0fQ.8rEX0xhM9oRE9XaiyMb_HW-lw1KLGDUaeX4O1Ij-lWo
+2025-01-12T19:27:04.833+01:00  INFO 21420 --- [user-service] [http-nio-8080-exec-9] o.league.app.controller.AuthController   : refreshToken token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0YXJhbmVua296YWhhckBnbWFpbC5jb20iLCJpYXQiOjE3MzY3MDY0MjQsImV4cCI6MTczNjc5MjgyNH0.YRLMOjx_JPQdzqjWGlTgAr2EDZAFCrYxlCffieI-4SI
+2025-01-12T19:27:18.597+01:00  INFO 21420 --- [user-service] [http-nio-8080-exec-6] o.league.app.controller.AuthController   : accessToken token: eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJVU0VSIl0sInN1YiI6InRhcmFuZW5rb3phaGFyQGdtYWlsLmNvbSIsImlhdCI6MTczNjcwNjQzOCwiZXhwIjoxNzM2NzA3MzM4fQ.eQeBZcCt7FaTlQK4n1Ym8ywimr3fQ3maElrSIaJtEZE
+2025-01-12T19:27:18.597+01:00  INFO 21420 --- [user-service] [http-nio-8080-exec-6] o.league.app.controller.AuthController   : refreshToken token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0YXJhbmVua296YWhhckBnbWFpbC5jb20iLCJpYXQiOjE3MzY3MDY0MzgsImV4cCI6MTczNjc5MjgzOH0.2kexjio7Eg3ky_3lADH9qIhrnRIoYWf_yzznHjIHYwE
+2025-01-12T19:27:22.855+01:00  INFO 21420 --- [user-service] [http-nio-8080-exec-7] org.league.app.service.JWTService        : Extracted email: taranenkozahar@gmail.com
+2025-01-12T19:27:25.141+01:00  INFO 21420 --- [user-service] [http-nio-8080-exec-4] org.league.app.service.JWTService        : Extracted email: taranenkozahar@gmail.com
+2025-01-12T19:27:27.551+01:00  INFO 21420 --- [user-service] [http-nio-8080-exec-3] org.league.app.service.JWTService        : Extracted email: taranenkozahar@gmail.com
+2025-01-12T19:30:19.664+01:00  INFO 21420 --- [user-service] [http-nio-8080-exec-10] org.league.app.service.JWTService        : Extracted email: taranenkozahar@gmail.com
+2025-01-12T19:30:25.371+01:00  INFO 21420 --- [user-service] [http-nio-8080-exec-4] o.league.app.controller.AuthController   : Logout endpoint reached with method POST
+2025-01-12T19:30:52.689+01:00  INFO 21420 --- [user-service] [http-nio-8080-exec-8] o.league.app.controller.AuthController   : accessToken token: eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJBVVRIT1JJU0VEX1VTRVIiLCJVU0VSIl0sInN1YiI6Imh1a28yOTkwQGdtYWlsLmNvbSIsImlhdCI6MTczNjcwNjY1MiwiZXhwIjoxNzM2NzA3NTUyfQ.uCJaWZtJaPEtcgD9bHLcoJXSJLV2Hh63X1ZbupsNUQo
+2025-01-12T19:30:52.689+01:00  INFO 21420 --- [user-service] [http-nio-8080-exec-8] o.league.app.controller.AuthController   : refreshToken token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJodWtvMjk5MEBnbWFpbC5jb20iLCJpYXQiOjE3MzY3MDY2NTIsImV4cCI6MTczNjc5MzA1Mn0.gKrn-SHghjoZCgRVeO61I-PbOBxCsMAX50NAEvTfQ_s
+2025-01-12T19:30:56.699+01:00  INFO 21420 --- [user-service] [http-nio-8080-exec-3] org.league.app.service.JWTService        : Extracted email: huko2990@gmail.com
+2025-01-12T19:31:14.685+01:00  WARN 21420 --- [user-service] [http-nio-8080-exec-6] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Cannot deserialize value of type `org.league.app.dto.UserChangePasswordDto` from Array value (token `JsonToken.START_ARRAY`)]
+2025-01-12T19:31:25.694+01:00  WARN 21420 --- [user-service] [http-nio-8080-exec-1] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Cannot deserialize value of type `org.league.app.dto.UserChangePasswordDto` from Array value (token `JsonToken.START_ARRAY`)]
+2025-01-12T19:31:26.995+01:00  WARN 21420 --- [user-service] [http-nio-8080-exec-4] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Cannot deserialize value of type `org.league.app.dto.UserChangePasswordDto` from Array value (token `JsonToken.START_ARRAY`)]
+2025-01-12T19:32:15.799+01:00  INFO 21420 --- [user-service] [http-nio-8080-exec-9] org.league.app.service.JWTService        : Extracted email: huko2990@gmail.com
+2025-01-12T19:32:22.452+01:00  INFO 21420 --- [user-service] [http-nio-8080-exec-6] org.league.app.service.JWTService        : Extracted email: huko2990@gmail.com
+2025-01-12T19:36:13.383+01:00  INFO 21420 --- [user-service] [SpringApplicationShutdownHook] o.s.c.c.s.ConsulServiceRegistry          : Deregistering service with consul: user-service-8080
+2025-01-12T19:36:13.479+01:00  INFO 21420 --- [user-service] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-01-12T19:36:13.580+01:00  INFO 21420 --- [user-service] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-01-12T19:36:13.680+01:00  INFO 21420 --- [user-service] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-01-12T19:36:37.063+01:00  INFO 7444 --- [user-service] [main] org.league.app.UserServiceApplication    : Starting UserServiceApplication using Java 23 with PID 7444 (C:\Users\huko2\IdeaProjects\ProLeagueManager\backend\user-service\target\classes started by huko2 in C:\Users\huko2\IdeaProjects\ProLeagueManager)
+2025-01-12T19:36:37.068+01:00  INFO 7444 --- [user-service] [main] org.league.app.UserServiceApplication    : No active profile set, falling back to 1 default profile: "default"
+2025-01-12T19:36:40.464+01:00  INFO 7444 --- [user-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-01-12T19:36:40.469+01:00  INFO 7444 --- [user-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-01-12T19:36:40.912+01:00  INFO 7444 --- [user-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 424 ms. Found 2 JPA repository interfaces.
+2025-01-12T19:36:40.947+01:00  INFO 7444 --- [user-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-01-12T19:36:40.950+01:00  INFO 7444 --- [user-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2025-01-12T19:36:40.982+01:00  INFO 7444 --- [user-service] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface org.league.app.database.repository.RoleGroupRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-01-12T19:36:40.983+01:00  INFO 7444 --- [user-service] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface org.league.app.database.repository.UserRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-01-12T19:36:40.983+01:00  INFO 7444 --- [user-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 14 ms. Found 0 Redis repository interfaces.
+2025-01-12T19:36:41.635+01:00  INFO 7444 --- [user-service] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=908a6830-c179-32d3-9af5-22d34837d4a1
+2025-01-12T19:36:42.641+01:00  WARN 7444 --- [user-service] [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig' of type [org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). The currently created BeanPostProcessor [lbRestClientPostProcessor] is declared through a non-static factory method on that class; consider declaring it as static instead.
+2025-01-12T19:36:42.650+01:00  WARN 7444 --- [user-service] [main] trationDelegate$BeanPostProcessorChecker : Bean 'deferringLoadBalancerInterceptor' of type [org.springframework.cloud.client.loadbalancer.DeferringLoadBalancerInterceptor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected into a currently created BeanPostProcessor [lbRestClientPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies.
+2025-01-12T19:36:43.451+01:00  INFO 7444 --- [user-service] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-01-12T19:36:43.484+01:00  INFO 7444 --- [user-service] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-01-12T19:36:43.485+01:00  INFO 7444 --- [user-service] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.30]
+2025-01-12T19:36:43.625+01:00  INFO 7444 --- [user-service] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-01-12T19:36:43.626+01:00  INFO 7444 --- [user-service] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 6420 ms
+2025-01-12T19:36:44.907+01:00  INFO 7444 --- [user-service] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-01-12T19:36:45.031+01:00  INFO 7444 --- [user-service] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.3.Final
+2025-01-12T19:36:45.103+01:00  INFO 7444 --- [user-service] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-01-12T19:36:45.961+01:00  INFO 7444 --- [user-service] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-01-12T19:36:46.053+01:00  INFO 7444 --- [user-service] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-01-12T19:36:46.435+01:00  INFO 7444 --- [user-service] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@685e5967
+2025-01-12T19:36:46.439+01:00  INFO 7444 --- [user-service] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-01-12T19:36:49.782+01:00  INFO 7444 --- [user-service] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-01-12T19:36:50.224+01:00  INFO 7444 --- [user-service] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-01-12T19:36:50.844+01:00  WARN 7444 --- [user-service] [main] o.s.aop.framework.CglibAopProxy          : Unable to proxy interface-implementing method [public final void org.springframework.web.filter.OncePerRequestFilter.doFilter(jakarta.servlet.ServletRequest,jakarta.servlet.ServletResponse,jakarta.servlet.FilterChain) throws jakarta.servlet.ServletException,java.io.IOException] because it is marked as final, consider using interface-based JDK proxies instead.
+2025-01-12T19:36:50.845+01:00  WARN 7444 --- [user-service] [main] o.s.aop.framework.CglibAopProxy          : Unable to proxy interface-implementing method [public final void org.springframework.web.filter.GenericFilterBean.init(jakarta.servlet.FilterConfig) throws jakarta.servlet.ServletException] because it is marked as final, consider using interface-based JDK proxies instead.
+2025-01-12T19:36:50.922+01:00  INFO 7444 --- [user-service] [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-01-12T19:36:52.489+01:00  INFO 7444 --- [user-service] [main] o.s.c.openfeign.FeignClientFactoryBean   : For 'notification-service' URL not provided. Will try picking an instance via load-balancing.
+2025-01-12T19:36:53.222+01:00  INFO 7444 --- [user-service] [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name userService
+2025-01-12T19:36:54.186+01:00  INFO 7444 --- [user-service] [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2025-01-12T19:36:55.492+01:00  WARN 7444 --- [user-service] [main] iguration$LoadBalancerCaffeineWarnLogger : Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2025-01-12T19:36:55.683+01:00  INFO 7444 --- [user-service] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-01-12T19:36:55.686+01:00  INFO 7444 --- [user-service] [main] o.s.c.c.s.ConsulServiceRegistry          : Registering service with consul: NewService{id='user-service-8080', name='user-service', tags=[], address='host.docker.internal', meta={secure=false}, port=8080, enableTagOverride=null, check=Check{script='null', dockerContainerID='null', shell='null', interval='10s', ttl='null', http='http://host.docker.internal:8080/actuator/health', method='null', header={}, tcp='null', timeout='null', deregisterCriticalServiceAfter='null', tlsSkipVerify=null, status='null', grpc='null', grpcUseTLS=null}, checks=null}
+2025-01-12T19:36:55.786+01:00  INFO 7444 --- [user-service] [main] org.league.app.UserServiceApplication    : Started UserServiceApplication in 20.78 seconds (process running for 34.536)
+2025-01-12T19:37:03.560+01:00  INFO 7444 --- [user-service] [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-01-12T19:37:03.560+01:00  INFO 7444 --- [user-service] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-01-12T19:37:03.564+01:00  INFO 7444 --- [user-service] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 4 ms
+2025-01-12T19:37:23.144+01:00  INFO 7444 --- [user-service] [http-nio-8080-exec-4] org.league.app.service.JWTService        : Extracted email: huko2990@gmail.com
+2025-01-12T19:37:52.035+01:00  INFO 7444 --- [user-service] [http-nio-8080-exec-9] org.league.app.service.JWTService        : Extracted email: huko2990@gmail.com
+2025-01-12T19:39:17.977+01:00  INFO 7444 --- [user-service] [SpringApplicationShutdownHook] o.s.c.c.s.ConsulServiceRegistry          : Deregistering service with consul: user-service-8080
+2025-01-12T19:39:18.007+01:00  INFO 7444 --- [user-service] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-01-12T19:39:18.013+01:00  INFO 7444 --- [user-service] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-01-12T19:39:18.035+01:00  INFO 7444 --- [user-service] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-01-12T19:39:26.756+01:00  INFO 16516 --- [user-service] [main] org.league.app.UserServiceApplication    : Starting UserServiceApplication using Java 23 with PID 16516 (C:\Users\huko2\IdeaProjects\ProLeagueManager\backend\user-service\target\classes started by huko2 in C:\Users\huko2\IdeaProjects\ProLeagueManager)
+2025-01-12T19:39:26.760+01:00  INFO 16516 --- [user-service] [main] org.league.app.UserServiceApplication    : No active profile set, falling back to 1 default profile: "default"
+2025-01-12T19:39:28.855+01:00  INFO 16516 --- [user-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-01-12T19:39:28.859+01:00  INFO 16516 --- [user-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-01-12T19:39:29.186+01:00  INFO 16516 --- [user-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 312 ms. Found 2 JPA repository interfaces.
+2025-01-12T19:39:29.249+01:00  INFO 16516 --- [user-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-01-12T19:39:29.255+01:00  INFO 16516 --- [user-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2025-01-12T19:39:29.302+01:00  INFO 16516 --- [user-service] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface org.league.app.database.repository.RoleGroupRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-01-12T19:39:29.303+01:00  INFO 16516 --- [user-service] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface org.league.app.database.repository.UserRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-01-12T19:39:29.303+01:00  INFO 16516 --- [user-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 24 ms. Found 0 Redis repository interfaces.
+2025-01-12T19:39:29.870+01:00  INFO 16516 --- [user-service] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=908a6830-c179-32d3-9af5-22d34837d4a1
+2025-01-12T19:39:30.751+01:00  WARN 16516 --- [user-service] [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig' of type [org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). The currently created BeanPostProcessor [lbRestClientPostProcessor] is declared through a non-static factory method on that class; consider declaring it as static instead.
+2025-01-12T19:39:30.757+01:00  WARN 16516 --- [user-service] [main] trationDelegate$BeanPostProcessorChecker : Bean 'deferringLoadBalancerInterceptor' of type [org.springframework.cloud.client.loadbalancer.DeferringLoadBalancerInterceptor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected into a currently created BeanPostProcessor [lbRestClientPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies.
+2025-01-12T19:39:31.647+01:00  INFO 16516 --- [user-service] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-01-12T19:39:31.669+01:00  INFO 16516 --- [user-service] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-01-12T19:39:31.670+01:00  INFO 16516 --- [user-service] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.30]
+2025-01-12T19:39:31.787+01:00  INFO 16516 --- [user-service] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-01-12T19:39:31.788+01:00  INFO 16516 --- [user-service] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 4918 ms
+2025-01-12T19:39:33.207+01:00  INFO 16516 --- [user-service] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-01-12T19:39:33.317+01:00  INFO 16516 --- [user-service] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.3.Final
+2025-01-12T19:39:33.378+01:00  INFO 16516 --- [user-service] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-01-12T19:39:33.892+01:00  INFO 16516 --- [user-service] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-01-12T19:39:33.941+01:00  INFO 16516 --- [user-service] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-01-12T19:39:34.314+01:00  INFO 16516 --- [user-service] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@6eff05e7
+2025-01-12T19:39:34.317+01:00  INFO 16516 --- [user-service] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-01-12T19:39:36.466+01:00  INFO 16516 --- [user-service] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-01-12T19:39:36.707+01:00  INFO 16516 --- [user-service] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-01-12T19:39:38.107+01:00  WARN 16516 --- [user-service] [main] o.s.aop.framework.CglibAopProxy          : Unable to proxy interface-implementing method [public final void org.springframework.web.filter.OncePerRequestFilter.doFilter(jakarta.servlet.ServletRequest,jakarta.servlet.ServletResponse,jakarta.servlet.FilterChain) throws jakarta.servlet.ServletException,java.io.IOException] because it is marked as final, consider using interface-based JDK proxies instead.
+2025-01-12T19:39:38.107+01:00  WARN 16516 --- [user-service] [main] o.s.aop.framework.CglibAopProxy          : Unable to proxy interface-implementing method [public final void org.springframework.web.filter.GenericFilterBean.init(jakarta.servlet.FilterConfig) throws jakarta.servlet.ServletException] because it is marked as final, consider using interface-based JDK proxies instead.
+2025-01-12T19:39:38.156+01:00  INFO 16516 --- [user-service] [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-01-12T19:39:39.188+01:00  INFO 16516 --- [user-service] [main] o.s.c.openfeign.FeignClientFactoryBean   : For 'notification-service' URL not provided. Will try picking an instance via load-balancing.
+2025-01-12T19:39:39.845+01:00  INFO 16516 --- [user-service] [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name userService
+2025-01-12T19:39:41.441+01:00  INFO 16516 --- [user-service] [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2025-01-12T19:39:42.831+01:00  WARN 16516 --- [user-service] [main] iguration$LoadBalancerCaffeineWarnLogger : Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2025-01-12T19:39:43.038+01:00  INFO 16516 --- [user-service] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-01-12T19:39:43.043+01:00  INFO 16516 --- [user-service] [main] o.s.c.c.s.ConsulServiceRegistry          : Registering service with consul: NewService{id='user-service-8080', name='user-service', tags=[], address='host.docker.internal', meta={secure=false}, port=8080, enableTagOverride=null, check=Check{script='null', dockerContainerID='null', shell='null', interval='10s', ttl='null', http='http://host.docker.internal:8080/actuator/health', method='null', header={}, tcp='null', timeout='null', deregisterCriticalServiceAfter='null', tlsSkipVerify=null, status='null', grpc='null', grpcUseTLS=null}, checks=null}
+2025-01-12T19:39:43.100+01:00  INFO 16516 --- [user-service] [main] org.league.app.UserServiceApplication    : Started UserServiceApplication in 17.715 seconds (process running for 20.798)
+2025-01-12T19:39:45.497+01:00  INFO 16516 --- [user-service] [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-01-12T19:39:45.497+01:00  INFO 16516 --- [user-service] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-01-12T19:39:45.500+01:00  INFO 16516 --- [user-service] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2025-01-12T19:39:46.501+01:00  INFO 16516 --- [user-service] [http-nio-8080-exec-1] o.league.app.controller.AuthController   : Logout endpoint reached with method POST
+2025-01-12T19:40:04.312+01:00  INFO 16516 --- [user-service] [http-nio-8080-exec-4] o.league.app.controller.AuthController   : accessToken token: eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJBVVRIT1JJU0VEX1VTRVIiLCJVU0VSIl0sInN1YiI6Imh1a28yOTkwQGdtYWlsLmNvbSIsImlhdCI6MTczNjcwNzIwNCwiZXhwIjoxNzM2NzA4MTA0fQ.09mpw71GoAvXsKP9hY8Oo-m-1WgGFavZsjA5htf1AlQ
+2025-01-12T19:40:04.313+01:00  INFO 16516 --- [user-service] [http-nio-8080-exec-4] o.league.app.controller.AuthController   : refreshToken token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJodWtvMjk5MEBnbWFpbC5jb20iLCJpYXQiOjE3MzY3MDcyMDQsImV4cCI6MTczNjc5MzYwNH0.LJq0a2UcZPbGyXwkCoABeDMLWoVP-vu0beVPG_LnMLM
+2025-01-12T19:40:13.223+01:00  INFO 16516 --- [user-service] [http-nio-8080-exec-6] o.league.app.controller.AuthController   : accessToken token: eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJBVVRIT1JJU0VEX1VTRVIiLCJVU0VSIl0sInN1YiI6Imh1a28yOTkwQGdtYWlsLmNvbSIsImlhdCI6MTczNjcwNzIxMywiZXhwIjoxNzM2NzA4MTEzfQ.h123kP9pY0yI210ZuHaJaGqbPiYjTml3YzGNepIU0bE
+2025-01-12T19:40:13.223+01:00  INFO 16516 --- [user-service] [http-nio-8080-exec-6] o.league.app.controller.AuthController   : refreshToken token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJodWtvMjk5MEBnbWFpbC5jb20iLCJpYXQiOjE3MzY3MDcyMTMsImV4cCI6MTczNjc5MzYxM30.RqCni60dWlgZPDXjB5Dq_DZ3wcN9HbeV12MS8MqcTpg
+2025-01-12T19:40:17.364+01:00  INFO 16516 --- [user-service] [http-nio-8080-exec-7] org.league.app.service.JWTService        : Extracted email: huko2990@gmail.com
+2025-01-12T19:41:17.144+01:00  INFO 16516 --- [user-service] [SpringApplicationShutdownHook] o.s.c.c.s.ConsulServiceRegistry          : Deregistering service with consul: user-service-8080
+2025-01-12T19:41:17.174+01:00  INFO 16516 --- [user-service] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-01-12T19:41:17.181+01:00  INFO 16516 --- [user-service] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-01-12T19:41:17.197+01:00  INFO 16516 --- [user-service] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-01-12T19:41:26.375+01:00  INFO 12720 --- [user-service] [main] org.league.app.UserServiceApplication    : Starting UserServiceApplication using Java 23 with PID 12720 (C:\Users\huko2\IdeaProjects\ProLeagueManager\backend\user-service\target\classes started by huko2 in C:\Users\huko2\IdeaProjects\ProLeagueManager)
+2025-01-12T19:41:26.381+01:00  INFO 12720 --- [user-service] [main] org.league.app.UserServiceApplication    : No active profile set, falling back to 1 default profile: "default"
+2025-01-12T19:41:28.635+01:00  INFO 12720 --- [user-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-01-12T19:41:28.638+01:00  INFO 12720 --- [user-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-01-12T19:41:28.967+01:00  INFO 12720 --- [user-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 316 ms. Found 2 JPA repository interfaces.
+2025-01-12T19:41:29.002+01:00  INFO 12720 --- [user-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-01-12T19:41:29.005+01:00  INFO 12720 --- [user-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2025-01-12T19:41:29.042+01:00  INFO 12720 --- [user-service] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface org.league.app.database.repository.RoleGroupRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-01-12T19:41:29.043+01:00  INFO 12720 --- [user-service] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface org.league.app.database.repository.UserRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-01-12T19:41:29.043+01:00  INFO 12720 --- [user-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 14 ms. Found 0 Redis repository interfaces.
+2025-01-12T19:41:29.603+01:00  INFO 12720 --- [user-service] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=908a6830-c179-32d3-9af5-22d34837d4a1
+2025-01-12T19:41:30.298+01:00  WARN 12720 --- [user-service] [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig' of type [org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). The currently created BeanPostProcessor [lbRestClientPostProcessor] is declared through a non-static factory method on that class; consider declaring it as static instead.
+2025-01-12T19:41:30.304+01:00  WARN 12720 --- [user-service] [main] trationDelegate$BeanPostProcessorChecker : Bean 'deferringLoadBalancerInterceptor' of type [org.springframework.cloud.client.loadbalancer.DeferringLoadBalancerInterceptor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected into a currently created BeanPostProcessor [lbRestClientPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies.
+2025-01-12T19:41:30.827+01:00  INFO 12720 --- [user-service] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-01-12T19:41:30.852+01:00  INFO 12720 --- [user-service] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-01-12T19:41:30.852+01:00  INFO 12720 --- [user-service] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.30]
+2025-01-12T19:41:30.973+01:00  INFO 12720 --- [user-service] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-01-12T19:41:30.974+01:00  INFO 12720 --- [user-service] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 4465 ms
+2025-01-12T19:41:32.368+01:00  INFO 12720 --- [user-service] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-01-12T19:41:32.493+01:00  INFO 12720 --- [user-service] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.3.Final
+2025-01-12T19:41:32.565+01:00  INFO 12720 --- [user-service] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-01-12T19:41:33.213+01:00  INFO 12720 --- [user-service] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-01-12T19:41:33.274+01:00  INFO 12720 --- [user-service] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-01-12T19:41:33.650+01:00  INFO 12720 --- [user-service] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@1e834a5b
+2025-01-12T19:41:33.653+01:00  INFO 12720 --- [user-service] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-01-12T19:41:36.116+01:00  INFO 12720 --- [user-service] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-01-12T19:41:36.368+01:00  INFO 12720 --- [user-service] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-01-12T19:41:36.979+01:00  WARN 12720 --- [user-service] [main] o.s.aop.framework.CglibAopProxy          : Unable to proxy interface-implementing method [public final void org.springframework.web.filter.OncePerRequestFilter.doFilter(jakarta.servlet.ServletRequest,jakarta.servlet.ServletResponse,jakarta.servlet.FilterChain) throws jakarta.servlet.ServletException,java.io.IOException] because it is marked as final, consider using interface-based JDK proxies instead.
+2025-01-12T19:41:36.979+01:00  WARN 12720 --- [user-service] [main] o.s.aop.framework.CglibAopProxy          : Unable to proxy interface-implementing method [public final void org.springframework.web.filter.GenericFilterBean.init(jakarta.servlet.FilterConfig) throws jakarta.servlet.ServletException] because it is marked as final, consider using interface-based JDK proxies instead.
+2025-01-12T19:41:37.050+01:00  INFO 12720 --- [user-service] [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-01-12T19:41:38.233+01:00  INFO 12720 --- [user-service] [main] o.s.c.openfeign.FeignClientFactoryBean   : For 'notification-service' URL not provided. Will try picking an instance via load-balancing.
+2025-01-12T19:41:39.165+01:00  INFO 12720 --- [user-service] [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name userService
+2025-01-12T19:41:40.118+01:00  INFO 12720 --- [user-service] [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2025-01-12T19:41:41.775+01:00  WARN 12720 --- [user-service] [main] iguration$LoadBalancerCaffeineWarnLogger : Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2025-01-12T19:41:42.035+01:00  INFO 12720 --- [user-service] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-01-12T19:41:42.047+01:00  INFO 12720 --- [user-service] [main] o.s.c.c.s.ConsulServiceRegistry          : Registering service with consul: NewService{id='user-service-8080', name='user-service', tags=[], address='host.docker.internal', meta={secure=false}, port=8080, enableTagOverride=null, check=Check{script='null', dockerContainerID='null', shell='null', interval='10s', ttl='null', http='http://host.docker.internal:8080/actuator/health', method='null', header={}, tcp='null', timeout='null', deregisterCriticalServiceAfter='null', tlsSkipVerify=null, status='null', grpc='null', grpcUseTLS=null}, checks=null}
+2025-01-12T19:41:42.130+01:00  INFO 12720 --- [user-service] [main] org.league.app.UserServiceApplication    : Started UserServiceApplication in 17.69 seconds (process running for 20.653)
+2025-01-12T19:41:45.586+01:00  INFO 12720 --- [user-service] [http-nio-8080-exec-3] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-01-12T19:41:45.586+01:00  INFO 12720 --- [user-service] [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-01-12T19:41:45.589+01:00  INFO 12720 --- [user-service] [http-nio-8080-exec-3] o.s.web.servlet.DispatcherServlet        : Completed initialization in 3 ms
+2025-01-12T19:45:49.958+01:00  INFO 12720 --- [user-service] [http-nio-8080-exec-8] org.league.app.service.JWTService        : Extracted email: huko2990@gmail.com
+2025-01-12T19:47:51.457+01:00  INFO 12720 --- [user-service] [SpringApplicationShutdownHook] o.s.c.c.s.ConsulServiceRegistry          : Deregistering service with consul: user-service-8080
+2025-01-12T19:47:51.509+01:00  INFO 12720 --- [user-service] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-01-12T19:47:51.525+01:00  INFO 12720 --- [user-service] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-01-12T19:47:51.550+01:00  INFO 12720 --- [user-service] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-01-12T19:47:59.796+01:00  INFO 21240 --- [user-service] [main] org.league.app.UserServiceApplication    : Starting UserServiceApplication using Java 23 with PID 21240 (C:\Users\huko2\IdeaProjects\ProLeagueManager\backend\user-service\target\classes started by huko2 in C:\Users\huko2\IdeaProjects\ProLeagueManager)
+2025-01-12T19:47:59.804+01:00  INFO 21240 --- [user-service] [main] org.league.app.UserServiceApplication    : No active profile set, falling back to 1 default profile: "default"
+2025-01-12T19:48:02.065+01:00  INFO 21240 --- [user-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-01-12T19:48:02.068+01:00  INFO 21240 --- [user-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-01-12T19:48:02.402+01:00  INFO 21240 --- [user-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 323 ms. Found 2 JPA repository interfaces.
+2025-01-12T19:48:02.449+01:00  INFO 21240 --- [user-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2025-01-12T19:48:02.452+01:00  INFO 21240 --- [user-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2025-01-12T19:48:02.488+01:00  INFO 21240 --- [user-service] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface org.league.app.database.repository.RoleGroupRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-01-12T19:48:02.489+01:00  INFO 21240 --- [user-service] [main] .RepositoryConfigurationExtensionSupport : Spring Data Redis - Could not safely identify store assignment for repository candidate interface org.league.app.database.repository.UserRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2025-01-12T19:48:02.490+01:00  INFO 21240 --- [user-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 18 ms. Found 0 Redis repository interfaces.
+2025-01-12T19:48:02.994+01:00  INFO 21240 --- [user-service] [main] o.s.cloud.context.scope.GenericScope     : BeanFactory id=908a6830-c179-32d3-9af5-22d34837d4a1
+2025-01-12T19:48:03.586+01:00  WARN 21240 --- [user-service] [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig' of type [org.springframework.cloud.client.loadbalancer.LoadBalancerAutoConfiguration$DeferringLoadBalancerInterceptorConfig] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). The currently created BeanPostProcessor [lbRestClientPostProcessor] is declared through a non-static factory method on that class; consider declaring it as static instead.
+2025-01-12T19:48:03.591+01:00  WARN 21240 --- [user-service] [main] trationDelegate$BeanPostProcessorChecker : Bean 'deferringLoadBalancerInterceptor' of type [org.springframework.cloud.client.loadbalancer.DeferringLoadBalancerInterceptor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected into a currently created BeanPostProcessor [lbRestClientPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies.
+2025-01-12T19:48:04.032+01:00  INFO 21240 --- [user-service] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2025-01-12T19:48:04.054+01:00  INFO 21240 --- [user-service] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-01-12T19:48:04.054+01:00  INFO 21240 --- [user-service] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.30]
+2025-01-12T19:48:04.179+01:00  INFO 21240 --- [user-service] [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-01-12T19:48:04.180+01:00  INFO 21240 --- [user-service] [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 4226 ms
+2025-01-12T19:48:05.241+01:00  INFO 21240 --- [user-service] [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-01-12T19:48:05.351+01:00  INFO 21240 --- [user-service] [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.3.Final
+2025-01-12T19:48:05.418+01:00  INFO 21240 --- [user-service] [main] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-01-12T19:48:05.934+01:00  INFO 21240 --- [user-service] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-01-12T19:48:05.986+01:00  INFO 21240 --- [user-service] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-01-12T19:48:06.268+01:00  INFO 21240 --- [user-service] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@6715a6da
+2025-01-12T19:48:06.270+01:00  INFO 21240 --- [user-service] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-01-12T19:48:08.159+01:00  INFO 21240 --- [user-service] [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-01-12T19:48:08.375+01:00  INFO 21240 --- [user-service] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-01-12T19:48:08.861+01:00  WARN 21240 --- [user-service] [main] o.s.aop.framework.CglibAopProxy          : Unable to proxy interface-implementing method [public final void org.springframework.web.filter.OncePerRequestFilter.doFilter(jakarta.servlet.ServletRequest,jakarta.servlet.ServletResponse,jakarta.servlet.FilterChain) throws jakarta.servlet.ServletException,java.io.IOException] because it is marked as final, consider using interface-based JDK proxies instead.
+2025-01-12T19:48:08.861+01:00  WARN 21240 --- [user-service] [main] o.s.aop.framework.CglibAopProxy          : Unable to proxy interface-implementing method [public final void org.springframework.web.filter.GenericFilterBean.init(jakarta.servlet.FilterConfig) throws jakarta.servlet.ServletException] because it is marked as final, consider using interface-based JDK proxies instead.
+2025-01-12T19:48:08.909+01:00  INFO 21240 --- [user-service] [main] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2025-01-12T19:48:10.041+01:00  INFO 21240 --- [user-service] [main] o.s.c.openfeign.FeignClientFactoryBean   : For 'notification-service' URL not provided. Will try picking an instance via load-balancing.
+2025-01-12T19:48:10.604+01:00  INFO 21240 --- [user-service] [main] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name userService
+2025-01-12T19:48:11.247+01:00  INFO 21240 --- [user-service] [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2025-01-12T19:48:12.331+01:00  WARN 21240 --- [user-service] [main] iguration$LoadBalancerCaffeineWarnLogger : Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2025-01-12T19:48:12.575+01:00  INFO 21240 --- [user-service] [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2025-01-12T19:48:12.578+01:00  INFO 21240 --- [user-service] [main] o.s.c.c.s.ConsulServiceRegistry          : Registering service with consul: NewService{id='user-service-8080', name='user-service', tags=[], address='host.docker.internal', meta={secure=false}, port=8080, enableTagOverride=null, check=Check{script='null', dockerContainerID='null', shell='null', interval='10s', ttl='null', http='http://host.docker.internal:8080/actuator/health', method='null', header={}, tcp='null', timeout='null', deregisterCriticalServiceAfter='null', tlsSkipVerify=null, status='null', grpc='null', grpcUseTLS=null}, checks=null}
+2025-01-12T19:48:12.655+01:00  INFO 21240 --- [user-service] [main] org.league.app.UserServiceApplication    : Started UserServiceApplication in 15.344 seconds (process running for 17.198)
+2025-01-12T19:48:18.612+01:00  INFO 21240 --- [user-service] [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-01-12T19:48:18.613+01:00  INFO 21240 --- [user-service] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2025-01-12T19:48:18.617+01:00  INFO 21240 --- [user-service] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 4 ms
+2025-01-12T19:48:25.221+01:00  INFO 21240 --- [user-service] [http-nio-8080-exec-2] org.league.app.service.JWTService        : Extracted email: huko2990@gmail.com
+2025-01-12T19:53:33.420+01:00  INFO 21240 --- [user-service] [http-nio-8080-exec-2] o.league.app.controller.AuthController   : accessToken token: eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJBVVRIT1JJU0VEX1VTRVIiLCJVU0VSIl0sInN1YiI6Imh1a28yOTkwQGdtYWlsLmNvbSIsImlhdCI6MTczNjcwODAxMywiZXhwIjoxNzM2NzA4OTEzfQ.hK8LF2BFdxRGYUO-RPfORH6g80Fr_-ESlGECqH8o19Y
+2025-01-12T19:53:33.431+01:00  INFO 21240 --- [user-service] [http-nio-8080-exec-2] o.league.app.controller.AuthController   : refreshToken token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJodWtvMjk5MEBnbWFpbC5jb20iLCJpYXQiOjE3MzY3MDgwMTMsImV4cCI6MTczNjc5NDQxM30.U8EfG-8PT74ooo-70UTSoER0koTt6ZOsC0Y-_xYGCkQ
+2025-01-12T19:53:43.941+01:00  INFO 21240 --- [user-service] [http-nio-8080-exec-4] o.league.app.controller.AuthController   : accessToken token: eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJBVVRIT1JJU0VEX1VTRVIiLCJVU0VSIl0sInN1YiI6Imh1a28yOTkwQGdtYWlsLmNvbSIsImlhdCI6MTczNjcwODAyMywiZXhwIjoxNzM2NzA4OTIzfQ.CnkMplVgpTbTE27L7mwPbIrI5xs4FYpQS07HLD6KYMw
+2025-01-12T19:53:43.941+01:00  INFO 21240 --- [user-service] [http-nio-8080-exec-4] o.league.app.controller.AuthController   : refreshToken token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJodWtvMjk5MEBnbWFpbC5jb20iLCJpYXQiOjE3MzY3MDgwMjMsImV4cCI6MTczNjc5NDQyM30.9lYzQ9JBoZ1Thw6I-hOm6b_GHbKO_wdF-IEY4e8vJe8
+2025-01-12T19:53:49.563+01:00  INFO 21240 --- [user-service] [http-nio-8080-exec-6] org.league.app.service.JWTService        : Extracted email: huko2990@gmail.com
+2025-01-12T19:55:51.149+01:00  INFO 21240 --- [user-service] [http-nio-8080-exec-2] o.league.app.controller.AuthController   : accessToken token: eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJBVVRIT1JJU0VEX1VTRVIiLCJVU0VSIl0sInN1YiI6Imh1a28yOTkwQGdtYWlsLmNvbSIsImlhdCI6MTczNjcwODE1MSwiZXhwIjoxNzM2NzA5MDUxfQ.Gzt_hhB9O7NBcrxRWhf7TumbvoM7vPvUgEz1Nd9QFPY
+2025-01-12T19:55:51.156+01:00  INFO 21240 --- [user-service] [http-nio-8080-exec-2] o.league.app.controller.AuthController   : refreshToken token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJodWtvMjk5MEBnbWFpbC5jb20iLCJpYXQiOjE3MzY3MDgxNTEsImV4cCI6MTczNjc5NDU1MX0.s2qUO9yHh0UCiNG-DB8bvcQ5THJvS8wK2QP_CnrL57U
+2025-01-12T19:56:03.055+01:00  INFO 21240 --- [user-service] [http-nio-8080-exec-6] o.league.app.controller.AuthController   : accessToken token: eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJBVVRIT1JJU0VEX1VTRVIiLCJVU0VSIl0sInN1YiI6Imh1a28yOTkwQGdtYWlsLmNvbSIsImlhdCI6MTczNjcwODE2MywiZXhwIjoxNzM2NzA5MDYzfQ.VKCA4sfCv_AAvqPo-ON4TNyq1TTeAW6s2JPt17jI5TU
+2025-01-12T19:56:03.056+01:00  INFO 21240 --- [user-service] [http-nio-8080-exec-6] o.league.app.controller.AuthController   : refreshToken token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJodWtvMjk5MEBnbWFpbC5jb20iLCJpYXQiOjE3MzY3MDgxNjMsImV4cCI6MTczNjc5NDU2M30.XQicKoi1vYZBRiA-wqeGaphioDCAREf89uM7Sc0yiLE
+2025-01-12T19:56:07.328+01:00  INFO 21240 --- [user-service] [http-nio-8080-exec-7] org.league.app.service.JWTService        : Extracted email: huko2990@gmail.com
+2025-01-12T19:56:10.556+01:00  INFO 21240 --- [user-service] [http-nio-8080-exec-9] org.league.app.service.JWTService        : Extracted email: huko2990@gmail.com
+2025-01-12T19:56:18.107+01:00  INFO 21240 --- [user-service] [http-nio-8080-exec-2] org.league.app.service.JWTService        : Extracted email: huko2990@gmail.com
+2025-01-12T19:56:23.442+01:00  WARN 21240 --- [user-service] [http-nio-8080-exec-6] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Cannot deserialize value of type `org.league.app.dto.UserPersonalDataDto` from Array value (token `JsonToken.START_ARRAY`)]
+2025-01-12T19:57:16.804+01:00  INFO 21240 --- [user-service] [http-nio-8080-exec-3] org.league.app.service.JWTService        : Extracted email: huko2990@gmail.com
+2025-01-12T19:57:56.749+01:00  INFO 21240 --- [user-service] [http-nio-8080-exec-1] org.league.app.service.JWTService        : Extracted email: huko2990@gmail.com
+2025-01-12T19:57:59.650+01:00  INFO 21240 --- [user-service] [http-nio-8080-exec-4] org.league.app.service.JWTService        : Extracted email: huko2990@gmail.com
+2025-01-12T19:58:01.572+01:00  INFO 21240 --- [user-service] [http-nio-8080-exec-6] org.league.app.service.JWTService        : Extracted email: huko2990@gmail.com
+2025-01-12T19:58:05.138+01:00  INFO 21240 --- [user-service] [http-nio-8080-exec-9] org.league.app.service.JWTService        : Extracted email: huko2990@gmail.com
+2025-01-12T19:58:07.942+01:00  INFO 21240 --- [user-service] [http-nio-8080-exec-10] org.league.app.service.JWTService        : Extracted email: huko2990@gmail.com
+2025-01-12T19:58:11.707+01:00  INFO 21240 --- [user-service] [http-nio-8080-exec-1] org.league.app.service.JWTService        : Extracted email: huko2990@gmail.com
+2025-01-12T19:59:24.233+01:00  INFO 21240 --- [user-service] [http-nio-8080-exec-7] org.league.app.service.JWTService        : Extracted email: huko2990@gmail.com
+2025-01-12T20:00:28.294+01:00  INFO 21240 --- [user-service] [http-nio-8080-exec-8] org.league.app.service.JWTService        : Extracted email: huko2990@gmail.com
+2025-01-12T20:02:24.752+01:00  INFO 21240 --- [user-service] [http-nio-8080-exec-8] org.league.app.service.JWTService        : Extracted email: huko2990@gmail.com
+2025-01-12T20:03:57.142+01:00  INFO 21240 --- [user-service] [http-nio-8080-exec-1] org.league.app.service.JWTService        : Extracted email: huko2990@gmail.com
+2025-01-12T20:05:04.514+01:00  INFO 21240 --- [user-service] [http-nio-8080-exec-6] org.league.app.service.JWTService        : Extracted email: huko2990@gmail.com
+2025-01-12T20:06:13.694+01:00  INFO 21240 --- [user-service] [http-nio-8080-exec-8] org.league.app.service.JWTService        : Extracted email: huko2990@gmail.com
+2025-01-12T20:06:51.424+01:00  INFO 21240 --- [user-service] [http-nio-8080-exec-6] org.league.app.service.JWTService        : Extracted email: huko2990@gmail.com
+2025-01-12T20:06:54.103+01:00  WARN 21240 --- [user-service] [http-nio-8080-exec-9] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Cannot deserialize value of type `java.time.LocalDate` from String "2005-001-18": Failed to deserialize java.time.LocalDate: (java.time.format.DateTimeParseException) Text '2005-001-18' could not be parsed at index 7]
+2025-01-12T20:08:26.630+01:00  INFO 21240 --- [user-service] [http-nio-8080-exec-4] org.league.app.service.JWTService        : Extracted email: huko2990@gmail.com
+2025-01-12T20:08:27.811+01:00  WARN 21240 --- [user-service] [http-nio-8080-exec-6] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Cannot deserialize value of type `java.time.LocalDate` from String "[object HTMLInputElement]-[object HTMLInputElement]-[object HTMLInputElement]": Failed to deserialize java.time.LocalDate: (java.time.format.DateTimeParseException) Text '[object HTMLInputElement]-[object HTMLInputElement]-[object HTML...' could not be parsed at index 0]
+2025-01-12T20:08:38.763+01:00  WARN 21240 --- [user-service] [http-nio-8080-exec-10] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Cannot deserialize value of type `java.time.LocalDate` from String "[object HTMLInputElement]-[object HTMLInputElement]-[object HTMLInputElement]": Failed to deserialize java.time.LocalDate: (java.time.format.DateTimeParseException) Text '[object HTMLInputElement]-[object HTMLInputElement]-[object HTML...' could not be parsed at index 0]
+2025-01-12T20:11:18.306+01:00  INFO 21240 --- [user-service] [http-nio-8080-exec-3] org.league.app.service.JWTService        : Extracted email: huko2990@gmail.com
+2025-01-12T20:14:17.106+01:00  INFO 21240 --- [user-service] [http-nio-8080-exec-5] org.league.app.service.JWTService        : Extracted email: huko2990@gmail.com
+2025-01-12T20:14:29.638+01:00  INFO 21240 --- [user-service] [http-nio-8080-exec-3] org.league.app.service.JWTService        : Extracted email: huko2990@gmail.com
+2025-01-12T20:14:32.701+01:00  INFO 21240 --- [user-service] [http-nio-8080-exec-6] org.league.app.service.JWTService        : Extracted email: huko2990@gmail.com
+2025-01-12T20:14:47.897+01:00  INFO 21240 --- [user-service] [http-nio-8080-exec-8] org.league.app.service.JWTService        : Extracted email: huko2990@gmail.com
+2025-01-12T20:15:39.695+01:00  INFO 21240 --- [user-service] [http-nio-8080-exec-9] org.league.app.service.JWTService        : Extracted email: huko2990@gmail.com
+2025-01-12T20:16:20.142+01:00  WARN 21240 --- [user-service] [http-nio-8080-exec-6] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Cannot deserialize value of type `java.time.LocalDate` from String "2005-01-00": Failed to deserialize java.time.LocalDate: (java.time.format.DateTimeParseException) Text '2005-01-00' could not be parsed: Invalid value for DayOfMonth (valid values 1 - 28/31): 0]
+2025-01-12T20:16:26.519+01:00  WARN 21240 --- [user-service] [http-nio-8080-exec-7] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Cannot deserialize value of type `java.time.LocalDate` from String "-00-00": Failed to deserialize java.time.LocalDate: (java.time.format.DateTimeParseException) Text '-00-00' could not be parsed at index 1]
+2025-01-12T20:18:33.809+01:00  INFO 21240 --- [user-service] [http-nio-8080-exec-6] org.league.app.service.JWTService        : Extracted email: huko2990@gmail.com
+2025-01-12T20:18:41.405+01:00  WARN 21240 --- [user-service] [http-nio-8080-exec-10] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Cannot deserialize value of type `java.time.LocalDate` from String "-00-00": Failed to deserialize java.time.LocalDate: (java.time.format.DateTimeParseException) Text '-00-00' could not be parsed at index 1]
+2025-01-12T20:18:59.161+01:00  INFO 21240 --- [user-service] [http-nio-8080-exec-4] org.league.app.service.JWTService        : Extracted email: huko2990@gmail.com
+2025-01-12T20:19:06.306+01:00  WARN 21240 --- [user-service] [http-nio-8080-exec-7] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Cannot deserialize value of type `java.time.LocalDate` from String "-00-00": Failed to deserialize java.time.LocalDate: (java.time.format.DateTimeParseException) Text '-00-00' could not be parsed at index 1]
+2025-01-12T20:21:58.780+01:00  INFO 21240 --- [user-service] [http-nio-8080-exec-8] org.league.app.service.JWTService        : Extracted email: huko2990@gmail.com
+2025-01-12T20:22:43.856+01:00  INFO 21240 --- [user-service] [http-nio-8080-exec-2] org.league.app.service.JWTService        : Extracted email: huko2990@gmail.com
+2025-01-12T20:23:12.861+01:00  INFO 21240 --- [user-service] [http-nio-8080-exec-7] org.league.app.service.JWTService        : Extracted email: huko2990@gmail.com
+2025-01-12T20:23:18.477+01:00  INFO 21240 --- [user-service] [http-nio-8080-exec-10] org.league.app.service.JWTService        : Extracted email: huko2990@gmail.com
