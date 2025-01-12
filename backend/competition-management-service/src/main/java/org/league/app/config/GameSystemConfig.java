@@ -26,7 +26,7 @@ public class GameSystemConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/actuator/health").permitAll()
-                        .requestMatchers("/api/game-system/create-game-system", "/api/game-system/get-system-by-name").hasAuthority("EDITOR"))
+                        .requestMatchers("/api/game-system/create-game-system", "/api/game-system/**").hasAuthority("EDITOR"))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
