@@ -50,7 +50,9 @@ public class JWTFilter extends OncePerRequestFilter {
                 || path.equals("/api/auth/is-access-token")
                 || path.equals("/api/auth/load-user-by-email")
                 || path.equals("/api/auth/validate-token")
-                || path.equals("/api/auth/get-user-by-email");
+                || path.equals("/api/auth/get-user-by-email")
+                || path.equals("/api/user/send-reset-password")
+                || path.startsWith("/api/user/reset-password/");
     }
 
     @Override

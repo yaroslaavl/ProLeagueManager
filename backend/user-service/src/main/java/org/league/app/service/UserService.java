@@ -87,7 +87,7 @@ public class UserService implements UserDetailsService {
         }
 
         String resetToken = UUID.randomUUID().toString();
-        String resetUrl = "http://localhost:8765/auth/reset-password?token=" + resetToken;
+        String resetUrl = "http://localhost:8765/user/reset-password/" + resetToken;
 
         try {
             notificationFeignClient.sendEmail(new EmailRequest(
