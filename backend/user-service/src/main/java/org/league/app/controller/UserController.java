@@ -121,7 +121,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/set-new-password/{token}")
+    @PostMapping("/reset-password/{token}")
     public ResponseEntity<String> setNewPassword(@PathVariable("token") String token,
                                                  @RequestBody @Validated(EditAction.class) ResetPasswordDto resetPasswordDto) {
         try {
