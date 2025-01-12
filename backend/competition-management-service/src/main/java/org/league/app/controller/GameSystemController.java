@@ -19,8 +19,9 @@ public class GameSystemController {
         return ResponseEntity.ok(gameSystemService.createGameSystem(gameSystemCreateEditDto));
     }
 
-    @GetMapping("get-system-by-name")
-    public ResponseEntity<GameSystemReadDto> getGameSystemByName(@RequestParam("systemName") String systemName) {
-        return ResponseEntity.ok(gameSystemService.getGameSystem(systemName));
+    @GetMapping("/{id}")
+    public ResponseEntity<GameSystemReadDto> getGameSystemById(@PathVariable("id") Integer id) {
+        GameSystemReadDto gameSystem = gameSystemService.getGameSystemById(id);
+        return ResponseEntity.ok(gameSystem);
     }
 }
