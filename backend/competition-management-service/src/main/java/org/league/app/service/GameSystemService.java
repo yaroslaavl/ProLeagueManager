@@ -16,6 +16,7 @@ import java.util.Optional;
 
 @Slf4j
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class GameSystemService {
 
@@ -36,14 +37,20 @@ public class GameSystemService {
         return gameSystemMapper.toDto(gameSystem);
     }
 
-    public GameSystemReadDto getGameSystem(String systemName) {
-        GameSystem gameSystem = gameSystemRepository.findGameSystemBySystemName(systemName)
+    public GameSystemReadDto getGameSystemById(Integer id) {
+        GameSystem gameSystem = gameSystemRepository.findById(id)
                 .orElseThrow(() -> new GameSystemNotFoundException("Game system not found"));
 
         return gameSystemMapper.toDto(gameSystem);
     }
 
+    @Transactional
+    public void deleteGameSystemById(Integer id) {
+        GameSystem gameSystem = gameSystemRepository.findById(id)
+                .orElseThrow(() -> new GameSystemNotFoundException("Game system not found"));
 
-
+        log.info("Deleting game system: {}", gameSystem);
+        gameSystemRepository.delete(gameSystem);
+    }
 
 }
