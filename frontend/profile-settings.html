@@ -88,43 +88,43 @@
       <div class="username_input">
         <div class="input-group">
           <p>Nazwa użytkownika</p>
-          <input maxlength="64" type="text" placeholder="Nickname" required>
+          <input id="nickname" maxlength="64" type="text" placeholder="Nickname" required>
         </div>
       </div>
       <div class="email_input">
         <div class="input-group">
           <p>Adres e-mail</p>
-          <input maxlength="64" type="email" placeholder="example@gmail.com" disabled>
+          <input id="email" maxlength="64" type="email" placeholder="example@gmail.com" disabled>
         </div>
       </div>
       <div class="imie_nazwisko_input">
         <div class="input-group">
           <p>Imię</p>
-          <input maxlength="64" type="text" placeholder="Imię" required>
+          <input id="firstName" maxlength="64" type="text" placeholder="Imię" required>
         </div>
         <div class="input-group">
           <p>Nazwisko</p>
-          <input maxlength="64" type="text" placeholder="Nazwisko" required>
+          <input id="lastName" maxlength="64" type="text" placeholder="Nazwisko" required>
         </div>
       </div>
       <div class="birthdate_input">
         <div class="input-group">
           <p>Dzień</p>
-          <input id="dayInput" type="number" placeholder="Dzień" required>
+          <input id="dayInput" type="number" placeholder="Dzień" disabled>
         </div>
         <div class="input-group">
           <p>Miesiąc</p>
-          <input id="monthInput" type="number" placeholder="Miesiąc" required>
+          <input id="monthInput" type="number" placeholder="Miesiąc" disabled>
         </div>
         <div class="input-group">
           <p>Rok</p>
-          <input id="yearInput" type="number" placeholder="Rok" required>
+          <input id="yearInput" type="number" placeholder="Rok" disabled>
         </div>
       </div>
 
       <!-- Добавляем кнопку "Zapisz" -->
       <div class="save-btn-container">
-        <button type="submit" class="save-btn">Zapisz</button>
+        <button id="submit" type="submit" class="save-btn">Zapisz</button>
       </div>
     </div>
 

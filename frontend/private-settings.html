@@ -90,7 +90,7 @@
         <p>Weryfikacja adresu e-mail  <span style="margin-left: 40px">Status: <span style="color: #EA3943" id="status">Off</span></span></p>
         <div class="underver-text">
         <p class="under-text">Jesli chcesz zmienié swój adres e-mail,<br>skontaktuj sie z <a href="main.html">Customer Service</a></p>
-        <button>Zweryfikować</button>
+        <button id="verify">Zweryfikować</button>
         </div>
       </div>
       </div>
@@ -98,7 +98,7 @@
           <p>Hasło</p>
           <div style="display: flex">
           <p class="under-text">Ustaw unikalne hasło dla lepszej ochrony</p>
-          <button>Zmień hasło</button>
+          <button id="changePassword">Zmień hasło</button>
           </div>
       </div>
       <div class="delete">
@@ -117,7 +117,15 @@
         <button class="close-overlay-btn" onclick="closeOverlay()">Zamknac</button>
       </div>
     </div>
-
+    <div id="changePasswordOverlay" class="overlay">
+      <div class="overlay-content">
+        <h2>Wprowadź hasło</h2>
+        <input type="password" class="password-input" placeholder="Stare hasło" id="oldPass">
+        <input type="password" class="password-input" placeholder="Nowe hasło" id="newPass">
+        <button id="updatePassword" class="submit" onclick="">Zmienić hasło</button>
+        <button class="close-overlay-btn" onclick="changePasswordCloseOverlay()">Zamknac</button>
+      </div>
+    </div>
 </main>
 </div>
 </body>
