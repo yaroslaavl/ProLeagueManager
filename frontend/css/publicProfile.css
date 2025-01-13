@@ -315,3 +315,7 @@ body {
   background: #EFF2F5;
   border-radius: 12px;
 }
+.blue {
+  color: #3861FB;
+  font-weight: bold;
+}

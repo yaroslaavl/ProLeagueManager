@@ -184,7 +184,6 @@ footer {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-
   border: none;
   cursor: pointer;
   transition: background 0.3s ease;
@@ -199,12 +198,16 @@ footer {
 }
 .register{
   width: 100%;
-  height: 100%;
+  height: 80%;
   background: #3861FB;
   color: white;
   border-radius: 12px;
   border: 0;
   font-weight: bold;
   cursor: pointer;
+  margin-top: 4px;
 }
-
+.blue {
+  color: #3861FB;
+  font-weight: bold;
+}
