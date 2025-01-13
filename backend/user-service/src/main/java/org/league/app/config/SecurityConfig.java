@@ -84,6 +84,7 @@ public class SecurityConfig {
                                 "/api/auth/get-token",
                                 "/api/auth/set-token",
                                 "/api/auth/delete-token",
+                                "/api/user/reset-password-check/**",
                                 "/api/user/reset-password/**",
                                 "/api/auth/is-access-token",
                                 "/api/auth/load-user-by-email",
