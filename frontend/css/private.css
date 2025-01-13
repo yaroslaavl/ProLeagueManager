@@ -607,3 +607,7 @@ footer {
   border-radius: 12px;
   cursor: pointer;
 }
+.blue {
+  color: #3861FB;
+  font-weight: bold;
+}
