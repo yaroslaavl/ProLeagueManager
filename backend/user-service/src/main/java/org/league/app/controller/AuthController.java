@@ -3,6 +3,7 @@ package org.league.app.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.league.app.database.entity.Role;
 import org.league.app.database.repository.UserRepository;
@@ -30,6 +31,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -107,11 +109,18 @@ public class AuthController {
         jwtService.generateRefreshToken(request,response);
     }
 
+    @SneakyThrows
     @GetMapping("/activate")
-    public ResponseEntity<Boolean> activate(@RequestParam("token") String token){
+    public void activate(@RequestParam("token") String token, HttpServletResponse response) {
         boolean confirmation = userService.emailConfirmation(token);
-        log.info("'{}' is activated",token);
-        return ResponseEntity.ok(confirmation);
+
+        if (!confirmation) {
+            log.info("Activation failed for token '{}'", token);
+            response.sendRedirect("http://localhost:63342/ProLeagueManager/frontend/404.html");
+            return;
+        }
+        log.info("'{}' is activated", token);
+        response.sendRedirect("http://localhost:63342/ProLeagueManager/frontend/verificationEmail.html");
     }
 
     @PostMapping("/extract-email")

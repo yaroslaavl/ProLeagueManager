@@ -1,6 +1,8 @@
 package org.league.app.controller;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.league.app.database.entity.RoleGroup;
 import org.league.app.database.entity.User;
@@ -8,6 +10,7 @@ import org.league.app.database.repository.UserRepository;
 import org.league.app.dto.*;
 import org.league.app.exception.UserEmailNotFoundException;
 import org.league.app.mapper.UserMapper;
+import org.league.app.redisclient.RedisClient;
 import org.league.app.service.UserService;
 import org.league.app.validation.CreateAction;
 import org.league.app.validation.EditAction;
@@ -21,7 +24,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
-
 @Slf4j
 @RestController
 @AllArgsConstructor
@@ -31,6 +33,7 @@ public class UserController {
     private final UserService userService;
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final RedisClient redisClient;
 
     @DeleteMapping("/delete-user-account")
     public ResponseEntity<?> deleteUser(@RequestBody @Validated({EditAction.class}) UserDeleteDto userDeleteDto) {
@@ -130,6 +133,19 @@ public class UserController {
         } catch (IllegalArgumentException e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    @SneakyThrows
+    @GetMapping("/reset-password-check/{token}")
+    public ResponseEntity<Void> handleResetPassword(@PathVariable("token") String token, HttpServletResponse response) {
+        String resetToken = redisClient.get(token);
+
+        if (resetToken == null) {
+            response.sendRedirect("http://localhost:63342/ProLeagueManager/frontend/404.html");
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        response.sendRedirect("http://localhost:63342/ProLeagueManager/frontend/resetPassword.html?token=" + token);
+        return new ResponseEntity<>(HttpStatus.TEMPORARY_REDIRECT);
     }
 
 }
