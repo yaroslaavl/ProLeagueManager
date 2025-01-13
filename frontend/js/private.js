@@ -83,6 +83,7 @@ async function logOut(){
 }
 async function verifyEmail(){
   try {
+    const accToken = localStorage.getItem('accToken');
     const url = "http://localhost:8765/user/resend-activation-email";
     const response = await fetch(url,{
       method:"POST",
