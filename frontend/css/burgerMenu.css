@@ -1,45 +1,67 @@
 .menu-container {
-  position: relative; /* Родитель должен иметь относительное позиционирование */
+  position: relative;
 }
-
 .menu-popup {
-  display: none; /* Скрыто по умолчанию */
-  flex-direction: column;
-  justify-content: space-between;
-  width: 150px; /* Укажите подходящую ширину */
-  background: #EFF2F5;
+  position: absolute;
+  top: 50px;
+  right: 0;
+  width: 300px;
+  background: #fff;
+  border: 1px solid #ddd;
   border-radius: 8px;
-  position: absolute; /* Абсолютное позиционирование относительно .menu-container */
-  top: 50px; /* Отступ вниз от кнопки */
-  right: 0; /* Меню выровнено по правому краю кнопки */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  z-index: 1000; /* Убедитесь, что меню отображается поверх других элементов */
-}
-
-.menu-popup > a {
-  text-decoration: none;
-  color: #000000;
-  font-size: 14px;
-  font-weight: bold;
+  display: none;
+  flex-direction: column;
   padding: 10px;
-  display: flex; /* Расположить текст и иконки горизонтально */
-  align-items: center; /* Центрируем по вертикали */
-  gap: 8px; /* Отступ между текстом и иконкой */
+}
+.menu-popup.active {
+  display: flex;
+}
+.menu-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
 }
+.user-info {
+  display: flex;
+  align-items: center;
 
-.menu-popup > a:hover {
-  color: #3861FB;
-  background-color: #e9eefb; /* Добавьте эффект наведения */
-  transition: 0.3s;
+  gap: 10px;
 }
-
-.menu-popup > a > img {
-  width: 16px;
-  height: 16px;
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid #ddd;
 
 }
-.menu-btn{
-  margin-top: 0;
+.email {
+  display: block;
+  color: #888;
+  font-size: 12px;
 }
-
+.menu-settings {
+  padding: 10px 0;
+  border-bottom: 1px solid #ddd;
+}
+.setting-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 0;
+}
+.menu-links {
+  padding: 10px 0;
+}
+.menu-link {
+  display: block;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  text-decoration: none;
+  color: #333;
+  border-radius: 4px;
+  transition: background 0.3s;
+}
+.menu-link:hover {
+  background: #f5f5f5;
+}
