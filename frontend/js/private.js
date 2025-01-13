@@ -1,3 +1,5 @@
+refreshToken();
+getUserData();
 document.addEventListener("DOMContentLoaded", () => {
   const pageLoadSpan = document.querySelector(".footer-content span:nth-child(3)");
   const htmlLoadSpan = document.querySelector(".footer-content span:nth-child(4)");
@@ -36,9 +38,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     window.location.href = "main.html";
   }
 })
-refreshToken();
-getUserData();
-const logOutBtn = document.getElementById('log-out').addEventListener('click',logOut);
+
 const accToken = localStorage.getItem('accToken');
 const deleteAcc = document.getElementById('deleteAcc').addEventListener('click',openOverlay);
 const changePasswordOverlay = document.getElementById('changePassword').addEventListener('click',changePasswordOpenOverlay);

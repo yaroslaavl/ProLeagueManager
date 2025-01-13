@@ -1,4 +1,3 @@
-refreshtoken();
 document.addEventListener("DOMContentLoaded", () => {
   const pageLoadSpan = document.querySelector(".footer-content span:nth-child(3)");
   const htmlLoadSpan = document.querySelector(".footer-content span:nth-child(4)");
@@ -30,25 +29,28 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
-document.addEventListener("DOMContentLoaded",()=>{
-  const accToken = localStorage.getItem("accToken");
-  const refreshToken = localStorage.getItem("refToken");
-  if(accToken === null || refreshToken === null){
-    window.location.href = "main.html";
+
+let accToken = localStorage.getItem("accToken");
+let refToken = localStorage.getItem("refToken");
+
+
+
+if(accToken === null || refToken === null){
+  var notifBtn = document.getElementById("notification_button");
+  var burgerAndUser = document.getElementById("header_right");
+  while (burgerAndUser.firstChild) {
+    burgerAndUser.removeChild(burgerAndUser.firstChild);
   }
-})
+  while (notifBtn.firstChild) {
+    notifBtn.removeChild(notifBtn.firstChild);
+  }
+  burgerAndUser.innerHTML = `
+  <a href="login.html" class="registerBtn" style="width: 100%;height: 100%;cursor: pointer"><button class="register">Zaloguj sie</button></a>
+  `
+  burgerAndUser.style.backgroundColor = "white"
 
-const accToken = localStorage.getItem("accToken");
-const refreshToken = localStorage.getItem("refToken");
-
-if(accToken === null || refreshToken === null){
-  window.location.href =
-    "main.html";
-}else{
-  getUserData();
 }
-
-async function refreshtoken(){
+async function refreshToken(){
   try {
     const url = "http://localhost:8765/auth/refresh-token";
     const refToken = localStorage.getItem("refToken");
@@ -65,48 +67,6 @@ async function refreshtoken(){
     localStorage.setItem("refToken",Tokens.refreshToken);
   }catch (err){
     console.error(err);
-  }
-}
-async function getUserData() {
-  try {
-    const url = `http://localhost:8765/user/profile`;
-    const response = await fetch(url, {
-      method: "GET", // Указываем метод GET
-      headers: {
-        "Authorization": `Bearer ${accToken}`, // Добавляем заголовок Authorization
-        "Content-Type": "application/json" // Указываем формат данных
-      }
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const data = await response.json(); // Парсим JSON-ответ
-    console.log(data); // Выводим данные в консоль или используем их дальше
-    const userName = data.username;
-    const firstName = data.firstName;
-    const lastName = data.lastName;
-    const dateOfBirth = data.birthDate.split('-');
-    let createdAt = new Date(data.createdAt).toLocaleDateString();
-    let userImg;
-    try {
-      const res = await fetch(`http://localhost:8765/user/avatar/${userName}`);
-      const urlImg =res.url;
-      console.log(urlImg);
-      userImg = urlImg;
-    }catch (err){
-      console.error('User image are not received!');
-    }
-
-  console.log(firstName + " " + lastName)
-  document.getElementById('first_last_name').innerHTML = firstName + " " + lastName;
-  document.getElementById("nickname").innerHTML = userName;
-  document.getElementById("date_of_birth").innerHTML = dateOfBirth[2]+'.'+dateOfBirth[1]+'.'+dateOfBirth[0]
-  document.getElementById("creation-date").innerHTML = createdAt
-    document.getElementById('profile_img').src = userImg;
-  } catch (err) {
-    console.error(`Error: ${err}`);
   }
 }
 async function logOut(){
@@ -128,5 +88,8 @@ async function logOut(){
   }catch (err){
     console.error(`${err}`);
   }
+}
+if (document.getElementById('log-out') !== null){
+  const logOutBtn = document.getElementById('log-out').addEventListener('click',logOut);
 }
 

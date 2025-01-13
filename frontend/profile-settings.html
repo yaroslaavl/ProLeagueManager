@@ -6,6 +6,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/profile.css">
   <script src="js/profile.js" defer></script> <!-- Подключение скрипта -->
+  <script src="js/burgerMenu.js" defer></script>
   <title>Profile</title>
 </head>
 <body>
@@ -28,25 +29,34 @@
       </button>
       <div class="header-right">
         <div class="menu-container">
-          <button class="icon-btn menu-btn" onclick="toggleMenu()">
+          <button class="icon-btn menu-btn" style="margin-top: 0" onclick="toggleMenu()">
             <img src="img/menu-hamburger.svg" alt="Menu">
           </button>
           <div class="menu-popup" id="menuPopup">
-            <a href="profile-settings.html">
-              <img src="img/profile.svg" alt="Profil"> Profil
-            </a>
-            <a href="private-settings.html">
-              <img src="img/lock-circle.svg" alt="Bezpieczeństwo"> Bezpieczeństwo
-            </a>
-            <a href="alerts-settings.html">
-              <img src="img/notification-bell.svg" alt="Powiadomienia"> Powiadomienia
-            </a>
-            <a href="manage-settings.html">
-              <img src="img/key.svg" alt="Uprawnienia"> Uprawnienia
-            </a>
-            <a href="#" id="log-out">
-              <img src="img/logout.png" alt="Log Out"> Log Out
-            </a>
+            <div class="menu-header">
+              <div class="user-info">
+                <img src="img/profile.svg" alt="Avatar" class="user-avatar" id="avatarBurger">
+                <div>
+                  <span id="greeting">Hi, <span id="userName">User</span></span>
+                  <span id="userEmail" class="email">email@example.com</span>
+                </div>
+              </div>
+            </div>
+            <div class="menu-settings">
+              <div class="setting-item">
+                <span>Language</span>
+                <span class="value">English</span>
+              </div>
+              <div class="setting-item">
+                <span>Dark Theme</span>
+                <input type="checkbox" id="darkThemeToggle">
+              </div>
+            </div>
+            <div class="menu-links">
+              <a href="public-profile.html" class="menu-link">My Community Page</a>
+              <a href="profile-settings.html" class="menu-link">Settings</a>
+              <a href="#" class="menu-link" id="logOut" onclick="logOut()">Log Out</a>
+            </div>
           </div>
         </div>
         <button class="icon-btn profile-btn">
@@ -151,7 +161,7 @@
     </div>
   </footer>
 </div>
-<script src="js/burgerMenu.js"></script>
+
 <link rel="stylesheet" href="css/burgerMenu.css">
 </body>
 </html>

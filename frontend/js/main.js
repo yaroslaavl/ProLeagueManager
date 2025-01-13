@@ -1,3 +1,7 @@
+if(localStorage.getItem('accToken') !== null && localStorage.getItem('refToken')!== null){
+  refreshToken();
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   const pageLoadSpan = document.querySelector(".footer-content span:nth-child(3)");
   const htmlLoadSpan = document.querySelector(".footer-content span:nth-child(4)");
@@ -29,12 +33,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
-
 let accToken = localStorage.getItem("accToken");
 let refToken = localStorage.getItem("refToken");
-
-
-
 if(accToken === null || refToken === null){
  var notifBtn = document.getElementById("notification_button");
  var burgerAndUser = document.getElementById("header_right");

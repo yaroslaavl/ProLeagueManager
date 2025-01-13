@@ -76,4 +76,4 @@ async function refreshToken(){
     console.error(err);
   }
 }
-const logOutBtn = document.getElementById('log-out').addEventListener('click',logOut);
+
