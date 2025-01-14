@@ -76,4 +76,26 @@ async function refreshToken(){
     console.error(err);
   }
 }
+async function getRoles(){
+  try {
+    const accToken = localStorage.getItem('accToken')
+    const url = 'http://localhost:8765/user/role-group';
+    const response = await fetch(url,{
+      method: 'GET',
+      headers:{
+        "Authorization": `Bearer ${accToken}`,
+        "Content-Type": "application/json"
+      }
+    })
+    if(!response.ok)throw new Error(response.status);
+    const data = await response.json();
+    const roles = data.roles;
+    console.log(roles);
+    document.getElementById('user_group').innerText = `${(roles[0].name).replace('_',' ')}`;
+    document.getElementById('group_role').innerText = `${(roles[1].name)}`;
 
+  }catch (err){
+    console.error(err);
+  }
+}
+getRoles();

@@ -5,8 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/alerts.css">
-  <script src="js/alerts.js" defer></script> <!-- Подключение скрипта -->
   <script src="js/burgerMenu.js" defer></script>
+  <script src="js/alerts.js" defer></script> <!-- Подключение скрипта -->
+
   <title>Profile</title>
 </head>
 <body>
@@ -27,9 +28,9 @@
       <button style="background: none;" class="icon-btn notification-btn">
         <img src="img/notification-bell.svg" alt="Powiadomienia">
       </button>
-      <div class="header-right">
-        <div class="menu-container">
-          <button class="icon-btn menu-btn" style="margin-top: 0" onclick="toggleMenu()">
+      <div class="header-right" id="header_right" onclick="toggleMenu()">
+        <div class="menu-container" >
+          <button class="icon-btn menu-btn" style="margin-top: 0">
             <img src="img/menu-hamburger.svg" alt="Menu">
           </button>
           <div class="menu-popup" id="menuPopup">
@@ -37,30 +38,30 @@
               <div class="user-info">
                 <img src="img/profile.svg" alt="Avatar" class="user-avatar" id="avatarBurger">
                 <div>
-                  <span id="greeting">Hi, <span id="userName">User</span></span>
+                  <span id="greeting">Cześć, <span id="userName">User</span></span>
                   <span id="userEmail" class="email">email@example.com</span>
                 </div>
               </div>
             </div>
             <div class="menu-settings">
               <div class="setting-item">
-                <span>Language</span>
-                <span class="value">English</span>
+                <span>Język</span>
+                <span class="value">Polski</span>
               </div>
               <div class="setting-item">
-                <span>Dark Theme</span>
+                <span>Ciemny tryb</span>
                 <input type="checkbox" id="darkThemeToggle">
               </div>
             </div>
             <div class="menu-links">
-              <a href="public-profile.html" class="menu-link">My Community Page</a>
-              <a href="profile-settings.html" class="menu-link">Settings</a>
+              <a href="public-profile.html" class="menu-link">Profil publiczny</a>
+              <a href="profile-settings.html" class="menu-link">Ustawienie</a>
               <a href="#" class="menu-link" id="logOut" onclick="logOut()">Log Out</a>
             </div>
           </div>
-        </div>
-        <button class="icon-btn profile-btn">
-          <a href="public-profile.html"><img src="img/profile.svg" alt="Profil"></a>
+        </div >
+        <button class="icon-btn profile-btn"onclick="toggleMenu()">
+          <img src="img/profile.svg" alt="Profil" >
         </button>
       </div>
 
@@ -98,32 +99,42 @@
             <label for="toggle1" class="toggle-switch"></label>
           </div>
         </div>
-        <p>Polubienia</p>
-        <div style="display: flex" class="liked">
-          <p class="under-text">Otrzymasz powiadomienie, gdy ktoś<br> polubi Twój post.</p>
-          <div class="toggle-container">
-            <input type="checkbox" id="toggle2" class="toggle-checkbox">
-            <label for="toggle2" class="toggle-switch"></label>
-          </div>
-        </div>
       </div>
-
       <div class="Community">
-        <p>Społeczność</p>
-        <p>Polubienia</p>
+        <p>Aktywność sportowa</p>
+        <p>Mecze </p>
         <div style="display: flex" class="akt-prom">
-          <p class="under-text">Otrzymasz powiadomienie, gdy ktoś<br> polubi Twój post.</p>
+          <p class="under-text">Będziesz otrzymywać wiadomości o <br> zmianach meczowych</p>
           <div class="toggle-container">
             <input type="checkbox" id="toggle3" class="toggle-checkbox">
             <label for="toggle3" class="toggle-switch"></label>
           </div>
         </div>
-        <p>Hasło</p>
+        <p>Turnieje </p>
         <div style="display: flex" class="liked">
-          <p class="under-text">Set a unique password for better protection</p>
-          <div style= "margin-left: 140px" class="toggle-container">
+          <p class="under-text">Będziesz otrzymywać wiadomości o <br>turniejach</p>
+          <div style= "display: flex" class="toggle-container">
             <input type="checkbox" id="toggle4" class="toggle-checkbox">
             <label for="toggle4" class="toggle-switch"></label>
+          </div>
+        </div>
+        <p>Ligi</p>
+        <div style="display: flex" class="liked">
+          <p class="under-text">Będziesz otrzymywać wiadomości o <br>ligach sportowych</p>
+          <div style= "display: flex" class="toggle-container">
+            <input type="checkbox" id="toggle5" class="toggle-checkbox">
+            <label for="toggle5" class="toggle-switch"></label>
+          </div>
+        </div>
+      </div>
+      <div class="Community">
+        <p>Zespół</p>
+        <p>Wiadomości zespołowe</p>
+        <div style="display: flex" class="liked">
+          <p class="under-text">Będziesz otrzymywać wiadomości o <br>o swoim zespole</p>
+          <div style= "display: flex" class="toggle-container">
+            <input type="checkbox" id="toggle6" class="toggle-checkbox">
+            <label for="toggle6" class="toggle-switch"></label>
           </div>
         </div>
       </div>

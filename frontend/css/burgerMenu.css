@@ -5,7 +5,7 @@
   position: absolute;
   top: 50px;
   right: 0;
-  width: 300px;
+  width: 200px;
   background: #fff;
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -13,6 +13,7 @@
   display: none;
   flex-direction: column;
   padding: 10px;
+  z-index: 9999;
 }
 .menu-popup.active {
   display: flex;
