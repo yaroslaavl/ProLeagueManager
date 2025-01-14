@@ -1,8 +1,7 @@
 package org.league.app.dto;
 
 import lombok.Data;
-
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Data
 public class CompetitionCreateEditDto {
@@ -11,6 +10,6 @@ public class CompetitionCreateEditDto {
     private Integer sportId;
     private Integer gameSystemId;
     private String competitionType;
-    private Date startDate;
-    private Date endDate;
+    private LocalDateTime startDate;
+    private LocalDateTime endDate;
 }
