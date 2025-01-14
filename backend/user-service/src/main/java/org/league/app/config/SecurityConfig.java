@@ -89,6 +89,7 @@ public class SecurityConfig {
                                 "/api/auth/is-access-token",
                                 "/api/auth/load-user-by-email",
                                 "/api/auth/validate-token",
+                                "/api/user/search-user",
                                 "/actuator/health",
                                 "/api/auth/get-user-by-email").permitAll()
                         .requestMatchers("/api/auth/logout").authenticated()
