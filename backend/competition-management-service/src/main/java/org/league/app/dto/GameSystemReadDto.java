@@ -1,10 +1,12 @@
 package org.league.app.dto;
 
+import lombok.Setter;
 import lombok.Value;
 
 import java.time.LocalDateTime;
 
 @Value
+@Setter
 public class GameSystemReadDto {
 
     Integer id;

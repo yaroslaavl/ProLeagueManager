@@ -39,26 +39,34 @@ public class NotificationService {
     @Transactional
     public boolean subscribeManagement(String eventCategory, Boolean isActive) {
         UserDto userByEmail = authClientFeign.getUserByEmail(securityContext());
-        Optional<UserNotificationSubscription> userNotificationSubscriptionByUserId =
+        List<UserNotificationSubscription> userNotificationSubscriptionByUserId =
                 userNotificationSubscriptionRepository.findUserNotificationSubscriptionByUserId(userByEmail.getId());
 
-        if (userNotificationSubscriptionByUserId.isPresent() && userNotificationSubscriptionByUserId.get().getEventCategory() == EventCategory.valueOf(eventCategory.trim().toUpperCase())) {
-            UserNotificationSubscription subscription = userNotificationSubscriptionByUserId.get();
-            if (isActive) {
-                subscription.setIsActive(Boolean.TRUE);
-                userNotificationSubscriptionRepository.save(subscription);
-            } else {
-                subscription.setIsActive(Boolean.FALSE);
-                userNotificationSubscriptionRepository.save(subscription);
+        EventCategory targetCategory;
+        try {
+            targetCategory = EventCategory.valueOf(eventCategory);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Invalid event category: " + eventCategory);
+        }
+
+        for(UserNotificationSubscription userNotificationSubscription : userNotificationSubscriptionByUserId) {
+            if(userNotificationSubscription.getEventCategory() == targetCategory) {
+                if (isActive) {
+                    userNotificationSubscription.setIsActive(Boolean.TRUE);
+                    userNotificationSubscriptionRepository.saveAndFlush(userNotificationSubscription);
+                } else {
+                    userNotificationSubscription.setIsActive(Boolean.FALSE);
+                    userNotificationSubscriptionRepository.saveAndFlush(userNotificationSubscription);
+                }
+                return true;
             }
-            return true;
         }
 
         try {
             UserNotificationSubscription newSubscription = UserNotificationSubscription.builder()
                     .userId(userByEmail.getId())
                     .eventCategory(EventCategory.valueOf(eventCategory.trim().toUpperCase()))
-                    .isActive(Boolean.TRUE)
+                    .isActive(isActive)
                     .build();
 
             userNotificationSubscriptionRepository.save(newSubscription);
