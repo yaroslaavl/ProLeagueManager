@@ -1,6 +1,7 @@
 package org.league.app.database.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,7 +11,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.league.app.database.entity.enums.CompetitionType;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.UUID;
 
 @Data
@@ -26,6 +26,7 @@ public class Competition {
     private UUID id;
 
     @Column(name = "name", nullable = false)
+    @NotNull(message = "Competition name must be field")
     private String name;
 
     @Column(name = "sport_id")
@@ -40,10 +41,12 @@ public class Competition {
     private CompetitionType competitionType;
 
     @Column(name = "start_date")
-    private Date startDate;
+    @NotNull(message = "Write the start date of your competition")
+    private LocalDateTime startDate;
 
     @Column(name = "end_date")
-    private Date endDate;
+    @NotNull(message = "Write the end date of your competition")
+    private LocalDateTime endDate;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)

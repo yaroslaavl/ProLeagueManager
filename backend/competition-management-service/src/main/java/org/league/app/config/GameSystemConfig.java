@@ -2,6 +2,7 @@ package org.league.app.config;
 
 import lombok.SneakyThrows;
 import org.league.app.filter.JWTFilter;
+import org.league.app.filter.RouteFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -9,14 +10,17 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.context.SecurityContextHolderFilter;
 
 @Configuration
 public class GameSystemConfig {
 
     private final JWTFilter jwtFilter;
+    private final RouteFilter routeFilter;
 
-    public GameSystemConfig(JWTFilter jwtFilter) {
+    public GameSystemConfig(JWTFilter jwtFilter, RouteFilter routeFilter) {
         this.jwtFilter = jwtFilter;
+        this.routeFilter = routeFilter;
     }
 
     @Bean
@@ -26,7 +30,13 @@ public class GameSystemConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/actuator/health").permitAll()
-                        .requestMatchers("/api/game-system/create-game-system", "/api/game-system/**").hasAuthority("EDITOR"))
+                        .requestMatchers(
+                                "/api/competition/create-competition",
+                                "/api/game-system/create-game-system",
+                                "/api/game-system/delete-game-system/**",
+                                "/api/game-system/search",
+                                "/api/game-system/**").hasAuthority("EDITOR"))
+                .addFilterBefore(routeFilter, SecurityContextHolderFilter.class)
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

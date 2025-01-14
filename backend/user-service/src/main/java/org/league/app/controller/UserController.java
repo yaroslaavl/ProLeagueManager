@@ -23,6 +23,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -145,8 +147,18 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         response.sendRedirect("http://localhost:63342/ProLeagueManager/frontend/resetPassword.html?token=" + token);
-        return new ResponseEntity<>(HttpStatus.TEMPORARY_REDIRECT);
+        return new ResponseEntity<>(HttpStatus.FOUND);
     }
 
+    @GetMapping("/search-user")
+    public ResponseEntity<List<UserReadDto>> searchUsers(@RequestParam("keyword") String keyword) {
+        if (keyword.isEmpty()){
+            return new ResponseEntity<>(null, HttpStatus.OK);
+        }
+
+        List<UserReadDto> users = userService.searchUser(keyword)
+                .stream().map(userMapper::toDto).collect(Collectors.toList());
+        return new ResponseEntity<>(users, HttpStatus.OK);
+    }
 }
 
