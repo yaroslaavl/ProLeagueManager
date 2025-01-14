@@ -12,7 +12,7 @@ import java.util.Optional;
 @Repository
 public interface UserNotificationSubscriptionRepository extends JpaRepository<UserNotificationSubscription, Long> {
 
-    Optional<UserNotificationSubscription> findUserNotificationSubscriptionByUserId(Long userId);
+    List<UserNotificationSubscription> findUserNotificationSubscriptionByUserId(Long userId);
 
     List<UserNotificationSubscription> findAllByUserId(Long userId);
 
