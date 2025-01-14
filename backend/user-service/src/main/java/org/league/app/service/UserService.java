@@ -342,6 +342,10 @@ public class UserService implements UserDetailsService {
          return roleGroupRepository.findRoleGroupByEmailWithRoles(email);
     }
 
+    public List<User> searchUser(String keyword) {
+        return userRepository.searchUser(keyword);
+    }
+
     private String securityContext() {
         return SecurityContextHolder.getContext().getAuthentication().getName();
     }
