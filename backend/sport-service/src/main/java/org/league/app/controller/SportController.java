@@ -2,8 +2,10 @@ package org.league.app.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.league.app.database.repository.SportRepository;
 import org.league.app.dto.SportCreateEditDto;
 import org.league.app.dto.SportReadDto;
+import org.league.app.feign.SportDto;
 import org.league.app.service.SportService;
 import org.league.app.validation.CreateAction;
 import org.league.app.validation.EditAction;
@@ -13,6 +15,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
@@ -26,6 +29,7 @@ import static org.springframework.http.ResponseEntity.notFound;
 public class SportController {
 
     private final SportService sportService;
+    private final SportRepository sportRepository;
 
     @PostMapping("/create-new-sport")
     public ResponseEntity<SportReadDto> createSport(@RequestBody @Validated(CreateAction.class) SportCreateEditDto sportCreateDto){
@@ -39,7 +43,7 @@ public class SportController {
         return ResponseEntity.ok(sportService.edit(sportName, sport));
     }
 
-    @PostMapping("/delete-sport/{sportName}")
+    @DeleteMapping("/delete-sport/{sportName}")
     public ResponseEntity<?> delete(@PathVariable("sportName") String sportName) {
         return sportService.deleteSport(sportName)
                 ? noContent().build()
@@ -66,4 +70,11 @@ public class SportController {
         return sportService.findBySportName(sportName);
     }
 
+    @GetMapping("/get-sports-by-name")
+    public List<SportDto> findByNameSearch(@RequestParam("sportName") String sportName) {
+        return sportRepository.findByNameSearch(sportName)
+                .stream()
+                .map(sport -> new SportDto(sport.getId(),sport.getName()))
+                .collect(Collectors.toList());
+    }
 }
