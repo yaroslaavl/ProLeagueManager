@@ -28,11 +28,9 @@
         <img src="img/notification-bell.svg" alt="Powiadomienia">
       </button>
       </div>
-      <div class="header-right" id="header_right">
-
-
-        <div class="menu-container">
-          <button class="icon-btn menu-btn" style="margin-top: 0" onclick="toggleMenu()">
+      <div class="header-right" id="header_right" onclick="toggleMenu()">
+        <div class="menu-container" >
+          <button class="icon-btn menu-btn" style="margin-top: 0">
             <img src="img/menu-hamburger.svg" alt="Menu">
           </button>
           <div class="menu-popup" id="menuPopup">
@@ -40,30 +38,30 @@
               <div class="user-info">
                 <img src="img/profile.svg" alt="Avatar" class="user-avatar" id="avatarBurger">
                 <div>
-                  <span id="greeting">Hi, <span id="userName">User</span></span>
+                  <span id="greeting">Cześć, <span id="userName">User</span></span>
                   <span id="userEmail" class="email">email@example.com</span>
                 </div>
               </div>
             </div>
             <div class="menu-settings">
               <div class="setting-item">
-                <span>Language</span>
-                <span class="value">English</span>
+                <span>Język</span>
+                <span class="value">Polski</span>
               </div>
               <div class="setting-item">
-                <span>Dark Theme</span>
+                <span>Ciemny tryb</span>
                 <input type="checkbox" id="darkThemeToggle">
               </div>
             </div>
             <div class="menu-links">
-              <a href="public-profile.html" class="menu-link">My Community Page</a>
-              <a href="profile-settings.html" class="menu-link">Settings</a>
+              <a href="public-profile.html" class="menu-link">Profil publiczny</a>
+              <a href="profile-settings.html" class="menu-link">Ustawienie</a>
               <a href="#" class="menu-link" id="logOut" onclick="logOut()">Log Out</a>
             </div>
           </div>
-        </div>
-        <button class="icon-btn profile-btn">
-          <a href="public-profile.html"><img src="img/profile.svg" alt="Profil"></a>
+        </div >
+        <button class="icon-btn profile-btn"onclick="toggleMenu()">
+          <img src="img/profile.svg" alt="Profil" >
         </button>
       </div>
 

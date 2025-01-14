@@ -37,17 +37,14 @@ document.addEventListener("DOMContentLoaded",()=>{
     window.location.href = "main.html";
   }
 })
-
 const accToken = localStorage.getItem("accToken");
 const refreshToken = localStorage.getItem("refToken");
-
 if(accToken === null || refreshToken === null){
   window.location.href =
     "main.html";
 }else{
   getUserData();
 }
-
 async function refreshtoken(){
   try {
     const url = "http://localhost:8765/auth/refresh-token";
@@ -129,4 +126,12 @@ async function logOut(){
     console.error(`${err}`);
   }
 }
+async function getTeam(){
+  try {
+    const response = await fetch(url,{
 
+    })
+  }catch (err){
+    console.error(`Error while receiveing data from server`);
+  }
+}
