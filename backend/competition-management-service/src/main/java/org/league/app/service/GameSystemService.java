@@ -4,22 +4,27 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.league.app.database.entity.GameSystem;
 import org.league.app.database.repository.GameSystemRepository;
+import org.league.app.dto.GameSystemCreateCompetitionDto;
 import org.league.app.dto.GameSystemCreateEditDto;
 import org.league.app.dto.GameSystemReadDto;
 import org.league.app.exception.GameSystemAlreadyExists;
 import org.league.app.exception.GameSystemNotFoundException;
+import org.league.app.feign.sportClient.SportClientFeign;
+import org.league.app.feign.sportClient.SportDto;
 import org.league.app.mapper.GameSystemMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-@Transactional(readOnly = true)
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class GameSystemService {
 
+    private final SportClientFeign sportClientFeign;
     private final GameSystemMapper gameSystemMapper;
     private final GameSystemRepository gameSystemRepository;
 
@@ -53,4 +58,37 @@ public class GameSystemService {
         gameSystemRepository.delete(gameSystem);
     }
 
+    public List<GameSystemCreateCompetitionDto> searchGameSystem(String query) {
+        if (query == null || query.trim().isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        List<SportDto> sports = sportClientFeign.findByNameSearch(query);
+
+        if (sports.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        List<Integer> sportIds = sports.stream()
+                .map(SportDto::getId)
+                .collect(Collectors.toList());
+        List<GameSystem> gameSystemsBySport = gameSystemRepository.findAllBySportIdIn(sportIds);
+
+        if (gameSystemsBySport.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        Map<Integer, String> sportIdToNameMap = sports.stream()
+                .collect(Collectors.toMap(SportDto::getId, SportDto::getName));
+
+        return gameSystemsBySport.stream()
+                .map(gameSystem -> GameSystemCreateCompetitionDto.builder()
+                        .systemId(gameSystem.getId())
+                        .systemName(gameSystem.getSystemName())
+                        .isIndividual(gameSystem.getIsIndividual())
+                        .sportId(gameSystem.getSportId())
+                        .sportName(sportIdToNameMap.getOrDefault(gameSystem.getSportId(), ""))
+                        .build())
+                .collect(Collectors.toList());
+    }
 }
