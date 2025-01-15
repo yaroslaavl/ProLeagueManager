@@ -40,13 +40,15 @@ public class TeamConfig {
                                 "/api/team/upload-team-logo",
                                 "/api/team/team-invite/**",
                                 "/api/team/team-user-deletion/**",
-                                "/api/team/team-leave",
+                                "/api/team/team-leave/**",
                                 "/api/team/update-team-member-role/**").authenticated()
                         .requestMatchers("/api/team/allTeams",
                                 "/api/team/currentTeam/**",
                                 "/actuator/health",
                                 "/api/team/*/user-role",
                                 "/api/team/team-logo/**",
+                                "/api/team/get-team-member-by-team-and-userId",
+                                "/api/team/get-teams-by-userId",
                                 "/api/team/get-all-teamRoles").permitAll())
 
                 .addFilterBefore(routeFilter, SecurityContextHolderFilter.class)
