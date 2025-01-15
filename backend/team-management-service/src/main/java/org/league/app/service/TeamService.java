@@ -32,6 +32,7 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -269,64 +270,74 @@ public class TeamService {
         sendNotificationMessage(userId, "You have been kicked out of the team: " + teamWithAccessCheck.getTeamName(), "TEAM_KICKED_OUT");
     }
 
+    public List<Team> findTeamsByUserId(Long userId) {
+        List<TeamMember> userTeams = teamMemberRepository.findTeamsByUserId(userId);
+        return userTeams.stream().map(TeamMember::getTeam).collect(Collectors.toList());
+    }
+
+    public TeamMember findByTeamIdAndUserId(UUID teamId, Long userId) {
+        return teamMemberRepository.findByTeamIdAndUserId(teamId, userId)
+                .orElseThrow(() -> new TeamNotFoundException("Team does not exist"));
+    }
+
     @Transactional
-    public void leaveTeam() {
+    public void leaveTeam(String teamName) {
         UserDto userByEmail = authClientFeign.getUserByEmail(securityContext());
 
-        Optional<TeamMember> optionalTeamMember = teamMemberRepository.findTeamByUserId(userByEmail.getId());
+        Team teamByTeamName = teamRepository.findTeamByTeamName(teamName)
+                .orElseThrow(() -> new TeamNotFoundException("Team does not exist"));
 
-        if (optionalTeamMember.isPresent()) {
-            Team team = optionalTeamMember.get().getTeam();
-            List<TeamMember> allMembers = teamMemberRepository.findTeamMemberByTeamId(team.getId());
-            TeamMember teamMember = optionalTeamMember.get();
-            if (teamMember.getRoles().stream().anyMatch(getRolesByNames("MANAGER")::contains)) {
+        Optional<TeamMember> optionalTeamMember = teamMemberRepository.findByTeamIdAndUserId(teamByTeamName.getId(), userByEmail.getId());
 
-                if(allMembers.size() == 1) {
-                    String teamName = team.getTeamName();
-                    sendNotificationMessage(userByEmail.getId(),"You have left the team: " + teamName + " and team is deleted", "TEAM_LEFT_TEAM_DELETED");
-                }
+        List<TeamMember> allMembers = teamMemberRepository.findTeamMemberByTeamId(teamByTeamName.getId());
+        TeamMember teamMember = optionalTeamMember.get();
+        if (teamMember.getRoles().stream().anyMatch(getRolesByNames("MANAGER")::contains)) {
 
-                List<TeamMember> teamMemberWithCapitanRole = teamMemberRepository.findTeamMemberByRolesAndTeamId(getRolesByNames("CAPITAN"), team.getId());
-                if (teamMemberWithCapitanRole.size() == 1 && teamMember.getRoles().stream().noneMatch(getRolesByNames("CAPITAN")::contains)) {
-                    TeamMember teamMemberWithCapitanRoleFirst = teamMemberWithCapitanRole.getFirst();
-                    List<TeamRole> currentRoles = new ArrayList<>(teamMemberWithCapitanRoleFirst.getRoles());
-
-                    TeamRole newRole = getRolesByNames("MANAGER").getFirst();
-                    if (!currentRoles.contains(newRole)) {
-                        currentRoles.add(newRole);
-                    }
-
-                    teamMemberWithCapitanRoleFirst.setRoles(currentRoles);
-                }
-
-                List<TeamMember> teamMemberWithPlayerRole = teamMemberRepository.findTeamMemberByRolesAndTeamId(getRolesByNames("PLAYER"), team.getId());
-
-                Optional<TeamMember> otherPlayers = teamMemberWithPlayerRole.stream()
-                        .filter(member -> !member.getUserId().equals(teamMember.getId()))
-                        .findFirst();
-
-                if (otherPlayers.isPresent()) {
-                    TeamMember teamMemberWithPlayerRoleFirst = otherPlayers.get();
-                    List<TeamRole> currentRoles = new ArrayList<>(teamMemberWithPlayerRoleFirst.getRoles());
-
-                    List<TeamRole> newRoles = getRolesByNames("MANAGER","CAPITAN");
-                    for (TeamRole role : newRoles) {
-                        if (!currentRoles.contains(role)) {
-                            currentRoles.add(role);
-                        }
-                    }
-
-                    teamMemberWithPlayerRoleFirst.setRoles(currentRoles);
-                } else {
-                    log.warn("No other players found in team {}", team.getTeamName());
-                    throw new UserNotFoundInTeamException("No other players found in team: " + team.getTeamName());
-                }
+            if (allMembers.size() == 1) {
+                String teamGetName = teamByTeamName.getTeamName();
+                teamRepository.delete(teamByTeamName);
+                sendNotificationMessage(userByEmail.getId(), "You have left the team: " + teamGetName + " and team is deleted", "TEAM_LEFT_TEAM_DELETED");
+                return;
             }
 
-            teamMemberRepository.delete(optionalTeamMember.get());
-        }
+            List<TeamMember> teamMemberWithCapitanRole = teamMemberRepository.findTeamMemberByRolesAndTeamId(getRolesByNames("CAPITAN"), teamByTeamName.getId());
+            if (teamMemberWithCapitanRole.size() == 1 && teamMember.getRoles().stream().noneMatch(getRolesByNames("CAPITAN")::contains)) {
+                TeamMember teamMemberWithCapitanRoleFirst = teamMemberWithCapitanRole.getFirst();
+                List<TeamRole> currentRoles = new ArrayList<>(teamMemberWithCapitanRoleFirst.getRoles());
 
-        sendNotificationMessage(userByEmail.getId(),"You have left the team: " + optionalTeamMember.get().getTeam(), "TEAM_LEFT");
+                TeamRole newRole = getRolesByNames("MANAGER").getFirst();
+                if (!currentRoles.contains(newRole)) {
+                    currentRoles.add(newRole);
+                }
+
+                teamMemberWithCapitanRoleFirst.setRoles(currentRoles);
+            }
+
+            List<TeamMember> teamMemberWithPlayerRole = teamMemberRepository.findTeamMemberByRolesAndTeamId(getRolesByNames("PLAYER"), teamByTeamName.getId());
+
+            Optional<TeamMember> otherPlayers = teamMemberWithPlayerRole.stream()
+                    .filter(member -> !member.getUserId().equals(teamMember.getId()))
+                    .findFirst();
+
+            if (otherPlayers.isPresent()) {
+                TeamMember teamMemberWithPlayerRoleFirst = otherPlayers.get();
+                List<TeamRole> currentRoles = new ArrayList<>(teamMemberWithPlayerRoleFirst.getRoles());
+
+                List<TeamRole> newRoles = getRolesByNames("MANAGER", "CAPITAN");
+                for (TeamRole role : newRoles) {
+                    if (!currentRoles.contains(role)) {
+                        currentRoles.add(role);
+                    }
+                }
+
+                teamMemberWithPlayerRoleFirst.setRoles(currentRoles);
+            } else {
+                log.warn("No other players found in team {}", teamByTeamName.getTeamName());
+                throw new UserNotFoundInTeamException("No other players found in team: " + teamByTeamName.getTeamName());
+            }
+        }
+        teamMemberRepository.delete(optionalTeamMember.get());
+        sendNotificationMessage(userByEmail.getId(), "You have left the team: " + optionalTeamMember.get().getTeam(), "TEAM_LEFT");
     }
 
     @Transactional

@@ -100,8 +100,9 @@ async function getUserData() {
   document.getElementById('first_last_name').innerHTML = firstName + " " + lastName;
   document.getElementById("nickname").innerHTML = userName;
   document.getElementById("date_of_birth").innerHTML = dateOfBirth[2]+'.'+dateOfBirth[1]+'.'+dateOfBirth[0]
-  document.getElementById("creation-date").innerHTML = createdAt
-    document.getElementById('profile_img').src = userImg;
+  document.getElementById("creation-date").innerHTML = createdAt;
+  document.getElementById('profile_img').src = userImg;
+  getTeam(data.id);
   } catch (err) {
     console.error(`Error: ${err}`);
   }
@@ -126,12 +127,72 @@ async function logOut(){
     console.error(`${err}`);
   }
 }
-async function getTeam(){
+async function getTeam(userId) {
   try {
-    const response = await fetch(url,{
+    const url = `http://localhost:8765/team/get-teams-by-userId?userId=${userId}`;
+    const response = await fetch(url);
 
-    })
-  }catch (err){
-    console.error(`Error while receiveing data from server`);
+    if (!response.ok) {
+      console.error("Failed to fetch teams");
+      return;
+    }
+
+    const data = await response.json();
+
+    if (!data || data.length === 0) {
+      console.error("No teams found for this user.");
+      return;
+    }
+
+    console.log(data);
+
+    // Установить имя команды
+    document.getElementById('team_name').innerText = data[0].teamName;
+
+    try {
+      const logoUrl = `http://localhost:8765/team/team-logo/${data[0].teamName}`;
+      const logoResponse = await fetch(logoUrl);
+
+      if (!logoResponse.ok) {
+        console.error("Failed to fetch team logo");
+        return;
+      }
+
+      // Установить URL логотипа
+      document.getElementById('Team_avatar').src = logoUrl;
+    } catch (err) {
+      console.error("Error while receiving team logo");
+    }
+    try {
+      const roleUrl = `http://localhost:8765/team/get-team-member-by-team-and-userId?teamId=${data[0].id}&userId=${userId}`;
+      const roleResponse = await fetch(roleUrl);
+
+      if (!roleResponse.ok) {
+        console.error("Failed to fetch team role");
+        return;
+      }
+
+      // Парсинг JSON-ответа
+      const roleData = await roleResponse.json();
+
+      // Логирование ответа
+      console.log("Role data:", roleData);
+      let role = roleData.roles;
+      console.log(role[0].name,role[1].name,role[2].name)
+      document.getElementById('roles').innerText = `${role[2].name},${role[1].name},${role[0].name}`;
+      // Проверяем наличие данных
+      if (!roleData || Object.keys(roleData).length === 0) {
+        console.error("No role data found");
+        return;
+      }
+
+      // Выполните дальнейшие действия с roleData
+    } catch (err) {
+      console.error("Error while fetching team role:", err);
+    }
+
+  } catch (err) {
+    console.error(`Error while receiving data from server`);
   }
 }
+

@@ -1,6 +1,8 @@
 package org.league.app.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.league.app.database.entity.Team;
+import org.league.app.database.entity.TeamMember;
 import org.league.app.database.entity.TeamRole;
 import org.league.app.database.repository.TeamRoleRepository;
 import org.league.app.exception.TeamNotFoundException;
@@ -111,9 +113,9 @@ public class TeamController {
         return "User deleted from team";
     }
 
-    @PutMapping("/team-leave")
-    public String leaveTeam() {
-        teamService.leaveTeam();
+    @PutMapping("/team-leave/{teamName}")
+    public String leaveTeam(@PathVariable("teamName") String teamName) {
+        teamService.leaveTeam(teamName);
         return "You left team";
     }
 
@@ -138,4 +140,13 @@ public class TeamController {
         }
     }
 
+    @GetMapping("/get-teams-by-userId")
+    public ResponseEntity<List<Team>> findTeamsByUserId(@RequestParam("userId") Long userId){
+        return ResponseEntity.ok(teamService.findTeamsByUserId(userId));
+    }
+
+    @GetMapping("/get-team-member-by-team-and-userId")
+    public ResponseEntity<TeamMember> findTeamMemberByTeamAndUserId(@RequestParam("teamId") UUID teamId, @RequestParam("userId") Long userId) {
+        return ResponseEntity.ok(teamService.findByTeamIdAndUserId(teamId,userId));
+    }
 }
