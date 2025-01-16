@@ -199,9 +199,7 @@ async function updateUserProfile(){
     });
     if(!response.ok)throw new Error("Error HTTP Request");
     console.log(response);
-    alert("Dane profilu zmienione,redirect na strone loginu!");
-    localStorage.clear();
-    window.location.href = "login.html"
+    alert("Dane profilu zmienione");
   }catch (err){
     console.error(err);
   }

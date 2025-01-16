@@ -76,26 +76,47 @@ async function refreshToken(){
     console.error(err);
   }
 }
-async function getRoles(){
+async function getRoles() {
   try {
-    const accToken = localStorage.getItem('accToken')
+    const accToken = localStorage.getItem('accToken');
     const url = 'http://localhost:8765/user/role-group';
-    const response = await fetch(url,{
+    const response = await fetch(url, {
       method: 'GET',
-      headers:{
+      headers: {
         "Authorization": `Bearer ${accToken}`,
         "Content-Type": "application/json"
       }
-    })
-    if(!response.ok)throw new Error(response.status);
-    const data = await response.json();
-    const roles = data.roles;
-    console.log(roles);
-    document.getElementById('user_group').innerText = `${(roles[0].name).replace('_',' ')}`;
-    document.getElementById('group_role').innerText = `${(roles[1].name)}`;
+    });
 
-  }catch (err){
+    if (!response.ok) throw new Error(response.status);
+
+    const data = await response.json();
+
+    // Получаем название группы
+    const groupName = data.name.replace('_', ' '); // Заменяем _ на пробел
+    document.getElementById('user_group').innerText = groupName;
+
+    // Получаем роли и добавляем их с описанием в колонку
+    const rolesContainer = document.getElementById('roles_list');
+    rolesContainer.innerHTML = ''; // Очищаем контейнер перед добавлением
+
+    data.roles.forEach(role => {
+      const roleName = role.name.replace('_', ' '); // Заменяем _ на пробел
+      const roleDescription = role.description || 'Brak opisu'; // Подставляем описание или текст по умолчанию
+
+      // Создаем элемент для отображения роли и её описания
+      const roleElement = document.createElement('div');
+      roleElement.classList.add('role-item'); // Для стилизации
+
+      roleElement.innerHTML = `
+        <p class="role-name" style="color: #3861FB; font-weight: bold;">${roleName}</p>
+        <p class="role-description" style="font-size: 12px; color: #555;">${roleDescription}</p>
+      `;
+      rolesContainer.appendChild(roleElement);
+    });
+  } catch (err) {
     console.error(err);
   }
 }
+
 getRoles();

@@ -354,6 +354,12 @@ footer {
   font-size: 14px;
   font-weight: bold;
 }
+
+.side-bar-right > .mailblock > .under-text a {
+  color: #3861FB;
+  text-decoration: none;
+}
+
 .side-bar-right>.verification
 {
   display: flex;
