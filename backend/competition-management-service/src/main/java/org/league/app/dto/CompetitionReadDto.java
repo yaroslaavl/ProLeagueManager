@@ -13,6 +13,7 @@ public class CompetitionReadDto {
     Integer sportId;
     Integer gameSystemId;
     String competitionType;
+    String status;
     LocalDateTime startDate;
     LocalDateTime endDate;
     LocalDateTime createdAt;
