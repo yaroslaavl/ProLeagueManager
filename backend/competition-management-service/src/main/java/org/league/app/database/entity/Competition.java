@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.league.app.database.entity.enums.CompetitionStatus;
 import org.league.app.database.entity.enums.CompetitionType;
 
 import java.time.LocalDateTime;
@@ -47,6 +48,10 @@ public class Competition {
     @Column(name = "end_date")
     @NotNull(message = "Write the end date of your competition")
     private LocalDateTime endDate;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "competition_status")
+    private CompetitionStatus status;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
