@@ -13,12 +13,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.context.SecurityContextHolderFilter;
 
 @Configuration
-public class GameSystemConfig {
+public class CompetitionManagementConfig {
 
     private final JWTFilter jwtFilter;
     private final RouteFilter routeFilter;
 
-    public GameSystemConfig(JWTFilter jwtFilter, RouteFilter routeFilter) {
+    public CompetitionManagementConfig(JWTFilter jwtFilter, RouteFilter routeFilter) {
         this.jwtFilter = jwtFilter;
         this.routeFilter = routeFilter;
     }
