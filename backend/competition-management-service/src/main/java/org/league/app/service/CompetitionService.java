@@ -3,18 +3,22 @@ package org.league.app.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.league.app.database.entity.Competition;
+import org.league.app.database.entity.enums.CompetitionStatus;
 import org.league.app.database.entity.enums.CompetitionType;
 import org.league.app.database.repository.CompetitionRepository;
 import org.league.app.database.repository.GameSystemRepository;
+import org.league.app.database.specification.CompetitionSpecification;
 import org.league.app.dto.CompetitionCreateEditDto;
 import org.league.app.dto.CompetitionReadDto;
 import org.league.app.exception.CompetitionAlreadyExists;
 import org.league.app.exception.GameSystemNotFoundException;
 import org.league.app.mapper.CompetitionMapper;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -44,6 +48,7 @@ public class CompetitionService {
                 .gameSystem(gameSystemRepository.findById(gameSystemId)
                         .orElseThrow(() -> new GameSystemNotFoundException("Game System not found")))
                 .competitionType(CompetitionType.valueOf(competitionCreate.getCompetitionType().toUpperCase()))
+                .status(CompetitionStatus.UPCOMING)
                 .startDate(competitionCreate.getStartDate())
                 .endDate(competitionCreate.getEndDate())
                 .createdAt(LocalDateTime.now())
@@ -51,5 +56,27 @@ public class CompetitionService {
 
         competitionRepository.save(competition);
         return competitionMapper.toDto(competition);
+    }
+
+    /**
+     * Method for searching tournaments by filters and with dynamic search by keyword ‘name’
+     *
+     * @param keyword
+     * @param isIndividual
+     * @param status
+     * @return the list of tournaments
+     */
+    public List<Competition> findAllTournamentsByFiltersAndDynamicSearch(String keyword, Boolean isIndividual, String status) {
+        if (keyword == null && isIndividual == null && status == null) {
+            return competitionRepository.findAll();
+        }
+
+        Specification<Competition> specification = Specification
+                .where(CompetitionSpecification.hasCompetitionStatus(status))
+                .and(CompetitionSpecification.search(keyword))
+                .and(CompetitionSpecification.isCompetitionIndividual(isIndividual))
+                .and(CompetitionSpecification.isTournament(CompetitionType.TOURNAMENT));
+
+        return competitionRepository.findAll(specification);
     }
 }

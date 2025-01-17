@@ -13,12 +13,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.context.SecurityContextHolderFilter;
 
 @Configuration
-public class GameSystemConfig {
+public class CompetitionManagementConfig {
 
     private final JWTFilter jwtFilter;
     private final RouteFilter routeFilter;
 
-    public GameSystemConfig(JWTFilter jwtFilter, RouteFilter routeFilter) {
+    public CompetitionManagementConfig(JWTFilter jwtFilter, RouteFilter routeFilter) {
         this.jwtFilter = jwtFilter;
         this.routeFilter = routeFilter;
     }
@@ -29,7 +29,9 @@ public class GameSystemConfig {
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/actuator/health").permitAll()
+                        .requestMatchers(
+                                "/actuator/health",
+                                "/api/competition/search-tournaments").permitAll()
                         .requestMatchers(
                                 "/api/competition/create-competition",
                                 "/api/game-system/create-game-system",
