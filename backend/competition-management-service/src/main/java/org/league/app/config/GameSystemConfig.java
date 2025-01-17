@@ -29,7 +29,9 @@ public class GameSystemConfig {
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/actuator/health").permitAll()
+                        .requestMatchers(
+                                "/actuator/health",
+                                "/api/competition/search-tournaments").permitAll()
                         .requestMatchers(
                                 "/api/competition/create-competition",
                                 "/api/game-system/create-game-system",
