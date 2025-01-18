@@ -31,10 +31,12 @@ public class GameSystemConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/actuator/health").permitAll()
                         .requestMatchers(
-                                "/api/competition/create-competition",
                                 "/api/game-system/create-game-system",
-                                "/api/game-system/delete-game-system/**",
+                                "/api/game-system/delete-game-system",
                                 "/api/game-system/search",
+                                "/api/competition/create-competition",
+                                "/api/competition/edit-competition/**",
+                                "/api/competition/delete-competition",
                                 "/api/game-system/**").hasAuthority("EDITOR"))
                 .addFilterBefore(routeFilter, SecurityContextHolderFilter.class)
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
