@@ -12,4 +12,6 @@ public interface CompetitionRepository extends JpaRepository<Competition, UUID> 
 
     Optional<Competition> findCompetitionByName(String competitionName);
 
+    int deleteCompetitionByName(String competitionName);
+
 }
