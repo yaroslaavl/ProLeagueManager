@@ -52,9 +52,9 @@ public class TeamController {
         return ResponseEntity.ok(userTeamStatusDto);
     }
 
-    @PutMapping("/update-team-name")
-    public ResponseEntity<TeamReadDto> updateTeamName(@RequestBody @Validated(EditAction.class) TeamCreateEditDto teamCreateEditDto) {
-        TeamReadDto team = teamService.updateTeamName(teamCreateEditDto);
+    @PutMapping("/update-team-name/{teamId}")
+    public ResponseEntity<TeamReadDto> updateTeamName(@PathVariable("teamId") UUID teamId, @RequestBody @Validated(EditAction.class) TeamCreateEditDto teamCreateEditDto) {
+        TeamReadDto team = teamService.updateTeamName(teamId, teamCreateEditDto);
         return ResponseEntity.ok(team);
     }
 
@@ -65,9 +65,9 @@ public class TeamController {
         return teamRepository.findAll(pageable).map(teamMapper::toDto);
     }
 
-    @PostMapping("/upload-team-logo")
-    public ResponseEntity<String> uploadTeamLogo(@ModelAttribute @Validated({CreateAction.class, EditAction.class}) UploadTeamLogoDto uploadTeamLogoDto) throws IOException {
-        return ResponseEntity.ok(teamService.uploadTeamLogo(uploadTeamLogoDto));
+    @PostMapping("/upload-team-logo/{teamId}")
+    public ResponseEntity<String> uploadTeamLogo(@PathVariable("teamId") UUID teamId, @ModelAttribute @Validated({CreateAction.class, EditAction.class}) UploadTeamLogoDto uploadTeamLogoDto) throws IOException {
+        return ResponseEntity.ok(teamService.uploadTeamLogo(teamId, uploadTeamLogoDto));
     }
 
     @GetMapping("/team-logo/{teamName}")
@@ -95,9 +95,10 @@ public class TeamController {
         return ResponseEntity.notFound().build();
     }
 
-    @PostMapping("/team-invite/{id}")
-    public ResponseEntity<String> teamInvitation(@PathVariable("id") Long id) {
-        teamService.teamInvitation(id);
+    @PostMapping("/team-invite/{teamId}/{userId}")
+    public ResponseEntity<String> teamInvitation(@PathVariable("teamId") UUID teamId,
+                                                 @PathVariable("userId") Long userId) {
+        teamService.teamInvitation(teamId, userId);
         return ResponseEntity.ok("Invitation sent successfully");
     }
 
@@ -107,9 +108,10 @@ public class TeamController {
         return ResponseEntity.ok("You accepted the invitation");
     }
 
-    @PutMapping("/team-user-deletion/{id}")
-    public String kickOutUserFromTeam(@PathVariable("id") Long id) {
-        teamService.kickOutUserFromTeam(id);
+    @PutMapping("/team-user-deletion/{teamId}/{id}")
+    public String kickOutUserFromTeam(@PathVariable("teamId") UUID teamId,
+                                      @PathVariable("id") Long id) {
+        teamService.kickOutUserFromTeam(teamId, id);
         return "User deleted from team";
     }
 
@@ -124,16 +126,18 @@ public class TeamController {
         return teamRoleRepository.findAll();
     }
 
-    @PutMapping("/update-team-member-role/{playerId}")
-    public ResponseEntity<String> updateTeamMemberRole(@PathVariable("playerId") Long playerId, @RequestBody TeamRoleUpdateDto teamRoleUpdateDto) {
-        teamService.updateTeamMemberRole(playerId, teamRoleUpdateDto);
+    @PutMapping("/update-role/{teamId}/{playerId}")
+    public ResponseEntity<String> updateTeamMemberRole(@PathVariable("teamId") UUID teamId,
+                                                       @PathVariable("playerId") Long playerId,
+                                                       @RequestBody TeamRoleUpdateDto teamRoleUpdateDto) {
+        teamService.updateTeamMemberRole(teamId, playerId, teamRoleUpdateDto);
         return ResponseEntity.ok("Role updated successfully");
     }
 
-    @PostMapping("/deleteTeam")
-    public ResponseEntity<String> deleteTeam() {
+    @DeleteMapping("/delete/{teamId}")
+    public ResponseEntity<String> deleteTeam(@PathVariable("teamId") UUID teamId) {
         try{
-            teamService.deleteTeam();
+            teamService.deleteTeam(teamId);
             return ResponseEntity.ok("Team deleted successfully");
         } catch (Exception e){
             throw new TeamNotFoundException("Team not found");
