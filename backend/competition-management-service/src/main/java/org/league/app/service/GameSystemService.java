@@ -81,6 +81,9 @@ public class GameSystemService {
         Map<Integer, String> sportIdToNameMap = sports.stream()
                 .collect(Collectors.toMap(SportDto::getId, SportDto::getName));
 
+        Map<Integer, Boolean> sportIdToSportTypeMap = sports.stream()
+                .collect(Collectors.toMap(SportDto::getId,SportDto::getIsEsport));
+
         return gameSystemsBySport.stream()
                 .map(gameSystem -> GameSystemCreateCompetitionDto.builder()
                         .systemId(gameSystem.getId())
@@ -88,6 +91,7 @@ public class GameSystemService {
                         .isIndividual(gameSystem.getIsIndividual())
                         .sportId(gameSystem.getSportId())
                         .sportName(sportIdToNameMap.getOrDefault(gameSystem.getSportId(), ""))
+                        .isEsport(sportIdToSportTypeMap.getOrDefault(gameSystem.getSportId(), false))
                         .build())
                 .collect(Collectors.toList());
     }
