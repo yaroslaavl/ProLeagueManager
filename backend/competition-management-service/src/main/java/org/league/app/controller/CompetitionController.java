@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
@@ -28,13 +29,33 @@ public class CompetitionController {
     }
 
     @GetMapping("/search-tournaments")
-    public ResponseEntity<List<CompetitionReadDto>> findAllTournamentsByFiltersAndDynamicSearch(@RequestParam(required = false, name = "isIndividual") Boolean isIndividual,
-                                                                                         @RequestParam(required = false, name = "status") String status,
-                                                                                         @RequestParam(required = false, name = "keyword") String keyword) {
-        List<Competition> allTournamentsByFiltersAndDynamicSearch = competitionService.findAllTournamentsByFiltersAndDynamicSearch(keyword, isIndividual, status);
-        List<CompetitionReadDto> collect = allTournamentsByFiltersAndDynamicSearch.stream()
-                .map(competitionMapper::toDto)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(collect);
+    public ResponseEntity<List<CompetitionReadDto>> findAllTournamentsByFiltersAndDynamicSearch(
+            @RequestParam(required = false, name = "keyword") String keyword,
+            @RequestParam(required = false, name = "isIndividual") Boolean isIndividual,
+            @RequestParam(required = false, name = "status") String status,
+            @RequestParam(required = false, name = "isEsport") Boolean isEsport) {
+        List<CompetitionReadDto> allTournamentsByFiltersAndDynamicSearch =
+                competitionService.findAllTournamentsByFiltersAndDynamicSearch(keyword, isIndividual, status, isEsport);
+
+        return ResponseEntity.ok(allTournamentsByFiltersAndDynamicSearch);
+    }
+
+    @GetMapping("/search-leagues")
+    public ResponseEntity<List<CompetitionReadDto>> findAllLeaguesByFilters(
+            @RequestParam(required = false, name = "isIndividual") Boolean isIndividual,
+            @RequestParam(required = false, name = "isEsport") Boolean isEsport) {
+        List<CompetitionReadDto> allLeaguesByFilters = competitionService.findAllLeaguesByFilters(isIndividual, isEsport);
+
+        return ResponseEntity.ok(allLeaguesByFilters);
+    }
+
+    @GetMapping("/all-competitions")
+    public List<CompetitionReadDto> findAllCompetitions() {
+        return competitionService.findAll();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<CompetitionReadDto> findById(@PathVariable UUID id) {
+        return ResponseEntity.ok(competitionService.findById(id));
     }
 }
