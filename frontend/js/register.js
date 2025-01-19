@@ -97,12 +97,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Отображение ошибок
     if (errors.length > 0) {
-      password1Error.style.display = "flex";
-      password1.style.borderColor = "rgb(234, 57, 67)";
-      password1Error.textContent = "Troubles: " + errors.join(", ");
+
+      password1.style.borderColor = "#EA3943";
+      password1.textContent = "Troubles: " + errors.join(", ");
       return false;
     } else {
-      password1Error.style.display = "none";
+
       password1.style.borderColor = "#16C784";
       return true;
     }
@@ -110,13 +110,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function validatePasswordMatch() {
     if (password1.value !== password2.value) {
-      password2Error.style.display = "flex";
-      password2.style.borderColor = "rgb(234, 57, 67)";
-      password2Error.textContent = "Password doesnt match";
+      password1.style.borderColor = "#EA3943";
+      password2.style.borderColor = "#EA3943";
+      password2.textContent = "Password doesnt match";
       return false;
     }
     else {
-      password2Error.style.display = "none";
+      password1.style.borderColor = "#16C784"
       password2.style.borderColor = "#16C784";
       return true;
     }
@@ -155,4 +155,34 @@ document.addEventListener("DOMContentLoaded", () => {
     toggleRegisterButton();
   });
 });
+document.addEventListener("DOMContentLoaded", () => {
+  const pageLoadSpan = document.querySelector(".footer-content span:nth-child(3)");
+  const htmlLoadSpan = document.querySelector(".footer-content span:nth-child(4)");
 
+  if (pageLoadSpan && htmlLoadSpan) {
+    // Ждём окончания полной загрузки страницы
+    window.addEventListener("load", () => {
+      setTimeout(() => {
+        const performanceTiming = performance.timing;
+
+        // Время полной загрузки страницы
+        const pageLoadTime = performanceTiming.loadEventEnd - performanceTiming.navigationStart;
+
+        // Время загрузки HTML
+        const htmlLoadTime = performanceTiming.responseEnd - performanceTiming.responseStart;
+
+        // Проверяем, что значения корректны
+        const validPageLoadTime = pageLoadTime > 0 ? pageLoadTime : performance.now(); // Используем performance.now() как fallback
+        const validHtmlLoadTime = htmlLoadTime > 0 ? htmlLoadTime : 0;
+
+        // Обновляем значения в DOM с обёрткой для стилей
+        pageLoadSpan.innerHTML = `Strona: <span class="blue">${Math.round(validPageLoadTime)}ms</span>`;
+        htmlLoadSpan.innerHTML = `Szablon: <span class="blue">${Math.round(validHtmlLoadTime)}ms</span>`;
+
+        // Логируем значения для отладки
+        console.log("Page Load Time (ms):", validPageLoadTime);
+        console.log("HTML Load Time (ms):", validHtmlLoadTime);
+      }, 0);
+    });
+  }
+});

@@ -13,6 +13,9 @@
 </head>
 <body>
   <div class="container">
+    <a href="main.html"><div style="justify-content: center;display:flex">
+      <img src="img/blogo_text.svg" alt="" style="width: 40%;height: 40%;">
+    </div></a>
     <div class="nav-links">
       <a href="login.html" class="link" id="login">Logowanie</a>
       <p>|</p>
@@ -37,18 +40,21 @@
       <input id="monthInput" type="number" min="1" max="12" placeholder="Miesiąc" required>
       <input id="yearInput" type="number" min="1900" max="2100" placeholder="Rok" required>
     </div>
+    <div class="Pass">
       <p class="register-p">Hasło</p>
-    <div style="position: relative;">
-      <input type="password" maxlength="32" id="password1" placeholder="Hasło" required>
-      <img src="img/eye-close.svg" alt="Pokaż hasło" class="password-toggle" onclick="togglePassword('password1', this)">
-      <div class="error-message" id="password1-error"></div>
+      <div class="form-row">
+        <div class="input-container">
+          <input style="width: 89.5%" type="password" maxlength="32" id="password1" placeholder="Hasło" required>
+          <img src="img/eye-close.svg" alt="Pokaż hasło" class="password-toggle" onclick="togglePassword('password1', this)">
+        </div>
+        <div class="input-container">
+          <input style="width: 89.5%" type="password" maxlength="32" id="password2" placeholder="Powtórz hasło" required>
+          <img src="img/eye-close.svg" alt="Pokaż hasło" class="password-toggle" onclick="togglePassword('password2', this)">
+        </div>
+      </div>
     </div>
-    <p class="register-p">Powtórz hasło</p>
-    <div style="position: relative;">
-      <input type="password" maxlength="32" id="password2" placeholder="Powtórz hasło" required>
-      <img src="img/eye-close.svg" alt="Pokaż hasło" class="password-toggle" onclick="togglePassword('password2', this)">
-      <div class="error-message" id="password2-error"></div>
-    </div>
+
+
 
 
 
@@ -61,10 +67,10 @@
 
 
     <button id="googleAuth" class="social-button google">
-      <img src="img/google-logo.svg" alt="Google"> Kontynuuj z Google
+      <img src="img/google-logo.svg" alt="Google" style="width: 7%;height: 7%"> Kontynuuj z Google
     </button>
     <button class="social-button apple">
-      <img src="img/apple-logo.svg" alt="Apple" style="width: 5%" > Kontynuuj z Apple
+      <img src="img/apple-logo.svg" alt="Apple" style="width: 5.7%;height:5.7%" > Kontynuuj z Apple
     </button>
   </div>
   <div class="link-row">

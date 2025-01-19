@@ -14,20 +14,22 @@
   <header class="header">
 
     <div class="header-center">
+      <div style="display: flex">
       <a href="main.html"><img src="img/blogo_text.svg" alt="Logo" class="logo"></a>
       <nav class="nav">
         <a href="main.html" class="nav-link-header">Sporty</a>
-        <a href="main.html" class="nav-link-header">e-Sporty</a>
       </nav>
+      </div>
       <div class="search-container">
         <img src="img/search.svg" alt="Szukaj" class="search-icon">
         <input type="text" placeholder="Szukaj" class="search-input">
       </div>
-      <div id = "notification_button">
-      <button style="background: none;" class="icon-btn notification-btn">
-        <img src="img/notification-bell.svg" alt="Powiadomienia">
-      </button>
-      </div>
+     <div style="display: flex;margin-bottom: 15px">
+       <div id = "notification_button">
+         <button style="background: none;" class="icon-btn notification-btn">
+           <img style="width: 25px;height: 25px" src="img/notification-bell.svg" alt="Powiadomienia">
+         </button>
+       </div>
       <div class="header-right" id="header_right" onclick="toggleMenu()">
         <div class="menu-container" >
           <button class="icon-btn menu-btn" style="margin-top: 0">
@@ -38,7 +40,7 @@
               <div class="user-info">
                 <img src="img/profile.svg" alt="Avatar" class="user-avatar" id="avatarBurger">
                 <div>
-                  <span id="greeting">Cześć, <span id="userName">User</span></span>
+                  <span id="greeting" style="font-size: 14px">Cześć, <span id="userName">User</span></span>
                   <span id="userEmail" class="email">email@example.com</span>
                 </div>
               </div>
@@ -64,7 +66,7 @@
           <img src="img/profile.svg" alt="Profil" >
         </button>
       </div>
-
+    </div>
     </div>
   </header>
 
@@ -78,17 +80,17 @@
 
 
   <footer>
-  <div class="footer-content">
-    <span>Wspierane przez <a href="https://zut.edu.pl" target="_blank">ZUT</a></span>
-    <span>Wersja: <a href="#">1.22.1</a></span>
-    <span>Strona: 2ms</span>
-    <span>Szablon: 0ms</span>
-  </div>
-  <div class="footer-links">
-    <a href="#">Licencje</a>
-    <a href="#">API</a>
-  </div>
-</footer>
+    <div class="footer-content">
+      <span>Wspierane przez: <a href="https://zut.edu.pl" target="_blank">ZUT</a></span>
+      <span>Wersja: <a href="#">1.0.0</a></span>
+      <span>Strona: 2ms</span>
+      <span>Szablon: 0ms</span>
+    </div>
+    <div class="footer-links">
+      <a href="#">Licencje</a>
+      <a href="#">API</a>
+    </div>
+  </footer>
 </div>
 
 <link rel="stylesheet" href="css/burgerMenu.css">
