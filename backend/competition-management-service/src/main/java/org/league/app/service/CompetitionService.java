@@ -11,6 +11,7 @@ import org.league.app.database.specification.CompetitionSpecification;
 import org.league.app.dto.CompetitionCreateEditDto;
 import org.league.app.dto.CompetitionReadDto;
 import org.league.app.exception.CompetitionAlreadyExists;
+import org.league.app.exception.CompetitionNotFoundException;
 import org.league.app.exception.GameSystemNotFoundException;
 import org.league.app.mapper.CompetitionMapper;
 import org.springframework.data.jpa.domain.Specification;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -79,4 +81,35 @@ public class CompetitionService {
 
         return competitionRepository.findAll(specification);
     }
+
+    @Transactional
+    public CompetitionReadDto edit(String competitionName, CompetitionCreateEditDto newCompetition) {
+        Competition currentCompetition = competitionRepository.findCompetitionByName(competitionName)
+                .orElseThrow(() -> new CompetitionNotFoundException("Competition not found : " + competitionName));
+
+        if (competitionRepository.findCompetitionByName(newCompetition.getName()).isPresent()) {
+            throw new CompetitionAlreadyExists("Competition with name:" + newCompetition.getName() + " already exists");
+        }
+
+        Optional.ofNullable(newCompetition.getName()).ifPresent(currentCompetition::setName);
+        Optional.ofNullable(newCompetition.getSportId()).ifPresent(currentCompetition::setSportId);
+        Optional.ofNullable(newCompetition.getCompetitionType()).map(CompetitionType::valueOf).ifPresent(currentCompetition::setCompetitionType);
+        Optional.ofNullable(newCompetition.getStartDate()).ifPresent(currentCompetition::setStartDate);
+        Optional.ofNullable(newCompetition.getEndDate()).ifPresent(currentCompetition::setEndDate);
+
+        competitionRepository.save(currentCompetition);
+        return competitionMapper.toDto(currentCompetition);
+    }
+
+    @Transactional
+    public boolean delete(String competitionName) {
+        return competitionRepository.findCompetitionByName(competitionName)
+                .map(entity -> {
+                    int deleted = competitionRepository.deleteCompetitionByName(competitionName.trim());
+                    competitionRepository.flush();
+                    return deleted > 0;
+                })
+                .orElse(false);
+    }
+
 }
