@@ -3,6 +3,7 @@ package org.league.app.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.league.app.database.entity.Competition;
+import org.league.app.database.entity.GameSystem;
 import org.league.app.database.entity.enums.CompetitionStatus;
 import org.league.app.database.entity.enums.CompetitionType;
 import org.league.app.database.repository.CompetitionRepository;
@@ -17,6 +18,7 @@ import org.league.app.feign.sportClient.SportClientFeign;
 import org.league.app.feign.sportClient.SportDto;
 import org.league.app.mapper.CompetitionMapper;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -134,11 +136,16 @@ public class CompetitionService {
             throw new CompetitionAlreadyExists("Competition with name:" + newCompetition.getName() + " already exists");
         }
 
+        GameSystem gameSystem = gameSystemRepository.findById(newCompetition.getGameSystemId())
+                        .orElseThrow(() -> new GameSystemNotFoundException("Game System not found"));
+
         Optional.ofNullable(newCompetition.getName()).ifPresent(currentCompetition::setName);
         Optional.ofNullable(newCompetition.getSportId()).ifPresent(currentCompetition::setSportId);
+        Optional.ofNullable(newCompetition.getGameSystemId()).ifPresent(gameSystem::setId);
         Optional.ofNullable(newCompetition.getCompetitionType()).map(CompetitionType::valueOf).ifPresent(currentCompetition::setCompetitionType);
         Optional.ofNullable(newCompetition.getStartDate()).ifPresent(currentCompetition::setStartDate);
         Optional.ofNullable(newCompetition.getEndDate()).ifPresent(currentCompetition::setEndDate);
+        Optional.ofNullable(newCompetition.getStatus()).map(CompetitionStatus::valueOf).ifPresent(currentCompetition::setStatus);
 
         competitionRepository.save(currentCompetition);
         return competitionMapper.toDto(currentCompetition);
@@ -148,11 +155,15 @@ public class CompetitionService {
     public boolean delete(String competitionName) {
         return competitionRepository.findCompetitionByName(competitionName)
                 .map(entity -> {
-                    int deleted = competitionRepository.deleteCompetitionByName(competitionName.trim());
+                    int deleted = competitionRepository.deleteCompetitionByName(competitionName);
                     competitionRepository.flush();
                     return deleted > 0;
                 })
                 .orElse(false);
+    }
+
+    private String securityContext() {
+        return SecurityContextHolder.getContext().getAuthentication().getName();
     }
 
 }

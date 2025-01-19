@@ -15,6 +15,7 @@ import org.league.app.mapper.GameSystemMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.reflect.Field;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -56,6 +57,32 @@ public class GameSystemService {
 
         log.info("Deleting game system: {}", gameSystem);
         gameSystemRepository.delete(gameSystem);
+    }
+
+    @Transactional
+    public GameSystemReadDto updateGameSystemPartial(Integer id, Map<String,Object> updates) {
+        GameSystem gameSystem = gameSystemRepository.findById(id)
+                .orElseThrow(() -> new GameSystemNotFoundException("Game system not found"));
+
+        updates.forEach((field, value) -> {
+            Field declaredField;
+            try {
+                declaredField = GameSystem.class.getDeclaredField(field);
+                if (field.equals("systemName") && updates.get("systemName") != null) {
+                    Optional<GameSystem> gameSystemBySystemName = gameSystemRepository.findGameSystemBySystemName(updates.get("systemName").toString());
+                    if (gameSystemBySystemName.isPresent()) {
+                        throw new GameSystemAlreadyExists("Game system already exists");
+                    }
+                }
+                declaredField.setAccessible(true);
+                declaredField.set(gameSystem, value);
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        GameSystem saveSystem = gameSystemRepository.save(gameSystem);
+        return gameSystemMapper.toDto(saveSystem);
     }
 
     public List<GameSystemCreateCompetitionDto> searchGameSystem(String query) {

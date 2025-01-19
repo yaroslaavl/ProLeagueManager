@@ -35,7 +35,7 @@ public class SportService {
                 .map(sportMapper::toEntity)
                 .orElseThrow(() -> new IllegalArgumentException("Bad mapping"));
 
-        sport.setName(sport.getName().trim().replaceAll("\\s+", ""));
+        sport.setName(sport.getName());
         sportRepository.save(sport);
         return sportMapper.toDto(sport);
     }
@@ -47,7 +47,7 @@ public class SportService {
     }
 
     public SportReadDto findBySportName(String sportName) {
-        return sportRepository.findByName(sportName.trim().replaceAll("\\s+", ""))
+        return sportRepository.findByName(sportName)
                 .map(sportMapper::toDto)
                 .orElseThrow(() -> new SportNotFoundException("Sport not found: " + sportName));
     }

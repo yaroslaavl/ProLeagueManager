@@ -9,6 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.league.app.database.entity.enums.TeamStatus;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -32,6 +33,9 @@ public class Team {
     @Column(name = "team_status")
     @Enumerated(EnumType.STRING)
     private TeamStatus teamStatus;
+
+    @OneToMany(mappedBy = "team", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<TeamMember> teamMemberList;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)

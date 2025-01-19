@@ -33,15 +33,16 @@ public class CompetitionManagementConfig {
                                 "/actuator/health",
                                 "/api/competition/search-leagues",
                                 "/api/competition/**",
-                                "/api/competition/all-competitions",
+                                "/api/competition/all",
                                 "/api/competition/search-tournaments").permitAll()
                         .requestMatchers(
-                                "/api/competition/create-competition",
-                                "/api/competition/edit-competition/**",
-                                "/api/competition/delete-competition",
-                                "/api/game-system/create-game-system",
-                                "/api/game-system/delete-game-system/**",
+                                "/api/competition/create",
+                                "/api/competition/edit/**",
+                                "/api/competition/delete",
+                                "/api/game-system/create",
+                                "/api/game-system/delete/**",
                                 "/api/game-system/search",
+                                "/api/game-system/update/**",
                                 "/api/game-system/**").hasAuthority("EDITOR"))
                 .addFilterBefore(routeFilter, SecurityContextHolderFilter.class)
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
