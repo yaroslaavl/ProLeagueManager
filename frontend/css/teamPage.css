@@ -100,56 +100,64 @@ input
 
 
 footer {
-  display: grid; /* Используем CSS Grid */
-  grid-template-columns: 1fr auto 1fr; /* Три колонки: контент, пустота, контент */
-  align-items: center; /* Выравнивание по центру */
-  padding: 10px 400px; /* 200px отступы слева и справа */
-  background-color: #f5f5f5;
-  color: #666;
+  display: flex;
+  justify-content: space-between; /* Располагаем элементы по краям */
+  align-items: center; /* Выравниваем элементы по вертикали */
+  padding: 8px 40px; /* Отступы сверху/снизу и слева/справа */
+  color: #808A9D;
   font-size: 12px;
-  border-top: 1px solid #ddd;
+  background-color: #ffffff;
+  border-top: 1px solid #EFF2F5;
   position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
+
 }
 
-.footer-content {
-  display: flex;
-  gap: 10px;
-}
-
+.footer-content,
 .footer-links {
-  justify-self: center; /* Перемещаем блок к правому краю */
+  display: flex;
+  flex-wrap: wrap; /* Чтобы элементы переносились на мобильных */
+  gap: 10px; /* Расстояние между элементами */
+  margin-right: 80px;
 }
 
-.footer-content a
-{
+.footer-content a{
   color: #3861FB;
   font-weight: bold;
-  text-decoration: none;
-  transition: color 0.3s ease;
+
+
 }
+
 .footer-links a {
+  background-color: #EFF2F5;
   color: #000000;
   font-weight: bold;
   text-decoration: none;
-  transition: color 0.3s ease;
-}
 
-.footer-content a:hover,
-.footer-links a:hover {
-  text-decoration: none;
-  color: #3861FB;
-}
-
-.footer-links a {
-
+  border-radius: 8px;
   padding: 4px 8px;
-  border-radius: 4px;
-  margin-left: 10px;
-  transition: color 0.3s ease;
+
 }
+
+.blue{
+  color: #3861FB;
+  font-weight:bold ;
+}
+
+@media (max-width: 600px) {
+  footer {
+    flex-direction: column; /* Вертикальное расположение элементов */
+    text-align: center; /* Центрируем текст */
+  }
+  .footer-content,
+  .footer-links {
+    justify-content: center; /* Центрируем контент */
+  }
+}
+
+
 .header-right {
   display: flex;
   align-items: center; /* Выравнивание по вертикали */

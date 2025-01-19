@@ -47,6 +47,8 @@ async function Login() {
   } catch (err) {
     console.error(`Login error: ${err.message}`);
     alert("Nieprawidłowe dane logowania. Sprawdź swój e-mail lub hasło.");
+    document.getElementById('password').style.borderColor = "#EA3943";
+    document.getElementById('emailOrUsername').style.borderColor = "#EA3943"
   }
 }
 

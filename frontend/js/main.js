@@ -45,7 +45,7 @@ if(accToken === null || refToken === null){
    notifBtn.removeChild(notifBtn.firstChild);
   }
   burgerAndUser.innerHTML = `
-  <a href="login.html" class="registerBtn" style="width: 100%;height: 100%;cursor: pointer"><button class="register">Zaloguj sie</button></a>
+  <a href="login.html" ><div class="registerBtn"><button class="register">Zaloguj sie</button></div></a>
   `
   burgerAndUser.style.backgroundColor = "white"
 

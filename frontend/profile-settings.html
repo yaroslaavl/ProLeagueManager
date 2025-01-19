@@ -14,56 +14,59 @@
   <header class="header">
 
     <div class="header-center">
-      <a href="main.html"><img src="img/blogo_text.svg" alt="Logo" class="logo"></a>
-      <nav class="nav">
-        <a href="main.html" class="nav-link-header">Sporty</a>
-        <a href="main.html" class="nav-link-header">e-Sporty</a>
-      </nav>
+      <div style="display: flex">
+        <a href="main.html"><img src="img/blogo_text.svg" alt="Logo" class="logo"></a>
+        <nav class="nav">
+          <a href="main.html" class="nav-link-header">Sporty</a>
+        </nav>
+      </div>
       <div class="search-container">
         <img src="img/search.svg" alt="Szukaj" class="search-icon">
         <input type="text" placeholder="Szukaj" class="search-input">
       </div>
-
-      <button style="background: none;" class="icon-btn notification-btn">
-        <img src="img/notification-bell.svg" alt="Powiadomienia">
-      </button>
-      <div class="header-right" id="header_right" onclick="toggleMenu()">
-        <div class="menu-container" >
-          <button class="icon-btn menu-btn" style="margin-top: 0">
-            <img src="img/menu-hamburger.svg" alt="Menu">
+      <div style="display: flex;margin-bottom: 15px">
+        <div id = "notification_button">
+          <button style="background: none;" class="icon-btn notification-btn">
+            <img style="width: 25px;height: 25px" src="img/notification-bell.svg" alt="Powiadomienia">
           </button>
-          <div class="menu-popup" id="menuPopup">
-            <div class="menu-header">
-              <div class="user-info">
-                <img src="img/profile.svg" alt="Avatar" class="user-avatar" id="avatarBurger">
-                <div>
-                  <span id="greeting">Cześć, <span id="userName">User</span></span>
-                  <span id="userEmail" class="email">email@example.com</span>
+        </div>
+        <div class="header-right" id="header_right" onclick="toggleMenu()">
+          <div class="menu-container" >
+            <button class="icon-btn menu-btn" style="margin-top: 0">
+              <img src="img/menu-hamburger.svg" alt="Menu">
+            </button>
+            <div class="menu-popup" id="menuPopup">
+              <div class="menu-header">
+                <div class="user-info">
+                  <img src="img/profile.svg" alt="Avatar" class="user-avatar" id="avatarBurger">
+                  <div>
+                    <span id="greeting" style="font-size: 14px">Cześć, <span id="userName">User</span></span>
+                    <span id="userEmail" class="email">email@example.com</span>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="menu-settings">
-              <div class="setting-item">
-                <span>Język</span>
-                <span class="value">Polski</span>
+              <div class="menu-settings">
+                <div class="setting-item">
+                  <span>Język</span>
+                  <span class="value">Polski</span>
+                </div>
+                <div class="setting-item">
+                  <span>Ciemny tryb</span>
+                  <input type="checkbox" id="darkThemeToggle">
+                </div>
               </div>
-              <div class="setting-item">
-                <span>Ciemny tryb</span>
-                <input type="checkbox" id="darkThemeToggle">
+              <div class="menu-links">
+                <a href="public-profile.html" class="menu-link">Profil publiczny</a>
+                <a href="profile-settings.html" class="menu-link">Ustawienie</a>
+                <a href="#" class="menu-link" id="logOut" onclick="logOut()">Log Out</a>
               </div>
             </div>
-            <div class="menu-links">
-              <a href="public-profile.html" class="menu-link">Profil publiczny</a>
-              <a href="profile-settings.html" class="menu-link">Ustawienie</a>
-              <a href="#" class="menu-link" id="logOut" onclick="logOut()">Log Out</a>
-            </div>
-          </div>
-        </div >
-        <button class="icon-btn profile-btn"onclick="toggleMenu()">
-          <img src="img/profile.svg" alt="Profil" >
-        </button>
+          </div >
+          <button class="icon-btn profile-btn"onclick="toggleMenu()">
+            <img src="img/profile.svg" alt="Profil" >
+          </button>
+        </div>
       </div>
-
     </div>
   </header>
 
@@ -104,7 +107,7 @@
       <div class="email_input">
         <div class="input-group">
           <p>Adres e-mail</p>
-          <input id="email" maxlength="64" type="email" placeholder="example@gmail.com" disabled>
+          <input id="email" maxlength="64" type="email" placeholder="example@gmail.com" style="border: none;background-color: #EFF2F5;color: #000000" disabled>
         </div>
       </div>
       <div class="imie_nazwisko_input">
@@ -120,15 +123,15 @@
       <div class="birthdate_input">
         <div class="input-group">
           <p>Dzień</p>
-          <input id="dayInput" type="number" placeholder="Dzień" disabled>
+          <input id="dayInput" type="number" style="border: none;background-color: #EFF2F5 ;color: #000000" placeholder="Dzień" disabled>
         </div>
         <div class="input-group">
           <p>Miesiąc</p>
-          <input id="monthInput" type="number" placeholder="Miesiąc" disabled>
+          <input id="monthInput" type="number" style="border: none;background-color: #EFF2F5 ;color: #000000" placeholder="Miesiąc" disabled>
         </div>
         <div class="input-group">
           <p>Rok</p>
-          <input id="yearInput" type="number" placeholder="Rok" disabled>
+          <input id="yearInput" type="number" style="border: none;background-color: #EFF2F5; color: #000000" placeholder="Rok" disabled>
         </div>
       </div>
 
@@ -150,8 +153,8 @@
 
   <footer>
     <div class="footer-content">
-      <span>Wspierane przez <a href="https://zut.edu.pl" target="_blank">ZUT</a></span>
-      <span>Wersja: <a href="#">1.22.1</a></span>
+      <span>Wspierane przez: <a href="https://zut.edu.pl" target="_blank">ZUT</a></span>
+      <span>Wersja: <a href="#">1.0.0</a></span>
       <span>Strona: 2ms</span>
       <span>Szablon: 0ms</span>
     </div>

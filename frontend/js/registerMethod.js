@@ -32,9 +32,13 @@ async function register() {
     };
 
     const response = await fetch(url, params);
-
+    if(response.status === 409){
+      document.getElementById('username').style.borderColor = '#EA3943';
+      document.getElementById('email').style.borderColor = '#EA3943';
+    }
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
+
     }
 
     const data = await response.json();
@@ -44,6 +48,7 @@ async function register() {
     window.location.href = "http://localhost:63342/ProLeagueManager/frontend/login.html";
   } catch (err) {
     console.error(`Registration error: ${err.message}`);
+    alert("Nie poprawne wprowadzone dane,lub nazwa uzytkownika lub poczta juz jest zajeta!");
   }
 }
 
