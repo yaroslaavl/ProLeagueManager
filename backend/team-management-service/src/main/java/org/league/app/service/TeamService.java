@@ -85,8 +85,8 @@ public class TeamService {
     }
 
     @Transactional
-    public TeamReadDto updateTeamName(TeamCreateEditDto teamCreateEditDto) {
-        Team team = getTeamWithAccessCheck();
+    public TeamReadDto updateTeamName(UUID teamId, TeamCreateEditDto teamCreateEditDto) {
+        Team team = getTeamWithAccessCheck(teamId);
 
         if(team.getTeamName().equals(teamCreateEditDto.getTeamName())) {
             throw new TeamNameAlreadyExistsException("This teamName is already yours. Please choose another one");
@@ -149,8 +149,8 @@ public class TeamService {
     }
 
     @Transactional
-    public String uploadTeamLogo(UploadTeamLogoDto uploadTeamLogoDto) throws IOException {
-        Team team = getTeamWithAccessCheck();
+    public String uploadTeamLogo(UUID teamId, UploadTeamLogoDto uploadTeamLogoDto) throws IOException {
+        Team team = getTeamWithAccessCheck(teamId);
 
         log.info("Team found by team name: {}", team);
         MultipartFile file = uploadTeamLogoDto.getTeamLogo();
@@ -202,8 +202,8 @@ public class TeamService {
     }
 
     @Transactional
-    public void teamInvitation(Long userId) {
-        Team team = getTeamWithAccessCheck();
+    public void teamInvitation(UUID teamId, Long userId) {
+        Team team = getTeamWithAccessCheck(teamId);
 
         Optional<TeamMember> teamMember = teamMemberRepository.findByTeamIdAndUserId(team.getId(), userId);
 
@@ -251,8 +251,8 @@ public class TeamService {
     }
 
     @Transactional
-    public void kickOutUserFromTeam(Long userId) {
-        Team teamWithAccessCheck = getTeamWithAccessCheck();
+    public void kickOutUserFromTeam(UUID teamId, Long userId) {
+        Team teamWithAccessCheck = getTeamWithAccessCheck(teamId);
 
         Optional<TeamMember> optionalTeamMember = teamMemberRepository.findByTeamIdAndUserId(teamWithAccessCheck.getId(), userId);
 
@@ -341,8 +341,8 @@ public class TeamService {
     }
 
     @Transactional
-    public void updateTeamMemberRole(Long playerId, TeamRoleUpdateDto teamRoleUpdateDto) {
-        Team teamWithAccessCheck = getTeamWithAccessCheck();
+    public void updateTeamMemberRole(UUID teamId, Long playerId, TeamRoleUpdateDto teamRoleUpdateDto) {
+        Team teamWithAccessCheck = getTeamWithAccessCheck(teamId);
 
         TeamMember teamMember = teamMemberRepository.findByTeamIdAndUserId(teamWithAccessCheck.getId(), playerId)
                 .orElseThrow(() -> new UserNotFoundInTeamException("User is not a member of this team"));
@@ -395,14 +395,9 @@ public class TeamService {
     }
 
     @Transactional
-    public void deleteTeam() {
-        Team team = getTeamWithAccessCheck();
-
-        if (team != null) {
-            teamRepository.delete(team);
-        } else {
-            throw new TeamNotFoundException("Team does not exist");
-        }
+    public void deleteTeam(UUID teamId) {
+        Team team = getTeamWithAccessCheck(teamId);
+        teamRepository.delete(team);
     }
 
     private byte[] getDefaultImage() {
@@ -442,19 +437,19 @@ public class TeamService {
         return authentication.getName();
     }
 
-    private Team getTeamWithAccessCheck() {
+    private Team getTeamWithAccessCheck(UUID teamId) {
         UserDto userByEmail = authClientFeign.getUserByEmail(securityContext());
-        Optional<TeamMember> teamByUserId = teamMemberRepository.findTeamByUserId(userByEmail.getId());
+        Team teamById = teamRepository.findTeamById(teamId)
+                .orElseThrow(() -> new TeamNotFoundException("Team does not exist"));
 
-        List<TeamMember> isManager = teamMemberRepository.findTeamMemberByRolesAndTeamId(getRolesByNames("MANAGER"), teamByUserId.get().getTeam().getId());
+        List<TeamMember> isManager = teamMemberRepository.findTeamMemberByRolesAndTeamId(getRolesByNames("MANAGER"), teamById.getId());
 
         boolean equals = isManager.getFirst().getUserId().equals(userByEmail.getId());
         if (!equals) {
             throw new NotManagerException("Access denied: You are not a manager of this team.");
         }
 
-        return teamRepository.findTeamByTeamName(teamByUserId.get().getTeam().getTeamName())
-                .orElseThrow(() -> new TeamNotFoundException("Team does not exist"));
+        return teamById;
     }
 
     private List<TeamRole> getRolesByNames(String... roleNames) {
