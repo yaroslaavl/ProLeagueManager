@@ -12,4 +12,5 @@ public class GameSystemCreateCompetitionDto {
     private Boolean isIndividual;
     private Integer sportId;
     private String sportName;
+    private Boolean isEsport;
 }
