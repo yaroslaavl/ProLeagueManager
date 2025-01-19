@@ -1,6 +1,7 @@
 package org.league.app.database.repository;
 
 import org.league.app.database.entity.Sport;
+import org.league.app.feign.SportDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -16,6 +17,8 @@ public interface SportRepository extends JpaRepository<Sport, Integer> {
 
     int deleteSportByName(String name);
 
-    @Query("SELECT s FROM Sport s WHERE LOWER(s.name) LIKE LOWER(CONCAT(:sportName, '%'))")
+    @Query("SELECT s FROM Sport s WHERE LOWER(s.name) LIKE LOWER(CONCAT('%', :sportName, '%'))")
     List<Sport> findByNameSearch(@Param("sportName") String sportName);
+
+    List<Sport> findSportsByIsEsport(Boolean isEsport);
 }
