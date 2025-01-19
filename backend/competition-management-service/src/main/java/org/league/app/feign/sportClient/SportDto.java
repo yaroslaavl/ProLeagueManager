@@ -7,4 +7,5 @@ public class SportDto {
 
     private Integer id;
     private String name;
+    private Boolean isEsport;
 }

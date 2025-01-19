@@ -65,6 +65,14 @@ public class SportController {
         return sportService.findAllByIsEsport(FALSE);
     }
 
+    @GetMapping("/type-of-sport")
+    public List<SportDto> findAllByIsEsport(@RequestParam("isEsport") Boolean isEsport) {
+        return sportRepository.findSportsByIsEsport(isEsport)
+                .stream()
+                .map(sportType -> new SportDto(sportType.getId(),sportType.getName(),sportType.getIsEsport()))
+                .collect(Collectors.toList());
+    }
+
     @GetMapping("/exact-sport/{sportName}")
     public SportReadDto findSportByName(@PathVariable("sportName") String sportName) {
         return sportService.findBySportName(sportName);
@@ -74,7 +82,7 @@ public class SportController {
     public List<SportDto> findByNameSearch(@RequestParam("sportName") String sportName) {
         return sportRepository.findByNameSearch(sportName)
                 .stream()
-                .map(sport -> new SportDto(sport.getId(),sport.getName()))
+                .map(sport -> new SportDto(sport.getId(),sport.getName(),sport.getIsEsport()))
                 .collect(Collectors.toList());
     }
 }

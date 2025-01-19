@@ -11,4 +11,7 @@ public interface SportClientFeign {
 
     @GetMapping("/api/sport/get-sports-by-name")
     List<SportDto> findByNameSearch(@RequestParam("sportName") String sportName);
+
+    @GetMapping("/api/sport/type-of-sport")
+    List<SportDto> findAllByIsEsport(@RequestParam("isEsport") Boolean isEsport);
 }
