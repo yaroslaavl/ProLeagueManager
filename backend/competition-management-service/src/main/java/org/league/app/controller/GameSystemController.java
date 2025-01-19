@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/game-system")
@@ -17,7 +18,7 @@ public class GameSystemController {
 
     private final GameSystemService gameSystemService;
 
-    @PostMapping("/create-game-system")
+    @PostMapping("/create")
     public ResponseEntity<GameSystemReadDto> createGameSystem(@RequestBody GameSystemCreateEditDto gameSystemCreateEditDto) {
         return ResponseEntity.ok(gameSystemService.createGameSystem(gameSystemCreateEditDto));
     }
@@ -28,7 +29,7 @@ public class GameSystemController {
         return ResponseEntity.ok(gameSystem);
     }
 
-    @DeleteMapping("/delete-game-system/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteGameSystem(@PathVariable("id") Integer id) {
         gameSystemService.deleteGameSystemById(id);
         return ResponseEntity.ok("Deleted GameSystem");
@@ -42,4 +43,8 @@ public class GameSystemController {
         return ResponseEntity.ok(gameSystemCreateCompetitionDtoList);
     }
 
+    @PatchMapping("/update/{id}")
+    public ResponseEntity<GameSystemReadDto> updateGameSystemPartial(@PathVariable("id") Integer id, @RequestBody Map<String, Object> updates) {
+        return ResponseEntity.ok(gameSystemService.updateGameSystemPartial(id, updates));
+    }
 }
