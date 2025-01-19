@@ -17,6 +17,7 @@ import org.league.app.feign.sportClient.SportClientFeign;
 import org.league.app.feign.sportClient.SportDto;
 import org.league.app.mapper.CompetitionMapper;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -148,11 +149,15 @@ public class CompetitionService {
     public boolean delete(String competitionName) {
         return competitionRepository.findCompetitionByName(competitionName)
                 .map(entity -> {
-                    int deleted = competitionRepository.deleteCompetitionByName(competitionName.trim());
+                    int deleted = competitionRepository.deleteCompetitionByName(competitionName);
                     competitionRepository.flush();
                     return deleted > 0;
                 })
                 .orElse(false);
+    }
+
+    private String securityContext() {
+        return SecurityContextHolder.getContext().getAuthentication().getName();
     }
 
 }
