@@ -37,6 +37,8 @@ public class CompetitionManagementConfig {
                                 "/api/competition/search-tournaments").permitAll()
                         .requestMatchers(
                                 "/api/competition/create-competition",
+                                "/api/competition/edit-competition/**",
+                                "/api/competition/delete-competition",
                                 "/api/game-system/create-game-system",
                                 "/api/game-system/delete-game-system/**",
                                 "/api/game-system/search",

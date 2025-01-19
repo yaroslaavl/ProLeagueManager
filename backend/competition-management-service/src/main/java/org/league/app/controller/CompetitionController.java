@@ -13,6 +13,9 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static org.springframework.http.ResponseEntity.noContent;
+import static org.springframework.http.ResponseEntity.notFound;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/competition")
@@ -57,5 +60,18 @@ public class CompetitionController {
     @GetMapping("/{id}")
     public ResponseEntity<CompetitionReadDto> findById(@PathVariable UUID id) {
         return ResponseEntity.ok(competitionService.findById(id));
+    }
+
+    @PutMapping("/edit-competition/{competitionName}")
+    public ResponseEntity<CompetitionReadDto> editCompetition (@PathVariable("competitionName") String competitionName,
+                                                               @RequestBody CompetitionCreateEditDto newCompetition) {
+        return ResponseEntity.ok(competitionService.edit(competitionName, newCompetition));
+    }
+
+    @DeleteMapping("/delete-competition")
+    public ResponseEntity<?> deleteCompetition (@RequestParam("competitionName") String competitionName) {
+        return competitionService.delete(competitionName)
+                ? noContent().build()
+                : notFound().build();
     }
 }

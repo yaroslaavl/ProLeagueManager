@@ -24,6 +24,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -123,4 +124,35 @@ public class CompetitionService {
 
         return competitionMapper.toDto(competition);
     }
+
+    @Transactional
+    public CompetitionReadDto edit(String competitionName, CompetitionCreateEditDto newCompetition) {
+        Competition currentCompetition = competitionRepository.findCompetitionByName(competitionName)
+                .orElseThrow(() -> new CompetitionNotFoundException("Competition not found : " + competitionName));
+
+        if (competitionRepository.findCompetitionByName(newCompetition.getName()).isPresent()) {
+            throw new CompetitionAlreadyExists("Competition with name:" + newCompetition.getName() + " already exists");
+        }
+
+        Optional.ofNullable(newCompetition.getName()).ifPresent(currentCompetition::setName);
+        Optional.ofNullable(newCompetition.getSportId()).ifPresent(currentCompetition::setSportId);
+        Optional.ofNullable(newCompetition.getCompetitionType()).map(CompetitionType::valueOf).ifPresent(currentCompetition::setCompetitionType);
+        Optional.ofNullable(newCompetition.getStartDate()).ifPresent(currentCompetition::setStartDate);
+        Optional.ofNullable(newCompetition.getEndDate()).ifPresent(currentCompetition::setEndDate);
+
+        competitionRepository.save(currentCompetition);
+        return competitionMapper.toDto(currentCompetition);
+    }
+
+    @Transactional
+    public boolean delete(String competitionName) {
+        return competitionRepository.findCompetitionByName(competitionName)
+                .map(entity -> {
+                    int deleted = competitionRepository.deleteCompetitionByName(competitionName.trim());
+                    competitionRepository.flush();
+                    return deleted > 0;
+                })
+                .orElse(false);
+    }
+
 }
