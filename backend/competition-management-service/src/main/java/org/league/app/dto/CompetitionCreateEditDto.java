@@ -1,8 +1,6 @@
 package org.league.app.dto;
 
 import lombok.Data;
-import org.league.app.database.entity.enums.CompetitionStatus;
-
 import java.time.LocalDateTime;
 
 @Data
