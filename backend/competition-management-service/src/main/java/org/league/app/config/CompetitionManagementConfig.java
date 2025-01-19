@@ -31,6 +31,9 @@ public class CompetitionManagementConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/actuator/health",
+                                "/api/competition/search-leagues",
+                                "/api/competition/**",
+                                "/api/competition/all-competitions",
                                 "/api/competition/search-tournaments").permitAll()
                         .requestMatchers(
                                 "/api/competition/create-competition",
