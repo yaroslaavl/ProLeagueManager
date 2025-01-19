@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.springframework.http.ResponseEntity.noContent;
+import static org.springframework.http.ResponseEntity.notFound;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/competition")
@@ -36,5 +39,18 @@ public class CompetitionController {
                 .map(competitionMapper::toDto)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(collect);
+    }
+
+    @PutMapping("/edit-competition/{competitionName}")
+    public ResponseEntity<CompetitionReadDto> editCompetition (@PathVariable("competitionName") String competitionName,
+                                                               @RequestBody CompetitionCreateEditDto newCompetition) {
+        return ResponseEntity.ok(competitionService.edit(competitionName, newCompetition));
+    }
+
+    @DeleteMapping("/delete-competition")
+    public ResponseEntity<?> deleteCompetition (@RequestParam("competitionName") String competitionName) {
+        return competitionService.delete(competitionName)
+                ? noContent().build()
+                : notFound().build();
     }
 }
