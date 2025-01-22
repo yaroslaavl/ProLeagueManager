@@ -6,6 +6,9 @@ import org.league.app.database.entity.TeamMember;
 import org.league.app.database.entity.TeamRole;
 import org.league.app.database.repository.TeamRoleRepository;
 import org.league.app.exception.TeamNotFoundException;
+import org.league.app.feign.teamClietnt.TeamFeignDto;
+import org.league.app.feign.teamClietnt.TeamMemberFeignDto;
+import org.league.app.feign.teamClietnt.TeamRoleFeignDto;
 import org.league.app.mapper.TeamMapper;
 import org.springframework.data.domain.Page;
 import org.league.app.database.repository.TeamRepository;
@@ -20,9 +23,11 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.data.domain.Pageable;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -136,21 +141,45 @@ public class TeamController {
 
     @DeleteMapping("/delete/{teamId}")
     public ResponseEntity<String> deleteTeam(@PathVariable("teamId") UUID teamId) {
-        try{
+        try {
             teamService.deleteTeam(teamId);
             return ResponseEntity.ok("Team deleted successfully");
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new TeamNotFoundException("Team not found");
         }
     }
 
     @GetMapping("/get-teams-by-userId")
-    public ResponseEntity<List<Team>> findTeamsByUserId(@RequestParam("userId") Long userId){
+    public ResponseEntity<List<Team>> findTeamsByUserId(@RequestParam("userId") Long userId) {
         return ResponseEntity.ok(teamService.findTeamsByUserId(userId));
     }
 
     @GetMapping("/get-team-member-by-team-and-userId")
     public ResponseEntity<TeamMember> findTeamMemberByTeamAndUserId(@RequestParam("teamId") UUID teamId, @RequestParam("userId") Long userId) {
-        return ResponseEntity.ok(teamService.findByTeamIdAndUserId(teamId,userId));
+        return ResponseEntity.ok(teamService.findByTeamIdAndUserId(teamId, userId));
+    }
+
+    @GetMapping("/managed")
+    public ResponseEntity<List<TeamFeignDto>> findTeamsWhereUserIsManager(@RequestParam("id") Long userId) {
+        List<Team> teams = teamService.findTeamWhereUserIsManager(userId);
+
+        List<TeamFeignDto> teamDtos = teams.stream()
+                .map(team -> new TeamFeignDto(
+                        team.getId(),
+                        team.getTeamName(),
+                        team.getTeamStatus(),
+                        team.getTeamMemberList().stream()
+                                .map(member -> new TeamMemberFeignDto(
+                                        member.getId(),
+                                        member.getRoles().stream()
+                                                .map(role -> new TeamRoleFeignDto(
+                                                        role.getId(),
+                                                        role.getName()))
+                                                .collect(Collectors.toList()),
+                                        member.getIsSubstitute()))
+                                .collect(Collectors.toList())))
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(teamDtos);
     }
 }
