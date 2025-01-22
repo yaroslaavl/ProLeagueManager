@@ -3,26 +3,37 @@ package org.league.app.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.league.app.database.entity.Competition;
+import org.league.app.database.entity.CompetitionParticipant;
 import org.league.app.database.entity.GameSystem;
+import org.league.app.database.entity.enums.CompetitionParticipantStatus;
 import org.league.app.database.entity.enums.CompetitionStatus;
 import org.league.app.database.entity.enums.CompetitionType;
+import org.league.app.database.repository.CompetitionParticipantRepository;
 import org.league.app.database.repository.CompetitionRepository;
 import org.league.app.database.repository.GameSystemRepository;
 import org.league.app.database.specification.CompetitionSpecification;
 import org.league.app.dto.CompetitionCreateEditDto;
 import org.league.app.dto.CompetitionReadDto;
+import org.league.app.exception.CaptainNotIncludedException;
 import org.league.app.exception.CompetitionAlreadyExists;
 import org.league.app.exception.CompetitionNotFoundException;
 import org.league.app.exception.GameSystemNotFoundException;
+import org.league.app.feign.authClient.AuthClientFeign;
+import org.league.app.feign.authClient.UserDto;
 import org.league.app.feign.sportClient.SportClientFeign;
 import org.league.app.feign.sportClient.SportDto;
+import org.league.app.feign.teamClient.TeamClientFeign;
+import org.league.app.feign.teamClient.TeamFeignDto;
+import org.league.app.feign.teamClient.TeamMemberFeignDto;
 import org.league.app.mapper.CompetitionMapper;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -35,9 +46,12 @@ import java.util.Optional;
 public class CompetitionService {
 
     private final CompetitionRepository competitionRepository;
+    private final CompetitionParticipantRepository competitionParticipantRepository;
     private final GameSystemRepository gameSystemRepository;
     private final CompetitionMapper competitionMapper;
     private final SportClientFeign sportClientFeign;
+    private final AuthClientFeign authClientFeign;
+    private final TeamClientFeign teamClientFeign;
 
     @Transactional
     public CompetitionReadDto createCompetition(CompetitionCreateEditDto competitionCreate,
@@ -160,6 +174,52 @@ public class CompetitionService {
                     return deleted > 0;
                 })
                 .orElse(false);
+    }
+
+    @Transactional
+    public boolean addTeamToCompetition(UUID competitionId, UUID teamId, List<Long> selectedPlayerIds) { 
+        Competition competition = competitionRepository.findById(competitionId)
+                .orElseThrow(() -> new CompetitionNotFoundException("Competition not found"));
+
+        UserDto userByEmail = authClientFeign.getUserByEmail(securityContext());
+
+        if (competition.getGameSystem().getIsIndividual()) {
+            CompetitionParticipant competitionParticipant = CompetitionParticipant.builder()
+                    .competition(competition)
+                    .teamId(null)
+                    .playerId(userByEmail.getId())
+                    .isTeam(false)
+                    .registeredAt(LocalDateTime.now())
+                    .competitionParticipantStatus(CompetitionParticipantStatus.REGISTERED)
+                    .build();
+
+            competitionParticipantRepository.save(competitionParticipant);
+            return true;
+        } else {
+            List<TeamMemberFeignDto> teamMembers = competitionRepository.findTeamById(teamId);
+            boolean captainExists = teamMembers.stream()
+                    .filter(member -> member.getRoles().stream()
+                            .anyMatch(role -> role.getRoleName().equalsIgnoreCase("CAPTAIN")))
+                    .anyMatch(member -> selectedPlayerIds.contains(member.getId()));
+
+            if (!captainExists) {
+                throw new CaptainNotIncludedException("Selected players must include the team captain.");
+            }
+
+            List<CompetitionParticipant> participants = selectedPlayerIds.stream()
+                    .map(playerId -> CompetitionParticipant.builder()
+                            .competition(competition)
+                            .teamId(teamId)
+                            .playerId(playerId)
+                            .isTeam(true)
+                            .registeredAt(LocalDateTime.now())
+                            .competitionParticipantStatus(CompetitionParticipantStatus.REGISTERED)
+                            .build())
+                    .toList();
+
+            competitionParticipantRepository.saveAll(participants);
+            return true;
+        }
     }
 
     private String securityContext() {
