@@ -9,6 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.league.app.database.entity.enums.CompetitionParticipantStatus;
 
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
@@ -41,7 +42,7 @@ public class CompetitionParticipant {
     private Integer points;
 
     @Column(name = "registered_at", nullable = false, updatable = false)
-    private OffsetDateTime registeredAt;
+    private LocalDateTime registeredAt;
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
@@ -49,9 +50,9 @@ public class CompetitionParticipant {
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
-    private OffsetDateTime createdAt;
+    private LocalDateTime createdAt;
 
     @UpdateTimestamp
     @Column(name = "updated_at")
-    private OffsetDateTime updatedAt;
+    private LocalDateTime updatedAt;
 }

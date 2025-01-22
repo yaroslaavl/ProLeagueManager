@@ -11,6 +11,7 @@ import java.util.List;
 @FeignClient("team-management-service")
 public interface TeamClientFeign {
 
-    /*@GetMapping("/api/team/get-teams-by-userId")
-    List<Team> findTeamsByUserId(@RequestParam("userId") Long userId);*/
+    @GetMapping("/api/team/managed")
+    List<TeamFeignDto> findTeamsWhereUserIsManager(@RequestParam("id") Long userId);
+
 }
