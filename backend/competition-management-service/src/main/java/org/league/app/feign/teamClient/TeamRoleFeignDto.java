@@ -1,7 +1,10 @@
 package org.league.app.feign.teamClient;
 
+import lombok.Data;
+
+@Data
 public class TeamRoleFeignDto {
 
-    private Long id;
+    private Integer id;
     private String roleName;
 }
