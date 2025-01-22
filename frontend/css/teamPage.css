@@ -1,7 +1,8 @@
 body {
   font-family: Inter,sans-serif;
-  background-color: #f9f9f9;
+  background-color: #ffffff;
   animation: fadeIn 0.3s ease-in forwards;
+  margin: 0;
 }
 @keyframes fadeIn {
   from {
@@ -17,20 +18,20 @@ body {
   justify-content: center;
   align-items: center;
   background-color: #ffffff;
-  padding: 10px 20px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #EFF2F5;
   width: 100%;
-  height: 20%;
+  margin-right: -20px;
 }
 .logo {
-  height: 70px;
+  height: 60px;
   margin-right: 20px;
+  margin-top: 10px;
 }
 .nav {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 40px;
+  gap: 60px;
 }
 .nav-link-header {
   text-decoration: none;
@@ -40,41 +41,41 @@ body {
   font-size: 14px;
 }
 .header-center {
-  gap: 40px;
+  gap: 540px;
   display: flex;
   justify-content: center;
 }
-input
-{
+input {
   color: #808A9D;
 }
 /* Контейнер для поля поиска и иконки */
 .search-container {
   display: flex;
-  align-items: center; /* Центрируем иконку и инпут по вертикали */
-  position: relative; /* Для позиционирования иконки */
+  align-items: center;
+  position: relative;
 }
 .search-icon {
-  position: absolute; /* Абсолютное позиционирование иконки */
-  left: 15px; /* Отступ от левого края */
-  width: 18px; /* Размер иконки */
+  position: absolute;
+  left: 15px;
+  width: 18px;
   height: 18px;
-  pointer-events: none; /* Чтобы клик не взаимодействовал с иконкой */
+  pointer-events: none;
 }
 /* Поле поиска */
 .search-input {
-  padding: 10px 15px 10px 40px; /* Отступ слева увеличен для иконки */
+  padding: 15px 15px 15px 40px;
   border: none;
-  border-radius: 30px;
-  background-color: #e1e6f4;
+  border-radius: 12px;
+  background-color: #EFF2F5;
   outline: none;
   font-family: Inter, sans-serif;
   color: #808A9D;
-  width: 350px; /* Ширина поля */
+  width: 350px;
   font-size: 14px;
+  font-weight: bold;
 }
 .search-input::placeholder {
-  color: #808A9D; /* Цвет плейсхолдера */
+  color: #808A9D;
 }
 .icon-btn {
   display: flex;
@@ -85,25 +86,17 @@ input
   border-radius: 50%;
   background-color: #f0f2f5;
   border: none;
-  cursor: pointer;
-  transition: background 0.3s ease;
   margin-top: 20px;
-}
-.icon-btn:hover {
-
 }
 .icon-btn img {
   width: 20px;
   height: 20px;
 }
-
-
-
 footer {
   display: flex;
-  justify-content: space-between; /* Располагаем элементы по краям */
-  align-items: center; /* Выравниваем элементы по вертикали */
-  padding: 8px 40px; /* Отступы сверху/снизу и слева/справа */
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 40px;
   color: #808A9D;
   font-size: 12px;
   background-color: #ffffff;
@@ -112,60 +105,49 @@ footer {
   bottom: 0;
   left: 0;
   width: 100%;
-
 }
-
 .footer-content,
 .footer-links {
   display: flex;
-  flex-wrap: wrap; /* Чтобы элементы переносились на мобильных */
-  gap: 10px; /* Расстояние между элементами */
+  flex-wrap: wrap;
+  gap: 10px;
   margin-right: 80px;
 }
-
-.footer-content a{
+.footer-content a {
   color: #3861FB;
   font-weight: bold;
-
-
 }
-
 .footer-links a {
   background-color: #EFF2F5;
   color: #000000;
   font-weight: bold;
   text-decoration: none;
-
   border-radius: 8px;
   padding: 4px 8px;
-
 }
-
-.blue{
+.blue {
   color: #3861FB;
-  font-weight:bold ;
+  font-weight: bold;
 }
-
 @media (max-width: 600px) {
   footer {
-    flex-direction: column; /* Вертикальное расположение элементов */
-    text-align: center; /* Центрируем текст */
+    flex-direction: column;
+    text-align: center;
   }
   .footer-content,
   .footer-links {
-    justify-content: center; /* Центрируем контент */
+    justify-content: center;
   }
 }
-
-
 .header-right {
   display: flex;
-  align-items: center; /* Выравнивание по вертикали */
+  align-items: center;
   justify-content: center;
   justify-items: center;
   margin-top: 15px;
+  gap: 10px;
   background: #EFF2F5;
-  width: 70px;
+  width: 80px;
   height: 45px;
   border-radius: 20%;
   cursor: pointer;
@@ -184,7 +166,7 @@ footer {
   border: none;
   transition: background 0.3s ease;
 }
-.notification-btn{
+.notification-btn {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -194,27 +176,216 @@ footer {
   border: none;
   cursor: pointer;
   transition: background 0.3s ease;
+  margin-right: 10px;
 }
 .icon-btn:hover {
   cursor: pointer;
 }
-
 .icon-btn img {
   width: 20px;
   height: 20px;
 }
-.register{
+body {
+  font-family: Inter, sans-serif;
+  background-color: #ffffff;
+  animation: fadeIn 0.3s ease-in forwards;
+  margin: 0;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.team-container {
+  max-width: 1200px;
+  margin: 50px auto;
+  background-color: #ffffff;
+  border-radius: 20px;
+  padding: 20px;
+  font-weight: bold;
+}
+
+.team-container-header {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.team-img img {
+  width: 120px;
+  height: 120px;
+  border-radius: 20px;
+  border: 2px solid #ddd;
+}
+
+.team-info {
+  display: block;
+  flex-direction: column;
+  width: 45%;
+}
+
+.team-info > p {
+  margin: 2px;
+}
+
+.manager-name {
+  font-size: 10px;
+  color: #fff;
+  background-color: #3861FB;
+  padding: 5px 10px;
+  border-radius: 8px;
+  display: inline;
+}
+.team-info-management{
   width: 100%;
-  height: 80%;
-  background: #3861FB;
-  color: white;
-  border-radius: 12px;
-  border: 0;
+}
+.info-buttons {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  justify-content: space-between;
+}
+
+.buttons {
+  display: flex;
+  margin-top: 20px;
+  gap: 25px;
+  justify-content: flex-end;
+}
+
+.info-buttons button {
+  background-color: #EFF2F5;
+  border: none;
+  border-radius: 22px;
+  padding: 15px 50px;
+  font-size: 14px;
   font-weight: bold;
   cursor: pointer;
-  margin-top: 4px;
+  transition: background-color 0.3s;
 }
-.blue {
-  color: #3861FB;
+
+.info-buttons button:hover {
+  background-color: #ddd;
+}
+
+.buttons > .active {
+  background-color: #3861FB;
+  color: #ffffff;
+}
+
+.info-container {
+  margin-top: 25px;
+  background-color: #EFF2F5;
+  padding: 20px;
+  border-radius: 20px;
+}
+
+.info-container h2 {
+  font-size: 22px;
+  color: #333;
+  border-bottom: 2px solid #ddd;
+  padding-bottom: 10px;
+}
+
+.players {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.player {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background-color: #fff;
+  border-radius: 15px;
+  padding: 10px;
+
+}
+
+.player-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 2px solid #ddd;
+}
+
+.player-info {
+  display: flex;
+  justify-content: space-between;
+  width: 80%;
+
+}
+
+.player-name {
+  font-size: 14px;
+  font-weight: bold;
+  margin: 0;
+  text-align: center;
+}
+
+.player-nickname {
+  font-size: 12px;
+  color: #808A9D;
+  margin: 0;
+  text-align: center;
+}
+
+.player-joined {
+  font-size: 12px;
+  color: #808A9D;
+  margin: 0;
+  text-align: center;
+}
+
+.createdAt {
+  font-size: 11px;
+  color: #808A9D;
+  text-align: left;
+}
+
+.createdAt > p {
+  margin: 4px;
+}
+
+
+footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 40px;
+  background-color: #ffffff;
+  border-top: 1px solid #EFF2F5;
+  font-size: 12px;
+  color: #808A9D;
+}
+
+.footer-content {
+  display: flex;
+  gap: 20px;
+}
+
+.footer-links {
+  display: flex;
+  gap: 10px;
+}
+
+.footer-links a {
+  background-color: #EFF2F5;
+  color: #000;
+  padding: 5px 10px;
+  border-radius: 8px;
+  text-decoration: none;
   font-weight: bold;
 }
+.buttons>.active{
+  background-color: #3861FB;
+  color: #ffffff;
+}
+

@@ -5,14 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/teamPage.css">
-  <script src="js/main.js" defer></script> <!-- Подключение скрипта -->
-  <script src="js/burgerMenu.js"></script>
-  <title>Main</title>
+  <link rel="stylesheet" href="css/burgerMenu.css">
+  <script src="js/teamPage.js" defer></script>
+  <script src="js/burgerMenu.js" defer></script>
+
+  <title>Team Page</title>
 </head>
 <body>
 <div class="container">
   <header class="header">
-
     <div class="header-center">
       <div style="display: flex">
         <a href="main.html"><img src="img/blogo_text.svg" alt="Logo" class="logo"></a>
@@ -25,13 +26,13 @@
         <input type="text" placeholder="Szukaj" class="search-input">
       </div>
       <div style="display: flex;margin-bottom: 15px">
-        <div id = "notification_button">
+        <div id="notification_button">
           <button style="background: none;" class="icon-btn notification-btn">
             <img style="width: 25px;height: 25px" src="img/notification-bell.svg" alt="Powiadomienia">
           </button>
         </div>
         <div class="header-right" id="header_right" onclick="toggleMenu()">
-          <div class="menu-container" >
+          <div class="menu-container">
             <button class="icon-btn menu-btn" style="margin-top: 0">
               <img src="img/menu-hamburger.svg" alt="Menu">
             </button>
@@ -61,22 +62,87 @@
                 <a href="#" class="menu-link" id="logOut" onclick="logOut()">Log Out</a>
               </div>
             </div>
-          </div >
-          <button class="icon-btn profile-btn"onclick="toggleMenu()">
-            <img src="img/profile.svg" alt="Profil" >
+          </div>
+          <button class="icon-btn profile-btn" onclick="toggleMenu()">
+            <img src="img/profile.svg" alt="Profil">
           </button>
         </div>
       </div>
     </div>
   </header>
 
+  <div class="team-container">
+    <div class="team-container-header">
+      <div class="team-img">
+        <img src="img/apple-logo.png" alt="">
+      </div>
+      <div class="team-info-management">
+        <div style="border-bottom: 1px solid #EFF2F5;padding: 0px 0px 10px">
+          <div class="team-info">
+            <p class="team-name">Nazwa drużyny</p>
+            <p class="manager-name">Manager_nickname</p>
+          </div>
+        </div>
+        <div class="info-buttons">
+          <div class="createdAt">
+            <p style="color: #808A9D">Drużyna utworzona:</p>
+            <p>06.01.2025</p>
+          </div>
+          <div class="buttons">
+            <button class="active">Zespół</button>
+            <button>Turnieje</button>
+            <button>Ligi</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="info-container">
+      <h2>Zawodnicy</h2>
+      <div class="players">
 
-
-
-
-
-
-
+        <div class="player" style="font-size: 10px;color:#808A9D;background-color:#EFF2F5;margin-bottom: -25px">
+          <p>Zdjęcie:</p>
+          <div class="player-info">
+            <p >Imię i Nazwisko:</p>
+            <p >Nickname:</p>
+            <p>Dołączony:</p>
+          </div>
+        </div>
+        <div class="player">
+          <img src="img/profile.svg" alt="Avatar" class="player-avatar">
+          <div class="player-info">
+            <p class="player-name">Zhan Karpovich</p>
+            <p class="player-nickname">zhan_karp</p>
+            <p class="player-joined">20.11.2025</p>
+          </div>
+        </div>
+        <div class="player">
+          <img src="img/profile.svg" alt="Avatar" class="player-avatar">
+          <div class="player-info">
+            <p class="player-name">Zhan Karpovich</p>
+            <p class="player-nickname">zhan_karp</p>
+            <p class="player-joined">20.11.2025</p>
+          </div>
+        </div>
+        <div class="player">
+          <img src="img/profile.svg" alt="Avatar" class="player-avatar">
+          <div class="player-info">
+            <p class="player-name">Zhan Karpovich</p>
+            <p class="player-nickname">zhan_karp</p>
+            <p class="player-joined">20.11.2025</p>
+          </div>
+        </div>
+        <div class="player">
+          <img src="img/profile.svg" alt="Avatar" class="player-avatar">
+          <div class="player-info">
+            <p class="player-name">Zhan Karpovich</p>
+            <p class="player-nickname">zhan_karp</p>
+            <p class="player-joined">20.11.2025</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
 
   <footer>
@@ -93,6 +159,5 @@
   </footer>
 </div>
 
-<link rel="stylesheet" href="css/burgerMenu.css">
 </body>
 </html>

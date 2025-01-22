@@ -1,7 +1,8 @@
 body {
   font-family: Inter,sans-serif;
-  background-color: #f9f9f9;
+  background-color: #ffffff;
   animation: fadeIn 0.3s ease-in forwards;
+  margin: 0;
 }
 @keyframes fadeIn {
   from {
@@ -17,20 +18,21 @@ body {
   justify-content: center;
   align-items: center;
   background-color: #ffffff;
-  padding: 10px 20px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #EFF2F5;
   width: 100%;
-  height: 20%;
+  margin-right: -20px;
+
 }
 .logo {
-  height: 70px;
+  height: 60px;
   margin-right: 20px;
+  margin-top: 10px;
 }
 .nav {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 40px;
+  gap: 60px;
 }
 .nav-link-header {
   text-decoration: none;
@@ -40,7 +42,7 @@ body {
   font-size: 14px;
 }
 .header-center {
-  gap: 40px;
+  gap: 540px;
   display: flex;
   justify-content: center;
 }
@@ -63,15 +65,17 @@ input
 }
 /* Поле поиска */
 .search-input {
-  padding: 10px 15px 10px 40px; /* Отступ слева увеличен для иконки */
+  padding: 15px 15px 15px 40px; /* Отступ слева увеличен для иконки */
   border: none;
-  border-radius: 30px;
-  background-color: #e1e6f4;
+  border-radius: 12px;
+  background-color: #EFF2F5;
   outline: none;
   font-family: Inter, sans-serif;
   color: #808A9D;
   width: 350px; /* Ширина поля */
+
   font-size: 14px;
+  font-weight: bold;
 }
 .search-input::placeholder {
   color: #808A9D; /* Цвет плейсхолдера */
@@ -85,12 +89,7 @@ input
   border-radius: 50%;
   background-color: #f0f2f5;
   border: none;
-  cursor: pointer;
-  transition: background 0.3s ease;
   margin-top: 20px;
-}
-.icon-btn:hover {
-
 }
 .icon-btn img {
   width: 20px;
@@ -162,12 +161,13 @@ footer {
   justify-content: center;
   justify-items: center;
   margin-top: 15px;
+  gap: 10px;
   background: #EFF2F5;
-  width: 70px;
+  width: 80px;
   height: 45px;
   border-radius: 20%;
   cursor: pointer;
-}
+}/**/
 .header-right > .icon-btn {
   margin-bottom: 20px;
 }
@@ -192,6 +192,7 @@ footer {
   border: none;
   cursor: pointer;
   transition: background 0.3s ease;
+  margin-right: 10px;
 }
 .icon-btn:hover {
   cursor: pointer;
@@ -201,13 +202,6 @@ footer {
   width: 20px;
   height: 20px;
 }
-body {
-  font-family: Inter, sans-serif;
-  background-color: #f9f9f9;
-  margin: 0;
-  padding: 0;
-}
-
 .profile-container {
   max-width: 1200px;
   margin: 50px auto;
