@@ -2,6 +2,7 @@ package org.league.app.dto;
 
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
@@ -13,6 +14,6 @@ public class CompetitionParticipantCreateEditDto {
     private Long playerId;
     private Boolean isTeam;
     private Integer points;
-    private OffsetDateTime registeredAt;
+    private LocalDateTime registeredAt;
     private String status;
 }
