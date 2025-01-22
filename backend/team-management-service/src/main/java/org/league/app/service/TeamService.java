@@ -400,6 +400,11 @@ public class TeamService {
         teamRepository.delete(team);
     }
 
+    public List<Team> findTeamWhereUserIsManager(Long userId) {
+        List<TeamMember> teamMembers = teamMemberRepository.findTeamMemberByRolesAndUserId((getRolesByNames("MANAGER")), userId);
+        return teamMembers.stream().map(TeamMember::getTeam).collect(Collectors.toList());
+    }
+
     private byte[] getDefaultImage() {
         Path defaultImagePath = Paths.get(uploadDir, "default-team-logo.png");
         try {
