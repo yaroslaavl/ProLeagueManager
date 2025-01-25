@@ -14,16 +14,12 @@ import org.league.app.database.repository.GameSystemRepository;
 import org.league.app.database.specification.CompetitionSpecification;
 import org.league.app.dto.CompetitionCreateEditDto;
 import org.league.app.dto.CompetitionReadDto;
-import org.league.app.exception.CaptainNotIncludedException;
-import org.league.app.exception.CompetitionAlreadyExists;
-import org.league.app.exception.CompetitionNotFoundException;
-import org.league.app.exception.GameSystemNotFoundException;
+import org.league.app.exception.*;
 import org.league.app.feign.authClient.AuthClientFeign;
 import org.league.app.feign.authClient.UserDto;
 import org.league.app.feign.sportClient.SportClientFeign;
 import org.league.app.feign.sportClient.SportDto;
 import org.league.app.feign.teamClient.TeamClientFeign;
-import org.league.app.feign.teamClient.TeamFeignDto;
 import org.league.app.feign.teamClient.TeamMemberFeignDto;
 import org.league.app.mapper.CompetitionMapper;
 import org.springframework.data.jpa.domain.Specification;
@@ -31,9 +27,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -206,19 +200,24 @@ public class CompetitionService {
                 throw new CaptainNotIncludedException("Selected players must include the team captain.");
             }
 
-            List<CompetitionParticipant> participants = selectedPlayerIds.stream()
-                    .map(playerId -> CompetitionParticipant.builder()
-                            .competition(competition)
-                            .teamId(teamId)
-                            .playerId(playerId)
-                            .isTeam(true)
-                            .registeredAt(LocalDateTime.now())
-                            .competitionParticipantStatus(CompetitionParticipantStatus.REGISTERED)
-                            .build())
-                    .toList();
+            if (gameSystemRepository.countMaxPlayersAtCompetition(competition.getGameSystem().getId()) >= selectedPlayerIds.size()
+                    && selectedPlayerIds.size() >= gameSystemRepository.countPlayersAtTeam(competition.getGameSystem().getId())) {
+                List<CompetitionParticipant> participants = selectedPlayerIds.stream()
+                        .map(playerId -> CompetitionParticipant.builder()
+                                .competition(competition)
+                                .teamId(teamId)
+                                .playerId(playerId)
+                                .isTeam(true)
+                                .registeredAt(LocalDateTime.now())
+                                .competitionParticipantStatus(CompetitionParticipantStatus.REGISTERED)
+                                .build())
+                        .toList();
 
-            competitionParticipantRepository.saveAll(participants);
-            return true;
+                competitionParticipantRepository.saveAll(participants);
+                return true;
+            } else {
+                throw new PlayerSizeNotMatchException("Player size not match.");
+            }
         }
     }
 

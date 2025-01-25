@@ -72,4 +72,11 @@ public class CompetitionController {
                 ? noContent().build()
                 : notFound().build();
     }
+
+    @PostMapping("/add-team")
+    public ResponseEntity<Boolean> addTeam (@RequestParam("competitionId") UUID competitionId,
+                                            @RequestParam("teamId") UUID teamId,
+                                            @RequestParam("selectedPlayersIds") List<Long> selectedPlayersIds) {
+        return ResponseEntity.ok(competitionService.addTeamToCompetition(competitionId, teamId, selectedPlayersIds));
+    }
 }

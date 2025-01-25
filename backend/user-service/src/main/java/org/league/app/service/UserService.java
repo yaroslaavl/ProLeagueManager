@@ -195,7 +195,7 @@ public class UserService implements UserDetailsService {
 
         String activationToken = UUID.randomUUID().toString();
 
-        String confirmationLink = "http://localhost:8765/user/activate?token=" + activationToken;
+        String confirmationLink = "http://localhost:8765/auth/activate?token=" + activationToken;
         notificationFeignClient.sendEmail(new EmailRequest(
                 user.getEmail(),
                 "Confirm your email",
