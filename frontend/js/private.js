@@ -119,26 +119,55 @@ async function logOut(){
     console.error(`${err}`);
   }
 }
-async function verifyEmail(){
+async function verifyEmail() {
   try {
     const accToken = localStorage.getItem('accToken');
     const url = "http://localhost:8765/user/resend-activation-email";
-    const response = await fetch(url,{
-      method:"POST",
-      headers:{
-        "Authorization": `Bearer ${accToken}`, // Добавляем заголовок Authorization
-        "Content-Type": "application/json" // Указываем формат данных
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${accToken}`,
+        "Content-Type": "application/json"
       }
     });
-    if(!response.ok)throw new Error("HTTP Request error");
+    if (!response.ok) throw new Error("HTTP Request error");
+
     console.log(response);
-    alert("Powiadomienie o veryfikacji bylo wyslane,redirect na login")
-    localStorage.clear();
-    window.location.href = "login.html"
-  }catch(err){
+    alert("Powiadomienie o weryfikacji bylo wyslane");
+
+    // Установить таймаут в localStorage
+    const timeoutEnd = Date.now() + 60000; // 60 секунд (1 минута)
+    localStorage.setItem("verifyTimeout", timeoutEnd);
+
+    // Обновить состояние кнопки
+    updateVerifyButtonState(timeoutEnd);
+  } catch (err) {
     console.error(err);
   }
 }
+function updateVerifyButtonState(timeoutEnd) {
+  const verifyButton = document.getElementById("verify");
+  const interval = setInterval(() => {
+    const remainingTime = timeoutEnd - Date.now();
+
+    if (remainingTime > 0) {
+      verifyButton.disabled = true;
+      verifyButton.textContent = `Prosze poczekać ${Math.ceil(remainingTime / 1000)} sec.`;
+    } else {
+      verifyButton.disabled = false;
+      verifyButton.textContent = "Zweryfikować";
+      localStorage.removeItem("verifyTimeout");
+      clearInterval(interval);
+    }
+  }, 1000);
+}
+// Проверяем сохранённый таймаут при загрузке страницы
+document.addEventListener("DOMContentLoaded", () => {
+  const savedTimeout = localStorage.getItem("verifyTimeout");
+  if (savedTimeout && Date.now() < savedTimeout) {
+    updateVerifyButtonState(Number(savedTimeout));
+  }
+});
 async function updatePassword(){
   try {
     const accToken = localStorage.getItem('accToken');

@@ -309,7 +309,7 @@ footer {
   display: flex;
   justify-items: center;
   justify-content: center;
-  height: 300px;
+  height: auto;
   background: #EFF2F5;
   border-radius: 12px;
 }

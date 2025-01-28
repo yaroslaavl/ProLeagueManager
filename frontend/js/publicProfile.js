@@ -141,6 +141,11 @@ async function getTeam(userId) {
 
     if (!data || data.length === 0) {
       console.error("No teams found for this user.");
+      const teams = document.getElementById('teams');
+      teams.innerHTML = '<p style="color: #808A9D;">Nie nalezy do zadnego zespolu</p>';
+      teams.style.backgroundColor= '#EFF2F5';
+      teams.style.display = 'block';
+      teams.style.justifyContent = 'center';
       return;
     }
 

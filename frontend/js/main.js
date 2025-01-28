@@ -1,7 +1,6 @@
 if(localStorage.getItem('accToken') !== null && localStorage.getItem('refToken')!== null){
   refreshToken();
 }
-
 document.addEventListener("DOMContentLoaded", () => {
   const pageLoadSpan = document.querySelector(".footer-content span:nth-child(3)");
   const htmlLoadSpan = document.querySelector(".footer-content span:nth-child(4)");
