@@ -43,7 +43,9 @@ public class CompetitionManagementConfig {
                                 "/api/game-system/delete/**",
                                 "/api/game-system/search",
                                 "/api/game-system/update/**",
-                                "/api/game-system/**").hasAuthority("EDITOR"))
+                                "/api/game-system/**").hasAuthority("EDITOR")
+                        .requestMatchers(
+                                "/api/competition/add-team").authenticated())
                 .addFilterBefore(routeFilter, SecurityContextHolderFilter.class)
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(session ->

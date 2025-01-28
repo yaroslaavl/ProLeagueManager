@@ -27,7 +27,7 @@ public class TeamConfig {
 
     @Bean
     @SneakyThrows
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity){
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) {
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
@@ -49,7 +49,9 @@ public class TeamConfig {
                                 "/api/team/team-logo/**",
                                 "/api/team/get-team-member-by-team-and-userId",
                                 "/api/team/get-teams-by-userId",
-                                "/api/team/get-all-teamRoles").permitAll())
+                                "/api/team/get-all-teamRoles",
+                                "/api/team/current/**",
+                                "/api/team/managed").permitAll())
 
                 .addFilterBefore(routeFilter, SecurityContextHolderFilter.class)
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)

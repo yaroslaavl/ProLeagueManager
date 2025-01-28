@@ -20,7 +20,7 @@ import org.league.app.feign.authClient.UserDto;
 import org.league.app.feign.sportClient.SportClientFeign;
 import org.league.app.feign.sportClient.SportDto;
 import org.league.app.feign.teamClient.TeamClientFeign;
-import org.league.app.feign.teamClient.TeamMemberFeignDto;
+import org.league.app.feign.teamClient.TeamFeignDto;
 import org.league.app.mapper.CompetitionMapper;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -175,9 +175,8 @@ public class CompetitionService {
         Competition competition = competitionRepository.findById(competitionId)
                 .orElseThrow(() -> new CompetitionNotFoundException("Competition not found"));
 
-        UserDto userByEmail = authClientFeign.getUserByEmail(securityContext());
-
         if (competition.getGameSystem().getIsIndividual()) {
+            UserDto userByEmail = authClientFeign.getUserByEmail(securityContext());
             CompetitionParticipant competitionParticipant = CompetitionParticipant.builder()
                     .competition(competition)
                     .teamId(null)
@@ -190,18 +189,18 @@ public class CompetitionService {
             competitionParticipantRepository.save(competitionParticipant);
             return true;
         } else {
-            List<TeamMemberFeignDto> teamMembers = competitionRepository.findTeamById(teamId);
-            boolean captainExists = teamMembers.stream()
+            TeamFeignDto teamById = teamClientFeign.findTeamById(teamId);
+            boolean captainExists = teamById.getTeamMembers().stream()
                     .filter(member -> member.getRoles().stream()
-                            .anyMatch(role -> role.getRoleName().equalsIgnoreCase("CAPTAIN")))
+                            .anyMatch(role -> role.getRoleName().equalsIgnoreCase("CAPITAN")))
                     .anyMatch(member -> selectedPlayerIds.contains(member.getId()));
 
             if (!captainExists) {
                 throw new CaptainNotIncludedException("Selected players must include the team captain.");
             }
 
-            if (gameSystemRepository.countMaxPlayersAtCompetition(competition.getGameSystem().getId()) >= selectedPlayerIds.size()
-                    && selectedPlayerIds.size() >= gameSystemRepository.countPlayersAtTeam(competition.getGameSystem().getId())) {
+            if (gameSystemRepository.countMaxPlayersPerTeamAtCompetition(competition.getGameSystem().getId()) >= selectedPlayerIds.size()
+                    && selectedPlayerIds.size() >= gameSystemRepository.countMinPlayersPerTeamAtCompetition(competition.getGameSystem().getId())) {
                 List<CompetitionParticipant> participants = selectedPlayerIds.stream()
                         .map(playerId -> CompetitionParticipant.builder()
                                 .competition(competition)

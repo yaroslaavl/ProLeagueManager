@@ -33,7 +33,9 @@ public class JWTFilter extends OncePerRequestFilter {
                 || path.startsWith("/api/team/team-logo/")
                 || path.equals("/api/team/get-teams-by-userId")
                 || path.equals("/api/team/get-team-member-by-team-and-userId")
-                || path.equals("/actuator/health");
+                || path.equals("/actuator/health")
+                || path.startsWith("/api/team/current/")
+                || path.equals("/api/team/managed");
     }
 
     @Override

@@ -8,8 +8,10 @@ import org.league.app.service.CompetitionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static org.springframework.http.ResponseEntity.noContent;
 import static org.springframework.http.ResponseEntity.notFound;
@@ -77,6 +79,8 @@ public class CompetitionController {
     public ResponseEntity<Boolean> addTeam (@RequestParam("competitionId") UUID competitionId,
                                             @RequestParam("teamId") UUID teamId,
                                             @RequestParam("selectedPlayersIds") List<Long> selectedPlayersIds) {
+
         return ResponseEntity.ok(competitionService.addTeamToCompetition(competitionId, teamId, selectedPlayersIds));
     }
+
 }

@@ -7,8 +7,6 @@ import org.league.app.database.entity.TeamRole;
 import org.league.app.database.repository.TeamRoleRepository;
 import org.league.app.exception.TeamNotFoundException;
 import org.league.app.feign.teamClietnt.TeamFeignDto;
-import org.league.app.feign.teamClietnt.TeamMemberFeignDto;
-import org.league.app.feign.teamClietnt.TeamRoleFeignDto;
 import org.league.app.mapper.TeamMapper;
 import org.springframework.data.domain.Page;
 import org.league.app.database.repository.TeamRepository;
@@ -27,7 +25,6 @@ import org.springframework.data.domain.Pageable;
 import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -160,26 +157,20 @@ public class TeamController {
     }
 
     @GetMapping("/managed")
-    public ResponseEntity<List<TeamFeignDto>> findTeamsWhereUserIsManager(@RequestParam("id") Long userId) {
+    public ResponseEntity<List<TeamReadDto>> findTeamsWhereUserIsManager(@RequestParam("id") Long userId) {
         List<Team> teams = teamService.findTeamWhereUserIsManager(userId);
+        List<TeamReadDto> collect = teams.stream()
+                .map(teamMapper::toDto)
+                .toList();
+        return ResponseEntity.ok(collect);
+    }
 
-        List<TeamFeignDto> teamDtos = teams.stream()
-                .map(team -> new TeamFeignDto(
-                        team.getId(),
-                        team.getTeamName(),
-                        team.getTeamStatus(),
-                        team.getTeamMemberList().stream()
-                                .map(member -> new TeamMemberFeignDto(
-                                        member.getId(),
-                                        member.getRoles().stream()
-                                                .map(role -> new TeamRoleFeignDto(
-                                                        role.getId(),
-                                                        role.getName()))
-                                                .collect(Collectors.toList()),
-                                        member.getIsSubstitute()))
-                                .collect(Collectors.toList())))
-                .collect(Collectors.toList());
+    @GetMapping("/current/{id}")
+    public ResponseEntity<TeamFeignDto> findTeamById(@PathVariable("id") UUID id) {
+        Team teamById = teamRepository.findTeamById(id)
+                .orElseThrow(() -> new TeamNotFoundException("Team not found"));
 
-        return ResponseEntity.ok(teamDtos);
+        TeamFeignDto teamFeignDto = teamMapper.toTeamFeignDto(teamById);
+        return ResponseEntity.ok(teamFeignDto);
     }
 }
