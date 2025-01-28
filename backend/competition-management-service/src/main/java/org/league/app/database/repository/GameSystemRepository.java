@@ -3,6 +3,7 @@ package org.league.app.database.repository;
 import org.league.app.database.entity.GameSystem;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -15,9 +16,9 @@ public interface GameSystemRepository extends JpaRepository<GameSystem, Integer>
 
     List<GameSystem> findAllBySportIdIn(List<Integer> sportIds);
 
-    @Query("SELECT sum(g.playersPerTeam + g.maxSubs) FROM GameSystem g where g.id = :gameSystemId")
-    Integer countMaxPlayersAtCompetition(Integer gameSystemId);
+    @Query("SELECT gs.playersPerTeam + CASE WHEN gs.allowSubs THEN gs.maxSubs ELSE 0 END FROM GameSystem gs WHERE gs.id = :gameSystemId")
+    Integer countMaxPlayersPerTeamAtCompetition(@Param("gameSystemId") Integer gameSystemId);
 
-    @Query("SELECT sum(g.playersPerTeam) FROM GameSystem g where g.id = :gameSystemId")
-    Integer countPlayersAtTeam(Integer gameSystemId);
+    @Query("SELECT gs.playersPerTeam FROM GameSystem gs WHERE gs.id = :gameSystemId")
+    Integer countMinPlayersPerTeamAtCompetition(@Param("gameSystemId") Integer gameSystemId);
 }
