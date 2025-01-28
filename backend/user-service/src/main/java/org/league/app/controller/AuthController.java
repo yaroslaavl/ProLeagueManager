@@ -116,11 +116,11 @@ public class AuthController {
 
         if (!confirmation) {
             log.info("Activation failed for token '{}'", token);
-            response.sendRedirect("http://localhost:63880/ProLeagueManager/frontend/404.html");
+            response.sendRedirect("http://localhost:63342/ProLeagueManager/frontend/404.html");
             return;
         }
         log.info("'{}' is activated", token);
-        response.sendRedirect("http://localhost:63880/ProLeagueManager/frontend/verificationEmail.html");
+        response.sendRedirect("http://localhost:63342/ProLeagueManager/frontend/verificationEmail.html");
     }
 
     @PostMapping("/extract-email")
