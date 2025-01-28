@@ -45,7 +45,7 @@ async function register() {
     console.log("Response data:", data);
 
     // Перенаправление только после успешной регистрации
-    window.location.href = "http://localhost:63342/ProLeagueManager/frontend/login.html";
+    window.location.href = "login.html";
   } catch (err) {
     console.error(`Registration error: ${err.message}`);
     alert("Nie poprawne wprowadzone dane,lub nazwa uzytkownika lub poczta juz jest zajeta!");

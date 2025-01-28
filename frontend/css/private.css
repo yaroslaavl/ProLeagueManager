@@ -601,3 +601,9 @@ footer {
   font-weight: bold;
 }
 
+#verify:disabled {
+  background-color: #3861FB; /* Цвет кнопки при отключении */
+  color: white; /* Цвет текста при отключении */
+  cursor: not-allowed; /* Курсор при наведении на отключённую кнопку */
+  opacity: 0.7; /* Прозрачность кнопки */
+}

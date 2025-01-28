@@ -29,12 +29,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
-
 let accToken = localStorage.getItem("accToken");
 let refToken = localStorage.getItem("refToken");
-
-
-
 if(accToken === null || refToken === null){
   var notifBtn = document.getElementById("notification_button");
   var burgerAndUser = document.getElementById("header_right");
