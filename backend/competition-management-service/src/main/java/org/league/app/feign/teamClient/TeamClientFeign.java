@@ -1,17 +1,16 @@
 package org.league.app.feign.teamClient;
 
-import org.league.app.feign.sportClient.SportDto;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.UUID;
 
 @FeignClient("team-management-service")
 public interface TeamClientFeign {
 
-    @GetMapping("/api/team/managed")
-    List<TeamFeignDto> findTeamsWhereUserIsManager(@RequestParam("id") Long userId);
-
+    @GetMapping("/api/team/current/{id}")
+    TeamFeignDto findTeamById(@PathVariable("id") UUID id);
 }
