@@ -1,5 +1,6 @@
 package org.league.app.database.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,6 +26,7 @@ public class TeamMember {
 
     @ManyToOne
     @JoinColumn(name = "team_id", nullable = false)
+    @JsonBackReference
     private Team team;
 
     @Column(name = "user_id", nullable = false)

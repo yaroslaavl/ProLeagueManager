@@ -8,6 +8,7 @@
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
+            position: relative;
         }
         ul {
             list-style: none;
@@ -28,6 +29,19 @@
         }
         .error {
             color: red;
+        }
+        /* ✅ Стили для всплывающих уведомлений */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            opacity: 1;
+            transition: opacity 0.5s ease-in-out;
         }
     </style>
 </head>
@@ -50,6 +64,7 @@
     eventSource.onmessage = (event) => {
         console.log("Notification received: ", event.data);
         displayNotification(event.data);
+        showToast(event.data);  // ✅ Показываем всплывающее уведомление
     };
 
     eventSource.onerror = () => {
@@ -74,5 +89,19 @@
         statusElement.innerText = message;
         statusElement.style.color = isError ? "red" : "green";
     }
+
+    // ✅ Функция показа всплывающего уведомления
+    function showToast(message) {
+        const toast = document.createElement("div");
+        toast.classList.add("toast");
+        toast.innerText = message;
+        document.body.appendChild(toast);
+
+        setTimeout(() => {
+            toast.style.opacity = "0";
+            setTimeout(() => toast.remove(), 500);
+        }, 5000); // Через 5 секунд удаляем уведомление
+    }
 </script>
 </body>
+</html>

@@ -1,5 +1,6 @@
 package org.league.app.database.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,6 +36,7 @@ public class Team {
     private TeamStatus teamStatus;
 
     @OneToMany(mappedBy = "team", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<TeamMember> teamMemberList;
 
     @CreationTimestamp
