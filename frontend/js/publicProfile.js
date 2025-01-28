@@ -44,6 +44,8 @@ if(accToken === null || refreshToken === null){
     "main.html";
 }else{
   getUserData();
+
+
 }
 async function refreshtoken(){
   try {
@@ -87,7 +89,9 @@ async function getUserData() {
     const dateOfBirth = data.birthDate.split('-');
     let createdAt = new Date(data.createdAt).toLocaleDateString();
     let userImg;
+    await getTeam(data.id);
     try {
+
       const res = await fetch(`http://localhost:8765/user/avatar/${userName}`);
       const urlImg =res.url;
       console.log(urlImg);
@@ -102,10 +106,11 @@ async function getUserData() {
   document.getElementById("date_of_birth").innerHTML = dateOfBirth[2]+'.'+dateOfBirth[1]+'.'+dateOfBirth[0]
   document.getElementById("creation-date").innerHTML = createdAt;
   document.getElementById('profile_img').src = userImg;
-  getTeam(data.id);
+
   } catch (err) {
     console.error(`Error: ${err}`);
   }
+
 }
 async function logOut(){
   try {
