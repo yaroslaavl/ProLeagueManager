@@ -83,4 +83,9 @@ public class CompetitionController {
         return ResponseEntity.ok(competitionService.addTeamToCompetition(competitionId, teamId, selectedPlayersIds));
     }
 
+    @GetMapping("/count-of-signed-in")
+    public ResponseEntity<Integer> countOfSignedInUsersOrTeams (@RequestParam("competitionId") UUID competitionId) {
+        return ResponseEntity.ok(competitionService.countCurrentPlayersPerCompetition(competitionId));
+    }
+
 }
