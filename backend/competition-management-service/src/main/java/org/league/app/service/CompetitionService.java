@@ -220,6 +220,10 @@ public class CompetitionService {
         }
     }
 
+    public Integer countCurrentPlayersPerCompetition(UUID competitionId) {
+        return competitionParticipantRepository.countTeamsOrUsersByCompetitionId(competitionId);
+    }
+
     private String securityContext() {
         return SecurityContextHolder.getContext().getAuthentication().getName();
     }
