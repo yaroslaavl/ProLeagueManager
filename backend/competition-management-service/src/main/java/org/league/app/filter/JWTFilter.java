@@ -30,7 +30,7 @@ public class JWTFilter extends OncePerRequestFilter {
         String path = request.getServletPath();
         return path.equals("/actuator/health")
                 || path.equals("/api/competition/search-tournaments")
-                || path.startsWith("/api/competition/")
+                || path.startsWith("/api/competition/get/")
                 || path.equals("/api/competition/all-competitions")
                 || path.equals("/api/competition/search-leagues");
     }

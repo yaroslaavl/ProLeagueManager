@@ -57,7 +57,7 @@ public class CompetitionController {
         return competitionService.findAll();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     public ResponseEntity<CompetitionReadDto> findById(@PathVariable UUID id) {
         return ResponseEntity.ok(competitionService.findById(id));
     }
@@ -75,12 +75,11 @@ public class CompetitionController {
                 : notFound().build();
     }
 
-    @PostMapping("/add-team")
+    @PostMapping("/participation")
     public ResponseEntity<Boolean> addTeam (@RequestParam("competitionId") UUID competitionId,
-                                            @RequestParam("teamId") UUID teamId,
-                                            @RequestParam("selectedPlayersIds") List<Long> selectedPlayersIds) {
-
-        return ResponseEntity.ok(competitionService.addTeamToCompetition(competitionId, teamId, selectedPlayersIds));
+                                            @RequestParam(required = false, name = "teamId") UUID teamId,
+                                            @RequestParam(required = false, name = "selectedPlayersIds") List<Long> selectedPlayersIds) {
+        return ResponseEntity.ok(competitionService.participation(competitionId, teamId, selectedPlayersIds));
     }
 
 }
