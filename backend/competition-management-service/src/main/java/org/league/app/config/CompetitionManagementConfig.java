@@ -32,7 +32,7 @@ public class CompetitionManagementConfig {
                         .requestMatchers(
                                 "/actuator/health",
                                 "/api/competition/search-leagues",
-                                "/api/competition/**",
+                                "/api/competition/get/**",
                                 "/api/competition/all",
                                 "/api/competition/search-tournaments",
                                 "/api/competition/count-of-signed-in").permitAll()
@@ -46,7 +46,7 @@ public class CompetitionManagementConfig {
                                 "/api/game-system/update/**",
                                 "/api/game-system/**").hasAuthority("EDITOR")
                         .requestMatchers(
-                                "/api/competition/add-team").authenticated())
+                                "/api/competition/participation").authenticated())
                 .addFilterBefore(routeFilter, SecurityContextHolderFilter.class)
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(session ->

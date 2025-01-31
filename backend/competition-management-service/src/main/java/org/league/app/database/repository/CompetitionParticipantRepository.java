@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -19,4 +20,9 @@ public interface CompetitionParticipantRepository extends JpaRepository<Competit
             "FROM Competition c " +
             "WHERE c.id = :competitionId")
     Integer countTeamsOrUsersByCompetitionId(@Param("competitionId")UUID competitionId);
+
+    Optional<CompetitionParticipant> findCompetitionParticipantByTeamIdAndCompetitionId(UUID id, UUID competitionId);
+
+    Optional<CompetitionParticipant> findCompetitionParticipantByPlayerIdAndCompetitionId(Long id, UUID competitionId);
+
 }
