@@ -26,6 +26,7 @@ public interface TeamMapper {
     @Mapping(source = "teamMemberList", target = "teamMembers")
     TeamFeignDto toTeamFeignDto(Team team);
 
+    @Mapping(source = "userId", target = "userId")
     @Mapping(source = "roles", target = "roles")
     TeamMemberFeignDto mapTeamMember(TeamMember member);
 
