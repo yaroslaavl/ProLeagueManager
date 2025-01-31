@@ -34,7 +34,8 @@ public class CompetitionManagementConfig {
                                 "/api/competition/search-leagues",
                                 "/api/competition/**",
                                 "/api/competition/all",
-                                "/api/competition/search-tournaments").permitAll()
+                                "/api/competition/search-tournaments",
+                                "/api/competition/count-of-signed-in").permitAll()
                         .requestMatchers(
                                 "/api/competition/create",
                                 "/api/competition/edit/**",
