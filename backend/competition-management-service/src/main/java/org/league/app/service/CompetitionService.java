@@ -249,6 +249,13 @@ public class CompetitionService {
         }
     }
 
+    public Integer countCurrentPlayersPerCompetition(UUID competitionId) {
+        return competitionParticipantRepository.countTeamsOrUsersByCompetitionId(competitionId);
+    }
+
+    private String securityContext() {
+        return SecurityContextHolder.getContext().getAuthentication().getName();
+
     private void sendNotificationMessage(Long userId, String message, String eventType, String notificationCategory) {
         NotificationDto notification = NotificationDto.builder()
                 .id(UUID.randomUUID())
