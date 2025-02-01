@@ -8,10 +8,8 @@ import org.league.app.service.CompetitionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import static org.springframework.http.ResponseEntity.noContent;
 import static org.springframework.http.ResponseEntity.notFound;
@@ -58,7 +56,7 @@ public class CompetitionController {
     }
 
     @GetMapping("/get/{id}")
-    public ResponseEntity<CompetitionReadDto> findById(@PathVariable UUID id) {
+    public ResponseEntity<CompetitionReadDto> findById(@PathVariable("id") UUID id) {
         return ResponseEntity.ok(competitionService.findById(id));
     }
 
