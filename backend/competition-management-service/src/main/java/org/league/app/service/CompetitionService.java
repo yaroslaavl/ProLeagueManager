@@ -58,7 +58,7 @@ public class CompetitionService {
                                                 Integer gameSystemId,
                                                 Integer sportId) {
         if (competitionRepository.findCompetitionByName(competitionCreate.getName()).isPresent()) {
-            throw new CompetitionAlreadyExists("Competition with current name already exists");
+            throw new CompetitionAlreadyExistsException("Competition with current name already exists");
         }
 
         if (competitionCreate.getStartDate().isAfter(competitionCreate.getEndDate())) {
@@ -147,7 +147,7 @@ public class CompetitionService {
                 .orElseThrow(() -> new CompetitionNotFoundException("Competition not found : " + competitionName));
 
         if (competitionRepository.findCompetitionByName(newCompetition.getName()).isPresent()) {
-            throw new CompetitionAlreadyExists("Competition with name:" + newCompetition.getName() + " already exists");
+            throw new CompetitionAlreadyExistsException("Competition with name:" + newCompetition.getName() + " already exists");
         }
 
         GameSystem gameSystem = gameSystemRepository.findById(newCompetition.getGameSystemId())
