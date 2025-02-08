@@ -75,7 +75,6 @@ public class TeamService {
                 .team(team)
                 .userId(userByEmail.getId())
                 .roles(teamRoleList)
-                .isSubstitute(false)
                 .build();
 
         teamMemberRepository.save(teamMember);
@@ -112,7 +111,6 @@ public class TeamService {
                     dto.setTeamId(existingTeam.getId());
                     dto.setUserId(member.getUserId());
                     dto.setRoles(member.getRoles());
-                    dto.setIsSubstitute(member.getIsSubstitute());
                     dto.setJoinedAt(member.getJoinedAt());
                     return dto;
                 })
@@ -239,7 +237,6 @@ public class TeamService {
                 .team(team)
                 .userId(userByEmail.getId())
                 .roles(getRolesByNames("PLAYER"))
-                .isSubstitute(false)
                 .build();
 
         if(authClientFeign.getToken("User:" + userByEmail.getId() + "teamInvitation").equals(team.getId() + "" + userByEmail.getId())) {

@@ -1,9 +1,9 @@
 package org.league.app.mapper;
 
 import org.league.app.database.entity.Competition;
-import org.league.app.database.entity.CompetitionStage;
-import org.league.app.dto.CompetitionStageCreateEditDto;
-import org.league.app.dto.CompetitionStageReadDto;
+import org.league.app.database.entity.TournamentStage;
+import org.league.app.dto.TournamentStageCreateEditDto;
+import org.league.app.dto.TournamentStageReadDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -11,16 +11,16 @@ import org.mapstruct.Named;
 import java.util.UUID;
 
 @Mapper(componentModel = "spring")
-public interface CompetitionStageMapper {
+public interface TournamentStageMapper {
 
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "competition", source = "competitionId", qualifiedByName = "mapToCompetition")
-    CompetitionStage toEntity(CompetitionStageCreateEditDto competitionStageCreateEditDto);
+    TournamentStage toEntity(TournamentStageCreateEditDto competitionStageCreateEditDto);
 
     @Mapping(target = "competitionId", source = "competition.id")
-    CompetitionStageReadDto toDto(CompetitionStage competitionStage);
+    TournamentStageReadDto toDto(TournamentStage competitionStage);
 
     @Named("mapToCompetition")
     default Competition mapToCompetition(UUID competitionId) {

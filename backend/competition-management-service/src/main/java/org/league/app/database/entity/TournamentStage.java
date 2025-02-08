@@ -30,6 +30,9 @@ public class TournamentStage {
     @Column(name = "stage_name")
     private String stageName;
 
+    @Column(name = "stage_order")
+    private Integer stageOrder;
+
     @Column(name = "is_elimination")
     private Boolean isElimination;
 

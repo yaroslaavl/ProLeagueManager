@@ -1,5 +1,5 @@
 # JetBrains IDEs
 .idea
 *.jar
-target/
+**/target/
 *.iml

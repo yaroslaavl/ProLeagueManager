@@ -38,9 +38,6 @@ public class CompetitionParticipant {
     @Column(name = "is_team")
     private Boolean isTeam;
 
-    @Column(name = "points")
-    private Integer points;
-
     @Column(name = "registered_at", nullable = false, updatable = false)
     private LocalDateTime registeredAt;
 

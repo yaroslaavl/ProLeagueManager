@@ -13,7 +13,6 @@ public class CompetitionParticipantCreateEditDto {
     private UUID teamId;
     private Long playerId;
     private Boolean isTeam;
-    private Integer points;
     private LocalDateTime registeredAt;
     private String status;
 }

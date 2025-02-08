@@ -38,9 +38,6 @@ public class TeamMember {
             inverseJoinColumns = @JoinColumn(name = "team_role_id"))
     private List<TeamRole> roles = new ArrayList<>();
 
-    @Column(name = "is_substitute")
-    private Boolean isSubstitute;
-
     @CreationTimestamp
     @Column(name = "joined_at")
     private LocalDateTime joinedAt;

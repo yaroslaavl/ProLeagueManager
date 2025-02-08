@@ -13,7 +13,6 @@ public class CompetitionParticipantReadDto {
     UUID competitionId;
     UUID teamId;
     Long playerId;
-    Integer points;
     LocalDateTime registeredAt;
     String status;
     LocalDateTime createdAt;

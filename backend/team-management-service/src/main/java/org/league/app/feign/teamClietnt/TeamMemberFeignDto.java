@@ -12,5 +12,4 @@ public class TeamMemberFeignDto {
     private Long id;
     private List<TeamRoleFeignDto> roles;
     private Long userId;
-    private Boolean isSubstitute;
 }
