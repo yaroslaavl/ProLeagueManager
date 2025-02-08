@@ -16,8 +16,8 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-@Table(schema = "public", name = "competition_stage")
-public class CompetitionStage {
+@Table(schema = "public", name = "tournament_stage")
+public class TournamentStage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -29,6 +29,9 @@ public class CompetitionStage {
 
     @Column(name = "stage_name")
     private String stageName;
+
+    @Column(name = "stage_order")
+    private Integer stageOrder;
 
     @Column(name = "is_elimination")
     private Boolean isElimination;
