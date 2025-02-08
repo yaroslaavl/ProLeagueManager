@@ -13,11 +13,11 @@ import java.util.UUID;
 
 @Data
 @Entity
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder(toBuilder = true)
-@Table(schema = "public", name = "tournament_stage")
-public class CompetitionStage {
+@Table(name = "league_standings")
+public class LeagueStanding {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -27,11 +27,23 @@ public class CompetitionStage {
     @JoinColumn(name = "competition_id", nullable = false)
     private Competition competition;
 
-    @Column(name = "stage_name")
-    private String stageName;
+    @Column(name = "team_id")
+    private UUID teamId;
 
-    @Column(name = "is_elimination")
-    private Boolean isElimination;
+    @Column(name = "player_id")
+    private Long playerId;
+
+    @Column(name = "wins")
+    private Integer wins;
+
+    @Column(name = "losses")
+    private Integer losses;
+
+    @Column(name = "draws")
+    private Integer draws;
+
+    @Column(name = "points")
+    private Integer points;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
