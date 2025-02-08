@@ -17,7 +17,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 @Table(schema = "public", name = "tournament_stage")
-public class CompetitionStage {
+public class TournamentStage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
