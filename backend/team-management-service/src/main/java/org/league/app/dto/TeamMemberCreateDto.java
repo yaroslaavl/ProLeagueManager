@@ -16,7 +16,5 @@ public class TeamMemberCreateDto {
 
     private List<TeamRole> roles;
 
-    private Boolean isSubstitute;
-
     private LocalDateTime joinedAt;
 }
