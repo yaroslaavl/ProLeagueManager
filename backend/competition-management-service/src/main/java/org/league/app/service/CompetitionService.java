@@ -62,12 +62,12 @@ public class CompetitionService {
         }
 
         if (competitionCreate.getStartDate().isAfter(competitionCreate.getEndDate())) {
-            throw new IllegalArgumentException("Start date cannot be after end date");
+            throw new TimeErrorException("Start date cannot be after end date");
         }
 
         CompetitionStatus competitionStatus;
         if (competitionCreate.getCompetitionType().toUpperCase().equals(CompetitionType.LEAGUE.toString())) {
-            competitionStatus = CompetitionStatus.valueOf(null);
+            competitionStatus = CompetitionStatus.NONE;
         } else {
             competitionStatus = CompetitionStatus.UPCOMING;
         }

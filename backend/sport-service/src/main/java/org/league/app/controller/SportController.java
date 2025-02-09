@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.league.app.database.repository.SportRepository;
 import org.league.app.dto.SportCreateEditDto;
 import org.league.app.dto.SportReadDto;
+import org.league.app.exception.SportNotFoundException;
 import org.league.app.feign.SportDto;
 import org.league.app.service.SportService;
 import org.league.app.validation.CreateAction;
@@ -76,6 +77,13 @@ public class SportController {
     @GetMapping("/exact-sport/{sportName}")
     public SportReadDto findSportByName(@PathVariable("sportName") String sportName) {
         return sportService.findBySportName(sportName);
+    }
+
+    @GetMapping("/id/{sportId}")
+    public SportDto findSportById(@PathVariable("sportId") Integer sportId) {
+        return sportRepository.findById(sportId)
+                .map(sportType -> new SportDto(sportType.getId(),sportType.getName(),sportType.getIsEsport()))
+                .orElseThrow(() -> new SportNotFoundException("Sport not found"));
     }
 
     @GetMapping("/get-sports-by-name")

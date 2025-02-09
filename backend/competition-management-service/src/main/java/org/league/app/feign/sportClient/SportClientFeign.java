@@ -2,6 +2,7 @@ package org.league.app.feign.sportClient;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
@@ -14,4 +15,7 @@ public interface SportClientFeign {
 
     @GetMapping("/api/sport/type-of-sport")
     List<SportDto> findAllByIsEsport(@RequestParam("isEsport") Boolean isEsport);
+
+    @GetMapping("/api/sport/id/{sportId}")
+    SportDto findSportById(@PathVariable("sportId") Integer sportId);
 }

@@ -18,36 +18,35 @@ import java.io.IOException;
 @Slf4j
 @Component
 public class JWTFilter extends OncePerRequestFilter {
-
+    
     private final AuthClientFeign authClientFeign;
-
+    
     public JWTFilter(AuthClientFeign authClientFeign) {
         this.authClientFeign = authClientFeign;
     }
 
     @Override
-    protected boolean shouldNotFilter(HttpServletRequest request)  {
+    protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getServletPath();
         return path.equals("/actuator/health")
-                || path.equals("/api/competition/search-tournaments")
-                || path.startsWith("/api/competition/get/")
-                || path.equals("/api/competition/all-competitions")
-                || path.equals("/api/competition/search-leagues");
+                || path.startsWith("/api/match/id/");
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-        String authorizationHeader = request.getHeader("Authorization");
-        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+
+        String authHeader = request.getHeader("Authorization");
+
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentType("application/json");
             response.getWriter().write("{\"error\": \"Unauthorized\", \"message\": \"Missing or invalid Authorization header\"}");
             return;
         }
 
-        String jwtToken = authorizationHeader.substring(7);
+        String jwtToken = authHeader.substring(7);
         String email;
 
         try {
@@ -56,17 +55,17 @@ public class JWTFilter extends OncePerRequestFilter {
         } catch (Exception e) {
             log.error("Failed to extract email from token", e);
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().write("Invalid or expired JWT token: " + jwtToken);
+            response.getWriter().write("Invalid or expired JWT tokenL: " + jwtToken);
             return;
         }
 
-        if(email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+        if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             log.info("User email: {}", email);
             var userDetails = authClientFeign.loadUserByEmail(jwtToken, email);
 
-            if(authClientFeign.validateToken(jwtToken, userDetails.getEmail()) && authClientFeign.isAccessToken(jwtToken) &&
-                    authClientFeign.getToken(
-                            "whitelist:" + userDetails.getEmail() + ":accessToken").equals(jwtToken)) {
+            if (authClientFeign.validateToken(jwtToken, userDetails.getEmail()) && authClientFeign.isAccessToken(jwtToken) &&
+                authClientFeign.getToken(
+                        "whitelist:" + userDetails.getEmail() + ":accessToken").equals(jwtToken)) {
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getRoles().stream()
                         .map(SimpleGrantedAuthority::new)
