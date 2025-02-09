@@ -38,6 +38,7 @@ public class SportConfig {
                                 "/api/sport/e-sports",
                                 "/api/sport/regular-sports",
                                 "/api/sport/exact-sport/**",
+                                "/api/sport/id/**",
                                 "/api/sport/get-sports-by-name",
                                 "/api/sport/type-of-sport",
                                 "/actuator/health").permitAll())
