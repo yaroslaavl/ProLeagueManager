@@ -5,6 +5,7 @@ import org.league.app.filter.JWTFilter;
 import org.league.app.filter.RouteFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -13,6 +14,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.context.SecurityContextHolderFilter;
 
 @Configuration
+@EnableScheduling
 public class CompetitionManagementConfig {
 
     private final JWTFilter jwtFilter;
@@ -35,7 +37,6 @@ public class CompetitionManagementConfig {
                                 "/api/competition/get/**",
                                 "/api/competition/all",
                                 "/api/competition/search-tournaments",
-                                "/api/stage/**",
                                 "/api/competition/count-of-signed-in").permitAll()
                         .requestMatchers(
                                 "/api/competition/create",
