@@ -33,7 +33,7 @@ public class Competition {
     @Column(name = "sport_id")
     private Integer sportId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "game_system_id", nullable = false)
     private GameSystem gameSystem;
 
