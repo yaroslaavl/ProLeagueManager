@@ -1,10 +1,13 @@
 package org.league.app.database.repository;
 
 import org.league.app.database.entity.Competition;
+import org.league.app.database.entity.enums.CompetitionStatus;
+import org.league.app.database.entity.enums.CompetitionType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -15,4 +18,5 @@ public interface CompetitionRepository extends JpaRepository<Competition, UUID>,
 
     int deleteCompetitionByName(String competitionName);
 
+    List<Competition> findAllByStatusAndCompetitionType(CompetitionStatus status, CompetitionType competitionType);
 }
