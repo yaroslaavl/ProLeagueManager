@@ -2,6 +2,7 @@ package org.league.app.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.league.app.broker.TournamentEventPublisher;
 import org.league.app.database.entity.Competition;
 import org.league.app.database.entity.TournamentStage;
 import org.league.app.database.entity.enums.CompetitionStatus;
@@ -30,6 +31,7 @@ public class TournamentStageService {
     private final TournamentStageRepository tournamentStageRepository;
     private final CompetitionRepository competitionRepository;
     private final SportClientFeign sportClientFeign;
+    private final TournamentEventPublisher tournamentEventPublisher;
 
     @Transactional
     public void closeTournamentRegistrationAndGenerateTournamentStages(UUID competitionId) {
@@ -46,6 +48,7 @@ public class TournamentStageService {
 
         if (competition.getStatus().equals(CompetitionStatus.ACTIVE)) {
             generateTournamentStages(competitionId);
+            tournamentEventPublisher.publishTournamentStartEvent(competitionId);
         }
     }
 

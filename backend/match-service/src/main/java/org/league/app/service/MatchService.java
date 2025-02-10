@@ -21,4 +21,8 @@ public class MatchService {
                 .map(matchMapper::toDto)
                 .orElseThrow(() -> new MatchNotFoundException("Match not found"));
     }
+
+    public String generateTournamentBracket(String competitionId) {
+        return "Generated";
+    }
 }
