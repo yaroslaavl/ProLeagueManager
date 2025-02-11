@@ -1,25 +1,23 @@
 package org.league.app.config;
 
-import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.*;
+import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class RabbitMqConfig {
 
-    private final String tournamentQueue;
-
-    public RabbitMqConfig(
-            @Value("${rabbitmq.queues.tournament-start}") String tournamentQueue) {
-        this.tournamentQueue = tournamentQueue;
-    }
-
     @Bean
-    public Queue tournamentQueue() {
-        return new Queue(tournamentQueue, true);
+    public SimpleRabbitListenerContainerFactory rabbitListenerContainerFactory(ConnectionFactory connectionFactory) {
+        SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
+        factory.setConnectionFactory(connectionFactory);
+        factory.setAcknowledgeMode(AcknowledgeMode.MANUAL);
+        factory.setMessageConverter(messageConverter());
+        return factory;
     }
 
     @Bean
