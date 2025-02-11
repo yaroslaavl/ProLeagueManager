@@ -14,6 +14,6 @@ public class CompetitionParticipantReadDto {
     UUID teamId;
     Long playerId;
     LocalDateTime registeredAt;
-    String status;
+    String competitionParticipantStatus;
     LocalDateTime createdAt;
 }
