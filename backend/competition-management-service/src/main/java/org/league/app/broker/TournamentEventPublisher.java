@@ -16,7 +16,7 @@ public class TournamentEventPublisher {
     @Value("${rabbitmq.exchange}")
     public String exchange;
 
-    @Value("${rabbitmq.routing-keys.tournament-start}")
+    @Value("${rabbitmq.queues.tournament-start.routing-key}")
     public String tournamentRoutingKey;
 
     public void publishTournamentStartEvent(TournamentBracketDto tournamentBracketDto) {
