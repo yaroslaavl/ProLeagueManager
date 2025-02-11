@@ -14,5 +14,5 @@ public class CompetitionParticipantCreateEditDto {
     private Long playerId;
     private Boolean isTeam;
     private LocalDateTime registeredAt;
-    private String status;
+    private String competitionParticipantStatus;
 }

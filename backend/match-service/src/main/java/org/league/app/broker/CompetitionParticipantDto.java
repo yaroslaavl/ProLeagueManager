@@ -1,13 +1,16 @@
-package org.league.app.dto;
+package org.league.app.broker;
 
-import lombok.Value;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
 import java.util.UUID;
 
-@Value
-public class CompetitionParticipantReadDto {
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class CompetitionParticipantDto {
 
     UUID id;
     UUID competitionId;

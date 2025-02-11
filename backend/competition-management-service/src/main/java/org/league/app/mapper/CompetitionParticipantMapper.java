@@ -20,6 +20,7 @@ public interface CompetitionParticipantMapper {
     CompetitionParticipant toEntity(CompetitionParticipantCreateEditDto competitionParticipantCreateEditDto);
 
     @Mapping(target = "competitionId", source = "competition.id")
+    @Mapping(target = "competitionParticipantStatus", expression = "java(competitionParticipant.getCompetitionParticipantStatus() != null ? competitionParticipant.getCompetitionParticipantStatus().name() : null)")
     CompetitionParticipantReadDto toDto(CompetitionParticipant competitionParticipant);
 
     @Named("mapToCompetition")

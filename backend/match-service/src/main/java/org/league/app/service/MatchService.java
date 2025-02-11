@@ -1,6 +1,7 @@
 package org.league.app.service;
 
 import lombok.RequiredArgsConstructor;
+import org.league.app.broker.TournamentBracketDto;
 import org.league.app.database.repository.MatchRepository;
 import org.league.app.dto.MatchReadDto;
 import org.league.app.exception.MatchNotFoundException;
@@ -22,7 +23,7 @@ public class MatchService {
                 .orElseThrow(() -> new MatchNotFoundException("Match not found"));
     }
 
-    public String generateTournamentBracket(String competitionId) {
-        return "Generated";
+    public void generateTournamentBracket(TournamentBracketDto tournamentBracketDto) {
+
     }
 }
