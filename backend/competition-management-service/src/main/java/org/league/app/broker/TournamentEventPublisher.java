@@ -6,8 +6,6 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.util.UUID;
-
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -18,11 +16,11 @@ public class TournamentEventPublisher {
     @Value("${rabbitmq.exchange}")
     public String exchange;
 
-    @Value("${rabbitmq.routing-key}")
-    public String routingKey;
+    @Value("${rabbitmq.routing-keys.tournament-start}")
+    public String tournamentRoutingKey;
 
     public void publishTournamentStartEvent(TournamentBracketDto tournamentBracketDto) {
         log.info("Sending tournament message to generate tournament bracket");
-        rabbitTemplate.convertAndSend(exchange, routingKey, tournamentBracketDto);
+        rabbitTemplate.convertAndSend(exchange, tournamentRoutingKey, tournamentBracketDto);
     }
 }

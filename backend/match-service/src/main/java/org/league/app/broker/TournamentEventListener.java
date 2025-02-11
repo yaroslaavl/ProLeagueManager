@@ -15,7 +15,7 @@ public class TournamentEventListener {
 
     @RabbitListener(queues = "tournament.start.queue")
     public void handleTournamentStartMessage(TournamentBracketDto tournamentBracketDto) {
-        log.info("Received tournament start event: {}", tournamentBracketDto.competition.getName());
+        log.info("Received tournament start event: {}", tournamentBracketDto);
 
         matchService.generateTournamentBracket(tournamentBracketDto);
     }
