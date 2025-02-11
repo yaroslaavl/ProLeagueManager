@@ -1,9 +1,13 @@
 package org.league.app.broker;
 
+import com.rabbitmq.client.Channel;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.league.app.service.MatchService;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.amqp.support.AmqpHeaders;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -13,10 +17,18 @@ public class TournamentEventListener {
 
     private final MatchService matchService;
 
+    @SneakyThrows
     @RabbitListener(queues = "tournament.start.queue")
-    public void handleTournamentStartMessage(TournamentBracketDto tournamentBracketDto) {
+    public void handleTournamentStartMessage(TournamentBracketDto tournamentBracketDto, Channel channel, @Header(AmqpHeaders.DELIVERY_TAG) long tag) {
         log.info("Received tournament start event: {}", tournamentBracketDto);
 
-        matchService.generateTournamentBracket(tournamentBracketDto);
+        try {
+            matchService.generateTournamentBracket(tournamentBracketDto);
+            channel.basicAck(tag, false);
+            log.info("Message successfully processed and acknowledged.");
+        } catch (Exception e) {
+            log.error("Error processing message: {}", e.getMessage());
+            channel.basicNack(tag, false, false);
+        }
     }
 }

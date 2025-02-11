@@ -1,6 +1,7 @@
 package org.league.app.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.league.app.broker.TournamentBracketDto;
 import org.league.app.database.repository.MatchRepository;
 import org.league.app.dto.MatchReadDto;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MatchService {
@@ -23,7 +25,8 @@ public class MatchService {
                 .orElseThrow(() -> new MatchNotFoundException("Match not found"));
     }
 
-    public void generateTournamentBracket(TournamentBracketDto tournamentBracketDto) {
-
+    public void generateTournamentBracket(TournamentBracketDto dto) {
+        log.info("Generating tournament bracket");
     }
+
 }
