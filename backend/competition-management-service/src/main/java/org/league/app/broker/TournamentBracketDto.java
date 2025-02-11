@@ -7,12 +7,13 @@ import org.league.app.dto.CompetitionParticipantReadDto;
 import org.league.app.dto.CompetitionReadDto;
 import org.league.app.dto.TournamentStageReadDto;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TournamentBracketDto {
+public class TournamentBracketDto implements Serializable {
 
     public CompetitionReadDto competition;
     public List<TournamentStageReadDto> stageList;
