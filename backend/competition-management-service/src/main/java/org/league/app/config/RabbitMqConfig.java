@@ -4,7 +4,6 @@ import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,15 +15,15 @@ public class RabbitMqConfig {
 
     private final String exchange;
     private final String routingKey;
-    private final String queueName;
+    private final String tournamentQueue;
 
     public RabbitMqConfig(
             @Value("${rabbitmq.exchange}") String exchange,
             @Value("${rabbitmq.routing-key}") String routingKey,
-            @Value("${rabbitmq.queue}") String queueName) {
+            @Value("${rabbitmq.queue}") String tournamentQueue) {
         this.exchange = exchange;
         this.routingKey = routingKey;
-        this.queueName = queueName;
+        this.tournamentQueue = tournamentQueue;
     }
 
     @Bean
@@ -33,13 +32,13 @@ public class RabbitMqConfig {
     }
 
     @Bean
-    public Queue queue() {
-        return new Queue(queueName, true);
+    public Queue tournamentQueue() {
+        return new Queue(tournamentQueue, true);
     }
 
     @Bean
-    public Binding binding(Queue queue, DirectExchange directExchange) {
-        return BindingBuilder.bind(queue).to(directExchange).with(routingKey);
+    public Binding binding(Queue tournamentQueue, DirectExchange directExchange) {
+        return BindingBuilder.bind(tournamentQueue).to(directExchange).with(routingKey);
     }
 
     @Bean
