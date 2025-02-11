@@ -21,8 +21,8 @@ public class TournamentEventPublisher {
     @Value("${rabbitmq.routing-key}")
     public String routingKey;
 
-    public void publishTournamentStartEvent(UUID competitionId) {
-        log.info("Sending tournament start event");
-        rabbitTemplate.convertAndSend(exchange, routingKey, competitionId);
+    public void publishTournamentStartEvent(TournamentBracketDto tournamentBracketDto) {
+        log.info("Sending tournament message to generate tournament bracket");
+        rabbitTemplate.convertAndSend(exchange, routingKey, tournamentBracketDto);
     }
 }
