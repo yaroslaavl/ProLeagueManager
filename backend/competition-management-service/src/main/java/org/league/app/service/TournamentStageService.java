@@ -2,18 +2,26 @@ package org.league.app.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.league.app.broker.TournamentBracketDto;
 import org.league.app.broker.TournamentEventPublisher;
 import org.league.app.database.entity.Competition;
+import org.league.app.database.entity.CompetitionParticipant;
 import org.league.app.database.entity.TournamentStage;
 import org.league.app.database.entity.enums.CompetitionStatus;
 import org.league.app.database.entity.enums.CompetitionType;
 import org.league.app.database.repository.CompetitionParticipantRepository;
 import org.league.app.database.repository.CompetitionRepository;
 import org.league.app.database.repository.TournamentStageRepository;
+import org.league.app.dto.CompetitionParticipantReadDto;
+import org.league.app.dto.CompetitionReadDto;
+import org.league.app.dto.TournamentStageReadDto;
 import org.league.app.exception.CompetitionNotFoundException;
 import org.league.app.exception.IncorrectTournamentStatus;
 import org.league.app.feign.sportClient.SportClientFeign;
 import org.league.app.feign.sportClient.SportDto;
+import org.league.app.mapper.CompetitionMapper;
+import org.league.app.mapper.CompetitionParticipantMapper;
+import org.league.app.mapper.TournamentStageMapper;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -32,6 +41,9 @@ public class TournamentStageService {
     private final CompetitionRepository competitionRepository;
     private final SportClientFeign sportClientFeign;
     private final TournamentEventPublisher tournamentEventPublisher;
+    private final TournamentStageMapper tournamentStageMapper;
+    private final CompetitionParticipantMapper competitionParticipantMapper;
+    private final CompetitionMapper competitionMapper;
 
     @Transactional
     public void closeTournamentRegistrationAndGenerateTournamentStages(UUID competitionId) {
@@ -48,7 +60,24 @@ public class TournamentStageService {
 
         if (competition.getStatus().equals(CompetitionStatus.ACTIVE)) {
             generateTournamentStages(competitionId);
-            tournamentEventPublisher.publishTournamentStartEvent(competitionId);
+
+            List<TournamentStage> tournamentStagesByCompetition = tournamentStageRepository.findTournamentStagesByCompetitionId(competitionId);
+            List<CompetitionParticipant> competitionParticipantList = competitionParticipantRepository.findAllByCompetitionId(competitionId);
+
+            CompetitionReadDto competitionReadDto = competitionMapper.toDto(competition);
+
+            List<TournamentStageReadDto>  tournamentStageReadDtoList = tournamentStagesByCompetition.stream()
+                    .map(tournamentStageMapper::toDto)
+                    .toList();
+
+            List<CompetitionParticipantReadDto> competitionParticipantReadDtoList = competitionParticipantList.stream()
+                            .map(competitionParticipantMapper::toDto)
+                            .toList();
+
+            tournamentEventPublisher.publishTournamentStartEvent(new TournamentBracketDto(
+                    competitionReadDto,
+                    tournamentStageReadDtoList,
+                    competitionParticipantReadDtoList));
         }
     }
 
@@ -86,7 +115,7 @@ public class TournamentStageService {
             throw new IncorrectTournamentStatus("Competition is not active");
         }
 
-        if (tournamentStageRepository.findTournamentStagesByCompetition(competition).isPresent()) {
+        if (!tournamentStageRepository.findTournamentStagesByCompetitionId(competitionId).isEmpty()) {
             log.error("Tournament stages already exist in competition '{}'", competition.getName());
             return;
         }
