@@ -13,7 +13,7 @@ public class RabbitMqConfig {
     private final String tournamentQueue;
 
     public RabbitMqConfig(
-            @Value("${rabbitmq.queue}") String tournamentQueue) {
+            @Value("${rabbitmq.queues.tournament-start}") String tournamentQueue) {
         this.tournamentQueue = tournamentQueue;
     }
 

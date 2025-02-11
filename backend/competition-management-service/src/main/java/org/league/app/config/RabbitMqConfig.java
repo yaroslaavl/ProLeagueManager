@@ -14,15 +14,15 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitMqConfig {
 
     private final String exchange;
-    private final String routingKey;
+    private final String tournamentRoutingKey;
     private final String tournamentQueue;
 
     public RabbitMqConfig(
             @Value("${rabbitmq.exchange}") String exchange,
-            @Value("${rabbitmq.routing-key}") String routingKey,
-            @Value("${rabbitmq.queue}") String tournamentQueue) {
+            @Value("${rabbitmq.routing-keys.tournament-start}") String tournamentRoutingKey,
+            @Value("${rabbitmq.queues.tournament-start}") String tournamentQueue) {
         this.exchange = exchange;
-        this.routingKey = routingKey;
+        this.tournamentRoutingKey = tournamentRoutingKey;
         this.tournamentQueue = tournamentQueue;
     }
 
@@ -37,8 +37,8 @@ public class RabbitMqConfig {
     }
 
     @Bean
-    public Binding binding(Queue tournamentQueue, DirectExchange directExchange) {
-        return BindingBuilder.bind(tournamentQueue).to(directExchange).with(routingKey);
+    public Binding tournamentBinding(Queue tournamentQueue, DirectExchange directExchange) {
+        return BindingBuilder.bind(tournamentQueue).to(directExchange).with(tournamentRoutingKey);
     }
 
     @Bean
