@@ -10,16 +10,16 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitMqConfig {
 
-    private final String queueName;
+    private final String tournamentQueue;
 
     public RabbitMqConfig(
-            @Value("${rabbitmq.queue}") String queueName) {
-        this.queueName = queueName;
+            @Value("${rabbitmq.queue}") String tournamentQueue) {
+        this.tournamentQueue = tournamentQueue;
     }
 
     @Bean
-    public Queue queue() {
-        return new Queue(queueName, true);
+    public Queue tournamentQueue() {
+        return new Queue(tournamentQueue, true);
     }
 
     @Bean
