@@ -13,10 +13,10 @@ public class TournamentEventPublisher {
 
     private final RabbitTemplate rabbitTemplate;
 
-    @Value("${rabbitmq.exchange}")
+    @Value("${rabbitmq.tournament.exchange}")
     public String exchange;
 
-    @Value("${rabbitmq.queues.tournament-start.routing-key}")
+    @Value("${rabbitmq.tournament.queues.start.routing-key}")
     public String tournamentRoutingKey;
 
     public void publishTournamentStartEvent(TournamentBracketDto tournamentBracketDto) {
