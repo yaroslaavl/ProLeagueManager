@@ -3,15 +3,18 @@ package org.league.app.service;
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.league.app.broker.LeagueEventPublisher;
 import org.league.app.database.entity.Competition;
 import org.league.app.database.entity.CompetitionParticipant;
 import org.league.app.database.entity.GameSystem;
+import org.league.app.database.entity.LeagueStanding;
 import org.league.app.database.entity.enums.CompetitionParticipantStatus;
 import org.league.app.database.entity.enums.CompetitionStatus;
 import org.league.app.database.entity.enums.CompetitionType;
 import org.league.app.database.repository.CompetitionParticipantRepository;
 import org.league.app.database.repository.CompetitionRepository;
 import org.league.app.database.repository.GameSystemRepository;
+import org.league.app.database.repository.LeagueStandingRepository;
 import org.league.app.database.specification.CompetitionSpecification;
 import org.league.app.dto.CompetitionCreateEditDto;
 import org.league.app.dto.CompetitionReadDto;
@@ -26,7 +29,9 @@ import org.league.app.feign.teamClient.TeamClientFeign;
 import org.league.app.feign.teamClient.TeamFeignDto;
 import org.league.app.feign.teamClient.TeamMemberFeignDto;
 import org.league.app.mapper.CompetitionMapper;
+import org.league.app.mapper.LeagueStandingMapper;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -52,6 +57,9 @@ public class CompetitionService {
     private final SportClientFeign sportClientFeign;
     private final AuthClientFeign authClientFeign;
     private final TeamClientFeign teamClientFeign;
+    private final LeagueStandingRepository leagueStandingRepository;
+    private final LeagueEventPublisher leagueEventPublisher;
+    private final LeagueStandingMapper leagueStandingMapper;
 
     @Transactional
     public CompetitionReadDto createCompetition(CompetitionCreateEditDto competitionCreate,
@@ -151,7 +159,7 @@ public class CompetitionService {
         }
 
         GameSystem gameSystem = gameSystemRepository.findById(newCompetition.getGameSystemId())
-                        .orElseThrow(() -> new GameSystemNotFoundException("Game System not found"));
+                .orElseThrow(() -> new GameSystemNotFoundException("Game System not found"));
 
         Optional.ofNullable(newCompetition.getName()).ifPresent(currentCompetition::setName);
         Optional.ofNullable(newCompetition.getSportId()).ifPresent(currentCompetition::setSportId);
@@ -196,6 +204,16 @@ public class CompetitionService {
                     .competitionParticipantStatus(CompetitionParticipantStatus.REGISTERED)
                     .build();
 
+            if (competition.getCompetitionType().equals(CompetitionType.LEAGUE)) {
+                LeagueStanding leagueStanding = LeagueStanding.builder()
+                        .competition(competition)
+                        .teamId(null)
+                        .playerId(userByEmail.getId())
+                        .build();
+
+                leagueStandingRepository.save(leagueStanding);
+            }
+
             competitionParticipantRepository.save(competitionParticipant);
             sendNotificationMessage(userByEmail.getId(), "You've joined a " + competition.getCompetitionType() + " called " + competition.getName(), "SOLO_PARTICIPATION", competition.getCompetitionType().toString());
             return true;
@@ -209,7 +227,7 @@ public class CompetitionService {
             boolean captainExists = teamById.getTeamMembers().stream()
                     .filter(member -> member.getRoles().stream()
                             .anyMatch(role -> role.getRoleName().equalsIgnoreCase("CAPITAN")))
-                    .anyMatch(member -> selectedPlayerIds.contains(member.getUserId()))                                                   ;
+                    .anyMatch(member -> selectedPlayerIds.contains(member.getUserId()));
 
             if (!captainExists) {
                 throw new CaptainNotIncludedException("Selected players must include the team captain.");
@@ -228,6 +246,16 @@ public class CompetitionService {
                                 .build())
                         .toList();
 
+                if (competition.getCompetitionType().equals(CompetitionType.LEAGUE)) {
+                    LeagueStanding leagueStanding = LeagueStanding.builder()
+                            .competition(competition)
+                            .teamId(teamId)
+                            .playerId(null)
+                            .build();
+
+                    leagueStandingRepository.save(leagueStanding);
+                }
+
                 competitionParticipantRepository.saveAll(participants);
                 TeamMemberFeignDto manager = teamById.getTeamMembers().stream()
                         .filter(dto -> dto.getRoles().stream()
@@ -245,6 +273,19 @@ public class CompetitionService {
                 return true;
             } else {
                 throw new PlayerSizeNotMatchException("Player size not match.");
+            }
+        }
+    }
+
+    @Scheduled(fixedRate = 60000/*86400000*/)
+    public void autoStartLeague() {
+        log.info("Checking tournaments at {}", LocalDateTime.now());
+
+        List<Competition> competitions = competitionRepository.findAllByStatusAndCompetitionType(CompetitionStatus.NONE, CompetitionType.LEAGUE);
+
+        for (Competition competition : competitions) {
+            if (competition.getStartDate().isAfter(LocalDateTime.now().minusDays(1))) {
+                leagueEventPublisher.publishLeagueStartEvent("hello blyat");
             }
         }
     }
