@@ -44,8 +44,6 @@ if(accToken === null || refreshToken === null){
     "main.html";
 }else{
   getUserData();
-
-
 }
 async function refreshtoken(){
   try {
@@ -206,3 +204,6 @@ async function getTeam(userId) {
   }
 }
 
+document.getElementById('team_name').addEventListener('click',()=>{
+  localStorage.setItem('MyTeam',document.getElementById('team_name').innerText);
+})

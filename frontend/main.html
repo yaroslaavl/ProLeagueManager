@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="css/main.css">
   <script src="js/main.js" defer></script> <!-- Подключение скрипта -->
   <script src="js/burgerMenu.js" defer></script>
+  <script src="js/notificationMenu.js" defer></script>
   <title>Main</title>
 </head>
 <body>
@@ -25,12 +26,28 @@
         <input type="text" placeholder="Szukaj" class="search-input">
       </div>
      <div style="display: flex;margin-bottom: 15px">
-       <div id = "notification_button">
+       <div id="notification_button" onclick="toggleNotifications(event)">
          <button style="background: none;" class="icon-btn notification-btn">
-           <img style="width: 25px;height: 25px" src="img/notification-bell.svg" alt="Powiadomienia">
+           <img style="width: 25px; height: 25px" src="img/notification-bell.svg" alt="Powiadomienia">
          </button>
+         <div class="notification-popup" id="notificationPopup">
+           <div class="notification-header">
+             <span>Powiadomienia</span>
+           </div>
+           <div class="notification-list">
+             <div class="notification-item">
+               <p class="notification-message">📢 Nowe testowe powiadomienie</p>
+               <span class="notification-time">5 min temu</span>
+             </div>
+             <div class="notification-item">
+               <p class="notification-message">📢 Nowe testowe powiadomienie</p>
+               <span class="notification-time">5 min temu</span>
+             </div>
+           </div>
+         </div>
        </div>
-      <div class="header-right" id="header_right" onclick="toggleMenu()">
+
+       <div class="header-right" id="header_right" onclick="toggleMenu()">
         <div class="menu-container" >
           <button class="icon-btn menu-btn" style="margin-top: 0">
             <img src="img/menu-hamburger.svg" alt="Menu">

@@ -319,12 +319,11 @@ body {
 .player-info {
   display: flex;
   justify-content: space-between;
-  width: 80%;
-
+  width: 95%;
 }
 
 .player-name {
-  font-size: 14px;
+  font-size: 12px;
   font-weight: bold;
   margin: 0;
   text-align: center;
@@ -342,8 +341,14 @@ body {
   color: #808A9D;
   margin: 0;
   text-align: center;
-}
 
+}
+.player-roles{
+  font-size: 12px;
+  color: #808A9D;
+  margin: 0;
+  text-align: center;
+}
 .createdAt {
   font-size: 11px;
   color: #808A9D;
