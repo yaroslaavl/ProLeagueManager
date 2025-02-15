@@ -221,3 +221,56 @@ cursor: pointer;
 .menu-container{
   cursor: pointer;
 }
+
+/*notitfications
+/* Стили для выпадающего меню уведомлений */
+.notification-popup {
+  display: none;
+  position: absolute;
+  top: 60px;
+  right: 60px;
+  width: 220px;
+  background: white;
+  border-radius: 10px;
+  border: 1px solid rgb(239, 242, 245);
+  margin-top: 10px;
+  overflow: hidden;
+  z-index: 100;
+}
+
+/* Заголовок */
+.notification-header {
+  background: #f0f2f5;
+  padding: 10px;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* Контейнер уведомлений */
+.notification-list {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+/* Отдельное уведомление */
+.notification-item {
+  padding: 10px;
+  border-bottom: 1px solid #eff2f5;
+}
+
+.notification-message {
+  margin: 0;
+  font-size: 14px;
+}
+
+.notification-time {
+  font-size: 12px;
+  color: #808A9D;
+  display: block;
+  margin-top: 5px;
+}
+
+/* Отображение активного меню */
+.notification-popup.active {
+  display: block;
+}
