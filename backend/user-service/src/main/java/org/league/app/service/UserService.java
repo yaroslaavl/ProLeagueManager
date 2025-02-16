@@ -81,6 +81,10 @@ public class UserService implements UserDetailsService {
         return userMapper.toDto(newUser);
     }
 
+    public UserReadDto getUser(Long id){
+        return userMapper.toDto(userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User not found")));
+    }
+
     public boolean sendPasswordResetEmail(EmailResetPasswordDto emailResetPasswordDto) {
         if (emailResetPasswordDto.getEmail() == null || !userRepository.existsByEmail(emailResetPasswordDto.getEmail())) {
             throw new UsernameNotFoundException("User not found");

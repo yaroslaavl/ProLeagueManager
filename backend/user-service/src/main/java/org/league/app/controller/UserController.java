@@ -160,5 +160,10 @@ public class UserController {
                 .stream().map(userMapper::toDto).collect(Collectors.toList());
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<UserReadDto> getUser(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(userService.getUser(id));
+    }
 }
 
