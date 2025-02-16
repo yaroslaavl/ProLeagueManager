@@ -3,6 +3,7 @@ package org.league.app.service;
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.league.app.broker.LeagueBracketDto;
 import org.league.app.broker.LeagueEventPublisher;
 import org.league.app.database.entity.Competition;
 import org.league.app.database.entity.CompetitionParticipant;
@@ -18,6 +19,7 @@ import org.league.app.database.repository.LeagueStandingRepository;
 import org.league.app.database.specification.CompetitionSpecification;
 import org.league.app.dto.CompetitionCreateEditDto;
 import org.league.app.dto.CompetitionReadDto;
+import org.league.app.dto.LeagueStandingReadDto;
 import org.league.app.exception.*;
 import org.league.app.feign.authClient.AuthClientFeign;
 import org.league.app.feign.authClient.UserDto;
@@ -284,8 +286,8 @@ public class CompetitionService {
         List<Competition> competitions = competitionRepository.findAllByStatusAndCompetitionType(CompetitionStatus.NONE, CompetitionType.LEAGUE);
 
         for (Competition competition : competitions) {
-            if (competition.getStartDate().isAfter(LocalDateTime.now().minusDays(1))) {
-                leagueEventPublisher.publishLeagueStartEvent("hello blyat");
+            if (LocalDateTime.now().isAfter(competition.getStartDate().minusDays(1))) {
+
             }
         }
     }
