@@ -28,4 +28,12 @@ public interface CompetitionParticipantRepository extends JpaRepository<Competit
 
     List<CompetitionParticipant> findAllByCompetitionId(UUID competitionId);
 
+    @Query("SELECT cp FROM CompetitionParticipant cp " +
+            "WHERE cp.competition.id = :competitionId " +
+            "AND (:isIndividual = TRUE AND cp.playerId IS NOT NULL " +
+            "OR :isIndividual = FALSE AND cp.teamId IS NOT NULL)")
+    List<CompetitionParticipant> findParticipantsByCompetitionId(
+            @Param("competitionId") UUID competitionId,
+            @Param("isIndividual") boolean isIndividual);
+
 }
