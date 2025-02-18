@@ -13,5 +13,6 @@ public class TournamentBracketDto {
 
     public CompetitionDto competition;
     public List<TournamentStageDto> stageList;
+    public SportDto sport;
     public List<CompetitionParticipantDto> competitionParticipantList;
 }

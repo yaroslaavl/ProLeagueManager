@@ -24,5 +24,6 @@ public class MatchReadDto {
     UUID winnerTeamId;
     Long winnerPlayerId;
     Integer leagueTourNumber;
+    UUID nextMatchId;
     LocalDateTime createdAt;
 }

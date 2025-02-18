@@ -80,7 +80,9 @@ public class RabbitMqConfig {
 
     @Bean
     public Queue tournamentDlq() {
-        return new Queue(tournamentDlqName, true);
+        Map<String, Object> args = new HashMap<>();
+        args.put("x-message-ttl", 60000);
+        return new Queue(tournamentDlqName, true, false, false, args);
     }
 
     @Bean

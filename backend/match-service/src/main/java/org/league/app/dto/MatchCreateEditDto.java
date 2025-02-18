@@ -26,6 +26,7 @@ public class MatchCreateEditDto {
     private Integer leagueTourNumber;
     private Boolean aConfirmed;
     private Boolean bConfirmed;
+    private UUID nextMatchId;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

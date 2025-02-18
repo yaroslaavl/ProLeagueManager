@@ -2,8 +2,8 @@ package org.league.app.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.league.app.dto.CompetitionCreateEditDto;
+import org.league.app.dto.CompetitionParticipantReadDto;
 import org.league.app.dto.CompetitionReadDto;
-import org.league.app.mapper.CompetitionMapper;
 import org.league.app.service.CompetitionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +19,6 @@ import static org.springframework.http.ResponseEntity.notFound;
 @RequestMapping("/api/competition")
 public class CompetitionController {
 
-    private final CompetitionMapper competitionMapper;
     private final CompetitionService competitionService;
 
     @PostMapping("/create")
@@ -85,4 +84,14 @@ public class CompetitionController {
         return ResponseEntity.ok(competitionService.countCurrentPlayersPerCompetition(competitionId));
     }
 
+    @GetMapping("/players/{id}")
+    public ResponseEntity<List<CompetitionParticipantReadDto>> findCompetitionParticipantsById(@PathVariable("id") UUID id) {
+        List<CompetitionParticipantReadDto> competitionParticipantsById = competitionService.findCompetitionParticipantsById(id);
+        return ResponseEntity.ok(competitionParticipantsById);
+    }
+
+    @GetMapping("/active-tournaments")
+    public List<UUID> getActiveTournaments() {
+        return competitionService.getActiveTournamentIds();
+    }
 }

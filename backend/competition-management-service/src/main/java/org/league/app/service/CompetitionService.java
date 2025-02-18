@@ -18,6 +18,7 @@ import org.league.app.database.repository.GameSystemRepository;
 import org.league.app.database.repository.LeagueStandingRepository;
 import org.league.app.database.specification.CompetitionSpecification;
 import org.league.app.dto.CompetitionCreateEditDto;
+import org.league.app.dto.CompetitionParticipantReadDto;
 import org.league.app.dto.CompetitionReadDto;
 import org.league.app.dto.LeagueStandingReadDto;
 import org.league.app.exception.*;
@@ -31,6 +32,7 @@ import org.league.app.feign.teamClient.TeamClientFeign;
 import org.league.app.feign.teamClient.TeamFeignDto;
 import org.league.app.feign.teamClient.TeamMemberFeignDto;
 import org.league.app.mapper.CompetitionMapper;
+import org.league.app.mapper.CompetitionParticipantMapper;
 import org.league.app.mapper.LeagueStandingMapper;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -56,6 +58,7 @@ public class CompetitionService {
     private final GameSystemRepository gameSystemRepository;
     private final NotificationClientFeign notificationClientFeign;
     private final CompetitionMapper competitionMapper;
+    private final CompetitionParticipantMapper competitionParticipantMapper;
     private final SportClientFeign sportClientFeign;
     private final AuthClientFeign authClientFeign;
     private final TeamClientFeign teamClientFeign;
@@ -281,7 +284,7 @@ public class CompetitionService {
 
     @Scheduled(fixedRate = 60000/*86400000*/)
     public void autoStartLeague() {
-        log.info("Checking tournaments at {}", LocalDateTime.now());
+        log.info("Checking leagues at {}", LocalDateTime.now());
 
         List<Competition> competitions = competitionRepository.findAllByStatusAndCompetitionType(CompetitionStatus.NONE, CompetitionType.LEAGUE);
 
@@ -292,8 +295,34 @@ public class CompetitionService {
         }
     }
 
+    @Transactional
+    public void finalizeCompetition(String competitionId) {
+        Competition competition = competitionRepository.findById(UUID.fromString(competitionId))
+                .orElseThrow(() -> new CompetitionNotFoundException("Competition not found"));
+
+        competition.setStatus(CompetitionStatus.COMPLETED);
+        competition.setEndDate(LocalDateTime.now());
+
+        log.info("Competition {} finalized successfully.", competition.getName());
+        competitionRepository.save(competition);
+    }
+
+    public List<UUID> getActiveTournamentIds() {
+        return competitionRepository.getActiveTournaments();
+    }
+
     public Integer countCurrentPlayersPerCompetition(UUID competitionId) {
         return competitionParticipantRepository.countTeamsOrUsersByCompetitionId(competitionId);
+    }
+
+    public List<CompetitionParticipantReadDto> findCompetitionParticipantsById(UUID competitionId) {
+        Competition competition = competitionRepository.findById(competitionId)
+                .orElseThrow(() -> new CompetitionNotFoundException("Competition not found"));
+
+        List<CompetitionParticipant> allByCompetitionId = competitionParticipantRepository.findParticipantsByCompetitionId(competitionId, competition.getGameSystem().getIsIndividual());
+        return allByCompetitionId.stream()
+                .map(competitionParticipantMapper::toDto)
+                .collect(Collectors.toList());
     }
 
     private void sendNotificationMessage(Long userId, String message, String eventType, String notificationCategory) {

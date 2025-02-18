@@ -16,6 +16,9 @@ public class RabbitMqConfig {
         SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
         factory.setConnectionFactory(connectionFactory);
         factory.setAcknowledgeMode(AcknowledgeMode.MANUAL);
+        factory.setPrefetchCount(1);
+        factory.setConcurrentConsumers(5);
+        factory.setMaxConcurrentConsumers(10);
         factory.setMessageConverter(messageConverter());
         return factory;
     }
@@ -23,5 +26,20 @@ public class RabbitMqConfig {
     @Bean
     public MessageConverter messageConverter() {
         return new Jackson2JsonMessageConverter();
+    }
+
+    @Bean
+    public DirectExchange finalizedCompetitionExchange() {
+        return new DirectExchange("finalized-competition-exchange");
+    }
+
+    @Bean
+    public Queue finalizedCompetitionQueue() {
+        return new Queue("finalized-competition-rpc-queue", true, false, false);
+    }
+
+    @Bean
+    public Binding finalizedCompetitionBinding(Queue rpcQueue, DirectExchange finalizedCompetitionExchange) {
+        return BindingBuilder.bind(rpcQueue).to(finalizedCompetitionExchange).with("competition.finalized.rpc");
     }
 }

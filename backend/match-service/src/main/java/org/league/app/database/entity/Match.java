@@ -76,6 +76,9 @@ public class Match {
     @Column(name = "B_confirmed")
     private Boolean bConfirmed;
 
+    @Column(name = "next_match_id")
+    private UUID nextMatchId;
+
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
