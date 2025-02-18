@@ -23,7 +23,7 @@ public class TournamentEventListener {
         log.info("Received tournament start event: {}", tournamentBracketDto);
 
         try {
-            matchService.generateTournamentBracket(tournamentBracketDto);
+            matchService.generateTournamentFirstStageMatches(tournamentBracketDto);
             channel.basicAck(tag, false);
             log.info("Message successfully processed and acknowledged.");
         } catch (Exception e) {
