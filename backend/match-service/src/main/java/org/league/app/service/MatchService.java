@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -393,9 +394,72 @@ public class MatchService {
         return true;
     }
 
-    public void generateLeagueMatches(String info) {
-        log.info("Generating league matches");
-        throw new RuntimeException("hahahaa");
+    public void generateLeagueMatches(List<LeagueBracketDto> leagueBracketDtos) {
+
+        if (leagueBracketDtos.size() % 2 != 0) {
+            leagueBracketDtos.add(null);
+        }
+
+        int teamNums = leagueBracketDtos.size();
+        int totalRounds = teamNums - 1;
+        int halfSize = teamNums / 2;
+
+        LocalDateTime startDate = leagueBracketDtos.get(0).getCompetition().getStartDate();
+        LocalDateTime endDate   = leagueBracketDtos.get(0).getCompetition().getEndDate();
+        long daysCount = ChronoUnit.DAYS.between(startDate.toLocalDate(), endDate.toLocalDate()) + 1;
+
+        if (totalRounds > daysCount) {
+            throw new IllegalStateException("Недостаточно дней, чтобы сыграть все туры!");
+        }
+
+        List<LeagueBracketDto> temp = new ArrayList<>(leagueBracketDtos);
+        LeagueBracketDto firstTeam = temp.removeFirst();
+
+        for (int round = 0; round < totalRounds; round++) {
+
+            LocalDateTime matchDay = startDate.plusDays(round);
+
+            LeagueBracketDto teamA = firstTeam;
+            LeagueBracketDto teamB = temp.get(temp.size() - 1);
+
+            createAndSaveMatch(teamA, teamB, matchDay);
+
+            for (int i = 0; i < halfSize - 1; i++) {
+                LeagueBracketDto d1 = temp.get(i);
+                LeagueBracketDto d2 = temp.get(temp.size() - 2 - i);
+                createAndSaveMatch(d1, d2, matchDay);
+            }
+
+            LeagueBracketDto last = temp.remove(temp.size() - 1);
+            temp.add(0, last);
+        }
+    }
+
+    private void createAndSaveMatch(LeagueBracketDto dtoA, LeagueBracketDto dtoB, LocalDateTime matchDate) {
+        if (dtoA == null || dtoB == null) {
+            return;
+        }
+
+        UUID competitionId = dtoA.getLeagueStanding().getCompetitionId();
+        if (dtoA.getLeagueStanding().getTeamId() == null) {
+            Match match = Match.builder()
+                    .competitionId(competitionId)
+                    .playerAId(dtoA.getLeagueStanding().getPlayerId())
+                    .playerBId(dtoB.getLeagueStanding().getPlayerId())
+                    .matchDate(matchDate)
+                    .build();
+
+            matchRepository.save(match);
+        } else {
+            Match match = Match.builder()
+                    .competitionId(competitionId)
+                    .teamAId(dtoA.getLeagueStanding().getTeamId())
+                    .teamBId(dtoB.getLeagueStanding().getTeamId())
+                    .matchDate(matchDate)
+                    .build();
+
+            matchRepository.save(match);
+        }
     }
 
     private void processNextMatch(Match match) {

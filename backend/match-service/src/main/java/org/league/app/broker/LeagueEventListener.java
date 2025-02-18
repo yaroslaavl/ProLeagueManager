@@ -10,6 +10,9 @@ import org.springframework.amqp.support.AmqpHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -19,11 +22,11 @@ public class LeagueEventListener {
 
     @SneakyThrows
     @RabbitListener(queues = "league.start.queue")
-    public void handleLeagueStartMessage(String info, Channel channel, @Header(AmqpHeaders.DELIVERY_TAG) long tag) {
-        log.info("Received tournament start event: {}", info);
+    public void handleLeagueStartMessage(List<LeagueBracketDto> leagueBracketDtos, Channel channel, @Header(AmqpHeaders.DELIVERY_TAG) long tag) {
+        log.info("Received tournament start event: {}", leagueBracketDtos);
 
         try {
-            matchService.generateLeagueMatches(info);
+            matchService.generateLeagueMatches(leagueBracketDtos);
             channel.basicAck(tag, false);
             log.info("kakakaka.");
         } catch (Exception e) {

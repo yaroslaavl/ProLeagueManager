@@ -2,9 +2,12 @@ package org.league.app.broker;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.league.app.dto.LeagueStandingReadDto;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Slf4j
 @Component
@@ -19,9 +22,9 @@ public class LeagueEventPublisher {
     @Value("${rabbitmq.league.queues.start.routing-key}")
     public String leagueRoutingKey;
 
-    public void publishLeagueStartEvent(String info) {
-        log.info("Publishing league start event: " + info);
+    public void publishLeagueStartEvent(List<LeagueStandingReadDto> leagueStandingReadDto) {
+        log.info("Publishing league start event: " + leagueStandingReadDto);
         log.info("Sending league message to generate league start.");
-        rabbitTemplate.convertAndSend(exchange, leagueRoutingKey, info);
+        rabbitTemplate.convertAndSend(exchange, leagueRoutingKey, leagueStandingReadDto);
     }
 }

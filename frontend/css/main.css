@@ -3,6 +3,7 @@ body {
   background-color: #ffffff;
   animation: fadeIn 0.3s ease-in forwards;
   margin: 0;
+  overflow-x: hidden;
 }
 @keyframes fadeIn {
   from {
@@ -221,3 +222,5 @@ cursor: pointer;
 .menu-container{
   cursor: pointer;
 }
+
+
