@@ -74,9 +74,12 @@ public class TournamentStageService {
                             .map(competitionParticipantMapper::toDto)
                             .toList();
 
+            SportDto sportById = sportClientFeign.findSportById(competition.getSportId());
+
             tournamentEventPublisher.publishTournamentStartEvent(new TournamentBracketDto(
                     competitionReadDto,
                     tournamentStageReadDtoList,
+                    sportById,
                     competitionParticipantReadDtoList));
         }
     }
@@ -151,6 +154,7 @@ public class TournamentStageService {
                 .orElseThrow(() -> new CompetitionNotFoundException("Competition not found"));
 
         return competitionWithGameSystem.getGameSystem().getMinTeamSize() >
-                competitionParticipantRepository.countTeamsOrUsersByCompetitionId(competitionId);
+                competitionParticipantRepository.countTeamsOrUsersByCompetitionId(competitionId)
+                 && LocalDateTime.now().isAfter(competitionWithGameSystem.getStartDate().minusHours(1));
     }
 }
