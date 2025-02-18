@@ -368,3 +368,95 @@ footer {
   color: #000000;
   font-weight: bold;
 }
+/*notitfications
+/* Стили для выпадающего меню уведомлений */
+.notification-popup {
+  display: none;
+  position: absolute;
+  top: 60px;
+  right: 60px;
+  width: 220px;
+  background: white;
+  border-radius: 10px;
+  border: 1px solid rgb(239, 242, 245);
+  margin-top: 10px;
+  overflow: hidden;
+  z-index: 100;
+}
+
+/* Заголовок */
+.notification-header {
+  background: #f0f2f5;
+  padding: 10px;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* Контейнер уведомлений */
+.notification-list {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+/* Отдельное уведомление */
+.notification-item {
+  padding: 10px;
+  border-bottom: 1px solid #eff2f5;
+}
+
+.notification-message {
+  margin: 0;
+  font-size: 14px;
+}
+
+.notification-time {
+  font-size: 12px;
+  color: #808A9D;
+  display: block;
+  margin-top: 5px;
+}
+
+/* Отображение активного меню */
+.notification-popup.active {
+  display: block;
+}
+
+/*Show notifications
+/* Всплывающее уведомление внизу слева */
+/* Контейнер для всплывающих уведомлений */
+#toastContainer {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 9999; /* Поднимаем выше всех */
+}
+
+/* Стили всплывающего уведомления */
+.toast {
+  background: #4CAF50;
+  color: white;
+  padding: 12px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  margin-bottom: 10px;
+  max-width: 300px;
+  font-size: 14px;
+  word-wrap: break-word;
+  line-height: 1.4;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  opacity: 1;
+  animation: toastFadeIn 0.5s ease-in-out, toastFadeOut 0.5s ease-out 4.5s forwards;
+}
+
+/* ✅ Уникальные анимации для уведомлений */
+@keyframes toastFadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes toastFadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}

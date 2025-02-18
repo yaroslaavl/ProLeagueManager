@@ -110,32 +110,45 @@ async function getData(){
     document.getElementById('team_img').src = teamimg.url;
 
 
-    members.forEach(member => {
+    for (const member of members) {
       // Формируем строку с ролями
       let rolesText = member.roles.map(role => role.name).join(', ');
-
+      let playerInfo;
+      let playerImg;
       // Проверяем, есть ли среди ролей "MANAGER"
       let isManager = member.roles.some(role => role.name === 'MANAGER');
       let isCapitan = member.roles.some(role => role.name === 'CAPITAN');
-      isManager ? document.getElementById('manager_name').innerText = `${member.userId}` : '';
+
+      try {
+        const userId = member.userId;
+        const response =  await fetch(`http://localhost:8765/user/id/${userId}`);
+        playerInfo = await response.json();
+
+      }catch (err) {console.log(err);}
+      try {
+        const response = await fetch(`http://localhost:8765/user/avatar/${playerInfo.username}`);
+        playerImg = response.url;
+      }catch (err){console.log(err);}
       if(isManager === true){
         document.getElementById('players').innerHTML += `
         <div class="player">
-          <img src="img/profile.svg" alt="Avatar" class="player-avatar">
+          <img src=${playerImg} alt="Avatar" class="player-avatar">
           <div class="player-info">
-            <p class="player-name" style="color: #3861FB">Zhan Karpovich</p>
-            <p class="player-nickname">zhan_karp</p>
+            <p class="player-name" style="color: #3861FB">${playerInfo.firstName + " " + playerInfo.lastName}</p>
+            <p class="player-nickname">${playerInfo.username}</p>
             <p class="player-joined">${new Date(member.joinedAt).toLocaleDateString()}</p>
             <p class="player-roles">${rolesText}</p>
           </div>
-        </div>`;}
+        </div>`;
+        document.getElementById('manager_name').innerText = `${playerInfo.username}`;
+      }
       else if(isCapitan === true){
         document.getElementById('players').innerHTML += `
         <div class="player">
-          <img src="img/profile.svg" alt="Avatar" class="player-avatar">
+          <img src=${playerImg} alt="Avatar" class="player-avatar">
           <div class="player-info">
-            <p class="player-name" style="color: darkgoldenrod">Zhan Karpovich</p>
-            <p class="player-nickname">zhan_karp</p>
+            <p class="player-name" style="color: darkgoldenrod">${playerInfo.firstName + " " + playerInfo.lastName}</p>
+            <p class="player-nickname">${playerInfo.username}</p>
             <p class="player-joined">${new Date(member.joinedAt).toLocaleDateString()}</p>
             <p class="player-roles">${rolesText}</p>
           </div>
@@ -143,22 +156,20 @@ async function getData(){
       else{
         document.getElementById('players').innerHTML += `
         <div class="player">
-          <img src="img/profile.svg" alt="Avatar" class="player-avatar">
+          <img src=${playerImg} alt="Avatar" class="player-avatar">
           <div class="player-info">
-            <p class="player-name">Zhan Karpovich</p>
-            <p class="player-nickname">zhan_karp</p>
+            <p class="player-name">${playerInfo.firstName + " " + playerInfo.lastName}</p>
+            <p class="player-nickname">${playerInfo.username}</p>
             <p class="player-joined">${new Date(member.joinedAt).toLocaleDateString()}</p>
             <p class="player-roles">${rolesText}</p>
           </div>
         </div>`;}
-      })
-
-
-
+      }
 
 
   }catch (err){
     console.error(err);
   }
 }
+
 getData();
