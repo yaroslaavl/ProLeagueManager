@@ -6,9 +6,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/publicProfile.css">
   <link rel="stylesheet" href="css/burgerMenu.css"></link>
+  <link rel="stylesheet" href="css/notificationMenu.css">
   <script src="js/publicProfile.js" defer></script>
   <script src="js/burgerMenu.js" defer></script>
-
+  <script src="js/notificationMenu.js" defer></script>
   <title>Public Profile</title>
 </head>
 <body>
@@ -27,10 +28,20 @@
         <input type="text" placeholder="Szukaj" class="search-input">
       </div>
       <div style="display: flex;margin-bottom: 15px">
-        <div id = "notification_button">
+        <div id="notification_button" onclick="toggleNotifications(event)">
           <button style="background: none;" class="icon-btn notification-btn">
-            <img style="width: 25px;height: 25px" src="img/notification-bell.svg" alt="Powiadomienia">
+            <img style="width: 25px; height: 25px" src="img/notification-bell.svg" alt="Powiadomienia">
           </button>
+          <div class="notification-popup" id="notificationPopup">
+            <div class="notification-header">
+              <span>Powiadomienia</span>
+            </div>
+            <div class="notification-list">
+              <div class="notification-item">
+
+              </div>
+            </div>
+          </div>
         </div>
         <div class="header-right" id="header_right" onclick="toggleMenu()">
           <div class="menu-container" >
@@ -119,7 +130,7 @@
       </div>
 
   </main>
-
+  <div id="toastContainer"></div>
   <footer>
     <div class="footer-content">
       <span>Wspierane przez: <a href="https://zut.edu.pl" target="_blank">ZUT</a></span>
