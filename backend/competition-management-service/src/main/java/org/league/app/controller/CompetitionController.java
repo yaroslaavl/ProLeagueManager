@@ -2,13 +2,14 @@ package org.league.app.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.league.app.dto.CompetitionCreateEditDto;
-import org.league.app.dto.CompetitionParticipantReadDto;
 import org.league.app.dto.CompetitionReadDto;
+import org.league.app.dto.LeagueStandingReadDto;
 import org.league.app.service.CompetitionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import static org.springframework.http.ResponseEntity.noContent;
@@ -84,14 +85,32 @@ public class CompetitionController {
         return ResponseEntity.ok(competitionService.countCurrentPlayersPerCompetition(competitionId));
     }
 
-    @GetMapping("/players/{id}")
-    public ResponseEntity<List<CompetitionParticipantReadDto>> findCompetitionParticipantsById(@PathVariable("id") UUID id) {
-        List<CompetitionParticipantReadDto> competitionParticipantsById = competitionService.findCompetitionParticipantsById(id);
+    @GetMapping("/players/{competitionId}/{teamId}")
+    public ResponseEntity<Set<Long>> findCompetitionParticipantsById(@PathVariable("competitionId") UUID id, @PathVariable("teamId") UUID teamId) {
+        Set<Long> competitionParticipantsById = competitionService.findCompetitionParticipantsByCompetitionIdAndTeamId(id, teamId);
         return ResponseEntity.ok(competitionParticipantsById);
     }
 
-    @GetMapping("/active-tournaments")
-    public List<UUID> getActiveTournaments() {
-        return competitionService.getActiveTournamentIds();
+    @GetMapping("/active-competitions")
+    public List<UUID> getActiveCompetitions() {
+        return competitionService.getActiveCompetitionIds();
+    }
+
+    @GetMapping("/active-leagues")
+    public List<UUID> getActiveLeagues() {
+        return competitionService.getActiveLeagues();
+    }
+
+    @GetMapping("/standings")
+    public List<LeagueStandingReadDto> getLeagueStanding (@RequestParam("competitionId") UUID competitionId,
+                                                    @RequestParam(required = false, name = "teamIds") List<UUID> teamIds,
+                                                    @RequestParam(required = false, name = "playerIds") List<Long> playerIds) {
+        return competitionService.getLeagueStandingByCompetitionIdAndTeamIdOrPlayerId(competitionId, teamIds, playerIds);
+    }
+
+    @PutMapping("/update-standing")
+    public ResponseEntity<Void> updateLeagueStanding(@RequestBody List<LeagueStandingReadDto> leagueStandingReadDto) {
+        competitionService.updateLeagueStanding(leagueStandingReadDto);
+        return ResponseEntity.ok().build();
     }
 }
