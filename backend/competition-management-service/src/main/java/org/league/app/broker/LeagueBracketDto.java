@@ -7,6 +7,7 @@ import org.league.app.dto.CompetitionReadDto;
 import org.league.app.dto.LeagueStandingReadDto;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -14,5 +15,5 @@ import java.io.Serializable;
 public class LeagueBracketDto implements Serializable {
 
     public CompetitionReadDto competition;
-    public LeagueStandingReadDto leagueStanding;
+    public List<LeagueStandingReadDto> leagueStanding;
 }

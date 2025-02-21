@@ -1,16 +1,18 @@
 package org.league.app.broker;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class LeagueBracketDto implements Serializable {
+@Builder(toBuilder = true)
+public class LeagueBracketDto {
 
     public CompetitionDto competition;
-    public LeagueStandingDto leagueStanding;
+    public List<LeagueStandingDto> leagueStanding;
 }
