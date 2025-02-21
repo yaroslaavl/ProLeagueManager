@@ -21,6 +21,9 @@ public interface CompetitionRepository extends JpaRepository<Competition, UUID>,
 
     List<Competition> findAllByStatusAndCompetitionType(CompetitionStatus status, CompetitionType competitionType);
 
-    @Query("SELECT c.id FROM Competition c WHERE c.status = 'ACTIVE' AND c.competitionType = 'TOURNAMENT'")
-    List<UUID> getActiveTournaments();
+    @Query("SELECT c.id FROM Competition c WHERE c.status = 'ACTIVE'")
+    List<UUID> getActiveCompetitions();
+
+    @Query(value = "SELECT c.id FROM Competition c WHERE c.status = 'ACTIVE' AND c.competitionType = 'LEAGUE' AND now() between c.endDate::DATE and c.endDate", nativeQuery = true)
+    List<UUID> getLastDayActiveLeagues();
 }

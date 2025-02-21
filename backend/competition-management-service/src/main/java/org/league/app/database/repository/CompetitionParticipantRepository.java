@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 @Repository
@@ -28,12 +29,11 @@ public interface CompetitionParticipantRepository extends JpaRepository<Competit
 
     List<CompetitionParticipant> findAllByCompetitionId(UUID competitionId);
 
-    @Query("SELECT cp FROM CompetitionParticipant cp " +
+    @Query("SELECT cp.playerId FROM CompetitionParticipant cp " +
             "WHERE cp.competition.id = :competitionId " +
-            "AND (:isIndividual = TRUE AND cp.playerId IS NOT NULL " +
-            "OR :isIndividual = FALSE AND cp.teamId IS NOT NULL)")
-    List<CompetitionParticipant> findParticipantsByCompetitionId(
+            "AND cp.teamId = :teamId")
+    Set<Long> findParticipantsByCompetitionIdAndTeamId(
             @Param("competitionId") UUID competitionId,
-            @Param("isIndividual") boolean isIndividual);
+            @Param("teamId") UUID teamId);
 
 }
