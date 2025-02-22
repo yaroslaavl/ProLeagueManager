@@ -14,8 +14,23 @@ public interface LeagueStandingRepository extends JpaRepository<LeagueStanding, 
 
     List<LeagueStanding> findAllByCompetitionId(UUID competitionId);
 
-    @Query("SELECT ls FROM LeagueStanding ls WHERE ls.competition.id = :competitionId AND (ls.teamId = :teamIds OR ls.playerId = :playerIds)")
-    List<LeagueStanding> findLeagueStandingByCompetitionIdWherePlayerIdOrTeamId(@Param("competitionId") UUID competitionId,
+    @Query("SELECT ls FROM LeagueStanding ls WHERE ls.competition.id = :competitionId AND (ls.teamId IN :teamIds OR ls.playerId IN :playerIds)")
+    List<LeagueStanding> findLeagueStandingsByCompetitionIdWherePlayerIdOrTeamId(@Param("competitionId") UUID competitionId,
                                                                           @Param("teamIds") List<UUID> teamIds,
                                                                           @Param("playerIds") List<Long> playerIds);
+
+    @Query("SELECT ls FROM LeagueStanding ls WHERE ls.competition.id = :competitionId AND (ls.teamId = :teamId OR ls.playerId = :playerId)")
+    LeagueStanding findLeagueStandingByCompetitionIdWhereTeamIdOrPlayerId(@Param("competitionId") UUID competitionId,
+                                                                          @Param("teamId") UUID teamId,
+                                                                          @Param("playerId") Long playerId);
+
+    @Query(value = """
+    SELECT ls FROM LeagueStanding ls
+        WHERE ls.competition.id = :competitionId
+            AND ls.points = (
+                SELECT MAX(ls2.points) FROM LeagueStanding ls2
+                    WHERE ls2.competition.id = :competitionId
+                )
+    """)
+    List<LeagueStanding> findLeagueStandingsMaxPointsByCompetitionId(@Param("competitionId")UUID competitionId);
 }

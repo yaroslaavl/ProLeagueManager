@@ -20,10 +20,10 @@ public interface CompetitionClientFeign {
     CompetitionDto findById(@PathVariable("id") UUID id);
 
     @GetMapping("/api/competition/active-competitions")
-    public List<UUID> getActiveCompetitions();
+    List<CompetitionDto> getActiveCompetitions();
 
-    @GetMapping("/api/competition/active-leagues")
-    List<UUID> getActiveLeagues();
+    @GetMapping("/api/competition/last-day-active-leagues")
+    List<UUID> getLastDayActiveLeagues();
 
     @GetMapping("/api/competition/standings")
     List<LeagueStandingDto> getLeagueStanding (@RequestParam("competitionId") UUID competitionId,

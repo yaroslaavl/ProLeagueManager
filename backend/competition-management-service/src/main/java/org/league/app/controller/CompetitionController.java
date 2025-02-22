@@ -92,13 +92,13 @@ public class CompetitionController {
     }
 
     @GetMapping("/active-competitions")
-    public List<UUID> getActiveCompetitions() {
+    public List<CompetitionReadDto> getActiveCompetitions() {
         return competitionService.getActiveCompetitionIds();
     }
 
-    @GetMapping("/active-leagues")
-    public List<UUID> getActiveLeagues() {
-        return competitionService.getActiveLeagues();
+    @GetMapping("/last-day-active-leagues")
+    public List<UUID> getLastDayActiveLeagues() {
+        return competitionService.getLastDayActiveLeagues();
     }
 
     @GetMapping("/standings")

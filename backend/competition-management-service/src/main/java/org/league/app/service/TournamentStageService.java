@@ -8,7 +8,6 @@ import org.league.app.database.entity.Competition;
 import org.league.app.database.entity.CompetitionParticipant;
 import org.league.app.database.entity.TournamentStage;
 import org.league.app.database.entity.enums.CompetitionStatus;
-import org.league.app.database.entity.enums.CompetitionType;
 import org.league.app.database.repository.CompetitionParticipantRepository;
 import org.league.app.database.repository.CompetitionRepository;
 import org.league.app.database.repository.TournamentStageRepository;
@@ -22,28 +21,26 @@ import org.league.app.feign.sportClient.SportDto;
 import org.league.app.mapper.CompetitionMapper;
 import org.league.app.mapper.CompetitionParticipantMapper;
 import org.league.app.mapper.TournamentStageMapper;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class TournamentStageService {
 
-    private final CompetitionParticipantRepository competitionParticipantRepository;
-    private final TournamentStageRepository tournamentStageRepository;
-    private final CompetitionRepository competitionRepository;
-    private final SportClientFeign sportClientFeign;
+    private final SportClientFeign sportClient;
     private final TournamentEventPublisher tournamentEventPublisher;
+    private final CompetitionRepository competitionRepository;
+    private final TournamentStageRepository tournamentStageRepository;
+    private final CompetitionParticipantRepository competitionParticipantRepository;
+    private final CompetitionMapper competitionMapper;
     private final TournamentStageMapper tournamentStageMapper;
     private final CompetitionParticipantMapper competitionParticipantMapper;
-    private final CompetitionMapper competitionMapper;
 
     @Transactional
     public void closeTournamentRegistrationAndGenerateTournamentStages(UUID competitionId) {
@@ -74,39 +71,13 @@ public class TournamentStageService {
                             .map(competitionParticipantMapper::toDto)
                             .toList();
 
-            SportDto sportById = sportClientFeign.findSportById(competition.getSportId());
+            SportDto sportById = sportClient.findSportById(competition.getSportId());
 
             tournamentEventPublisher.publishTournamentStartEvent(new TournamentBracketDto(
                     competitionReadDto,
                     tournamentStageReadDtoList,
                     sportById,
                     competitionParticipantReadDtoList));
-        }
-    }
-
-    @Scheduled(fixedDelay = 60000)
-    public void autoStartTournaments() {
-        log.info("Checking tournaments at {}", LocalDateTime.now());
-
-        List<Competition> competitions = competitionRepository.findAllByStatusAndCompetitionType(CompetitionStatus.UPCOMING, CompetitionType.TOURNAMENT);
-
-        for (Competition competition : competitions) {
-            SportDto sportDto = sportClientFeign.findSportById(competition.getSportId());
-            try {
-                if (sportDto.getIsEsport()) {
-                    if (LocalDateTime.now().isAfter(competition.getStartDate().minusHours(1))) {
-                        log.info("Auto-starting e-sport tournament: '{}'", competition.getName());
-                        closeTournamentRegistrationAndGenerateTournamentStages(competition.getId());
-                    }
-                } else {
-                    if (LocalDateTime.now().isAfter(competition.getStartDate().minusHours(24))) {
-                        log.info("Auto-starting sport tournament: '{}'", competition.getName());
-                        closeTournamentRegistrationAndGenerateTournamentStages(competition.getId());
-                    }
-                }
-            } catch (Exception e) {
-                log.error("Failed to start tournament '{}': {}", competition.getName(), e.getMessage(), e);
-            }
         }
     }
 

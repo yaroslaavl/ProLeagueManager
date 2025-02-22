@@ -39,7 +39,7 @@ public class CompetitionManagementConfig {
                                 "/api/competition/search-tournaments",
                                 "/api/competition/players/**",
                                 "/api/competition/active-competitions",
-                                "/api/competition/active-leagues",
+                                "/api/competition/last-day-active-leagues",
                                 "/api/competition/count-of-signed-in",
                                 "/api/competition/standings",
                                 "/api/competition/update-standing").permitAll()
