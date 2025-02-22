@@ -2,6 +2,7 @@ package org.league.app.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.league.app.dto.MatchCreateEditDto;
 import org.league.app.dto.MatchReadDto;
 import org.league.app.service.MatchService;
 import org.springframework.http.ResponseEntity;
@@ -34,5 +35,13 @@ public class MatchController {
 
         boolean isConfirmed = matchService.matchConfirmation(matchId, teamId, userId, playerIds);
         return ResponseEntity.ok(isConfirmed);
+    }
+
+    @PutMapping("/{matchId}/score")
+    public ResponseEntity<Void> editMatchScore(@PathVariable("matchId") UUID matchId,
+                                               @RequestBody MatchCreateEditDto matchCreateEditDto) {
+
+        matchService.editMatchScore(matchId, matchCreateEditDto);
+        return ResponseEntity.noContent().build();
     }
 }
