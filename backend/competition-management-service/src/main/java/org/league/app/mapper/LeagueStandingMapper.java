@@ -10,4 +10,10 @@ public interface LeagueStandingMapper {
 
     @Mapping(target = "competitionId", source = "competition.id")
     LeagueStandingReadDto toDto(LeagueStanding leagueStanding);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "competition.id", source = "competitionId")
+    LeagueStanding toEntity(LeagueStandingReadDto leagueStandingReadDto);
 }
