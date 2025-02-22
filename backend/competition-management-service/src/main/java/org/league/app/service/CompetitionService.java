@@ -28,21 +28,16 @@ import org.league.app.feign.teamClient.TeamClientFeign;
 import org.league.app.feign.teamClient.TeamFeignDto;
 import org.league.app.feign.teamClient.TeamMemberFeignDto;
 import org.league.app.mapper.CompetitionMapper;
-import org.league.app.mapper.CompetitionParticipantMapper;
 import org.league.app.mapper.LeagueStandingMapper;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -54,7 +49,6 @@ public class CompetitionService {
     private final GameSystemRepository gameSystemRepository;
     private final NotificationClientFeign notificationClientFeign;
     private final CompetitionMapper competitionMapper;
-    private final CompetitionParticipantMapper competitionParticipantMapper;
     private final SportClientFeign sportClientFeign;
     private final AuthClientFeign authClientFeign;
     private final TeamClientFeign teamClientFeign;
@@ -94,59 +88,6 @@ public class CompetitionService {
                 .build();
 
         competitionRepository.save(competition);
-        return competitionMapper.toDto(competition);
-    }
-
-    /**
-     * Method for searching tournaments by filters and with dynamic search by keyword ‘name’
-     *
-     * @param keyword
-     * @param isIndividual
-     * @param status
-     * @return the list of tournaments
-     */
-    public List<CompetitionReadDto> findAllTournamentsByFiltersAndDynamicSearch(String keyword, Boolean isIndividual, String status, Boolean isEsport) {
-        List<Integer> allByIsEsport = sportClientFeign.findAllByIsEsport(isEsport).stream()
-                .map(SportDto::getId)
-                .toList();
-
-        Specification<Competition> specification = Specification
-                .where(CompetitionSpecification.isEsport(allByIsEsport))
-                .and(CompetitionSpecification.search(keyword))
-                .and(CompetitionSpecification.isCompetitionIndividual(isIndividual))
-                .and(CompetitionSpecification.hasCompetitionStatus(status))
-                .and(CompetitionSpecification.hasCompetitionType(CompetitionType.TOURNAMENT));
-
-        return competitionRepository.findAll(specification).stream()
-                .map(competitionMapper::toDto)
-                .collect(Collectors.toList());
-    }
-
-    public List<CompetitionReadDto> findAllLeaguesByFilters(Boolean isIndividual, Boolean isEsport) {
-        List<Integer> allByIsEsport = sportClientFeign.findAllByIsEsport(isEsport).stream()
-                .map(SportDto::getId)
-                .toList();
-
-        Specification<Competition> specification = Specification
-                .where(CompetitionSpecification.isCompetitionIndividual(isIndividual))
-                .and(CompetitionSpecification.isEsport(allByIsEsport))
-                .and(CompetitionSpecification.hasCompetitionType(CompetitionType.LEAGUE));
-
-        return competitionRepository.findAll(specification).stream()
-                .map(competitionMapper::toDto)
-                .collect(Collectors.toList());
-    }
-
-    public List<CompetitionReadDto> findAll() {
-        return competitionRepository.findAll().stream()
-                .map(competitionMapper::toDto)
-                .collect(Collectors.toList());
-    }
-
-    public CompetitionReadDto findById(UUID id) {
-        Competition competition = competitionRepository.findById(id)
-                .orElseThrow(() -> new CompetitionNotFoundException("Competition not found"));
-
         return competitionMapper.toDto(competition);
     }
 
@@ -210,6 +151,10 @@ public class CompetitionService {
                         .competition(competition)
                         .teamId(null)
                         .playerId(userByEmail.getId())
+                        .wins(0)
+                        .draws(0)
+                        .losses(0)
+                        .points(0)
                         .build();
 
                 leagueStandingRepository.save(leagueStanding);
@@ -300,21 +245,18 @@ public class CompetitionService {
         }
     }
 
-    @Scheduled(fixedRate = 60000/*86400000*/)
-    public void autoStartLeague() {
-        log.info("Checking leagues at {}", LocalDateTime.now());
+    @Transactional
+    public void updateLeagueStanding(List<LeagueStandingReadDto> leagueStandingReadDto) {
+        for (LeagueStandingReadDto dto : leagueStandingReadDto) {
+            LeagueStanding league = leagueStandingRepository.findLeagueStandingByCompetitionIdWhereTeamIdOrPlayerId(
+                    dto.getCompetitionId(), dto.getTeamId(), dto.getPlayerId());
 
-        List<Competition> competitions = competitionRepository.findAllByStatusAndCompetitionType(CompetitionStatus.NONE, CompetitionType.LEAGUE);
+            league.setWins(dto.getWins());
+            league.setDraws(dto.getDraws());
+            league.setLosses(dto.getLosses());
+            league.setPoints(dto.getPoints());
 
-        for (Competition competition : competitions) {
-            try {
-                if (LocalDateTime.now().isAfter(competition.getStartDate().minusDays(1))) {
-                    log.info("Auto-starting e-sport league: '{}'", competition.getName());
-                    closeLeagueRegistration(competition.getId());
-                }
-            } catch (Exception e) {
-                log.error("Failed to start league '{}': {}", competition.getName(), e.getMessage(), e);
-            }
+            leagueStandingRepository.save(league);
         }
     }
 
@@ -328,10 +270,104 @@ public class CompetitionService {
 
         log.info("Competition {} finalized successfully.", competition.getName());
         competitionRepository.save(competition);
+
+        if (competition.getCompetitionType().equals(CompetitionType.LEAGUE)) {
+            List<LeagueStanding> leagueStandings = leagueStandingRepository.findLeagueStandingsMaxPointsByCompetitionId(competition.getId());
+
+            if (leagueStandings.size() == 1) {
+                declareWinner(competition, leagueStandings.getFirst());
+            } else if (leagueStandings.size() > 1) {
+                Optional<LeagueStanding> winnerByWins = leagueStandings.stream()
+                        .max(Comparator.comparing(LeagueStanding::getWins));
+
+                List<LeagueStanding> tiedByWins = leagueStandings.stream()
+                        .filter(ls -> ls.getWins().equals(winnerByWins.get().getWins()))
+                        .toList();
+
+                if (tiedByWins.size() == 1) {
+                    declareWinner(competition, tiedByWins.getFirst());
+                    return;
+                }
+
+                Optional<LeagueStanding> winnerByDraws = tiedByWins.stream()
+                        .min(Comparator.comparing(LeagueStanding::getDraws));
+
+                List<LeagueStanding> tiedByDraws = tiedByWins.stream()
+                        .filter(ls -> ls.getDraws().equals(winnerByDraws.get().getDraws()))
+                        .toList();
+
+                if (tiedByDraws.size() == 1) {
+                    declareWinner(competition, tiedByDraws.getFirst());
+                    return;
+                }
+
+                LeagueStanding randomWinner = tiedByDraws.get(new Random().nextInt(tiedByDraws.size()));
+                declareWinner(competition, randomWinner);
+            }
+        }
     }
 
-    public List<UUID> getActiveCompetitionIds() {
-        return competitionRepository.getActiveCompetitions();
+    /**
+     * Method for searching tournaments by filters and with dynamic search by keyword ‘name’
+     *
+     * @param keyword
+     * @param isIndividual
+     * @param status
+     * @return the list of tournaments
+     */
+    public List<CompetitionReadDto> findAllTournamentsByFiltersAndDynamicSearch(String keyword, Boolean isIndividual, String status, Boolean isEsport) {
+        List<Integer> allByIsEsport = sportClientFeign.findAllByIsEsport(isEsport).stream()
+                .map(SportDto::getId)
+                .toList();
+
+        Specification<Competition> specification = Specification
+                .where(CompetitionSpecification.isEsport(allByIsEsport))
+                .and(CompetitionSpecification.search(keyword))
+                .and(CompetitionSpecification.isCompetitionIndividual(isIndividual))
+                .and(CompetitionSpecification.hasCompetitionStatus(status))
+                .and(CompetitionSpecification.hasCompetitionType(CompetitionType.TOURNAMENT));
+
+        return competitionRepository.findAll(specification).stream()
+                .map(competitionMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<CompetitionReadDto> findAllLeaguesByFilters(Boolean isIndividual, Boolean isEsport) {
+        List<Integer> allByIsEsport = sportClientFeign.findAllByIsEsport(isEsport).stream()
+                .map(SportDto::getId)
+                .toList();
+
+        Specification<Competition> specification = Specification
+                .where(CompetitionSpecification.isCompetitionIndividual(isIndividual))
+                .and(CompetitionSpecification.isEsport(allByIsEsport))
+                .and(CompetitionSpecification.hasCompetitionType(CompetitionType.LEAGUE));
+
+        return competitionRepository.findAll(specification).stream()
+                .map(competitionMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<CompetitionReadDto> findAll() {
+        return competitionRepository.findAll().stream()
+                .map(competitionMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+    public CompetitionReadDto findById(UUID id) {
+        Competition competition = competitionRepository.findById(id)
+                .orElseThrow(() -> new CompetitionNotFoundException("Competition not found"));
+
+        return competitionMapper.toDto(competition);
+    }
+
+    public List<CompetitionReadDto> getActiveCompetitionIds() {
+        return competitionRepository.getActiveCompetitions().stream()
+                .map(competitionMapper::toDto)
+                .toList();
+    }
+
+    public List<UUID> getLastDayActiveLeagues() {
+        return competitionRepository.getLastDayActiveLeagues();
     }
 
     public Integer countCurrentPlayersPerCompetition(UUID competitionId) {
@@ -343,18 +379,28 @@ public class CompetitionService {
     }
 
     public List<LeagueStandingReadDto> getLeagueStandingByCompetitionIdAndTeamIdOrPlayerId(UUID competitionId, List<UUID> teamIds, List<Long> playerIds) {
-        return leagueStandingRepository.findLeagueStandingByCompetitionIdWherePlayerIdOrTeamId(competitionId, teamIds, playerIds).stream().map(leagueStandingMapper::toDto).toList();
+        return leagueStandingRepository.findLeagueStandingsByCompetitionIdWherePlayerIdOrTeamId(competitionId, teamIds, playerIds).stream().map(leagueStandingMapper::toDto).toList();
     }
 
-    @Transactional
-    public void updateLeagueStanding(List<LeagueStandingReadDto> leagueStandingReadDto) {
-        for (LeagueStandingReadDto dto : leagueStandingReadDto) {
-            leagueStandingRepository.save(leagueStandingMapper.toEntity(dto));
+    private void declareWinner(Competition competition, LeagueStanding winner) {
+        if (winner.getTeamId() == null) {
+            sendNotificationMessage(
+                    winner.getPlayerId(),
+                    "Congratulations! You won the " + competition.getName(),
+                    "COMPETITION_WINNER",
+                    competition.getCompetitionType().toString()
+            );
+        } else {
+            TeamFeignDto team = teamClientFeign.findTeamById(winner.getTeamId());
+            team.getTeamMembers().stream()
+                    .map(TeamMemberFeignDto::getUserId)
+                    .forEach(playerId -> sendNotificationMessage(
+                            playerId,
+                            "Congratulations! Your team won the competition " + competition.getName(),
+                            "COMPETITION_WINNER",
+                            competition.getCompetitionType().toString()
+                    ));
         }
-    }
-
-    public List<UUID> getActiveLeagues() {
-        return competitionRepository.getLastDayActiveLeagues();
     }
 
     private void sendNotificationMessage(Long userId, String message, String eventType, String notificationCategory) {
