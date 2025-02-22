@@ -5,10 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.league.app.broker.LeagueBracketDto;
 import org.league.app.broker.LeagueEventPublisher;
-import org.league.app.database.entity.Competition;
-import org.league.app.database.entity.CompetitionParticipant;
-import org.league.app.database.entity.GameSystem;
-import org.league.app.database.entity.LeagueStanding;
+import org.league.app.database.entity.*;
 import org.league.app.database.entity.enums.CompetitionParticipantStatus;
 import org.league.app.database.entity.enums.CompetitionStatus;
 import org.league.app.database.entity.enums.CompetitionType;
@@ -18,7 +15,6 @@ import org.league.app.database.repository.GameSystemRepository;
 import org.league.app.database.repository.LeagueStandingRepository;
 import org.league.app.database.specification.CompetitionSpecification;
 import org.league.app.dto.CompetitionCreateEditDto;
-import org.league.app.dto.CompetitionParticipantReadDto;
 import org.league.app.dto.CompetitionReadDto;
 import org.league.app.dto.LeagueStandingReadDto;
 import org.league.app.exception.*;
@@ -43,6 +39,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.Optional;
@@ -50,7 +47,6 @@ import java.util.Optional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class CompetitionService {
 
     private final CompetitionRepository competitionRepository;
@@ -282,6 +278,28 @@ public class CompetitionService {
         }
     }
 
+    @Transactional
+    public void closeLeagueRegistration(UUID competitionId) {
+        Competition competition = competitionRepository.findById(competitionId)
+                .orElseThrow(() -> new CompetitionNotFoundException("Competition not found"));
+
+        if (checkLeagueCapacity(competitionId)) {
+            competition.setStatus(CompetitionStatus.CANCELLED);
+        } else {
+            competition.setStatus(CompetitionStatus.ACTIVE);
+        }
+
+        competitionRepository.saveAndFlush(competition);
+
+        if (competition.getStatus().equals(CompetitionStatus.ACTIVE)) {
+            CompetitionReadDto competitionReadDto = competitionMapper.toDto(competition);
+
+            List<LeagueStandingReadDto> leagueStandings = leagueStandingRepository.findAllByCompetitionId(competitionId).stream().map(leagueStandingMapper::toDto).toList();
+
+            leagueEventPublisher.publishLeagueStartEvent(new LeagueBracketDto(competitionReadDto, leagueStandings));
+        }
+    }
+
     @Scheduled(fixedRate = 60000/*86400000*/)
     public void autoStartLeague() {
         log.info("Checking leagues at {}", LocalDateTime.now());
@@ -289,8 +307,13 @@ public class CompetitionService {
         List<Competition> competitions = competitionRepository.findAllByStatusAndCompetitionType(CompetitionStatus.NONE, CompetitionType.LEAGUE);
 
         for (Competition competition : competitions) {
-            if (LocalDateTime.now().isAfter(competition.getStartDate().minusDays(1))) {
-
+            try {
+                if (LocalDateTime.now().isAfter(competition.getStartDate().minusDays(1))) {
+                    log.info("Auto-starting e-sport league: '{}'", competition.getName());
+                    closeLeagueRegistration(competition.getId());
+                }
+            } catch (Exception e) {
+                log.error("Failed to start league '{}': {}", competition.getName(), e.getMessage(), e);
             }
         }
     }
@@ -300,29 +323,38 @@ public class CompetitionService {
         Competition competition = competitionRepository.findById(UUID.fromString(competitionId))
                 .orElseThrow(() -> new CompetitionNotFoundException("Competition not found"));
 
-        competition.setStatus(CompetitionStatus.COMPLETED);
         competition.setEndDate(LocalDateTime.now());
+        competition.setStatus(CompetitionStatus.COMPLETED);
 
         log.info("Competition {} finalized successfully.", competition.getName());
         competitionRepository.save(competition);
     }
 
-    public List<UUID> getActiveTournamentIds() {
-        return competitionRepository.getActiveTournaments();
+    public List<UUID> getActiveCompetitionIds() {
+        return competitionRepository.getActiveCompetitions();
     }
 
     public Integer countCurrentPlayersPerCompetition(UUID competitionId) {
         return competitionParticipantRepository.countTeamsOrUsersByCompetitionId(competitionId);
     }
 
-    public List<CompetitionParticipantReadDto> findCompetitionParticipantsById(UUID competitionId) {
-        Competition competition = competitionRepository.findById(competitionId)
-                .orElseThrow(() -> new CompetitionNotFoundException("Competition not found"));
+    public Set<Long> findCompetitionParticipantsByCompetitionIdAndTeamId(UUID competitionId, UUID teamId) {
+        return competitionParticipantRepository.findParticipantsByCompetitionIdAndTeamId(competitionId, teamId);
+    }
 
-        List<CompetitionParticipant> allByCompetitionId = competitionParticipantRepository.findParticipantsByCompetitionId(competitionId, competition.getGameSystem().getIsIndividual());
-        return allByCompetitionId.stream()
-                .map(competitionParticipantMapper::toDto)
-                .collect(Collectors.toList());
+    public List<LeagueStandingReadDto> getLeagueStandingByCompetitionIdAndTeamIdOrPlayerId(UUID competitionId, List<UUID> teamIds, List<Long> playerIds) {
+        return leagueStandingRepository.findLeagueStandingByCompetitionIdWherePlayerIdOrTeamId(competitionId, teamIds, playerIds).stream().map(leagueStandingMapper::toDto).toList();
+    }
+
+    @Transactional
+    public void updateLeagueStanding(List<LeagueStandingReadDto> leagueStandingReadDto) {
+        for (LeagueStandingReadDto dto : leagueStandingReadDto) {
+            leagueStandingRepository.save(leagueStandingMapper.toEntity(dto));
+        }
+    }
+
+    public List<UUID> getActiveLeagues() {
+        return competitionRepository.getLastDayActiveLeagues();
     }
 
     private void sendNotificationMessage(Long userId, String message, String eventType, String notificationCategory) {
@@ -349,5 +381,14 @@ public class CompetitionService {
             return userDto.getEmail();
         }
         return authentication.getName();
+    }
+
+    private boolean checkLeagueCapacity(UUID competitionId) {
+        Competition competitionWithGameSystem = competitionRepository.findById(competitionId)
+                .orElseThrow(() -> new CompetitionNotFoundException("Competition not found"));
+
+        return competitionWithGameSystem.getGameSystem().getMinTeamSize() >
+                competitionParticipantRepository.countTeamsOrUsersByCompetitionId(competitionId)
+                && LocalDateTime.now().isAfter(competitionWithGameSystem.getStartDate().minusHours(1));
     }
 }
