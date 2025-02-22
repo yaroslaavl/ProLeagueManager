@@ -36,7 +36,10 @@ public class MatchConfig {
                                 "/actuator/health",
                                 "/api/match/id/**").permitAll()
                         .requestMatchers(
-                                "/api/match/confirmation").authenticated())
+                                "/api/match/confirmation").authenticated()
+                        .requestMatchers(
+                                "/api/match/*/score").hasAuthority("EDITOR")
+                        )
                 .addFilterBefore(routeFilter, SecurityContextHolderFilter.class)
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(session ->
