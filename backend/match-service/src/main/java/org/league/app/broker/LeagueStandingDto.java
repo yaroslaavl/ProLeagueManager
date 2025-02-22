@@ -1,12 +1,14 @@
 package org.league.app.broker;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Value;
 
 import java.util.UUID;
 
-@Value
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class LeagueStandingDto {
 
     UUID id;

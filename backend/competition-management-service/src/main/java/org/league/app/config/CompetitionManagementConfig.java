@@ -27,7 +27,7 @@ public class CompetitionManagementConfig {
 
     @Bean
     @SneakyThrows
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity){
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) {
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
@@ -38,8 +38,11 @@ public class CompetitionManagementConfig {
                                 "/api/competition/all",
                                 "/api/competition/search-tournaments",
                                 "/api/competition/players/**",
-                                "/api/competition/active-tournaments",
-                                "/api/competition/count-of-signed-in").permitAll()
+                                "/api/competition/active-competitions",
+                                "/api/competition/active-leagues",
+                                "/api/competition/count-of-signed-in",
+                                "/api/competition/standings",
+                                "/api/competition/update-standing").permitAll()
                         .requestMatchers(
                                 "/api/competition/create",
                                 "/api/competition/edit/**",

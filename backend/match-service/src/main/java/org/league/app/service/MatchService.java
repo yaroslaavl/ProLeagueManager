@@ -9,6 +9,7 @@ import org.league.app.database.entity.MatchPlayer;
 import org.league.app.database.entity.enums.MatchStatus;
 import org.league.app.database.repository.MatchPlayerRepository;
 import org.league.app.database.repository.MatchRepository;
+import org.league.app.dto.MatchCreateEditDto;
 import org.league.app.dto.MatchReadDto;
 import org.league.app.exception.*;
 import org.league.app.feign.competitionClient.CompetitionClientFeign;
@@ -41,7 +42,8 @@ public class MatchService {
     private final MatchPublisher matchPublisher;
     private final NotificationClientFeign notificationClient;
     private final MatchPlayerRepository matchPlayerRepository;
-    private List<UUID> activeTournamentsCache = new ArrayList<>();
+    private List<UUID> activeCompetitionCache = new ArrayList<>();
+    private List<UUID> activeLastDayLeaguesCache = new ArrayList<>();
 
     public MatchReadDto findMatchById(UUID id) {
         return matchRepository.findById(id)
@@ -223,18 +225,20 @@ public class MatchService {
     }
 
     @Scheduled(fixedDelay = 45000)
-    public void updateActiveTournamentsCache() {
-        activeTournamentsCache = competitionClient.getActiveTournaments();
-        log.info("Updated active tournaments cache: {}", activeTournamentsCache.size());
+    public void updateActiveTournamentsAndLeaguesCache() {
+        activeCompetitionCache = competitionClient.getActiveCompetitions();
+        log.info("Updated active tournaments cache: {}", activeCompetitionCache.size());
+        activeLastDayLeaguesCache = competitionClient.getActiveLeagues();
+        log.info("Updated active leagues cache: {}", activeLastDayLeaguesCache.size());
     }
 
     @Scheduled(fixedDelay = 30000)
     public void processScheduledTournamentMatches() {
-        if (activeTournamentsCache.isEmpty()) {
+        if (activeCompetitionCache.isEmpty()) {
             return;
         }
 
-        List<Match> matchesByMatchStatus = matchRepository.findScheduledMatchesByActiveTournaments(activeTournamentsCache);
+        List<Match> matchesByMatchStatus = matchRepository.findScheduledMatchesByActiveCompetitions(activeCompetitionCache);
         log.info("Match confirmation check 5 minutes before the start of the match at {}", LocalDateTime.now());
 
         for (Match match : matchesByMatchStatus) {
@@ -255,26 +259,18 @@ public class MatchService {
 
     @Scheduled(fixedDelay = 30000)
     public void changeTournamentMatchStatus() {
-        if (activeTournamentsCache.isEmpty()) {
+        if (activeCompetitionCache.isEmpty()) {
             return;
         }
 
-        List<Match> matchesByMatchStatus = matchRepository.findInProgressMatchesByActiveTournamentId(activeTournamentsCache);
+        List<Match> matchesByMatchStatus = matchRepository.findInProgressMatchesByActiveTournamentId(activeCompetitionCache);
         log.info("Checking match winners at {}", LocalDateTime.now());
 
         for (Match match : matchesByMatchStatus) {
             if (match.getWinnerPlayerId() != null || match.getWinnerTeamId() != null) {
-                processNextMatchAndFinishPrevious(match);
+                processNextMatch(match);
             }
         }
-    }
-
-    @Transactional
-    public void processNextMatchAndFinishPrevious(Match match) {
-        match.setMatchStatus(MatchStatus.FINISHED);
-        matchRepository.save(match);
-
-        processNextMatch(match);
     }
 
     @Transactional
@@ -306,7 +302,9 @@ public class MatchService {
         }
         matchRepository.save(matchById);
 
-        processNextMatch(matchById);
+        if (competitionClient.findById(match.getCompetitionId()).getCompetitionType().equals("TOURNAMENT")) {
+            processNextMatch(matchById);
+        }
     }
 
     @Transactional
@@ -336,12 +334,8 @@ public class MatchService {
                 throw new UserIsNotCaptain("User is not a capitan");
             }
 
-            List<CompetitionParticipantDto> competitionParticipantsById =
-                    competitionClient.findCompetitionParticipantsById(match.getCompetitionId());
-
-            Set<Long> allTeamPlayersIds = competitionParticipantsById.stream()
-                    .map(CompetitionParticipantDto::getPlayerId)
-                    .collect(Collectors.toSet());
+            Set<Long> allTeamPlayersIds =
+                    competitionClient.findCompetitionParticipantsById(match.getCompetitionId(), teamById.getId());
 
             if (!allTeamPlayersIds.containsAll(playerIds)) {
                 throw new PlayerNotFoundException("One or more selected players do not belong to this team");
@@ -394,75 +388,232 @@ public class MatchService {
         return true;
     }
 
-    public void generateLeagueMatches(List<LeagueBracketDto> leagueBracketDtos) {
+    @Transactional
+    public void generateLeagueMatches(LeagueBracketDto bracketDto) {
+        CompetitionDto competition = bracketDto.getCompetition();
+        List<LeagueStandingDto> leagueStandings = new ArrayList<>(bracketDto.getLeagueStanding());
 
-        if (leagueBracketDtos.size() % 2 != 0) {
-            leagueBracketDtos.add(null);
+        if (leagueStandings.size() % 2 != 0) {
+            leagueStandings.add(null);
         }
 
-        int teamNums = leagueBracketDtos.size();
+        int teamNums = leagueStandings.size();
         int totalRounds = teamNums - 1;
         int halfSize = teamNums / 2;
+        int totalMatches = halfSize * totalRounds;
 
-        LocalDateTime startDate = leagueBracketDtos.get(0).getCompetition().getStartDate();
-        LocalDateTime endDate   = leagueBracketDtos.get(0).getCompetition().getEndDate();
-        long daysCount = ChronoUnit.DAYS.between(startDate.toLocalDate(), endDate.toLocalDate()) + 1;
+        LocalDateTime startDate = competition.getStartDate();
+        LocalDateTime endDate = competition.getEndDate();
+        long totalDays = ChronoUnit.DAYS.between(startDate.toLocalDate(), endDate.toLocalDate()) + 1;
 
-        if (totalRounds > daysCount) {
-            throw new IllegalStateException("Недостаточно дней, чтобы сыграть все туры!");
+        if (totalDays < totalMatches) {
+            throw new IllegalStateException("Not enough days to generate league matches");
         }
 
-        List<LeagueBracketDto> temp = new ArrayList<>(leagueBracketDtos);
-        LeagueBracketDto firstTeam = temp.removeFirst();
+        double interval = (totalDays - 1) / (double) (totalMatches - 1);
+
+        List<LeagueStandingDto> temp = new ArrayList<>(leagueStandings);
+        LeagueStandingDto firstTeam = temp.removeFirst();
+
+        int matchCounter = 0;
 
         for (int round = 0; round < totalRounds; round++) {
-
-            LocalDateTime matchDay = startDate.plusDays(round);
-
-            LeagueBracketDto teamA = firstTeam;
-            LeagueBracketDto teamB = temp.get(temp.size() - 1);
-
-            createAndSaveMatch(teamA, teamB, matchDay);
+            LocalDateTime matchDay = startDate.plusDays(Math.round(matchCounter * interval));
+            createAndSaveMatch(competition, firstTeam, temp.getLast(), matchDay, round + 1);
+            matchCounter++;
 
             for (int i = 0; i < halfSize - 1; i++) {
-                LeagueBracketDto d1 = temp.get(i);
-                LeagueBracketDto d2 = temp.get(temp.size() - 2 - i);
-                createAndSaveMatch(d1, d2, matchDay);
+                matchDay = startDate.plusDays(Math.round(matchCounter * interval));
+                if (startDate.getHour() > 11 && i > halfSize / 2) {
+                    matchDay = matchDay.plusHours(4);
+                }
+                LeagueStandingDto d1 = temp.get(i);
+                LeagueStandingDto d2 = temp.get(temp.size() - 2 - i);
+                if (round == totalRounds - 1 && matchDay == endDate) {
+                    matchDay = matchDay.minusHours(5);
+                }
+                createAndSaveMatch(competition, d1, d2, matchDay, round + 1);
+                matchCounter++;
             }
 
-            LeagueBracketDto last = temp.remove(temp.size() - 1);
-            temp.add(0, last);
+            LeagueStandingDto last = temp.removeLast();
+            temp.addFirst(last);
         }
     }
 
-    private void createAndSaveMatch(LeagueBracketDto dtoA, LeagueBracketDto dtoB, LocalDateTime matchDate) {
+    @Transactional
+    public void editMatchScore(UUID matchId, MatchCreateEditDto matchCreateEditDto) {
+        Match match = matchRepository.findById(matchId)
+                .orElseThrow(() -> new MatchNotFoundException("Match not found"));
+
+
+        CompetitionDto competition = competitionClient.findById(match.getCompetitionId());
+
+        if (competition.getCompetitionType().equalsIgnoreCase("LEAGUE") &&
+                match.getMatchStatus().equals(MatchStatus.IN_PROGRESS)) {
+            Optional.ofNullable(matchCreateEditDto.getScoreA()).ifPresent(match::setScoreA);
+            Optional.ofNullable(matchCreateEditDto.getScoreB()).ifPresent(match::setScoreB);
+            Optional.ofNullable(matchCreateEditDto.getIsOvertime()).ifPresent(match::setIsOvertime);
+
+            boolean isNotTeam = match.getTeamAId() == null && match.getTeamBId() == null;
+            boolean isWinnerA = match.getScoreA() > match.getScoreB();
+
+            List<Long> playerIds = new ArrayList<>();
+            List<UUID> teamIds = new ArrayList<>();
+
+            if (isNotTeam) {
+                playerIds.add(match.getPlayerAId());
+                playerIds.add(match.getPlayerBId());
+            } else {
+                teamIds.add(match.getTeamAId());
+                teamIds.add(match.getTeamBId());
+            }
+
+            List<LeagueStandingDto> leagueStandingDtos = competitionClient.getLeagueStanding(competition.getId(), teamIds, playerIds);
+
+            if (match.getScoreA().equals(match.getScoreB())) {
+                match.setIsDraw(true);
+                match.setMatchStatus(MatchStatus.FINISHED);
+                matchRepository.save(match);
+                updateLeagueStandings(leagueStandingDtos, isNotTeam, isWinnerA, match.getIsDraw(), match.getPlayerAId(), match.getPlayerBId(), match.getTeamAId(), match.getTeamBId());
+                return;
+            }
+
+            if (isNotTeam) {
+                match.setWinnerPlayerId(isWinnerA ? match.getPlayerAId() : match.getPlayerBId());
+            } else {
+                match.setWinnerTeamId(isWinnerA ? match.getTeamAId() : match.getTeamBId());
+            }
+
+            match.setMatchStatus(MatchStatus.FINISHED);
+            matchRepository.save(match);
+
+            updateLeagueStandings(leagueStandingDtos, isNotTeam, isWinnerA, match.getIsDraw(), match.getPlayerAId(), match.getPlayerBId(), match.getTeamAId(), match.getTeamBId());
+        }
+    }
+
+    @Scheduled(fixedRate = 60000)
+    public void checkLeagueEnding() {
+        if (activeLastDayLeaguesCache.isEmpty()) {
+            return;
+        }
+
+        for (UUID competitionId : activeLastDayLeaguesCache) {
+            Match lastMatch = matchRepository.findLastMatchByCompetitionId(competitionId);
+            if (lastMatch.getMatchStatus().equals(MatchStatus.FINISHED) && (lastMatch.getWinnerPlayerId() != null || lastMatch.getWinnerTeamId() != null)) {
+                boolean isFinalized = matchPublisher.publishFinalizedCompetition(competitionId.toString());
+                if (!isFinalized) {
+                    log.error("Finalization of competition failed!");
+                    throw new FinalizeCompetitionException("Failed to finalize competition with id: " + competitionId);
+                }
+                if (matchRepository.findMaxPointsMatchByCompetitionId(competitionId).getWinnerPlayerId() != null) {
+                    sendNotificationMessage(matchRepository.findMaxPointsMatchByCompetitionId(competitionId).getWinnerPlayerId(),
+                            "Congratulations! You won the " + competitionClient.findById(competitionId).getName(),
+                            "COMPETITION_WINNER",
+                            competitionClient.findById(competitionId).getCompetitionType());
+                } else {
+                    TeamFeignDto team = teamClient.findTeamById(matchRepository.findMaxPointsMatchByCompetitionId(competitionId).getWinnerTeamId());
+
+                    Set<Long> winnersIds = team.getTeamMembers().stream()
+                            .map(TeamMemberFeignDto::getUserId)
+                            .collect(Collectors.toSet());
+
+                    for (Long playerId : winnersIds) {
+                        sendNotificationMessage(playerId,
+                                "Congratulations! Your team won the competition " + competitionClient.findById(competitionId).getName(),
+                                "COMPETITION_WINNER",
+                                competitionClient.findById(competitionId).getCompetitionType());
+                    }
+                }
+            }
+        }
+    }
+
+    private void updateLeagueStandings(List<LeagueStandingDto> leagueStandings, boolean isNotTeam, boolean isWinnerA, boolean isDraw,
+                                       Long playerAId, Long playerBId, UUID teamAId, UUID teamBId) {
+        if (isDraw) {
+            for (LeagueStandingDto leagueStanding : leagueStandings) {
+                leagueStanding.setDraws(leagueStanding.getDraws() + 1);
+                leagueStanding.setPoints(leagueStanding.getPoints() + 1);
+            }
+            competitionClient.updateLeagueStanding(leagueStandings);
+            return;
+        }
+
+        if (isNotTeam) {
+            for (LeagueStandingDto leagueStanding : leagueStandings) {
+                if (leagueStanding.getPlayerId().equals(playerAId)) {
+                    if (isWinnerA) {
+                        leagueStanding.setWins(leagueStanding.getWins() + 1);
+                        leagueStanding.setPoints(leagueStanding.getPoints() + 3);
+                    } else {
+                        leagueStanding.setLosses(leagueStanding.getLosses() + 1);
+                    }
+                } else if (leagueStanding.getPlayerId().equals(playerBId)) {
+                    if (!isWinnerA) {
+                        leagueStanding.setWins(leagueStanding.getWins() + 1);
+                        leagueStanding.setPoints(leagueStanding.getPoints() + 3);
+                    } else {
+                        leagueStanding.setLosses(leagueStanding.getLosses() + 1);
+                    }
+                }
+            }
+        } else {
+            for (LeagueStandingDto leagueStanding : leagueStandings) {
+                if (leagueStanding.getTeamId().equals(teamAId)) {
+                    if (isWinnerA) {
+                        leagueStanding.setWins(leagueStanding.getWins() + 1);
+                        leagueStanding.setPoints(leagueStanding.getPoints() + 3);
+                    } else {
+                        leagueStanding.setLosses(leagueStanding.getLosses() + 1);
+                    }
+                } else if (leagueStanding.getTeamId().equals(teamBId)) {
+                    if (!isWinnerA) {
+                        leagueStanding.setWins(leagueStanding.getWins() + 1);
+                        leagueStanding.setPoints(leagueStanding.getPoints() + 3);
+                    } else {
+                        leagueStanding.setLosses(leagueStanding.getLosses() + 1);
+                    }
+                }
+            }
+        }
+
+        competitionClient.updateLeagueStanding(leagueStandings);
+    }
+
+    private void createAndSaveMatch(CompetitionDto competition, LeagueStandingDto dtoA, LeagueStandingDto dtoB, LocalDateTime matchDate, int round) {
         if (dtoA == null || dtoB == null) {
             return;
         }
 
-        UUID competitionId = dtoA.getLeagueStanding().getCompetitionId();
-        if (dtoA.getLeagueStanding().getTeamId() == null) {
+        UUID competitionId = competition.getId();
+        if (dtoA.getTeamId() == null) {
             Match match = Match.builder()
                     .competitionId(competitionId)
-                    .playerAId(dtoA.getLeagueStanding().getPlayerId())
-                    .playerBId(dtoB.getLeagueStanding().getPlayerId())
+                    .playerAId(dtoA.getPlayerId())
+                    .playerBId(dtoB.getPlayerId())
                     .matchDate(matchDate)
+                    .leagueTourNumber(round)
+                    .scoreA(0)
+                    .scoreB(0)
                     .build();
-
             matchRepository.save(match);
         } else {
             Match match = Match.builder()
                     .competitionId(competitionId)
-                    .teamAId(dtoA.getLeagueStanding().getTeamId())
-                    .teamBId(dtoB.getLeagueStanding().getTeamId())
+                    .teamAId(dtoA.getTeamId())
+                    .teamBId(dtoB.getTeamId())
                     .matchDate(matchDate)
+                    .leagueTourNumber(round)
+                    .scoreA(0)
+                    .scoreB(0)
                     .build();
-
             matchRepository.save(match);
         }
     }
 
-    private void processNextMatch(Match match) {
+    @Transactional
+    public void processNextMatch(Match match) {
         if (match.getNextMatchId() == null) {
             String competitionId = match.getCompetitionId().toString();
 
