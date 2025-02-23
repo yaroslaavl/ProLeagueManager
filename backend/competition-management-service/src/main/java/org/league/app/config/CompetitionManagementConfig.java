@@ -42,6 +42,7 @@ public class CompetitionManagementConfig {
                                 "/api/competition/last-day-active-leagues",
                                 "/api/competition/count-of-signed-in",
                                 "/api/competition/standings",
+                                "/api/competition/league-table/**",
                                 "/api/competition/update-standing").permitAll()
                         .requestMatchers(
                                 "/api/competition/create",
