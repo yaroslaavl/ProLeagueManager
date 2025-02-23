@@ -26,7 +26,7 @@ public class JWTFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected boolean shouldNotFilter(HttpServletRequest request)  {
+    protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getServletPath();
         return path.equals("/actuator/health")
                 || path.equals("/api/competition/search-tournaments")
@@ -36,6 +36,7 @@ public class JWTFilter extends OncePerRequestFilter {
                 || path.equals("/api/competition/active-competitions")
                 || path.equals("/api/competition/search-leagues")
                 || path.equals("/api/competition/standings")
+                || path.startsWith("/api/competition/league-table/")
                 || path.equals("/api/competition/update-standing")
                 || path.equals("/api/competition/last-day-active-leagues");
     }

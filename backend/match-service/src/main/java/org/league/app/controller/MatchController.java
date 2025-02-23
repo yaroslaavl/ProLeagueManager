@@ -2,8 +2,10 @@ package org.league.app.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.league.app.database.entity.Match;
 import org.league.app.dto.MatchCreateEditDto;
 import org.league.app.dto.MatchReadDto;
+import org.league.app.dto.ToursWithTimeGapDto;
 import org.league.app.service.MatchService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -43,5 +45,16 @@ public class MatchController {
 
         matchService.editMatchScore(matchId, matchCreateEditDto);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/leagueTours/{leagueId}")
+    public ResponseEntity<List<ToursWithTimeGapDto>> findAllLeagueTours(@PathVariable("leagueId") UUID leagueId) {
+       return ResponseEntity.ok(matchService.findAllTourLeagueWithTimeGap(leagueId));
+    }
+
+    @GetMapping("/tourMatches/{leagueId}")
+    public ResponseEntity<List<Match>> findAllByCompetitionAndLeagueTourNumber(@PathVariable("leagueId") UUID leagueId,
+                                                                               @RequestParam("leagueTourNumber") Integer leagueTourNumber) {
+        return ResponseEntity.ok(matchService.findAllByCompetitionAndLeagueTourNumber(leagueId, leagueTourNumber));
     }
 }

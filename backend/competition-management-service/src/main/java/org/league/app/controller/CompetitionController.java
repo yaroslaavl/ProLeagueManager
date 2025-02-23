@@ -113,4 +113,9 @@ public class CompetitionController {
         competitionService.updateLeagueStanding(leagueStandingReadDto);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/league-table/{leagueId}")
+    public ResponseEntity<List<LeagueStandingReadDto>> getLeagueTableByCompetitionId(@PathVariable("leagueId") UUID leagueId) {
+        return ResponseEntity.ok(competitionService.showLeagueTableByLeagueId(leagueId));
+    }
 }

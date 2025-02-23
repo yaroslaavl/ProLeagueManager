@@ -382,6 +382,15 @@ public class CompetitionService {
         return leagueStandingRepository.findLeagueStandingsByCompetitionIdWherePlayerIdOrTeamId(competitionId, teamIds, playerIds).stream().map(leagueStandingMapper::toDto).toList();
     }
 
+    public List<LeagueStandingReadDto> showLeagueTableByLeagueId(UUID competitionId) {
+        Competition competition = competitionRepository.findById(competitionId)
+                .orElseThrow(() -> new CompetitionNotFoundException("Competition not found"));
+
+        return leagueStandingRepository.findAllByCompetitionIdOrderByPointsDesc(competition.getId()).stream()
+                .map(leagueStandingMapper::toDto)
+                .toList();
+    }
+
     private void declareWinner(Competition competition, LeagueStanding winner) {
         if (winner.getTeamId() == null) {
             sendNotificationMessage(

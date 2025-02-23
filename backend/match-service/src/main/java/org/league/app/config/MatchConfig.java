@@ -34,6 +34,8 @@ public class MatchConfig {
                 authorizeRequests -> authorizeRequests
                         .requestMatchers(
                                 "/actuator/health",
+                                "/api/match/leagueTours/**",
+                                "/api/match/tourMatches/**",
                                 "/api/match/id/**").permitAll()
                         .requestMatchers(
                                 "/api/match/confirmation").authenticated()

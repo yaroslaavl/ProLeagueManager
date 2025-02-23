@@ -11,6 +11,7 @@ import org.league.app.database.repository.MatchPlayerRepository;
 import org.league.app.database.repository.MatchRepository;
 import org.league.app.dto.MatchCreateEditDto;
 import org.league.app.dto.MatchReadDto;
+import org.league.app.dto.ToursWithTimeGapDto;
 import org.league.app.exception.*;
 import org.league.app.feign.competitionClient.CompetitionClientFeign;
 import org.league.app.feign.notificationClient.NotificationClientFeign;
@@ -453,6 +454,26 @@ public class MatchService {
         if (lastMatch.getMatchStatus().equals(MatchStatus.FINISHED) && (lastMatch.getWinnerPlayerId() != null || lastMatch.getWinnerTeamId() != null)) {
             checkPublishingSuccess(competitionId.toString());
         }
+    }
+
+    public List<ToursWithTimeGapDto> findAllTourLeagueWithTimeGap(UUID competitionId) {
+        CompetitionDto competition = competitionClient.findById(competitionId);
+
+        if (!competition.getCompetitionType().equals("LEAGUE")) {
+            throw new InvalidMatchStateException("Competition type is not LEAGUE");
+        }
+
+        return matchRepository.findAllLeagueTourNumbersWithTimeGap(competitionId);
+    }
+
+    public List<Match> findAllByCompetitionAndLeagueTourNumber(UUID competitionId, Integer leagueTourNumber) {
+        CompetitionDto competition = competitionClient.findById(competitionId);
+
+        if (!competition.getCompetitionType().equals("LEAGUE")) {
+            throw new InvalidMatchStateException("Competition type is not LEAGUE");
+        }
+
+        return matchRepository.findAllByCompetitionIdAndLeagueTourNumberOrderByMatchDateAsc(competitionId, leagueTourNumber);
     }
 
     private void generateEmptyTournamentMatches(TournamentBracketDto dto) {
