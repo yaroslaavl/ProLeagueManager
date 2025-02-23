@@ -33,4 +33,17 @@ public interface LeagueStandingRepository extends JpaRepository<LeagueStanding, 
                 )
     """)
     List<LeagueStanding> findLeagueStandingsMaxPointsByCompetitionId(@Param("competitionId")UUID competitionId);
+
+    @Query(value = """
+    WITH ranked_standings AS (
+       SELECT *,
+              RANK() OVER (ORDER BY points DESC, wins DESC, draws, RANDOM()) AS rank
+       FROM league_standings ls
+       WHERE ls.competition_id = :competitionId
+    )
+    SELECT *
+    FROM ranked_standings
+    ORDER BY rank
+    """, nativeQuery = true)
+    List<LeagueStanding> findAllByCompetitionIdOrderByPointsDesc(@Param("competitionId") UUID competitionId);
 }
