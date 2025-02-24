@@ -9,6 +9,7 @@ import org.league.app.database.entity.MatchPlayer;
 import org.league.app.database.entity.enums.MatchStatus;
 import org.league.app.database.repository.MatchPlayerRepository;
 import org.league.app.database.repository.MatchRepository;
+import org.league.app.database.specification.MatchSpecification;
 import org.league.app.dto.MatchCreateEditDto;
 import org.league.app.dto.MatchReadDto;
 import org.league.app.dto.ToursWithTimeGapDto;
@@ -21,6 +22,7 @@ import org.league.app.feign.teamClient.TeamClientFeign;
 import org.league.app.feign.teamClient.TeamFeignDto;
 import org.league.app.feign.teamClient.TeamMemberFeignDto;
 import org.league.app.mapper.MatchMapper;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -456,24 +458,42 @@ public class MatchService {
         }
     }
 
-    public List<ToursWithTimeGapDto> findAllTourLeagueWithTimeGap(UUID competitionId) {
+    public List<MatchReadDto> findFilteredMatchesByTournamentId(UUID competitionId, List<String> matchStatuses) {
         CompetitionDto competition = competitionClient.findById(competitionId);
 
-        if (!competition.getCompetitionType().equals("LEAGUE")) {
-            throw new InvalidMatchStateException("Competition type is not LEAGUE");
+        if (!competition.getCompetitionType().equals("TOURNAMENT")) {
+            throw new InvalidMatchStateException("Competition type is not TOURNAMENT");
         }
+
+        Specification<Match> matchesByStatuses = Specification
+                .where(
+                        MatchSpecification.getMatchesByCompetitionId(competition.getId())
+                                .and(
+                                        MatchSpecification.getMatchesByDynamicMatchType(matchStatuses)));
+
+        return matchRepository.findAll(matchesByStatuses).stream()
+                .map(matchMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<ToursWithTimeGapDto> findAllTourLeagueWithTimeGap(UUID competitionId) {
+        isLeague(competitionId);
 
         return matchRepository.findAllLeagueTourNumbersWithTimeGap(competitionId);
     }
 
     public List<Match> findAllByCompetitionAndLeagueTourNumber(UUID competitionId, Integer leagueTourNumber) {
+        isLeague(competitionId);
+
+        return matchRepository.findAllByCompetitionIdAndLeagueTourNumberOrderByMatchDateAsc(competitionId, leagueTourNumber);
+    }
+
+    private void isLeague(UUID competitionId) {
         CompetitionDto competition = competitionClient.findById(competitionId);
 
         if (!competition.getCompetitionType().equals("LEAGUE")) {
             throw new InvalidMatchStateException("Competition type is not LEAGUE");
         }
-
-        return matchRepository.findAllByCompetitionIdAndLeagueTourNumberOrderByMatchDateAsc(competitionId, leagueTourNumber);
     }
 
     private void generateEmptyTournamentMatches(TournamentBracketDto dto) {
