@@ -36,6 +36,7 @@ public class MatchConfig {
                                 "/actuator/health",
                                 "/api/match/leagueTours/**",
                                 "/api/match/tourMatches/**",
+                                "/api/match/dynamic-all/**",
                                 "/api/match/id/**").permitAll()
                         .requestMatchers(
                                 "/api/match/confirmation").authenticated()

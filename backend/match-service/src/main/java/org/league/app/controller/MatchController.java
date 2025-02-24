@@ -57,4 +57,11 @@ public class MatchController {
                                                                                @RequestParam("leagueTourNumber") Integer leagueTourNumber) {
         return ResponseEntity.ok(matchService.findAllByCompetitionAndLeagueTourNumber(leagueId, leagueTourNumber));
     }
+
+    @GetMapping("/dynamic-all/{tournamentId}")
+    public List<MatchReadDto> findAllDynamicallyByTournamentId(@PathVariable("tournamentId") UUID tournamentId,
+                                                               @RequestParam("matchStatuses") List<String> matchStatuses) {
+        return matchService.findFilteredMatchesByTournamentId(tournamentId, matchStatuses);
+    }
+
 }
