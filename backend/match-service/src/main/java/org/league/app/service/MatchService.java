@@ -15,7 +15,6 @@ import org.league.app.dto.MatchReadDto;
 import org.league.app.dto.QrCodeDto;
 import org.league.app.dto.ToursWithTimeGapDto;
 import org.league.app.exception.*;
-import org.league.app.feign.authClient.AuthClientFeign;
 import org.league.app.feign.authClient.UserDto;
 import org.league.app.feign.competitionClient.CompetitionClientFeign;
 import org.league.app.feign.notificationClient.EmailRequestWithQrCode;
@@ -46,7 +45,6 @@ public class MatchService {
     private final MatchMapper matchMapper;
     private final MatchPublisher matchPublisher;
     private final TeamClientFeign teamClient;
-    private final AuthClientFeign authClient;
     private final SportClientFeign sportClient;
     private final CompetitionClientFeign competitionClient;
     private final NotificationClientFeign notificationClient;
