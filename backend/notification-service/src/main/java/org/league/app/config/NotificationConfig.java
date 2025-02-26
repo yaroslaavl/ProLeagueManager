@@ -38,6 +38,7 @@ public class NotificationConfig {
                         .requestMatchers(
                                 "/actuator/health",
                                 "/api/notification/send-email",
+                                "/api/notification/send-email-with-qr-code",
                                 "/api/my-notifications/send-notification",
                                 "/api/my-notifications/subscribe/**").permitAll())
                 .addFilterBefore(routeFilter, SecurityContextHolderFilter.class)
