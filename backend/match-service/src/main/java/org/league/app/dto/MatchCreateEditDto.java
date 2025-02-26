@@ -1,5 +1,6 @@
 package org.league.app.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import org.league.app.database.entity.enums.MatchStatus;
 
@@ -24,7 +25,9 @@ public class MatchCreateEditDto {
     private UUID winnerTeamId;
     private Long winnerPlayerId;
     private Integer leagueTourNumber;
+    @JsonProperty("aConfirmed")
     private Boolean aConfirmed;
+    @JsonProperty("bConfirmed")
     private Boolean bConfirmed;
     private UUID nextMatchId;
     private LocalDateTime createdAt;

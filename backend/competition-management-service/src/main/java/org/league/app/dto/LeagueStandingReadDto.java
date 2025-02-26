@@ -1,12 +1,10 @@
 package org.league.app.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.Value;
+import lombok.*;
 
 import java.util.UUID;
 
-@Value
+@Data
 @AllArgsConstructor
 @NoArgsConstructor(force = true)
 public class LeagueStandingReadDto {
