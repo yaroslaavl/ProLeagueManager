@@ -34,6 +34,7 @@ public class JWTFilter extends OncePerRequestFilter {
         return path.equals("/actuator/health")
                 || path.equals("/api/notification/send-email")
                 || path.startsWith("/api/my-notifications/subscribe/")
+                || path.equals("/api/notification/send-email-with-qr-code")
                 || path.equals("/api/my-notifications/send-notification");
     }
 
