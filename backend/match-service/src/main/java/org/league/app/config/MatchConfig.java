@@ -41,6 +41,7 @@ public class MatchConfig {
                         .requestMatchers(
                                 "/api/match/confirmation").authenticated()
                         .requestMatchers(
+                                "/api/match/qr-review",
                                 "/api/match/*/score").hasAuthority("EDITOR")
                         )
                 .addFilterBefore(routeFilter, SecurityContextHolderFilter.class)
