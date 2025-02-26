@@ -10,4 +10,7 @@ public interface NotificationClientFeign {
 
     @PostMapping("/api/my-notifications/send-notification")
     NotificationDto sendNotification(@RequestBody NotificationDto notification, @RequestParam("notificationCategory") String notificationCategory);
+
+    @PostMapping("/api/notification/send-email-with-qr-code")
+    String sendMailWithQrCode(@RequestBody EmailRequestWithQrCode emailRequestWithQrCode);
 }
