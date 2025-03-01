@@ -36,4 +36,7 @@ public interface CompetitionParticipantRepository extends JpaRepository<Competit
             @Param("competitionId") UUID competitionId,
             @Param("teamId") UUID teamId);
 
+    @Query("SELECT cp.playerId FROM CompetitionParticipant cp " +
+            "WHERE cp.competition.id = :competitionId")
+    Set<Long> findParticipantsByCompetitionId(@Param("competitionId") UUID competitionId);
 }

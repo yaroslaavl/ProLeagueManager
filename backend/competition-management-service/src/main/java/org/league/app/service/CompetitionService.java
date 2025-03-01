@@ -378,6 +378,10 @@ public class CompetitionService {
         return competitionParticipantRepository.findParticipantsByCompetitionIdAndTeamId(competitionId, teamId);
     }
 
+    public Set<Long> findAllPlayersByCompetitionId(UUID competitionId) {
+        return competitionParticipantRepository.findParticipantsByCompetitionId(competitionId);
+    }
+
     public List<LeagueStandingReadDto> getLeagueStandingByCompetitionIdAndTeamIdOrPlayerId(UUID competitionId, List<UUID> teamIds, List<Long> playerIds) {
         return leagueStandingRepository.findLeagueStandingsByCompetitionIdWherePlayerIdOrTeamId(competitionId, teamIds, playerIds).stream().map(leagueStandingMapper::toDto).toList();
     }
