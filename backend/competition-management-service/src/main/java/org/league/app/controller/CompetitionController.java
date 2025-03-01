@@ -91,6 +91,11 @@ public class CompetitionController {
         return ResponseEntity.ok(competitionParticipantsById);
     }
 
+    @GetMapping("/players/{competitionId}")
+    public Set<Long> findAllPlayersByCompetitionId(@PathVariable("competitionId") UUID id) {
+        return competitionService.findAllPlayersByCompetitionId(id);
+    }
+
     @GetMapping("/active-competitions")
     public List<CompetitionReadDto> getActiveCompetitions() {
         return competitionService.getActiveCompetitionIds();
