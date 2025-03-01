@@ -1,11 +1,16 @@
 package org.league.app.feign.competitionClient;
 
+import io.github.resilience4j.retry.annotation.Retry;
 import org.league.app.broker.CompetitionDto;
 import org.league.app.broker.LeagueStandingDto;
+import org.league.app.feign.notificationClient.NotificationClientFeign;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -16,8 +21,17 @@ public interface CompetitionClientFeign {
     @GetMapping("/api/competition/players/{competitionId}/{teamId}")
     Set<Long> findCompetitionParticipantsById(@PathVariable("competitionId") UUID id, @PathVariable("teamId") UUID teamId);
 
+    @Retry(name = "competitionRetry", fallbackMethod = "fallbackCompetition")
     @GetMapping("/api/competition/get/{id}")
     CompetitionDto findById(@PathVariable("id") UUID id);
+
+    default CompetitionDto fallbackCompetition(UUID id,
+                                                 Throwable t) {
+        Logger logger = LoggerFactory.getLogger(NotificationClientFeign.class);
+        logger.warn("Competition service is down. ID: '{}'. Error: {}",
+                id, t.getMessage());
+        throw new RuntimeException("Competition service is down", t);
+    }
 
     @GetMapping("/api/competition/active-competitions")
     List<CompetitionDto> getActiveCompetitions();

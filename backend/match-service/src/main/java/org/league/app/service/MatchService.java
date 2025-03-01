@@ -9,11 +9,15 @@ import org.league.app.database.entity.MatchPlayer;
 import org.league.app.database.entity.enums.MatchStatus;
 import org.league.app.database.repository.MatchPlayerRepository;
 import org.league.app.database.repository.MatchRepository;
+import org.league.app.database.specification.MatchSpecification;
 import org.league.app.dto.MatchCreateEditDto;
 import org.league.app.dto.MatchReadDto;
+import org.league.app.dto.QrCodeDto;
 import org.league.app.dto.ToursWithTimeGapDto;
 import org.league.app.exception.*;
+import org.league.app.feign.authClient.UserDto;
 import org.league.app.feign.competitionClient.CompetitionClientFeign;
+import org.league.app.feign.notificationClient.EmailRequestWithQrCode;
 import org.league.app.feign.notificationClient.NotificationClientFeign;
 import org.league.app.feign.notificationClient.NotificationDto;
 import org.league.app.feign.sportClient.SportClientFeign;
@@ -21,9 +25,13 @@ import org.league.app.feign.teamClient.TeamClientFeign;
 import org.league.app.feign.teamClient.TeamFeignDto;
 import org.league.app.feign.teamClient.TeamMemberFeignDto;
 import org.league.app.mapper.MatchMapper;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -42,6 +50,7 @@ public class MatchService {
     private final NotificationClientFeign notificationClient;
     private final MatchRepository matchRepository;
     private final MatchPlayerRepository matchPlayerRepository;
+    private final QrCodeGeneratorService qrCodeGeneratorService;
 
     public MatchReadDto findMatchById(UUID id) {
         return matchRepository.findById(id)
@@ -195,10 +204,9 @@ public class MatchService {
 
         CompetitionDto competitionDto = competitionClient.findById(match.getCompetitionId());
 
+        Boolean isEsport = sportClient.findSportById(competitionDto.getSportId()).getIsEsport();
         if (!isSoloCompetition) {
-
             TeamFeignDto teamById = teamClient.findTeamById(teamId);
-
             TeamMemberFeignDto capitan = teamById.getTeamMembers().stream()
                     .filter(member -> member.getRoles().stream()
                             .anyMatch(role -> "CAPITAN".equalsIgnoreCase(role.getRoleName())))
@@ -233,11 +241,15 @@ public class MatchService {
                 sendNotificationMessage(
                         playerId,
                         teamMessage,
-                        "MATCH_CONFIRMED",
+                        isEsport ? "MATCH_CONFIRMED" : "AWAITING_QR_CONFIRMATION",
                         competitionDto.getCompetitionType());
             }
 
             matchPlayerRepository.saveAll(matchPlayers);
+
+            if (!isEsport) {
+                sendQrCodeAndNotification(match, teamById.getId(), playerIds, capitan.getId(), competitionDto);
+            }
         } else {
             MatchPlayer matchPlayer = MatchPlayer.builder()
                     .match(match)
@@ -253,26 +265,47 @@ public class MatchService {
             sendNotificationMessage(
                     userId,
                     playerMessage,
-                    "MATCH_CONFIRMED",
+                    isEsport ? "MATCH_CONFIRMED" : "AWAITING_QR_CONFIRMATION",
                     competitionDto.getCompetitionType());
+
+            if (!isEsport) {
+                sendQrCodeAndNotification(match, null, List.of(userId), userId, competitionDto);
+            }
         }
 
-        if (!isSoloCompetition) {
-            if (teamId.equals(match.getTeamAId())) {
-                match.setAConfirmed(true);
-            } else if (teamId.equals(match.getTeamBId())) {
-                match.setBConfirmed(true);
-            }
-        } else {
-            if (userId.equals(match.getPlayerAId())) {
-                match.setAConfirmed(true);
-            } else if (userId.equals(match.getPlayerBId())) {
-                match.setBConfirmed(true);
+        if (isEsport) {
+            if (!isSoloCompetition) {
+                if (teamId.equals(match.getTeamAId())) {
+                    match.setAConfirmed(true);
+                } else if (teamId.equals(match.getTeamBId())) {
+                    match.setBConfirmed(true);
+                }
+            } else {
+                if (userId.equals(match.getPlayerAId())) {
+                    match.setAConfirmed(true);
+                } else if (userId.equals(match.getPlayerBId())) {
+                    match.setBConfirmed(true);
+                }
             }
         }
 
         matchRepository.save(match);
         return true;
+    }
+
+    @Transactional
+    public void confirmAfterQrCodeReview(UUID matchId, MatchCreateEditDto matchCreateEditDto) {
+        Match match = matchRepository.findById(matchId)
+                .orElseThrow(() -> new MatchNotFoundException("Match not found"));
+
+        if (!match.getMatchStatus().equals(MatchStatus.SCHEDULED)) {
+            throw new InvalidMatchStateException("Match is not scheduled");
+        }
+
+        Optional.ofNullable(matchCreateEditDto.getAConfirmed()).ifPresent(match::setAConfirmed);
+        Optional.ofNullable(matchCreateEditDto.getBConfirmed()).ifPresent(match::setBConfirmed);
+
+        matchRepository.save(match);
     }
 
     @Transactional
@@ -456,24 +489,65 @@ public class MatchService {
         }
     }
 
-    public List<ToursWithTimeGapDto> findAllTourLeagueWithTimeGap(UUID competitionId) {
+    public List<MatchReadDto> findFilteredMatchesByTournamentId(UUID competitionId, List<String> matchStatuses) {
         CompetitionDto competition = competitionClient.findById(competitionId);
 
-        if (!competition.getCompetitionType().equals("LEAGUE")) {
-            throw new InvalidMatchStateException("Competition type is not LEAGUE");
+        if (!competition.getCompetitionType().equals("TOURNAMENT")) {
+            throw new InvalidMatchStateException("Competition type is not TOURNAMENT");
         }
+
+        Specification<Match> matchesByStatuses = Specification
+                .where(
+                        MatchSpecification.getMatchesByCompetitionId(competition.getId())
+                                .and(
+                                        MatchSpecification.getMatchesByDynamicMatchType(matchStatuses)));
+
+        return matchRepository.findAll(matchesByStatuses).stream()
+                .map(matchMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<ToursWithTimeGapDto> findAllTourLeagueWithTimeGap(UUID competitionId) {
+        isLeague(competitionId);
 
         return matchRepository.findAllLeagueTourNumbersWithTimeGap(competitionId);
     }
 
     public List<Match> findAllByCompetitionAndLeagueTourNumber(UUID competitionId, Integer leagueTourNumber) {
+        isLeague(competitionId);
+
+        return matchRepository.findAllByCompetitionIdAndLeagueTourNumberOrderByMatchDateAsc(competitionId, leagueTourNumber);
+    }
+
+    private void isLeague(UUID competitionId) {
         CompetitionDto competition = competitionClient.findById(competitionId);
 
         if (!competition.getCompetitionType().equals("LEAGUE")) {
             throw new InvalidMatchStateException("Competition type is not LEAGUE");
         }
+    }
 
-        return matchRepository.findAllByCompetitionIdAndLeagueTourNumberOrderByMatchDateAsc(competitionId, leagueTourNumber);
+    private void sendQrCodeAndNotification(Match match, UUID teamId, List<Long> playerIds, Long recipientId, CompetitionDto competitionDto) {
+        File qrFile = qrCodeGeneratorService.generateQrCode(new QrCodeDto(match.getId(), teamId, playerIds, LocalDateTime.now().toString()));
+
+        boolean emailSent = Boolean.parseBoolean(notificationClient.sendMailWithQrCode(new EmailRequestWithQrCode(
+                securityContext(), "QR Confirmation Code",
+                "<p>You have received a new match confirmation QR code.</p>" +
+                        "<p>Please show this code to our representative on the ground.</p>",
+                qrFile
+        )));
+
+        if (emailSent) {
+            qrFile.delete();
+        } else {
+            log.warn("File has been lost");
+        }
+
+        sendNotificationMessage(
+                recipientId,
+                "You have received a new match confirmation QR code",
+                "MATCH_CONFIRMED",
+                competitionDto.getCompetitionType());
     }
 
     private void generateEmptyTournamentMatches(TournamentBracketDto dto) {
@@ -689,5 +763,13 @@ public class MatchService {
             log.error("Failed to send notification: {}", e.getMessage());
             throw new NotificationSendingException("Failed to send notification.");
         }
+    }
+
+    private String securityContext() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication.getPrincipal() instanceof UserDto userDto){
+            return userDto.getEmail();
+        }
+        return authentication.getName();
     }
 }

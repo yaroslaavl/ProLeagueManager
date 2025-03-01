@@ -47,6 +47,18 @@ public class MatchController {
         return ResponseEntity.noContent().build();
     }
 
+    @PutMapping("/qr-review")
+    public ResponseEntity<Void> confirmAfterQrCodeReview(@RequestParam("matchId") UUID matchId,
+                                                         @RequestBody MatchCreateEditDto matchCreateEditDto) {
+        System.out.println("matchId: " + matchId);
+        System.out.println("AConfirmed: " + matchCreateEditDto.getAConfirmed());
+        System.out.println("BConfirmed: " + matchCreateEditDto.getBConfirmed());
+
+        matchService.confirmAfterQrCodeReview(matchId, matchCreateEditDto);
+        return ResponseEntity.noContent().build();
+    }
+
+
     @GetMapping("/leagueTours/{leagueId}")
     public ResponseEntity<List<ToursWithTimeGapDto>> findAllLeagueTours(@PathVariable("leagueId") UUID leagueId) {
        return ResponseEntity.ok(matchService.findAllTourLeagueWithTimeGap(leagueId));
@@ -57,4 +69,11 @@ public class MatchController {
                                                                                @RequestParam("leagueTourNumber") Integer leagueTourNumber) {
         return ResponseEntity.ok(matchService.findAllByCompetitionAndLeagueTourNumber(leagueId, leagueTourNumber));
     }
+
+    @GetMapping("/dynamic-all/{tournamentId}")
+    public List<MatchReadDto> findAllDynamicallyByTournamentId(@PathVariable("tournamentId") UUID tournamentId,
+                                                               @RequestParam("matchStatuses") List<String> matchStatuses) {
+        return matchService.findFilteredMatchesByTournamentId(tournamentId, matchStatuses);
+    }
+
 }
