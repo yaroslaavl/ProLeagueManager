@@ -50,8 +50,8 @@ public class FeedbackService {
 
         CompetitionDto competition = competitionClientFeign.findById(competitionId);
 
-        if (!(competition.getCompetitionType().equalsIgnoreCase("COMPLETED") || competition.getCompetitionType().equalsIgnoreCase("ACTIVE"))) {
-            throw new CompetitionException("This competition is not finished yet");
+        if (!(competition.getStatus().equalsIgnoreCase("COMPLETED") || competition.getStatus().equalsIgnoreCase("ACTIVE"))) {
+            throw new CompetitionException("This competition is not started yet");
         }
 
         String tonality;
