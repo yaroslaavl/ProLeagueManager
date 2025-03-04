@@ -43,6 +43,8 @@ public class CompetitionManagementConfig {
                                 "/api/competition/count-of-signed-in",
                                 "/api/competition/standings",
                                 "/api/competition/league-table/**",
+                                "/api/competition/stages",
+                                "/api/competition/get-image/*",
                                 "/api/competition/update-standing").permitAll()
                         .requestMatchers(
                                 "/api/competition/create",
@@ -52,6 +54,7 @@ public class CompetitionManagementConfig {
                                 "/api/game-system/delete/**",
                                 "/api/game-system/search",
                                 "/api/game-system/update/**",
+                                "/api/competition/upload-image/*",
                                 "/api/game-system/**").hasAuthority("EDITOR")
                         .requestMatchers(
                                 "/api/competition/participation").authenticated())
