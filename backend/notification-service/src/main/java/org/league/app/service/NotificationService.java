@@ -1,5 +1,6 @@
 package org.league.app.service;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.league.app.database.entity.Notification;
@@ -19,6 +20,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -38,7 +41,7 @@ public class NotificationService {
 
     @Transactional
     public boolean subscribeManagement(String eventCategory, Boolean isActive) {
-        UserDto userByEmail = authClientFeign.getUserByEmail(securityContext());
+        UserDto userByEmail = authClientFeign.getUserByEmail(getTokenFromRequest(), securityContext());
         List<UserNotificationSubscription> userNotificationSubscriptionByUserId =
                 userNotificationSubscriptionRepository.findUserNotificationSubscriptionByUserId(userByEmail.getId());
 
@@ -78,7 +81,7 @@ public class NotificationService {
     }
 
     public List<UserNotificationSubscriptionReadDto> getAllSubscriptions () {
-        UserDto userByEmail = authClientFeign.getUserByEmail(securityContext());
+        UserDto userByEmail = authClientFeign.getUserByEmail(getTokenFromRequest(), securityContext());
         List<UserNotificationSubscription> userNotificationSubscriptionByUserId =
                 userNotificationSubscriptionRepository.findAllByUserId(userByEmail.getId());
 
@@ -107,7 +110,7 @@ public class NotificationService {
 
     @Transactional
     public List<Notification> getAllNotifications() {
-        UserDto userByEmail = authClientFeign.getUserByEmail(securityContext());
+        UserDto userByEmail = authClientFeign.getUserByEmail(getTokenFromRequest(), securityContext());
 
         if (userByEmail == null) {
             throw new UserNotFoundException("User not found");
@@ -119,6 +122,15 @@ public class NotificationService {
                 .forEach(notification -> notification.setIsRead(Boolean.TRUE));
 
         return notificationRepository.saveAll(allByUserId);
+    }
+
+    private String getTokenFromRequest() {
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        if (attributes != null) {
+            HttpServletRequest request = attributes.getRequest();
+            return request.getHeader("Authorization");
+        }
+        return null;
     }
 
     private String securityContext() {
