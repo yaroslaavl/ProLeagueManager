@@ -3,7 +3,7 @@ package org.league.app.controller;
 import lombok.RequiredArgsConstructor;
 import org.league.app.dto.CompetitionCreateEditDto;
 import org.league.app.dto.CompetitionReadDto;
-import org.league.app.dto.LeagueStandingReadDto;
+import org.league.app.dto.LeagueStandingDto;
 import org.league.app.service.CompetitionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -107,20 +107,31 @@ public class CompetitionController {
     }
 
     @GetMapping("/standings")
-    public List<LeagueStandingReadDto> getLeagueStanding (@RequestParam("competitionId") UUID competitionId,
-                                                    @RequestParam(required = false, name = "teamIds") List<UUID> teamIds,
-                                                    @RequestParam(required = false, name = "playerIds") List<Long> playerIds) {
+    public List<LeagueStandingDto> getLeagueStanding (@RequestParam("competitionId") UUID competitionId,
+                                                      @RequestParam(required = false, name = "teamIds") List<UUID> teamIds,
+                                                      @RequestParam(required = false, name = "playerIds") List<Long> playerIds) {
         return competitionService.getLeagueStandingByCompetitionIdAndTeamIdOrPlayerId(competitionId, teamIds, playerIds);
     }
 
     @PutMapping("/update-standing")
-    public ResponseEntity<Void> updateLeagueStanding(@RequestBody List<LeagueStandingReadDto> leagueStandingReadDto) {
+    public ResponseEntity<Void> updateLeagueStanding(@RequestBody List<LeagueStandingDto> leagueStandingReadDto) {
         competitionService.updateLeagueStanding(leagueStandingReadDto);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/league-table/{leagueId}")
-    public ResponseEntity<List<LeagueStandingReadDto>> getLeagueTableByCompetitionId(@PathVariable("leagueId") UUID leagueId) {
+    public ResponseEntity<List<LeagueStandingDto>> getLeagueTableByCompetitionId(@PathVariable("leagueId") UUID leagueId) {
         return ResponseEntity.ok(competitionService.showLeagueTableByLeagueId(leagueId));
+    }
+
+    @GetMapping("/user")
+    public ResponseEntity<List<CompetitionReadDto>> getCompetitionsByUser(@RequestParam("userId") Long userId,
+                                                                          @RequestParam("competitionType") String competitionType) {
+        return ResponseEntity.ok(competitionService.findCompetitionByUserId(userId, competitionType));
+    }
+
+    @GetMapping("/team")
+    public UUID getTeamByUser(@RequestParam("userId") Long userId) {
+        return competitionService.findTeamByUser(userId);
     }
 }
