@@ -45,9 +45,6 @@ public class UserService implements UserDetailsService {
     private final RoleGroupRepository roleGroupRepository;
     private final NotificationFeignClient notificationFeignClient;
 
-    @Value("${app.image.uploadDir}")
-    private String uploadDir;
-
     @Transactional
     public UserReadDto create(UserCreateDto userCreateDto){
         String activationToken = UUID.randomUUID().toString();
@@ -273,61 +270,6 @@ public class UserService implements UserDetailsService {
         return userMapper.toDto(updatedUser);
     }
 
-    @Transactional
-    public String uploadAvatar(ImageUploadDto imageUploadDto) throws IOException {
-        User user = userRepository.findByEmail(securityContext())
-                .orElseThrow(() -> new UserEmailNotFoundException("User with email: " + securityContext() + " not found"));
-
-        MultipartFile file = imageUploadDto.getAvatar();
-
-        if (file != null && !file.isEmpty()) {
-            String extension = Objects.requireNonNull(file.getOriginalFilename()).substring(file.getOriginalFilename().lastIndexOf("."));
-            String filename = user.getEmail() + "_avatar" + extension;
-
-            String oldFileName = user.getAvatar();
-            if (oldFileName != null && !oldFileName.isEmpty()) {
-                Path oldPath = Paths.get(uploadDir, oldFileName);
-                if (Files.exists(oldPath)) {
-                    Files.delete(oldPath);
-                }
-            }
-            Path path = Paths.get(uploadDir, filename);
-
-            if (Files.exists(path)) {
-                Files.delete(path);
-            }
-
-            File directory = new File(uploadDir);
-            if (!directory.exists()) {
-                directory.mkdirs();
-            }
-            Files.write(path, file.getBytes());
-
-            user.setAvatar(filename);
-            userRepository.save(user);
-
-            return filename;
-        }
-
-        return null;
-    }
-
-    public byte[] getUserImage(String username) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UserEmailNotFoundException("User with username: " + username + " not found"));
-
-        if (user.getAvatar() != null) {
-            Path path = Paths.get(uploadDir, user.getAvatar());
-            try {
-
-                return Files.readAllBytes(path);
-            } catch (IOException e) {
-                log.error("Failed to read user image: {}", e.getMessage());
-            }
-        }
-         return getDefaultImage();
-    }
-
     public UserReadDto getUserByEmail() {
         String email = securityContext();
         return userRepository.findByEmail(email)
@@ -354,13 +296,4 @@ public class UserService implements UserDetailsService {
         return SecurityContextHolder.getContext().getAuthentication().getName();
     }
 
-    private byte[] getDefaultImage() {
-        Path defaultImagePath = Paths.get(uploadDir, "default-avatar.png");
-        try {
-            return Files.readAllBytes(defaultImagePath);
-        } catch (IOException e) {
-            log.error("Failed to load default avatar: {}", e.getMessage());
-            return new byte[0];
-        }
-    }
 }
