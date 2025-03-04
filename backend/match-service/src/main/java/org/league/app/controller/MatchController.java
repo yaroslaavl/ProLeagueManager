@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.league.app.database.entity.Match;
 import org.league.app.dto.MatchCreateEditDto;
 import org.league.app.dto.MatchReadDto;
+import org.league.app.dto.TournamentMatchesByStageDto;
 import org.league.app.dto.ToursWithTimeGapDto;
 import org.league.app.service.MatchService;
 import org.springframework.http.ResponseEntity;
@@ -76,4 +77,8 @@ public class MatchController {
         return matchService.findFilteredMatchesByTournamentId(tournamentId, matchStatuses);
     }
 
+    @GetMapping("/grouped-by-stage/{competitionId}")
+    public ResponseEntity<List<TournamentMatchesByStageDto>> findMatchesByStage(@PathVariable("competitionId") UUID competitionId) {
+        return ResponseEntity.ok(matchService.findMatchesByStage(competitionId));
+    }
 }
