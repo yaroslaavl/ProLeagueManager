@@ -414,6 +414,17 @@ public class CompetitionService {
         return competitionParticipantRepository.findTeamByUserId(userId);
     }
 
+    public List<UUID> findClosestTournaments(Boolean isEsport) {
+        List<Competition> closestTournaments = competitionRepository.findFiveClosestTournaments();
+        List<UUID> tournamentIds = new ArrayList<>();
+        for (Competition closesTournament : closestTournaments) {
+            if (sportClientFeign.findSportById(closesTournament.getSportId()).getIsEsport() == isEsport) {
+                tournamentIds.add(closesTournament.getId());
+            }
+        }
+        return tournamentIds;
+    }
+
     private void declareWinner(Competition competition, LeagueStanding winner) {
         if (winner.getTeamId() == null) {
             CompetitionParticipant competitionParticipant = competitionParticipantRepository.findCompetitionParticipantByPlayerIdAndCompetitionId(winner.getPlayerId(), competition.getId())

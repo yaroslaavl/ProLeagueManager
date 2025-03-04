@@ -43,7 +43,7 @@ public class JWTFilter extends OncePerRequestFilter {
                 || path.equals("/api/competition/user")
                 || path.equals("/api/competition/team")
                 || path.startsWith("/api/competition/get-image/")
-                || path.equals("/api/competition/last-day-active-leagues");
+                || path.equals("/api/competition/closest-tournaments");
     }
 
     @Override

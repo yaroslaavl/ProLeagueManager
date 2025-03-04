@@ -26,4 +26,7 @@ public interface CompetitionRepository extends JpaRepository<Competition, UUID>,
 
     @Query(value = "SELECT c.id FROM Competition c WHERE c.competition_status = 'ACTIVE' AND c.competition_type = 'LEAGUE' AND now() between c.end_date::DATE and c.end_date", nativeQuery = true)
     List<UUID> getLastDayActiveLeagues();
+
+    @Query("SELECT c FROM Competition c WHERE c.competitionType = 'TOURNAMENT' AND c.startDate >= CURRENT_DATE ORDER BY c.startDate ASC LIMIT 10")
+    List<Competition> findFiveClosestTournaments();
 }

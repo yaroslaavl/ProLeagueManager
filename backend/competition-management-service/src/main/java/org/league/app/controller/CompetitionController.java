@@ -138,6 +138,7 @@ public class CompetitionController {
     @GetMapping("/team")
     public UUID getTeamByUser(@RequestParam("userId") Long userId) {
         return competitionService.findTeamByUser(userId);
+    }
 
     @GetMapping("/stages")
     public List<TournamentStageReadDto> findAllStagesByCompetitionIdSortedByStageOrder(@RequestParam("competitionId") UUID competitionId) {
@@ -153,6 +154,10 @@ public class CompetitionController {
     @GetMapping("/get-image/{competitionId}")
     public ResponseEntity<String> getCompetitionImage(@PathVariable("competitionId") UUID competitionId) {
         return ResponseEntity.ok(minioService.getCompetitionImage(competitionId));
+    }
 
+    @GetMapping("/closest-tournaments")
+    public List<UUID> getClosestTournaments(@RequestParam("isEsport") Boolean isEsport) {
+        return competitionService.findClosestTournaments(isEsport);
     }
 }
