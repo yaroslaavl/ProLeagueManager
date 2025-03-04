@@ -27,24 +27,27 @@ public class NotificationConfig {
 
     @Bean
     @SneakyThrows
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity){
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) {
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/api/my-notifications/subscribeToNotification",
                                 "/api/my-notifications/subscriptionList",
-                                "/api/my-notifications/get-all-notifications").authenticated()
+                                "/api/my-notifications/get-all-notifications",
+                                "/api/my-notifications/send-notification",
+                                "/api/my-notifications/subscribe/**",
+                                "/api/notification/send-email-with-qr-code"
+                        ).authenticated()
                         .requestMatchers(
                                 "/actuator/health",
-                                "/api/notification/send-email",
-                                "/api/notification/send-email-with-qr-code",
-                                "/api/my-notifications/send-notification",
-                                "/api/my-notifications/subscribe/**").permitAll())
+                                "/api/notification/send-email").permitAll()
+                )
                 .addFilterBefore(routeFilter, SecurityContextHolderFilter.class)
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         return httpSecurity.build();
     }
+
 }
