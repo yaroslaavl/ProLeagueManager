@@ -45,7 +45,10 @@ public class CompetitionManagementConfig {
                                 "/api/competition/league-table/**",
                                 "/api/competition/update-standing",
                                 "/api/competition/user",
-                                "/api/competition/team").permitAll()
+                                "/api/competition/team",
+                                "/api/competition/stages",
+                                "/api/competition/get-image/*",
+                                "/api/competition/update-standing").permitAll()
                         .requestMatchers(
                                 "/api/competition/create",
                                 "/api/competition/edit/**",
@@ -54,6 +57,7 @@ public class CompetitionManagementConfig {
                                 "/api/game-system/delete/**",
                                 "/api/game-system/search",
                                 "/api/game-system/update/**",
+                                "/api/competition/upload-image/*",
                                 "/api/game-system/**").hasAuthority("EDITOR")
                         .requestMatchers(
                                 "/api/competition/participation").authenticated())

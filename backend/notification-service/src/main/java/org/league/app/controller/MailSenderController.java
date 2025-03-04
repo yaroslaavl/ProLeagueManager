@@ -8,10 +8,7 @@ import org.league.app.feign.EmailRequestWithQrCode;
 import org.league.app.service.MailSenderService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -34,7 +31,8 @@ public class MailSenderController {
     }
 
     @PostMapping("/send-email-with-qr-code")
-    public ResponseEntity<String> sendMailWithQrCode(@RequestBody EmailRequestWithQrCode emailRequestWithQrCode) {
+    public ResponseEntity<String> sendMailWithQrCode(@RequestHeader("Authorization") String token,
+                                                     @RequestBody EmailRequestWithQrCode emailRequestWithQrCode) {
         try {
             mailSenderService.sendMailWithQrCode(emailRequestWithQrCode.getTo(), emailRequestWithQrCode.getSubject(), emailRequestWithQrCode.getBody(), emailRequestWithQrCode.getQrCodeFile());
             log.info("'{}'", emailRequestWithQrCode);

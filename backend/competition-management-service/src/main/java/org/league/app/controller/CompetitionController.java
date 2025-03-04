@@ -1,11 +1,14 @@
 package org.league.app.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.league.app.dto.CompetitionCreateEditDto;
-import org.league.app.dto.CompetitionReadDto;
-import org.league.app.dto.LeagueStandingDto;
+import org.league.app.dto.*;
 import org.league.app.service.CompetitionService;
+import org.league.app.service.MinioService;
+import org.league.app.service.TournamentStageService;
+import org.league.app.validation.CreateAction;
+import org.league.app.validation.EditAction;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +24,8 @@ import static org.springframework.http.ResponseEntity.notFound;
 public class CompetitionController {
 
     private final CompetitionService competitionService;
+    private final TournamentStageService tournamentStageService;
+    private final MinioService minioService;
 
     @PostMapping("/create")
     public ResponseEntity<CompetitionReadDto> createCompetition (@RequestBody CompetitionCreateEditDto competitionCreate,
@@ -133,5 +138,21 @@ public class CompetitionController {
     @GetMapping("/team")
     public UUID getTeamByUser(@RequestParam("userId") Long userId) {
         return competitionService.findTeamByUser(userId);
+
+    @GetMapping("/stages")
+    public List<TournamentStageReadDto> findAllStagesByCompetitionIdSortedByStageOrder(@RequestParam("competitionId") UUID competitionId) {
+        return tournamentStageService.findAllStagesByCompetitionIdSortedByStageOrder(competitionId);
+    }
+
+    @PostMapping("/upload-image/{competitionId}")
+    public void uploadCompetitionImage(@PathVariable("competitionId") UUID competitionId,
+                                       @Validated({CreateAction.class, EditAction.class}) UploadCompetitionImageDto uploadCompetitionImageDto) {
+        minioService.uploadImage(competitionId, uploadCompetitionImageDto);
+    }
+
+    @GetMapping("/get-image/{competitionId}")
+    public ResponseEntity<String> getCompetitionImage(@PathVariable("competitionId") UUID competitionId) {
+        return ResponseEntity.ok(minioService.getCompetitionImage(competitionId));
+
     }
 }

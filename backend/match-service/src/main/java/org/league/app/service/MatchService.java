@@ -1,6 +1,7 @@
 package org.league.app.service;
 
 import feign.FeignException;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.league.app.broker.*;
@@ -10,10 +11,7 @@ import org.league.app.database.entity.enums.MatchStatus;
 import org.league.app.database.repository.MatchPlayerRepository;
 import org.league.app.database.repository.MatchRepository;
 import org.league.app.database.specification.MatchSpecification;
-import org.league.app.dto.MatchCreateEditDto;
-import org.league.app.dto.MatchReadDto;
-import org.league.app.dto.QrCodeDto;
-import org.league.app.dto.ToursWithTimeGapDto;
+import org.league.app.dto.*;
 import org.league.app.exception.*;
 import org.league.app.feign.authClient.UserDto;
 import org.league.app.feign.competitionClient.CompetitionClientFeign;
@@ -30,6 +28,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.io.File;
 import java.time.LocalDateTime;
@@ -537,10 +537,26 @@ public class MatchService {
         }
     }
 
+    public List<TournamentMatchesByStageDto> findMatchesByStage(UUID competitionId) {
+        List<TournamentStageDto> allStagesByCompetitionId = competitionClient.findAllStagesByCompetitionIdSortedByStageOrder(competitionId);
+
+        List<Match> allMatchesByCompetitionId = matchRepository.findAllByCompetitionId(competitionId);
+
+        return allStagesByCompetitionId.stream()
+                .map(stage -> {
+                    List<Match> matchesForStage = allMatchesByCompetitionId.stream()
+                            .filter(match -> match.getStageId().equals(stage.getId()))
+                            .collect(Collectors.toList());
+
+                    return new TournamentMatchesByStageDto(stage.getStageName(), stage.getStageOrder(), matchesForStage);
+                })
+                .toList();
+    }
+
     private void sendQrCodeAndNotification(Match match, UUID teamId, List<Long> playerIds, Long recipientId, CompetitionDto competitionDto) {
         File qrFile = qrCodeGeneratorService.generateQrCode(new QrCodeDto(match.getId(), teamId, playerIds, LocalDateTime.now().toString()));
 
-        boolean emailSent = Boolean.parseBoolean(notificationClient.sendMailWithQrCode(new EmailRequestWithQrCode(
+        boolean emailSent = Boolean.parseBoolean(notificationClient.sendMailWithQrCode(getTokenFromRequest(), new EmailRequestWithQrCode(
                 securityContext(), "QR Confirmation Code",
                 "<p>You have received a new match confirmation QR code.</p>" +
                         "<p>Please show this code to our representative on the ground.</p>",
@@ -768,11 +784,20 @@ public class MatchService {
                 .build();
 
         try {
-            notificationClient.sendNotification(notification, notificationCategory);
+            notificationClient.sendNotification(getTokenFromRequest(), notification, notificationCategory);
         } catch (FeignException e) {
             log.error("Failed to send notification: {}", e.getMessage());
             throw new NotificationSendingException("Failed to send notification.");
         }
+    }
+
+    private String getTokenFromRequest() {
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        if (attributes != null) {
+            HttpServletRequest request = attributes.getRequest();
+            return request.getHeader("Authorization");
+        }
+        return null;
     }
 
     private String securityContext() {

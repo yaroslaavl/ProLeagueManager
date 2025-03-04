@@ -36,4 +36,7 @@ public interface MatchRepository extends JpaRepository<Match, UUID>, JpaSpecific
 
     @Query("SELECT m FROM Match m WHERE m.teamAId = :teamId OR m.teamBId = :teamId AND (m.matchStatus = 'IN_PROGRESS' OR m.matchStatus = 'FINISHED') ORDER BY m.matchDate DESC")
     List<Match> findMatchByTeamId(@Param("teamId") UUID teamId);
+
+    List<Match> findAllByCompetitionId(UUID competitionId);
+
 }

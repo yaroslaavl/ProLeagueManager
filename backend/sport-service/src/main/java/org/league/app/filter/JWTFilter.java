@@ -53,7 +53,7 @@ public class JWTFilter extends OncePerRequestFilter {
         String email;
 
         try {
-            email = authClientFeign.extractEmail(jwtToken);
+            email = authClientFeign.extractEmail(authorizationHeader, jwtToken);
             log.info("Extracted email: {}", email);
         } catch (Exception e) {
             log.error("Failed to extract email from token", e);
@@ -64,9 +64,9 @@ public class JWTFilter extends OncePerRequestFilter {
 
         if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             log.info("User email: {}", email);
-            var userDetails = authClientFeign.loadUserByEmail(jwtToken, email);
+            var userDetails = authClientFeign.loadUserByEmail(authorizationHeader, email);
 
-            if (authClientFeign.validateToken(jwtToken, userDetails.getEmail()) && authClientFeign.isAccessToken(jwtToken) &&
+            if (authClientFeign.validateToken(authorizationHeader, jwtToken, userDetails.getEmail()) && authClientFeign.isAccessToken(authorizationHeader, jwtToken) &&
                 authClientFeign.getToken(
                         "whitelist:" + userDetails.getEmail() + ":accessToken").equals(jwtToken)) {
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(

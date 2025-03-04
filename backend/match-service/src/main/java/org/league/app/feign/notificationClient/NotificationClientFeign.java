@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDateTime;
@@ -15,9 +16,13 @@ public interface NotificationClientFeign {
 
     @Retry(name = "notificationServiceRetry", fallbackMethod = "fallbackNotification")
     @PostMapping("/api/my-notifications/send-notification")
-    NotificationDto sendNotification(@RequestBody NotificationDto notification, @RequestParam("notificationCategory") String notificationCategory);
+    NotificationDto sendNotification(
+            @RequestHeader("Authorization") String authorizationHeader,
+            @RequestBody NotificationDto notification,
+            @RequestParam("notificationCategory") String notificationCategory);
 
-    default NotificationDto fallbackNotification(NotificationDto notification,
+    default NotificationDto fallbackNotification(String authorizationHeader,
+                                                 NotificationDto notification,
                                                  String notificationCategory,
                                                  Throwable t) {
         Logger logger = LoggerFactory.getLogger(NotificationClientFeign.class);
@@ -28,5 +33,6 @@ public interface NotificationClientFeign {
     }
 
     @PostMapping("/api/notification/send-email-with-qr-code")
-    String sendMailWithQrCode(@RequestBody EmailRequestWithQrCode emailRequestWithQrCode);
+    String sendMailWithQrCode(@RequestHeader("Authorization") String token,
+                              @RequestBody EmailRequestWithQrCode emailRequestWithQrCode);
 }

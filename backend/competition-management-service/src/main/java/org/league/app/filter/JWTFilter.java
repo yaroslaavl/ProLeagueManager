@@ -32,6 +32,7 @@ public class JWTFilter extends OncePerRequestFilter {
                 || path.equals("/api/competition/search-tournaments")
                 || path.startsWith("/api/competition/get/")
                 || path.equals("/api/competition/all-competitions")
+                || path.equals("/api/competition/stages")
                 || path.startsWith("/api/competition/players/")
                 || path.equals("/api/competition/active-competitions")
                 || path.equals("/api/competition/search-leagues")
@@ -40,7 +41,9 @@ public class JWTFilter extends OncePerRequestFilter {
                 || path.equals("/api/competition/update-standing")
                 || path.equals("/api/competition/last-day-active-leagues")
                 || path.equals("/api/competition/user")
-                || path.equals("/api/competition/team");
+                || path.equals("/api/competition/team")
+                || path.startsWith("/api/competition/get-image/")
+                || path.equals("/api/competition/last-day-active-leagues");
     }
 
     @Override
@@ -59,7 +62,7 @@ public class JWTFilter extends OncePerRequestFilter {
         String email;
 
         try {
-            email = authClientFeign.extractEmail(jwtToken);
+            email = authClientFeign.extractEmail(authorizationHeader, jwtToken);
             log.info("Extracted email: {}", email);
         } catch (Exception e) {
             log.error("Failed to extract email from token", e);
@@ -70,9 +73,9 @@ public class JWTFilter extends OncePerRequestFilter {
 
         if(email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             log.info("User email: {}", email);
-            var userDetails = authClientFeign.loadUserByEmail(jwtToken, email);
+            var userDetails = authClientFeign.loadUserByEmail(authorizationHeader, email);
 
-            if(authClientFeign.validateToken(jwtToken, userDetails.getEmail()) && authClientFeign.isAccessToken(jwtToken) &&
+            if(authClientFeign.validateToken(authorizationHeader, jwtToken, userDetails.getEmail()) && authClientFeign.isAccessToken(authorizationHeader, jwtToken) &&
                     authClientFeign.getToken(
                             "whitelist:" + userDetails.getEmail() + ":accessToken").equals(jwtToken)) {
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(

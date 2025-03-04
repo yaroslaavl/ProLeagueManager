@@ -27,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -79,6 +80,11 @@ public class TournamentStageService {
                     sportById,
                     competitionParticipantReadDtoList));
         }
+    }
+
+    public List<TournamentStageReadDto> findAllStagesByCompetitionIdSortedByStageOrder(UUID competitionId) {
+        return tournamentStageRepository.findAllStagesByCompetitionIdSortedByStageOrder(competitionId).stream()
+                .map(tournamentStageMapper::toDto).collect(Collectors.toList());
     }
 
     private void generateTournamentStages(UUID competitionId) {

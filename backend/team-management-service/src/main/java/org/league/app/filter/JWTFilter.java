@@ -50,25 +50,24 @@ public class JWTFilter extends OncePerRequestFilter {
             response.getWriter().write("{\"error\": \"Unauthorized\", \"message\": \"Missing or invalid Authorization header\"}");
             return;
         }
-
         String jwtToken = authorizationHeader.substring(7);
         String email;
-        log.info("Authorization header: {}", authorizationHeader);
+        log.info("Authorization header: {}", authorizationHeader, jwtToken);
         try {
-            email = authClientFeign.extractEmail(jwtToken);
+            email = authClientFeign.extractEmail(authorizationHeader, jwtToken);
             log.info("Extracted email: {}", email);
         } catch (Exception e) {
             log.error("Failed to extract email from token", e);
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().write("Invalid or expired JWT token: " + jwtToken);
+            response.getWriter().write("Invalid or expired JWT token: " + authorizationHeader);
             return;
         }
 
         if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             log.info("User email: {}", email);
-            var userDetails = authClientFeign.loadUserByEmail(jwtToken, email);
+            var userDetails = authClientFeign.loadUserByEmail(authorizationHeader, email);
 
-            if (authClientFeign.validateToken(jwtToken, userDetails.getEmail()) && authClientFeign.isAccessToken(jwtToken) &&
+            if (authClientFeign.validateToken(authorizationHeader, jwtToken, userDetails.getEmail()) && authClientFeign.isAccessToken(authorizationHeader, jwtToken) &&
                     authClientFeign.getToken(
                             "whitelist:" + userDetails.getEmail() + ":accessToken").equals(jwtToken)) {
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(

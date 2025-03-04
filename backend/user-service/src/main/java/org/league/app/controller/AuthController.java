@@ -124,20 +124,21 @@ public class AuthController {
     }
 
     @PostMapping("/extract-email")
-    public String extractEmail(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
-        return jwtService.extractEmail(token);
+    public String extractEmail(@RequestHeader("Authorization") String token, @RequestParam("extractToken") String extractToken) {
+        return jwtService.extractEmail(extractToken);
     }
 
     @PostMapping("/validate-token")
-    public boolean validateToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestParam("email") String email) {
+    public boolean validateToken(@RequestHeader("Authorization") String token,
+                                 @RequestParam("validToken") String validToken,
+                                 @RequestParam("email") String email) {
         UserDetails userDetails = userService.loadUserByUsername(email);
-
-        return jwtService.isTokenValid(token, userDetails);
+        return jwtService.isTokenValid(validToken, userDetails);
     }
 
     @PostMapping("/is-access-token")
-    public boolean isAccessToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
-        return jwtService.isAccessToken(token);
+    public boolean isAccessToken(@RequestHeader("Authorization") String token, @RequestParam("accessToken") String accessToken) {
+        return jwtService.isAccessToken(accessToken);
     }
 
     @GetMapping("/get-token")
@@ -162,7 +163,7 @@ public class AuthController {
     }
 
     @GetMapping("/load-user-by-email")
-    public UserDto loadUserByEmail(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestParam("email") String email) {
+    public UserDto loadUserByEmail(@RequestHeader("Authorization") String token, @RequestParam("email") String email) {
         UserDetails user = userService.loadUserByUsername(email);
         List<String> roles = user.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
@@ -174,7 +175,7 @@ public class AuthController {
     }
 
     @GetMapping("/get-user-by-email")
-    public UserDto getUserByEmail(@RequestParam("email") String email) {
+    public UserDto getUserByEmail(@RequestHeader("Authorization") String token, @RequestParam("email") String email) {
         return userRepository.findByEmail(email)
                 .map(user -> new UserDto(user.getId(), user.getEmail(),
                         user.getRoleGroup().getRoles().stream()
