@@ -5,19 +5,17 @@ import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.league.app.database.entity.RoleGroup;
-import org.league.app.database.entity.User;
 import org.league.app.database.repository.UserRepository;
 import org.league.app.dto.*;
-import org.league.app.exception.UserEmailNotFoundException;
 import org.league.app.mapper.UserMapper;
 import org.league.app.redisclient.RedisClient;
+import org.league.app.service.MinioService;
 import org.league.app.service.UserService;
 import org.league.app.validation.CreateAction;
 import org.league.app.validation.EditAction;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +34,7 @@ public class UserController {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final RedisClient redisClient;
+    private final MinioService minioService;
 
     @DeleteMapping("/delete-user-account")
     public ResponseEntity<?> deleteUser(@RequestBody @Validated({EditAction.class}) UserDeleteDto userDeleteDto) {
@@ -78,36 +77,13 @@ public class UserController {
     }
 
     @PostMapping("/upload-user-avatar")
-    public ResponseEntity<String> uploadAvatar(@ModelAttribute @Validated({CreateAction.class, EditAction.class}) ImageUploadDto imageUploadDto) throws IOException {
-        return ResponseEntity.ok(userService.uploadAvatar(imageUploadDto));
+    public void uploadAvatar(@ModelAttribute @Validated({CreateAction.class, EditAction.class}) ImageUploadDto imageUploadDto) throws IOException {
+        minioService.uploadImage(imageUploadDto);
     }
 
     @GetMapping("/avatar/{username}")
-    public ResponseEntity<byte[]> getUserImage(@PathVariable("username") String username) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UserEmailNotFoundException("User with username: " + username + " not found"));
-
-        byte[] imageBytes = userService.getUserImage(username);
-
-        if (imageBytes != null && imageBytes.length > 0) {
-            String logo = user.getAvatar();
-            String fileExtension = (logo != null && logo.contains("."))
-                    ? logo.substring(logo.lastIndexOf(".") + 1).toLowerCase()
-                    : "png";
-
-            String contentType = switch (fileExtension) {
-                case "jpg", "jpeg" -> "image/jpeg";
-                case "png" -> "image/png";
-                case "svg" -> "image/svg+xml";
-                default -> "application/octet-stream";
-            };
-
-            return ResponseEntity.ok()
-                    .contentType(MediaType.parseMediaType(contentType))
-                    .body(imageBytes);
-        }
-
-        return ResponseEntity.notFound().build();
+    public ResponseEntity<String> getUserImage(@PathVariable("username") String username) {
+        return ResponseEntity.ok(minioService.getUserAvatar(username));
     }
 
     @PostMapping("/resend-activation-email")

@@ -1,6 +1,7 @@
 package org.league.app.service;
 
 import feign.FeignException;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.league.app.database.entity.TeamRole;
@@ -22,6 +23,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -47,12 +50,9 @@ public class TeamService {
     private final TeamMemberRepository teamMemberRepository;
     private final NotificationClientFeign notificationClientFeign;
 
-    @Value("${app.image.uploadDir}")
-    private String uploadDir;
-
     @Transactional
     public TeamReadDto createTeam(TeamCreateEditDto teamCreateEditDto) {
-        UserDto userByEmail = authClientFeign.getUserByEmail(securityContext());
+        UserDto userByEmail = authClientFeign.getUserByEmail(getTokenFromRequest(), securityContext());
 
         Optional<Team> existingTeam = teamRepository.findTeamByTeamName(teamCreateEditDto.getTeamName());
 
@@ -129,7 +129,7 @@ public class TeamService {
 
         UserDto userByEmail;
         try {
-            userByEmail = authClientFeign.getUserByEmail(email);
+            userByEmail = authClientFeign.getUserByEmail(getTokenFromRequest(), email);
         } catch (FeignException.Forbidden e) {
             return new UserTeamStatusDto(false, null);
         }
@@ -144,59 +144,6 @@ public class TeamService {
 
         List<TeamRole> teamRole = teamMember.map(TeamMember::getRoles).orElse(null);
         return new UserTeamStatusDto(isMember, teamRole);
-    }
-
-    @Transactional
-    public String uploadTeamLogo(UUID teamId, UploadTeamLogoDto uploadTeamLogoDto) throws IOException {
-        Team team = getTeamWithAccessCheck(teamId);
-
-        log.info("Team found by team name: {}", team);
-        MultipartFile file = uploadTeamLogoDto.getTeamLogo();
-
-        if (file == null || file.isEmpty()) {
-            throw new IllegalArgumentException("Uploaded file is missing or empty. Please provide a valid team logo.");
-        }
-
-        String extension = Objects.requireNonNull(file.getOriginalFilename())
-                .substring(file.getOriginalFilename().lastIndexOf("."));
-        String filename = team.getId() + "_team-logo" + extension;
-
-        String oldFileName = team.getTeamImage();
-        if (oldFileName != null && !oldFileName.isEmpty()) {
-            Path oldFilePath = Paths.get(uploadDir, oldFileName);
-            if (Files.exists(oldFilePath)) {
-                Files.delete(oldFilePath);
-            }
-        }
-
-        Path newFilePath = Paths.get(uploadDir, filename);
-        File directory = new File(uploadDir);
-        if (!directory.exists()) {
-            directory.mkdirs();
-        }
-        Files.write(newFilePath, file.getBytes());
-
-        team.setTeamImage(filename);
-        teamRepository.save(team);
-
-        log.info("Team logo successfully uploaded: {}", filename);
-        return filename;
-    }
-
-    public byte[] getTeamImage(String teamName) {
-        Team existingTeam = teamRepository.findTeamByTeamName(teamName)
-                .orElseThrow(() -> new TeamNotFoundException("Team does not exist"));
-
-        if (existingTeam.getTeamImage() != null) {
-            Path path = Paths.get(uploadDir, existingTeam.getTeamImage());
-            try {
-                return Files.readAllBytes(path);
-            } catch (IOException e) {
-                log.error("Failed to read team logo: {}", e.getMessage());
-            }
-        }
-
-        return getDefaultImage();
     }
 
     @Transactional
@@ -215,7 +162,7 @@ public class TeamService {
 
     @Transactional
     public void teamJoinRequest(String teamName) {
-        UserDto userByEmail = authClientFeign.getUserByEmail(securityContext());
+        UserDto userByEmail = authClientFeign.getUserByEmail(getTokenFromRequest(), securityContext());
 
         boolean hasMatchingRole = userByEmail.getRoles().stream()
                 .anyMatch(role -> role.equals("AUTHORISED_USER"));
@@ -279,7 +226,7 @@ public class TeamService {
 
     @Transactional
     public void leaveTeam(String teamName) {
-        UserDto userByEmail = authClientFeign.getUserByEmail(securityContext());
+        UserDto userByEmail = authClientFeign.getUserByEmail(getTokenFromRequest(), securityContext());
 
         Team teamByTeamName = teamRepository.findTeamByTeamName(teamName)
                 .orElseThrow(() -> new TeamNotFoundException("Team does not exist"));
@@ -402,16 +349,6 @@ public class TeamService {
         return teamMembers.stream().map(TeamMember::getTeam).collect(Collectors.toList());
     }
 
-    private byte[] getDefaultImage() {
-        Path defaultImagePath = Paths.get(uploadDir, "default-team-logo.png");
-        try {
-            return Files.readAllBytes(defaultImagePath);
-        } catch (IOException e) {
-            log.error("Failed to load default team logo: {}", e.getMessage());
-            return new byte[0];
-        }
-    }
-
     private void sendNotificationMessage(Long userId, String message, String eventType) {
         NotificationDto notification = NotificationDto.builder()
                 .id(UUID.randomUUID())
@@ -424,11 +361,20 @@ public class TeamService {
 
         try {
             String notificationCategory = "TEAM";
-            notificationClientFeign.sendNotification(notification, notificationCategory);
+            notificationClientFeign.sendNotification(getTokenFromRequest(), notification, notificationCategory);
         } catch (FeignException e) {
             log.error("Failed to send notification: {}", e.getMessage());
             throw new NotificationSendingException("Failed to send notification.");
         }
+    }
+
+    private String getTokenFromRequest() {
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        if (attributes != null) {
+            HttpServletRequest request = attributes.getRequest();
+            return request.getHeader("Authorization");
+        }
+        return null;
     }
 
     private String securityContext() {
@@ -439,8 +385,8 @@ public class TeamService {
         return authentication.getName();
     }
 
-    private Team getTeamWithAccessCheck(UUID teamId) {
-        UserDto userByEmail = authClientFeign.getUserByEmail(securityContext());
+    public Team getTeamWithAccessCheck(UUID teamId) {
+        UserDto userByEmail = authClientFeign.getUserByEmail(getTokenFromRequest(), securityContext());
         Team teamById = teamRepository.findTeamById(teamId)
                 .orElseThrow(() -> new TeamNotFoundException("Team does not exist"));
 

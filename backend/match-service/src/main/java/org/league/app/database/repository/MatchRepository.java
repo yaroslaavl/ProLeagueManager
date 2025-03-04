@@ -30,4 +30,6 @@ public interface MatchRepository extends JpaRepository<Match, UUID>, JpaSpecific
     List<ToursWithTimeGapDto> findAllLeagueTourNumbersWithTimeGap(@Param("competitionId") UUID competitionId);
 
     List<Match> findAllByCompetitionIdAndLeagueTourNumberOrderByMatchDateAsc(UUID competitionId, Integer leagueTourNumber);
+
+    List<Match> findAllByCompetitionId(UUID competitionId);
 }

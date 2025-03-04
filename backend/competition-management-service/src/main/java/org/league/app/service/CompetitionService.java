@@ -1,6 +1,7 @@
 package org.league.app.service;
 
 import feign.FeignException;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.league.app.broker.LeagueBracketDto;
@@ -34,6 +35,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -132,7 +135,7 @@ public class CompetitionService {
                 .orElseThrow(() -> new CompetitionNotFoundException("Competition not found"));
 
         if (competition.getGameSystem().getIsIndividual()) {
-            UserDto userByEmail = authClientFeign.getUserByEmail(securityContext());
+            UserDto userByEmail = authClientFeign.getUserByEmail(getTokenFromRequest(), securityContext());
             if (competitionParticipantRepository.findCompetitionParticipantByPlayerIdAndCompetitionId(userByEmail.getId(), competitionId).isPresent()) {
                 throw new UserAlreadyParticipating("User is already participating");
             }
@@ -427,7 +430,7 @@ public class CompetitionService {
                 .build();
 
         try {
-            notificationClientFeign.sendNotification(notification, notificationCategory);
+            notificationClientFeign.sendNotification(getTokenFromRequest(), notification, notificationCategory);
         } catch (FeignException e) {
             log.error("Failed to send notification: {}", e.getMessage());
             throw new NotificationSendingException("Failed to send notification.");
@@ -440,6 +443,15 @@ public class CompetitionService {
             return userDto.getEmail();
         }
         return authentication.getName();
+    }
+
+    private String getTokenFromRequest() {
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        if (attributes != null) {
+            HttpServletRequest request = attributes.getRequest();
+            return request.getHeader("Authorization");
+        }
+        return null;
     }
 
     private boolean checkLeagueCapacity(UUID competitionId) {

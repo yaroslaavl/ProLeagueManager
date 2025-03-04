@@ -61,15 +61,19 @@ public class NotificationController {
     }
 
     @PostMapping("/send-notification")
-    public ResponseEntity<NotificationReadDto> sendNotification(@RequestBody NotificationCreateDto notificationCreateDto, @RequestParam("notificationCategory") String notificationCategory) {
+    public ResponseEntity<NotificationReadDto> sendNotification(
+            @RequestHeader("Authorization") String token,
+            @RequestBody NotificationCreateDto notificationCreateDto,
+            @RequestParam("notificationCategory") String notificationCategory) {
         NotificationReadDto notification = notificationService.createNotification(notificationCreateDto, notificationCategory);
 
         Optional<UserNotificationSubscription> userNotificationSubscriptionByEventCategoryAndUserId =
                 userNotificationSubscriptionRepository.findUserNotificationSubscriptionByEventCategoryAndUserId(
-                      EventCategory.valueOf(notificationCategory.trim().toUpperCase()),
-                      notificationCreateDto.getUserId());
+                        EventCategory.valueOf(notificationCategory.trim().toUpperCase()),
+                        notificationCreateDto.getUserId());
 
-        if (userNotificationSubscriptionByEventCategoryAndUserId.isPresent() && userNotificationSubscriptionByEventCategoryAndUserId.get().getIsActive()) {
+        if (userNotificationSubscriptionByEventCategoryAndUserId.isPresent() &&
+                userNotificationSubscriptionByEventCategoryAndUserId.get().getIsActive()) {
             sendSseNotification(notificationCreateDto.getUserId(), notificationCreateDto.getMessage());
         }
 
