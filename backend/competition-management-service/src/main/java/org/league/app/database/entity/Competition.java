@@ -53,6 +53,9 @@ public class Competition {
     @Column(name = "competition_status")
     private CompetitionStatus status;
 
+    @Column(name = "image")
+    private String competitionImage;
+
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;

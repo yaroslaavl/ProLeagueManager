@@ -13,6 +13,7 @@ import java.util.UUID;
 @Mapper(componentModel = "spring")
 public interface CompetitionMapper {
 
+    @Mapping(target = "competitionImage", ignore = true)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
