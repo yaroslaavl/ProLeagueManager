@@ -78,21 +78,23 @@ public class SecurityConfig {
                                 "/api/user/profile/public/**",
                                 "/api/user/avatar/**",
                                 "/api/user/allUsers",
-                                "/api/auth/extract-email",
                                 "/api/user/send-reset-password",
                                 "/api/user/reset-password/**",
                                 "/api/auth/get-token",
                                 "/api/auth/set-token",
                                 "/api/auth/delete-token",
                                 "/api/user/reset-password-check/**",
-                                "/api/user/reset-password/**",
+                                "/api/user/avatar/*",
+                                "/api/user/search-user",
+                                "/actuator/health").permitAll()
+                        .requestMatchers(
+                                "/api/auth/logout",
+                                "/api/auth/extract-email",
                                 "/api/auth/is-access-token",
                                 "/api/auth/load-user-by-email",
                                 "/api/auth/validate-token",
-                                "/api/user/search-user",
-                                "/actuator/health",
-                                "/api/auth/get-user-by-email").permitAll()
-                        .requestMatchers("/api/auth/logout").authenticated()
+                                "/api/auth/get-user-by-email"
+                                ).authenticated()
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 -> oauth2
