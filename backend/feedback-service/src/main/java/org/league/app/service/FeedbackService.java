@@ -1,5 +1,6 @@
 package org.league.app.service;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.league.app.database.entity.Feedback;
@@ -23,6 +24,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -42,7 +45,7 @@ public class FeedbackService {
 
     @Transactional
     public FeedbackReadDto sendFeedback(UUID competitionId, String message) {
-        UserDto user = authClientFeign.getUserByEmail(securityContext());
+        UserDto user = authClientFeign.getUserByEmail(getTokenFromRequest(), securityContext());
 
         if (!competitionClientFeign.findAllPlayersByCompetitionId(competitionId).contains(user.getId())) {
             throw new DoNotHaveEnoughPermissionsException("You haven't participated in this competition");
@@ -81,7 +84,7 @@ public class FeedbackService {
 
     @Transactional
     public FeedbackReadDto editFeedback(UUID feedbackId, String message) {
-        UserDto user = authClientFeign.getUserByEmail(securityContext());
+        UserDto user = authClientFeign.getUserByEmail(getTokenFromRequest(), securityContext());
 
         Feedback oldFeedback = feedbackRepository.findById(feedbackId)
                 .orElseThrow(() -> new FeedbackNotFoundException("There is no feedback with id: " + feedbackId));
@@ -111,7 +114,7 @@ public class FeedbackService {
 
     @Transactional
     public boolean deleteFeedback(UUID feedbackId) {
-        UserDto user = authClientFeign.getUserByEmail(securityContext());
+        UserDto user = authClientFeign.getUserByEmail(getTokenFromRequest(), securityContext());
 
         Feedback feedback = feedbackRepository.findById(feedbackId)
                 .orElseThrow(() -> new FeedbackNotFoundException("There is no feedback with id: " + feedbackId));
@@ -127,7 +130,7 @@ public class FeedbackService {
 
     @Transactional
     public void likeFeedback(UUID feedbackId) {
-        UserDto user = authClientFeign.getUserByEmail(securityContext());
+        UserDto user = authClientFeign.getUserByEmail(getTokenFromRequest(), securityContext());
 
         Feedback feedback = feedbackRepository.findById(feedbackId)
                 .orElseThrow(() -> new FeedbackNotFoundException("There is no feedback with id: " + feedbackId));
@@ -163,6 +166,15 @@ public class FeedbackService {
         Specification<Feedback> specification = Specification.where(FeedbackSpecification.findAllFeedbackByDaysWeeksMonths(days));
 
         return feedbackRepository.findAll(specification).stream().map(feedbackMapper::toDto).toList();
+    }
+
+    private String getTokenFromRequest() {
+            ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        if (attributes != null) {
+            HttpServletRequest request = attributes.getRequest();
+            return request.getHeader("Authorization");
+        }
+        return null;
     }
 
     private String securityContext() {
