@@ -43,7 +43,9 @@ public class CompetitionManagementConfig {
                                 "/api/competition/count-of-signed-in",
                                 "/api/competition/standings",
                                 "/api/competition/league-table/**",
-                                "/api/competition/update-standing").permitAll()
+                                "/api/competition/update-standing",
+                                "/api/competition/user",
+                                "/api/competition/team").permitAll()
                         .requestMatchers(
                                 "/api/competition/create",
                                 "/api/competition/edit/**",
