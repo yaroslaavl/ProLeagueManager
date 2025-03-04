@@ -76,4 +76,9 @@ public class MatchController {
         return matchService.findFilteredMatchesByTournamentId(tournamentId, matchStatuses);
     }
 
+    @GetMapping("/user")
+    public ResponseEntity<List<MatchReadDto>> findAllMatchesByUser(@RequestParam("userId") Long userId) {
+        return ResponseEntity.ok(matchService.findAllMatchesWhereUserParticipated(userId));
+    }
+
 }

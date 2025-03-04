@@ -519,6 +519,16 @@ public class MatchService {
         return matchRepository.findAllByCompetitionIdAndLeagueTourNumberOrderByMatchDateAsc(competitionId, leagueTourNumber);
     }
 
+    public List<MatchReadDto> findAllMatchesWhereUserParticipated(Long userId) {
+        List<Match> individualMatches = matchRepository.findMatchByUserId(userId);
+        List<Match> teamMatch = matchRepository.findMatchByTeamId(competitionClient.getTeamByUser(userId));
+
+        List<Match> allMatches = new ArrayList<>(individualMatches);
+        allMatches.addAll(teamMatch);
+
+        return allMatches.stream().map(matchMapper::toDto).toList();
+    }
+
     private void isLeague(UUID competitionId) {
         CompetitionDto competition = competitionClient.findById(competitionId);
 
