@@ -7,7 +7,7 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor(force = true)
-public class LeagueStandingReadDto {
+public class LeagueStandingDto {
     private UUID id;
     private UUID competitionId;
     private UUID teamId;
