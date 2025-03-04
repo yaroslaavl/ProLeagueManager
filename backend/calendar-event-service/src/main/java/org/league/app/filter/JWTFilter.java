@@ -28,54 +28,41 @@ public class JWTFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getServletPath();
-        return path.equals("/actuator/health")
-                || path.equals("/api/competition/search-tournaments")
-                || path.startsWith("/api/competition/get/")
-                || path.equals("/api/competition/all-competitions")
-                || path.equals("/api/competition/stages")
-                || path.startsWith("/api/competition/players/")
-                || path.equals("/api/competition/active-competitions")
-                || path.equals("/api/competition/search-leagues")
-                || path.equals("/api/competition/standings")
-                || path.startsWith("/api/competition/league-table/")
-                || path.equals("/api/competition/update-standing")
-                || path.equals("/api/competition/last-day-active-leagues")
-                || path.equals("/api/competition/user")
-                || path.equals("/api/competition/team")
-                || path.startsWith("/api/competition/get-image/")
-                || path.equals("/api/competition/closest-tournaments");
+        return path.equals("/actuator/health");
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-        String authorizationHeader = request.getHeader("Authorization");
-        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+
+        String authHeader = request.getHeader("Authorization");
+
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentType("application/json");
             response.getWriter().write("{\"error\": \"Unauthorized\", \"message\": \"Missing or invalid Authorization header\"}");
             return;
         }
 
-        String jwtToken = authorizationHeader.substring(7);
+        String jwtToken = authHeader.substring(7);
         String email;
 
         try {
-            email = authClientFeign.extractEmail(authorizationHeader, jwtToken);
+            email = authClientFeign.extractEmail(authHeader, jwtToken);
             log.info("Extracted email: {}", email);
         } catch (Exception e) {
             log.error("Failed to extract email from token", e);
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().write("Invalid or expired JWT token: " + jwtToken);
+            response.getWriter().write("Invalid or expired JWT tokenL: " + jwtToken);
             return;
         }
 
-        if(email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+        if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             log.info("User email: {}", email);
-            var userDetails = authClientFeign.loadUserByEmail(authorizationHeader, email);
+            var userDetails = authClientFeign.loadUserByEmail(authHeader, email);
 
-            if(authClientFeign.validateToken(authorizationHeader, jwtToken, userDetails.getEmail()) && authClientFeign.isAccessToken(authorizationHeader, jwtToken) &&
+            if (authClientFeign.validateToken(authHeader, jwtToken, userDetails.getEmail()) && authClientFeign.isAccessToken(authHeader, jwtToken) &&
                     authClientFeign.getToken(
                             "whitelist:" + userDetails.getEmail() + ":accessToken").equals(jwtToken)) {
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
