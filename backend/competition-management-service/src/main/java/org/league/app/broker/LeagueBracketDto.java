@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.league.app.dto.CompetitionReadDto;
-import org.league.app.dto.LeagueStandingReadDto;
+import org.league.app.dto.LeagueStandingDto;
 
 import java.io.Serializable;
 import java.util.List;
@@ -15,5 +15,5 @@ import java.util.List;
 public class LeagueBracketDto implements Serializable {
 
     public CompetitionReadDto competition;
-    public List<LeagueStandingReadDto> leagueStanding;
+    public List<LeagueStandingDto> leagueStanding;
 }

@@ -47,6 +47,9 @@ public interface CompetitionClientFeign {
     @PutMapping("/api/competition/update-standing")
     ResponseEntity<Void> updateLeagueStanding(@RequestBody List<LeagueStandingDto> leagueStandingReadDto);
 
+    @GetMapping("/api/competition/team")
+    UUID getTeamByUser(@RequestParam("userId") Long userId);
+
     @GetMapping("/api/competition/stages")
     List<TournamentStageDto> findAllStagesByCompetitionIdSortedByStageOrder(@RequestParam("competitionId") UUID competitionId);
 }

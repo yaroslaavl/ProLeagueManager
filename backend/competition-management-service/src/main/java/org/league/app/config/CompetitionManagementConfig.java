@@ -43,6 +43,9 @@ public class CompetitionManagementConfig {
                                 "/api/competition/count-of-signed-in",
                                 "/api/competition/standings",
                                 "/api/competition/league-table/**",
+                                "/api/competition/update-standing",
+                                "/api/competition/user",
+                                "/api/competition/team",
                                 "/api/competition/stages",
                                 "/api/competition/get-image/*",
                                 "/api/competition/update-standing").permitAll()
