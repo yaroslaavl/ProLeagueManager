@@ -36,11 +36,11 @@ public class NotificationConfig {
                                 "/api/my-notifications/subscriptionList",
                                 "/api/my-notifications/get-all-notifications",
                                 "/api/my-notifications/send-notification",
-                                "/api/my-notifications/subscribe/**",
                                 "/api/notification/send-email-with-qr-code"
                         ).authenticated()
                         .requestMatchers(
                                 "/actuator/health",
+                                "/api/my-notifications/subscribe/*",
                                 "/api/notification/send-email").permitAll()
                 )
                 .addFilterBefore(routeFilter, SecurityContextHolderFilter.class)

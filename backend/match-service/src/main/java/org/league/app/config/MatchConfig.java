@@ -38,7 +38,8 @@ public class MatchConfig {
                                 "/api/match/tourMatches/**",
                                 "/api/match/dynamic-all/**",
                                 "/api/match/grouped-by-stage/*",
-                                "/api/match/id/**").permitAll()
+                                "/api/match/id/**",
+                                "/api/match/user").permitAll()
                         .requestMatchers(
                                 "/api/match/confirmation").authenticated()
                         .requestMatchers(
