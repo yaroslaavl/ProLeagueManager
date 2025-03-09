@@ -49,7 +49,9 @@ public class CompetitionManagementConfig {
                                 "/api/competition/stages",
                                 "/api/competition/get-image/*",
                                 "/api/competition/update-standing",
-                                "/api/competition/closest-tournaments").permitAll()
+                                "/api/competition/closest-tournaments",
+                                "/api/competition/closest-leagues",
+                                "/api/competition/top-stages").permitAll()
                         .requestMatchers(
                                 "/api/competition/create",
                                 "/api/competition/edit/**",
