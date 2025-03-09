@@ -8,6 +8,7 @@ import org.league.app.database.entity.Competition;
 import org.league.app.database.entity.CompetitionParticipant;
 import org.league.app.database.entity.TournamentStage;
 import org.league.app.database.entity.enums.CompetitionStatus;
+import org.league.app.database.entity.enums.CompetitionType;
 import org.league.app.database.repository.CompetitionParticipantRepository;
 import org.league.app.database.repository.CompetitionRepository;
 import org.league.app.database.repository.TournamentStageRepository;
@@ -25,6 +26,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -80,6 +83,22 @@ public class TournamentStageService {
                     sportById,
                     competitionParticipantReadDtoList));
         }
+    }
+
+    public List<UUID> getAllTopStagesByActiveTournaments(Boolean isEsport) {
+        List<TournamentStage> allStagesByStageName = tournamentStageRepository.findAllStagesByStageName();
+
+        List<UUID> stagesIds = new ArrayList<>();
+
+        for (TournamentStage tournamentStage : allStagesByStageName) {
+             if (sportClient.findSportById(tournamentStage.getCompetition().getSportId()).getIsEsport() == isEsport) {
+                 stagesIds.add(tournamentStage.getId());
+             }
+        }
+
+        return stagesIds.isEmpty()
+                ? Collections.emptyList()
+                : stagesIds;
     }
 
     public List<TournamentStageReadDto> findAllStagesByCompetitionIdSortedByStageOrder(UUID competitionId) {
