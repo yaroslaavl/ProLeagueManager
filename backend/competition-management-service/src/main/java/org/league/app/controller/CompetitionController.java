@@ -1,6 +1,7 @@
 package org.league.app.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.league.app.dto.*;
 import org.league.app.service.CompetitionService;
 import org.league.app.service.MinioService;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -18,6 +20,7 @@ import java.util.UUID;
 import static org.springframework.http.ResponseEntity.noContent;
 import static org.springframework.http.ResponseEntity.notFound;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/competition")
@@ -31,28 +34,35 @@ public class CompetitionController {
     public ResponseEntity<CompetitionReadDto> createCompetition (@RequestBody CompetitionCreateEditDto competitionCreate,
                                                                  @RequestParam("gameSystemId") Integer gameSystemId,
                                                                  @RequestParam("sportId") Integer sportId) {
-        return ResponseEntity.ok(competitionService.createCompetition(competitionCreate, gameSystemId, sportId));
+        log.info("Creating competition: gameSystemId={}, sportId={}, data={}", gameSystemId, sportId, competitionCreate);
+        CompetitionReadDto competition = competitionService.createCompetition(competitionCreate, gameSystemId, sportId);
+
+        log.info("Competition created successfully: {}", competition);
+        return ResponseEntity.ok(competition);
     }
 
     @GetMapping("/search-tournaments")
-    public ResponseEntity<List<CompetitionReadDto>> findAllTournamentsByFiltersAndDynamicSearch(
-            @RequestParam(required = false, name = "keyword") String keyword,
-            @RequestParam(required = false, name = "isIndividual") Boolean isIndividual,
-            @RequestParam(required = false, name = "status") String status,
-            @RequestParam(required = false, name = "isEsport") Boolean isEsport) {
-        List<CompetitionReadDto> allTournamentsByFiltersAndDynamicSearch =
+    public ResponseEntity<List<CompetitionReadDto>> findAllTournamentsByFiltersAndDynamicSearch(@RequestParam(required = false, name = "keyword") String keyword,
+                                                                                                @RequestParam(required = false, name = "isIndividual") Boolean isIndividual,
+                                                                                                @RequestParam(required = false, name = "status") String status,
+                                                                                                @RequestParam(required = false, name = "isEsport") Boolean isEsport) {
+        log.info("Searching tournaments: keyword={}, isIndividual={}, status={}, isEsport={}", keyword, isIndividual, status, isEsport);
+        List<CompetitionReadDto> tournaments =
                 competitionService.findAllTournamentsByFiltersAndDynamicSearch(keyword, isIndividual, status, isEsport);
 
-        return ResponseEntity.ok(allTournamentsByFiltersAndDynamicSearch);
+        log.info("Found {} tournaments", tournaments.size());
+        return ResponseEntity.ok(tournaments);
     }
 
     @GetMapping("/search-leagues")
     public ResponseEntity<List<CompetitionReadDto>> findAllLeaguesByFilters(
             @RequestParam(required = false, name = "isIndividual") Boolean isIndividual,
             @RequestParam(required = false, name = "isEsport") Boolean isEsport) {
-        List<CompetitionReadDto> allLeaguesByFilters = competitionService.findAllLeaguesByFilters(isIndividual, isEsport);
+        log.info("Searching leagues: isIndividual={}, isEsport={}", isIndividual, isEsport);
+        List<CompetitionReadDto> leagues = competitionService.findAllLeaguesByFilters(isIndividual, isEsport);
 
-        return ResponseEntity.ok(allLeaguesByFilters);
+        log.info("Found {} leagues", leagues.size());
+        return ResponseEntity.ok(leagues);
     }
 
     @GetMapping("/all")
@@ -68,6 +78,7 @@ public class CompetitionController {
     @PutMapping("/edit/{competitionName}")
     public ResponseEntity<CompetitionReadDto> editCompetition (@PathVariable("competitionName") String competitionName,
                                                                @RequestBody CompetitionCreateEditDto newCompetition) {
+        log.info("Editing competition: name={}, newData={}", competitionName, newCompetition);
         return ResponseEntity.ok(competitionService.edit(competitionName, newCompetition));
     }
 
@@ -82,6 +93,7 @@ public class CompetitionController {
     public ResponseEntity<Boolean> addTeam (@RequestParam("competitionId") UUID competitionId,
                                             @RequestParam(required = false, name = "teamId") UUID teamId,
                                             @RequestParam(required = false, name = "selectedPlayersIds") List<Long> selectedPlayersIds) {
+        log.info("Adding participation: competitionId={}, teamId={}, players={}", competitionId, teamId, selectedPlayersIds);
         return ResponseEntity.ok(competitionService.participation(competitionId, teamId, selectedPlayersIds));
     }
 
@@ -148,6 +160,7 @@ public class CompetitionController {
     @PostMapping("/upload-image/{competitionId}")
     public void uploadCompetitionImage(@PathVariable("competitionId") UUID competitionId,
                                        @Validated({CreateAction.class, EditAction.class}) UploadCompetitionImageDto uploadCompetitionImageDto) {
+        log.info("Uploading image for competitionId={}", competitionId);
         minioService.uploadImage(competitionId, uploadCompetitionImageDto);
     }
 
@@ -157,7 +170,26 @@ public class CompetitionController {
     }
 
     @GetMapping("/closest-tournaments")
-    public List<UUID> getClosestTournaments(@RequestParam("isEsport") Boolean isEsport) {
-        return competitionService.findClosestTournaments(isEsport);
+    public ResponseEntity<List<UUID>> getClosestTournaments(@RequestParam("isEsport") Boolean isEsport) {
+        log.info("Fetching closest tournaments: isEsport={}", isEsport);
+        List<UUID> closestTournament = competitionService.findClosestTournaments(isEsport);
+
+        return ResponseEntity.ok(closestTournament == null || closestTournament.isEmpty() ? Collections.emptyList() : closestTournament);
+    }
+
+    @GetMapping("/closest-leagues")
+    public ResponseEntity<List<UUID>> getClosestLeagues(@RequestParam("isEsport") Boolean isEsport) {
+        log.info("Fetching closest leagues: isEsport={}", isEsport);
+        List<UUID> closestLeagues = competitionService.findClosestLeagues(isEsport);
+
+        return ResponseEntity.ok(closestLeagues == null || closestLeagues.isEmpty() ? Collections.emptyList() : closestLeagues);
+    }
+
+    @GetMapping("/top-stages")
+    public ResponseEntity<List<UUID>> getTopStages(@RequestParam("isEsport") Boolean isEsport) {
+        log.info("Fetching top stages: isEsport={}", isEsport);
+        List<UUID> allTopStagesByActiveTournaments = tournamentStageService.getAllTopStagesByActiveTournaments(isEsport);
+
+        return ResponseEntity.ok(allTopStagesByActiveTournaments == null || allTopStagesByActiveTournaments.isEmpty() ? Collections.emptyList() : allTopStagesByActiveTournaments);
     }
 }
