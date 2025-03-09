@@ -5,6 +5,7 @@ import org.league.app.filter.JWTFilter;
 import org.league.app.filter.RouteFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -14,6 +15,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.context.SecurityContextHolderFilter;
 
 @Configuration
+@EnableScheduling
 @EnableWebSecurity
 public class NotificationConfig {
 
@@ -36,11 +38,13 @@ public class NotificationConfig {
                                 "/api/my-notifications/subscriptionList",
                                 "/api/my-notifications/get-all-notifications",
                                 "/api/my-notifications/send-notification",
-                                "/api/my-notifications/subscribe/**",
-                                "/api/notification/send-email-with-qr-code"
+                                "/api/notification/send-email-with-qr-code",
+                                "/api/my-notifications/get-team/*",
+                                "/api/my-notifications/team/**"
                         ).authenticated()
                         .requestMatchers(
                                 "/actuator/health",
+                                "/api/my-notifications/subscribe/**",
                                 "/api/notification/send-email").permitAll()
                 )
                 .addFilterBefore(routeFilter, SecurityContextHolderFilter.class)
