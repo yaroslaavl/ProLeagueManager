@@ -26,6 +26,12 @@ public class Notification {
     @Column(name = "user_id", nullable = false)
     private Long userId;
 
+    @Column(name = "target_user_id")
+    private Long targetUserId;
+
+    @Column(name = "team_id")
+    private UUID teamId;
+
     @Column(name = "message")
     private String message;
 
