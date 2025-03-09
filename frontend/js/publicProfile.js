@@ -91,7 +91,7 @@ async function getUserData() {
     try {
 
       const res = await fetch(`http://localhost:8765/user/avatar/${userName}`);
-      const urlImg =res.url;
+      const urlImg =await res.text();
       console.log(urlImg);
       userImg = urlImg;
     }catch (err){

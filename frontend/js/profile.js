@@ -163,8 +163,8 @@ async function getUsername() {
     // Загрузка аватара
     const avatarResponse = await fetch(`http://localhost:8765/user/avatar/${data.username}`);
     if (avatarResponse.ok) {
-      const blob = await avatarResponse.blob();
-      const objectURL = URL.createObjectURL(blob);
+      const blob = await avatarResponse;
+      const objectURL = await blob.text();
       document.getElementById("avatarPreview").src = objectURL;
     } else {
       console.warn("Аватар не найден:", avatarResponse.status);

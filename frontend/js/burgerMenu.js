@@ -29,37 +29,51 @@ window.updateUser = function(name, email, avatar) {
   document.getElementById('avatarBurger').src = avatar;
 };
 
-// Получение информации о пользователе
 async function fetchUserInfo() {
-  if(localStorage.getItem('accToken') !== null && localStorage.getItem('refToken') !== null) {
-    try {
-      await refreshtoken();
-      const accToken = localStorage.getItem('accToken');
-      const response = await fetch('http://localhost:8765/user/profile', {
-        method: "GET",
-        headers: {
-          "Authorization": `Bearer ${accToken}`,
-          "Content-Type": "application/json"
-        }
-      });
+  if (!localStorage.getItem('accToken') || !localStorage.getItem('refToken')) {
+    console.warn("Tokens are missing. User not logged in.");
+    return;
+  }
 
-      const data = await response.json();
-      let userAvatar;
-      try {
-        const res = await fetch(`http://localhost:8765/user/avatar/${data.username}`);
-        const urlImg = res.url;
-        console.log(urlImg);
-        userAvatar = urlImg;
-      } catch (err) {
-        console.error("Error while receiving user photo");
+  try {
+    await refreshtoken();
+    const accToken = localStorage.getItem('accToken');
+
+    const response = await fetch('http://localhost:8765/user/profile', {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${accToken}`,
+        "Content-Type": "application/json"
       }
-      updateUser(data.username, data.email, userAvatar);
-    } catch (error) {
-      console.error('Error fetching user info:', error);
-    }
+    });
+
+    if (!response.ok) throw new Error("Failed to fetch user profile");
+
+    const data = await response.json();
+    if (!data.username) throw new Error("Username is missing in response");
+
+    // Получаем URL аватара из MinIO
+    const userAvatar = await fetchUserAvatar(data.username) || "default-avatar.png"; // Подстраховка
+
+    updateUser(data.username, data.email, userAvatar);
+  } catch (error) {
+    console.error('Error fetching user info:', error);
   }
 }
+async function fetchUserAvatar(username) {
+  try {
+    const res = await fetch(`http://localhost:8765/user/avatar/${username}`);
+    if (!res.ok) throw new Error(`Avatar request failed with status: ${res.status}`);
 
+    const urlImg = await res.text(); // Получаем строку вместо JSON
+    console.log("Fetched avatar URL:", urlImg);
+
+    return urlImg.startsWith("http") ? urlImg : "default-avatar.png"; // Проверяем, вернулся ли URL
+  } catch (err) {
+    console.warn("Error while receiving user photo:", err);
+    return "default-avatar.png"; // Возвращаем дефолтный аватар при ошибке
+  }
+}
 async function refreshtoken() {
   try {
     const url = "http://localhost:8765/auth/refresh-token";
