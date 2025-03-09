@@ -4,9 +4,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.league.app.database.entity.Role;
 import org.league.app.database.entity.RoleGroup;
 import org.league.app.database.repository.UserRepository;
 import org.league.app.dto.*;
+import org.league.app.feign.UserDto;
 import org.league.app.mapper.UserMapper;
 import org.league.app.redisclient.RedisClient;
 import org.league.app.service.MinioService;
@@ -137,9 +139,17 @@ public class UserController {
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<UserReadDto> getUser(@PathVariable("id") Long id) {
-        return ResponseEntity.ok(userService.getUser(id));
+    @GetMapping("/getUser/{userId}")
+    public ResponseEntity<UserReadDto> getUser(@PathVariable("userId") Long userId) {
+        return ResponseEntity.ok(userService.getUser(userId));
+    }
+
+    @GetMapping("/id-dto/{userId}")
+    public ResponseEntity<UserDto> getUserDto(@PathVariable("userId") Long userId) {
+        UserReadDto user = userService.getUser(userId);
+        List<String> roles = user.getRoleGroup().getRoles().stream().map(Role::getName).toList();
+
+        return ResponseEntity.ok(new UserDto(user.getId(), user.getEmail(), roles));
     }
 }
 

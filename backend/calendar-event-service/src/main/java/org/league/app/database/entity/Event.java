@@ -1,16 +1,15 @@
 package org.league.app.database.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.league.app.database.entity.enums.Category;
 import org.league.app.database.entity.enums.EventType;
 import org.league.app.database.entity.enums.Status;
-import org.springframework.security.core.parameters.P;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -44,11 +43,15 @@ public class Event {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @Column(name = "image")
+    @Column(name = "event_image")
     private String eventImage;
 
     @Column(name = "isPinned")
     private Boolean isPinned;
+
+    @Column(name = "category")
+    @Enumerated(EnumType.STRING)
+    private Category category;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)

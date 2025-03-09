@@ -16,4 +16,8 @@ public interface TournamentStageRepository extends JpaRepository<TournamentStage
 
     @Query("SELECT t FROM TournamentStage t WHERE t.competition.id = :competitionId ORDER BY t.stageOrder ASC")
     List<TournamentStage> findAllStagesByCompetitionIdSortedByStageOrder(@Param("competitionId") UUID competitionId);
+
+    @Query("SELECT t FROM TournamentStage t JOIN FETCH t.competition c WHERE t.stageName IN ('SEMI FINAL', 'FINAL') AND c.status = 'ACTIVE'")
+    List<TournamentStage> findAllStagesByStageName();
+
 }

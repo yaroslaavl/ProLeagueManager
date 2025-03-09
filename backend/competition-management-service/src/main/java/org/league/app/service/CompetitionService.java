@@ -4,6 +4,7 @@ import feign.FeignException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.league.app.broker.LeagueBracketDto;
 import org.league.app.broker.LeagueEventPublisher;
 import org.league.app.database.entity.*;
@@ -164,7 +165,7 @@ public class CompetitionService {
             }
 
             competitionParticipantRepository.save(competitionParticipant);
-            sendNotificationMessage(userByEmail.getId(), "You've joined a " + competition.getCompetitionType() + " called " + competition.getName(), "SOLO_PARTICIPATION", competition.getCompetitionType().toString());
+            sendNotificationMessage(userByEmail.getId(), null, null, "You've joined a " + competition.getCompetitionType() + " called " + competition.getName(), "SOLO_PARTICIPATION", competition.getCompetitionType().toString());
             return true;
         } else {
             TeamFeignDto teamById = teamClientFeign.findTeamById(teamId);
@@ -221,7 +222,7 @@ public class CompetitionService {
                             ? "You've registered your team " + teamById.getTeamName()
                             : "You were registered in the " + competition.getCompetitionType() + " as part of " + teamById.getTeamName();
 
-                    sendNotificationMessage(participant.getPlayerId(), message, "TEAM_PARTICIPATION", competition.getCompetitionType().toString());
+                    sendNotificationMessage(participant.getPlayerId(), null, null, message, "TEAM_PARTICIPATION", competition.getCompetitionType().toString());
                 }
                 return true;
             } else {
@@ -415,14 +416,36 @@ public class CompetitionService {
     }
 
     public List<UUID> findClosestTournaments(Boolean isEsport) {
-        List<Competition> closestTournaments = competitionRepository.findFiveClosestTournaments();
-        List<UUID> tournamentIds = new ArrayList<>();
-        for (Competition closesTournament : closestTournaments) {
-            if (sportClientFeign.findSportById(closesTournament.getSportId()).getIsEsport() == isEsport) {
-                tournamentIds.add(closesTournament.getId());
+        List<Competition> closestTournaments = competitionRepository.findClosestTournaments();
+        return getCompetitionUuids(isEsport, closestTournaments);
+    }
+
+    public List<UUID> findClosestLeagues(Boolean isEsport) {
+        List<Competition> closestLeagues = competitionRepository.findClosestAndActiveLeagues();
+        return getCompetitionUuids(isEsport, closestLeagues);
+    }
+
+    @NotNull
+    private List<UUID> getCompetitionUuids(Boolean isEsport, List<Competition> closest) {
+
+        if (closest.isEmpty()) {
+            throw new CompetitionNotFoundException("Competition list is empty");
+        }
+
+        List<UUID> competitionIds = new ArrayList<>();
+        boolean isTournament = closest.getFirst().getCompetitionType() == CompetitionType.TOURNAMENT;
+
+        for (Competition closestCompetition : closest) {
+            if (sportClientFeign.findSportById(closestCompetition.getSportId()).getIsEsport() == isEsport) {
+                competitionIds.add(closestCompetition.getId());
             }
         }
-        return tournamentIds;
+
+        return  competitionIds.isEmpty()
+                ? Collections.emptyList()
+                : isTournament
+                  ? competitionIds.subList(0, Math.min(competitionIds.size(), 5))
+                  : competitionIds.subList(0, Math.min(competitionIds.size(), 3));
     }
 
     private void declareWinner(Competition competition, LeagueStanding winner) {
@@ -432,7 +455,7 @@ public class CompetitionService {
             competitionParticipant.setCompetitionParticipantStatus(CompetitionParticipantStatus.WINNER);
             competitionParticipantRepository.save(competitionParticipant);
             sendNotificationMessage(
-                    winner.getPlayerId(),
+                    winner.getPlayerId(), null, null,
                     "Congratulations! You won the " + competition.getName(),
                     "COMPETITION_WINNER",
                     competition.getCompetitionType().toString()
@@ -443,7 +466,7 @@ public class CompetitionService {
             team.getTeamMembers().stream()
                     .map(TeamMemberFeignDto::getUserId)
                     .forEach(playerId -> sendNotificationMessage(
-                            playerId,
+                            playerId, null, null,
                             "Congratulations! Your team won the competition " + competition.getName(),
                             "COMPETITION_WINNER",
                             competition.getCompetitionType().toString()
@@ -454,10 +477,12 @@ public class CompetitionService {
         }
     }
 
-    private void sendNotificationMessage(Long userId, String message, String eventType, String notificationCategory) {
+    private void sendNotificationMessage(Long userId, Long targetUserId, UUID teamId, String message, String eventType, String notificationCategory) {
         NotificationDto notification = NotificationDto.builder()
                 .id(UUID.randomUUID())
                 .userId(userId)
+                .targetUserId(targetUserId)
+                .teamId(teamId)
                 .message(message)
                 .eventType(eventType)
                 .isRead(false)

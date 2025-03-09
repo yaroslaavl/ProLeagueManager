@@ -1,7 +1,6 @@
 package org.league.app.feign.sportClient;
 
 import io.github.resilience4j.retry.annotation.Retry;
-import org.league.app.feign.notificationClient.NotificationClientFeign;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -25,7 +24,7 @@ public interface SportClientFeign {
     SportDto findSportById(@PathVariable("sportId") Integer sportId);
 
     default SportDto fallbackSport(Integer sportId, Throwable t) {
-        Logger logger = LoggerFactory.getLogger(NotificationClientFeign.class);
+        Logger logger = LoggerFactory.getLogger(SportClientFeign.class);
         logger.warn("Sport service is down.");
         throw new RuntimeException("Sport service is down.", t);
     }

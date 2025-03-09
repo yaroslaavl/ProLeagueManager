@@ -11,6 +11,8 @@ public class NotificationReadDto {
 
     UUID id;
     Long userId;
+    Long targetUserId;
+    UUID teamId;
     String message;
     EventType eventType;
     Boolean isRead;

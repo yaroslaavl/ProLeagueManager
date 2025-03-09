@@ -27,7 +27,7 @@ public interface CompetitionClientFeign {
 
     default CompetitionDto fallbackCompetition(UUID id,
                                                  Throwable t) {
-        Logger logger = LoggerFactory.getLogger(NotificationClientFeign.class);
+        Logger logger = LoggerFactory.getLogger(CompetitionClientFeign.class);
         logger.warn("Competition service is down. ID: '{}'. Error: {}",
                 id, t.getMessage());
         throw new RuntimeException("Competition service is down", t);
@@ -52,4 +52,7 @@ public interface CompetitionClientFeign {
 
     @GetMapping("/api/competition/stages")
     List<TournamentStageDto> findAllStagesByCompetitionIdSortedByStageOrder(@RequestParam("competitionId") UUID competitionId);
+
+    @GetMapping("/api/competition/top-stages")
+    List<UUID> getTopStages(@RequestParam("isEsport") Boolean isEsport);
 }

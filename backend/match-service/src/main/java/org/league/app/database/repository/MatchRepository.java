@@ -1,6 +1,7 @@
 package org.league.app.database.repository;
 
 import org.league.app.database.entity.Match;
+import org.league.app.database.entity.enums.MatchStatus;
 import org.league.app.dto.ToursWithTimeGapDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -38,5 +39,8 @@ public interface MatchRepository extends JpaRepository<Match, UUID>, JpaSpecific
     List<Match> findMatchByTeamId(@Param("teamId") UUID teamId);
 
     List<Match> findAllByCompetitionId(UUID competitionId);
+
+    @Query("SELECT m FROM Match m WHERE m.stageId IN :stageIds AND m.matchStatus = 'SCHEDULED'")
+    List<Match> findMatchesByStageIdsAndMatchStatus(@Param("stageIds") List<UUID> stageIds);
 
 }

@@ -34,5 +34,8 @@ public interface AuthClientFeign {
 
     @GetMapping("/api/auth/get-user-by-email")
     UserDto getUserByEmail(@RequestHeader("Authorization") String token, @RequestParam("email") String email);
+
+    @GetMapping("/api/user/id-dto/{userId}")
+    UserDto getUserDto(@PathVariable("userId") Long userId);
 }
 

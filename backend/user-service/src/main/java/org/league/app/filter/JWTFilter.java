@@ -49,6 +49,8 @@ public class JWTFilter extends OncePerRequestFilter {
                 || path.equals("/api/user/send-reset-password")
                 || path.startsWith("/api/user/reset-password/")
                 || path.equals("/api/user/search-user")
+                || path.startsWith("/api/user/getUser/")
+                || path.startsWith("/api/user/id-dto/")
                 || path.startsWith("/api/user/reset-password-check/");
     }
 

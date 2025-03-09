@@ -1,17 +1,15 @@
-package org.league.app.feign;
+package org.league.app.feign.authClient;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.File;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class EmailRequestWithQrCode {
+public class EmailRequest {
     private String to;
     private String subject;
     private String body;
-    private File qrCodeFile;
 }
+

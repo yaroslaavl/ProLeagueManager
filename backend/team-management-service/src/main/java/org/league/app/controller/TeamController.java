@@ -79,27 +79,27 @@ public class TeamController {
         return ResponseEntity.ok(minioService.getTeamLogo(teamId));
     }
 
-    @PostMapping("/team-invite/{teamId}/{userId}")
+    @PostMapping("/invite/{teamId}/{userId}")
     public ResponseEntity<String> teamInvitation(@PathVariable("teamId") UUID teamId,
                                                  @PathVariable("userId") Long userId) {
         teamService.teamInvitation(teamId, userId);
         return ResponseEntity.ok("Invitation sent successfully");
     }
 
-    @PostMapping("/team-join-accept/{teamName}")
+    @PostMapping("/join-accept/{teamName}")
     public ResponseEntity<String> teamJoinAccept(@PathVariable("teamName") String teamName) {
         teamService.teamJoinRequest(teamName);
         return ResponseEntity.ok("You accepted the invitation");
     }
 
-    @PutMapping("/team-user-deletion/{teamId}/{id}")
+    @PutMapping("/user-deletion/{teamId}/{id}")
     public String kickOutUserFromTeam(@PathVariable("teamId") UUID teamId,
                                       @PathVariable("id") Long id) {
         teamService.kickOutUserFromTeam(teamId, id);
         return "User deleted from team";
     }
 
-    @PutMapping("/team-leave/{teamName}")
+    @PutMapping("/leave/{teamName}")
     public String leaveTeam(@PathVariable("teamName") String teamName) {
         teamService.leaveTeam(teamName);
         return "You left team";
@@ -155,6 +155,18 @@ public class TeamController {
         TeamFeignDto teamFeignDto = teamMapper.toTeamFeignDto(teamById);
         return ResponseEntity.ok(teamFeignDto);
     }
+
+    @PostMapping("/join-reject/{teamName}")
+    public ResponseEntity<String> teamJoinReject(@PathVariable("teamName") String teamName) {
+        teamService.teamRejectRequest(teamName);
+        return ResponseEntity.ok("You rejected the invitation");
+    }
+
+    @PostMapping("/revoke-join-request/{teamId}")
+    public ResponseEntity<String> revokeTeamJoinRequest(@PathVariable("teamId") UUID teamId,
+                                                        @RequestParam("userId") Long userId) {
+        teamService.revokeTeamJoinRequest(teamId, userId);
+        return ResponseEntity.ok("You revoked the invitation");
 
     @GetMapping("/search-team")
     public ResponseEntity<List<TeamReadDto>> findAllTeamsByFiltersByDynamicSearch(

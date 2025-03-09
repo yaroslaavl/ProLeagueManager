@@ -86,4 +86,12 @@ public class MatchController {
     public ResponseEntity<List<TournamentMatchesByStageDto>> findMatchesByStage(@PathVariable("competitionId") UUID competitionId) {
         return ResponseEntity.ok(matchService.findMatchesByStage(competitionId));
     }
+
+    @GetMapping("/upcoming-top")
+    public ResponseEntity<List<UUID>> findUpcomingTopMatchesByStage(@RequestParam("isEsport") Boolean isEsport) {
+        List<UUID> matchesByStagesAndMatchStatus = matchService.findMatchesByStagesAndMatchStatus(isEsport);
+        log.info("Top matches: '{}'", matchesByStagesAndMatchStatus.size());
+
+        return ResponseEntity.ok(matchesByStagesAndMatchStatus);
+    }
 }

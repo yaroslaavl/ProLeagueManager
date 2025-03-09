@@ -1,6 +1,7 @@
 package org.league.app.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.league.app.dto.GameSystemCreateCompetitionDto;
 import org.league.app.dto.GameSystemCreateEditDto;
 import org.league.app.dto.GameSystemReadDto;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/game-system")
 @RequiredArgsConstructor
@@ -20,7 +22,9 @@ public class GameSystemController {
 
     @PostMapping("/create")
     public ResponseEntity<GameSystemReadDto> createGameSystem(@RequestBody GameSystemCreateEditDto gameSystemCreateEditDto) {
-        return ResponseEntity.ok(gameSystemService.createGameSystem(gameSystemCreateEditDto));
+        log.info("Creating game system: {}", gameSystemCreateEditDto);
+        GameSystemReadDto createdGameSystem = gameSystemService.createGameSystem(gameSystemCreateEditDto);
+        return ResponseEntity.ok(createdGameSystem);
     }
 
     @GetMapping("/{id}")
@@ -37,14 +41,17 @@ public class GameSystemController {
 
     @GetMapping("/search")
     public ResponseEntity<List<GameSystemCreateCompetitionDto>> searchGameSystem(@RequestParam("query") String query) {
-        List<GameSystemCreateCompetitionDto> gameSystemCreateCompetitionDtoList =
-                gameSystemService.searchGameSystem(query);
-
-        return ResponseEntity.ok(gameSystemCreateCompetitionDtoList);
+        log.info("Searching game systems with query: {}", query);
+        List<GameSystemCreateCompetitionDto> results = gameSystemService.searchGameSystem(query);
+        log.info("Found {} game systems", results.size());
+        return ResponseEntity.ok(results);
     }
 
     @PatchMapping("/update/{id}")
-    public ResponseEntity<GameSystemReadDto> updateGameSystemPartial(@PathVariable("id") Integer id, @RequestBody Map<String, Object> updates) {
-        return ResponseEntity.ok(gameSystemService.updateGameSystemPartial(id, updates));
+    public ResponseEntity<GameSystemReadDto> updateGameSystemPartial(@PathVariable("id") Integer id,
+                                                                     @RequestBody Map<String, Object> updates) {
+        log.info("Updating game system with id={}, updates={}", id, updates);
+        GameSystemReadDto updatedGameSystem = gameSystemService.updateGameSystemPartial(id, updates);
+        return ResponseEntity.ok(updatedGameSystem);
     }
 }
