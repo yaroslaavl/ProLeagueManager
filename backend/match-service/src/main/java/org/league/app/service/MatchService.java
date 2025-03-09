@@ -526,6 +526,8 @@ public class MatchService {
         List<Match> allMatches = new ArrayList<>(individualMatches);
         allMatches.addAll(teamMatch);
 
+        allMatches.sort(Comparator.comparing(Match::getMatchDate));
+
         return allMatches.stream().map(matchMapper::toDto).toList();
     }
 

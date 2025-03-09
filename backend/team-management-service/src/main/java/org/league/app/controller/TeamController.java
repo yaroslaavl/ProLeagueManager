@@ -167,5 +167,13 @@ public class TeamController {
                                                         @RequestParam("userId") Long userId) {
         teamService.revokeTeamJoinRequest(teamId, userId);
         return ResponseEntity.ok("You revoked the invitation");
+
+    @GetMapping("/search-team")
+    public ResponseEntity<List<TeamReadDto>> findAllTeamsByFiltersByDynamicSearch(
+            @RequestParam(required = false, name = "keyword") String keyword,
+            @RequestParam(required = false, name = "teamStatus") String teamStatus) {
+        List<TeamReadDto> allTeams = teamService.searchTeamByFilter(keyword, teamStatus);
+
+        return ResponseEntity.ok(allTeams);
     }
 }

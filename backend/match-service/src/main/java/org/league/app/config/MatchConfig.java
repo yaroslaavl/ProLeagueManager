@@ -39,6 +39,7 @@ public class MatchConfig {
                                 "/api/match/dynamic-all/**",
                                 "/api/match/grouped-by-stage/*",
                                 "/api/match/upcoming-top",
+                                "/api/match/user",
                                 "/api/match/id/**").permitAll()
                         .requestMatchers(
                                 "/api/match/confirmation").authenticated()

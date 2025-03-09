@@ -32,10 +32,10 @@ public interface MatchRepository extends JpaRepository<Match, UUID>, JpaSpecific
 
     List<Match> findAllByCompetitionIdAndLeagueTourNumberOrderByMatchDateAsc(UUID competitionId, Integer leagueTourNumber);
 
-    @Query("SELECT m FROM Match m WHERE m.playerAId = :userId OR m.playerBId = :userId AND (m.matchStatus = 'IN_PROGRESS' OR m.matchStatus = 'FINISHED') ORDER BY m.matchDate DESC")
+    @Query("SELECT m FROM Match m WHERE (m.playerAId = :userId OR m.playerBId = :userId) AND (m.matchStatus = 'IN_PROGRESS' OR m.matchStatus = 'FINISHED' OR m.matchStatus = 'AUTO_WIN')")
     List<Match> findMatchByUserId(@Param("userId") Long userId);
 
-    @Query("SELECT m FROM Match m WHERE m.teamAId = :teamId OR m.teamBId = :teamId AND (m.matchStatus = 'IN_PROGRESS' OR m.matchStatus = 'FINISHED') ORDER BY m.matchDate DESC")
+    @Query("SELECT m FROM Match m WHERE (m.teamAId = :teamId OR m.teamBId = :teamId) AND (m.matchStatus = 'IN_PROGRESS' OR m.matchStatus = 'FINISHED' OR m.matchStatus = 'AUTO_WIN')")
     List<Match> findMatchByTeamId(@Param("teamId") UUID teamId);
 
     List<Match> findAllByCompetitionId(UUID competitionId);

@@ -1,11 +1,11 @@
-// 🔹 Funkcja otwierania/zamykania menu powiadomień
+// 🔹 Функция открытия/закрытия меню уведомлений
 window.toggleNotifications = function (event) {
   const notificationPopup = document.getElementById("notificationPopup");
   notificationPopup.classList.toggle("active");
   event.stopPropagation();
 };
 
-// 🔹 Zamknięcie menu po kliknięciu poza nim
+// 🔹 Закрытие меню при клике вне его
 document.addEventListener("click", function (event) {
   const notificationPopup = document.getElementById("notificationPopup");
   const notificationButton = document.getElementById("notification_button");
@@ -15,28 +15,27 @@ document.addEventListener("click", function (event) {
   }
 });
 
-// 🔹 Zapobieganie zamykaniu menu po kliknięciu wewnątrz
+// 🔹 Предотвращение закрытия меню при клике внутри
 document.getElementById("notificationPopup").addEventListener("click", function (event) {
   event.stopPropagation();
 });
 
-// 🔹 Funkcja łączenia z SSE
-// 🔹 Funkcja łączenia z SSE
-async function connectSSE(userId) {
-  const eventSource = new EventSource(`http://localhost:8765/my-notifications/subscribe/${userId}`);
+// 🔹 Функция подключения к SSE
+async function connectSSE(userId, token) {
+  const eventSource = new EventSource(`http://localhost:8765/my-notifications/subscribe/${userId}?token=${token}`);
 
   eventSource.onopen = () => {
-    console.log("🔗 SSE: Połączenie nawiązane.");
+    console.log("🔗 SSE: Соединение установлено.");
   };
 
   eventSource.onmessage = (event) => {
-    console.log("📩 Nowe powiadomienie:", event.data);
+    console.log("📩 Новое уведомление:", event.data);
 
     let notification;
     try {
-      notification = JSON.parse(event.data); // Próba parsowania JSON
+      notification = JSON.parse(event.data);
     } catch (error) {
-      console.warn("⚠ Otrzymano tekst zamiast JSON, wyświetlamy jako wiadomość:", event.data);
+      console.warn("⚠ Получен текст вместо JSON, отображаем как сообщение:", event.data);
       notification = { message: event.data, eventType: "INFO", createdAt: new Date().toISOString(), isRead: false };
     }
 
@@ -45,27 +44,28 @@ async function connectSSE(userId) {
   };
 
   eventSource.onerror = () => {
-    console.error("❌ Błąd SSE. Ponowna próba połączenia za 3 sek...");
+    console.error("❌ Ошибка SSE. Повторное подключение через 3 секунды...");
     eventSource.close();
-    setTimeout(() => connectSSE(userId), 3000); // 🔄 Ponowne połączenie po 3 sek.
+    setTimeout(() => connectSSE(userId, token), 3000);
   };
 }
 
 
-// 🔹 Pobranie użytkownika i wszystkich powiadomień
+// 🔹 Получение пользователя и всех уведомлений
 document.addEventListener("DOMContentLoaded", async () => {
   await refreshtoken();
-  const userId = await GetUserId();
+  const token = localStorage.getItem("accToken");
+  const userId = await GetUserId(token);
   if (!userId) {
-    console.error("⚠ Błąd: Nie udało się pobrać userId!");
+    console.error("⚠ Ошибка: Не удалось получить userId!");
     return;
   }
 
-  await getAllNotifications(userId);
-  connectSSE(userId);
+  await getAllNotifications(userId, token);
+  connectSSE(userId, token);
 });
 
-// 🔹 Funkcja wyświetlania powiadomienia (toast)
+// 🔹 Функция отображения уведомления (toast)
 function showToast(message) {
   const toastContainer = document.getElementById("toastContainer");
   const toast = document.createElement("div");
@@ -78,16 +78,14 @@ function showToast(message) {
   }, 5000);
 }
 
-// 🔹 Funkcja dodawania powiadomień do menu
+// 🔹 Функция добавления уведомлений в меню
 function addNotificationToMenu(notification) {
   const notificationList = document.querySelector(".notification-list");
-
   const notificationItem = document.createElement("div");
   notificationItem.classList.add("notification-item");
 
-  // Sprawdzenie, czy wiadomość jest przeczytana
   if (!notification.isRead) {
-    notificationItem.classList.add("unread"); // Można dodać specjalny styl dla nieprzeczytanych
+    notificationItem.classList.add("unread");
   }
 
   notificationItem.innerHTML = `
@@ -102,51 +100,46 @@ function addNotificationToMenu(notification) {
   }
 }
 
-// 🔹 Pobranie userId
-async function GetUserId() {
+// 🔹 Получение userId
+async function GetUserId(token) {
   try {
     const response = await fetch("http://localhost:8765/user/profile", {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('accToken')}`,
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
     });
 
-    if (!response.ok) throw new Error(`Błąd ${response.status}`);
+    if (!response.ok) throw new Error(`Ошибка ${response.status}`);
 
     const user = await response.json();
     return user.id;
   } catch (err) {
-    console.error("❌ Błąd pobierania userId:", err);
+    console.error("❌ Ошибка получения userId:", err);
     return null;
   }
 }
 
-// 🔹 Pobranie wszystkich powiadomień
-async function getAllNotifications(userId) {
+// 🔹 Получение всех уведомлений
+async function getAllNotifications(userId, token) {
   try {
-    const accToken = localStorage.getItem("accToken");
-
     const response = await fetch("http://localhost:8765/my-notifications/get-all-notifications", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${accToken}`,
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ userId: userId }),
     });
 
-    if (!response.ok) throw new Error(`Błąd ${response.status}`);
+    if (!response.ok) throw new Error(`Ошибка ${response.status}`);
 
     const messages = await response.json();
-    console.log("📜 Historia powiadomień:", messages);
+    console.log("📜 История уведомлений:", messages);
 
     messages.forEach((msg) => addNotificationToMenu(msg));
   } catch (err) {
-    console.error("❌ Błąd pobierania powiadomień:", err);
+    console.error("❌ Ошибка получения уведомлений:", err);
   }
 }
-
-// 🔹 Odświeżenie tokena
-

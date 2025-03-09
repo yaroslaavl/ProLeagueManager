@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.league.app.database.entity.TeamRole;
 import org.league.app.database.repository.TeamRoleRepository;
+import org.league.app.database.specification.TeamSpecification;
 import org.league.app.dto.*;
 import org.league.app.database.entity.Team;
 import org.league.app.database.entity.TeamMember;
@@ -19,6 +20,7 @@ import org.league.app.feign.notificationClient.NotificationDto;
 import org.league.app.feign.authClient.UserDto;
 import org.league.app.mapper.TeamMapper;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -431,6 +433,14 @@ public class TeamService {
     public List<Team> findTeamWhereUserIsManager(Long userId) {
         List<TeamMember> teamMembers = teamMemberRepository.findTeamMemberByRolesAndUserId((getRolesByNames("MANAGER")), userId);
         return teamMembers.stream().map(TeamMember::getTeam).collect(Collectors.toList());
+    }
+    
+    public List<TeamReadDto> searchTeamByFilter(String keyword, String teamStatus) {
+        Specification<Team> specification = Specification
+                .where(TeamSpecification.search(keyword))
+                .and(TeamSpecification.hasStatus(teamStatus));
+
+        return teamRepository.findAll(specification).stream().map(teamMapper::toDto).toList();
     }
 
     private void sendNotificationMessage(Long userId, Long targetUserId, UUID teamId, String message, String eventType) {
