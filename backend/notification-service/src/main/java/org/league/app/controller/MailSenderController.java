@@ -3,8 +3,8 @@ package org.league.app.controller;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.league.app.feign.EmailRequest;
-import org.league.app.feign.EmailRequestWithQrCode;
+import org.league.app.feign.authClient.EmailRequest;
+import org.league.app.feign.teamClient.EmailRequestWithQrCode;
 import org.league.app.service.MailSenderService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

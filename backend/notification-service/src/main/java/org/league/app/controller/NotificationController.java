@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
@@ -86,6 +87,23 @@ public class NotificationController {
         return allNotifications.stream()
                 .map(notificationMapper::toDto)
                 .toList();
+    }
+
+    @PostMapping("/get-team/{teamId}")
+    public List<NotificationReadDto> getAllTeamNotificationsForManager(@PathVariable("teamId") UUID teamId) {
+        List<Notification> allNotificationsForTeam = notificationService.getAllNotificationsForTeam(teamId);
+
+        return allNotificationsForTeam.stream()
+                .map(notificationMapper::toDto)
+                .toList();
+    }
+
+    @DeleteMapping("/team/{teamId}/{userId}")
+    public void deleteTeamNotifications(@RequestHeader("Authorization") String token,
+                                        @PathVariable("teamId") UUID teamId,
+                                        @PathVariable("userId") Long userId) {
+
+        notificationService.deleteTeamNotifications(userId, teamId);
     }
 
     private void sendSseNotification(Long userId, String message) {
