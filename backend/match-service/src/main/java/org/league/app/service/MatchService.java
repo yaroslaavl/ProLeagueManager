@@ -239,7 +239,7 @@ public class MatchService {
 
                 matchPlayers.add(matchPlayer);
                 sendNotificationMessage(
-                        playerId,
+                        playerId, null, null,
                         teamMessage,
                         isEsport ? "MATCH_CONFIRMED" : "AWAITING_QR_CONFIRMATION",
                         competitionDto.getCompetitionType());
@@ -263,7 +263,7 @@ public class MatchService {
             String playerMessage = "You've confirmed your participation in the match. Match starts at: " + match.getMatchDate();
 
             sendNotificationMessage(
-                    userId,
+                    userId, null, null,
                     playerMessage,
                     isEsport ? "MATCH_CONFIRMED" : "AWAITING_QR_CONFIRMATION",
                     competitionDto.getCompetitionType());
@@ -441,7 +441,7 @@ public class MatchService {
                     = competitionClient.findById(match.getCompetitionId());
 
             if (match.getWinnerTeamId() == null) {
-                sendNotificationMessage(match.getWinnerPlayerId(), "Congratulations! You won the " + competition.getName(), "COMPETITION_WINNER", competition.getCompetitionType());
+                sendNotificationMessage(match.getWinnerPlayerId(), null, null, "Congratulations! You won the " + competition.getName(), "COMPETITION_WINNER", competition.getCompetitionType());
             } else {
                 TeamFeignDto team = teamClient.findTeamById(match.getWinnerTeamId());
 
@@ -450,7 +450,7 @@ public class MatchService {
                         .collect(Collectors.toSet());
 
                 for (Long playerId : winnersIds) {
-                    sendNotificationMessage(playerId, "Congratulations! Your team won the competition " + competition.getName(), "COMPETITION_WINNER", competition.getCompetitionType());
+                    sendNotificationMessage(playerId, null, null, "Congratulations! Your team won the competition " + competition.getName(), "COMPETITION_WINNER", competition.getCompetitionType());
                 }
             }
 
@@ -553,6 +553,23 @@ public class MatchService {
                 .toList();
     }
 
+    public List<UUID> findMatchesByStagesAndMatchStatus(Boolean isEsport) {
+        List<UUID> topStages = Optional.ofNullable(competitionClient.getTopStages(isEsport))
+                .orElse(Collections.emptyList());
+
+        if (topStages.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        List<Match> matchesByStageIdsAndMatchStatus = Optional.ofNullable(
+                matchRepository.findMatchesByStageIdsAndMatchStatus(topStages)
+        ).orElse(Collections.emptyList());
+
+        return matchesByStageIdsAndMatchStatus.stream()
+                .map(Match::getId)
+                .collect(Collectors.toList());
+    }
+
     private void sendQrCodeAndNotification(Match match, UUID teamId, List<Long> playerIds, Long recipientId, CompetitionDto competitionDto) {
         File qrFile = qrCodeGeneratorService.generateQrCode(new QrCodeDto(match.getId(), teamId, playerIds, LocalDateTime.now().toString()));
 
@@ -570,7 +587,7 @@ public class MatchService {
         }
 
         sendNotificationMessage(
-                recipientId,
+                recipientId, null, null,
                 "You have received a new match confirmation QR code",
                 "MATCH_CONFIRMED",
                 competitionDto.getCompetitionType());
@@ -773,10 +790,12 @@ public class MatchService {
 
     }
 
-    private void sendNotificationMessage(Long userId, String message, String eventType, String notificationCategory) {
+    private void sendNotificationMessage(Long userId, Long targetUserId, UUID teamId, String message, String eventType, String notificationCategory) {
         NotificationDto notification = NotificationDto.builder()
                 .id(UUID.randomUUID())
                 .userId(userId)
+                .targetUserId(targetUserId)
+                .teamId(teamId)
                 .message(message)
                 .eventType(eventType)
                 .isRead(false)
