@@ -33,14 +33,16 @@ public class TeamConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/api/team/create-team",
-                                "/api/team/team-join-accept/**").hasAuthority("AUTHORISED_USER")
+                                "/api/team/join-accept/**").hasAuthority("AUTHORISED_USER")
                         .requestMatchers(
                                 "/api/team/update-team-name/**",
                                 "/api/team/delete/**",
                                 "/api/team/upload-team-logo/**",
-                                "/api/team/team-invite/**",
-                                "/api/team/team-user-deletion/**",
-                                "/api/team/team-leave/**",
+                                "/api/team/invite/**",
+                                "/api/team/revoke-join-request/**",
+                                "/api/team/user-deletion/**",
+                                "/api/team/leave/**",
+                                "/api/team/join-reject/**",
                                 "/api/team/update-role/**").authenticated()
                         .requestMatchers("/api/team/allTeams",
                                 "/api/team/currentTeam/**",
