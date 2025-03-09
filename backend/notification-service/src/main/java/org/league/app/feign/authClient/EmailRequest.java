@@ -1,4 +1,4 @@
-package org.league.app.feign;
+package org.league.app.feign.authClient;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
