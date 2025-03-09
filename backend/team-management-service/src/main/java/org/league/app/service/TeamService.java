@@ -79,7 +79,7 @@ public class TeamService {
 
         teamMemberRepository.save(teamMember);
 
-        sendNotificationMessage(userByEmail.getId(),"Your team has been created with name: " + team.getTeamName(), "TEAM_CREATED");
+        sendNotificationMessage(userByEmail.getId(), null, null, "Your team has been created with name: " + team.getTeamName(), "TEAM_CREATED");
         return teamMapper.toDto(team);
     }
 
@@ -149,6 +149,12 @@ public class TeamService {
     @Transactional
     public void teamInvitation(UUID teamId, Long userId) {
         Team team = getTeamWithAccessCheck(teamId);
+        String token = authClientFeign.getToken("User:" + userId + "teamInvitation");
+
+        if (token != null && !token.isEmpty()) {
+            throw new InvitationException("User already received the invitation");
+
+        }
 
         Optional<TeamMember> teamMember = teamMemberRepository.findByTeamIdAndUserId(team.getId(), userId);
 
@@ -157,7 +163,17 @@ public class TeamService {
         }
 
         authClientFeign.setToken("User:" + userId + "teamInvitation",team.getId() + "" + userId,1, TimeUnit.DAYS);
-        sendNotificationMessage(userId, "You have been invited to join the team: " + team.getTeamName(), "TEAM_INVITATION");
+
+        UserDto userDto = authClientFeign.getUserDto(userId);
+
+        List<TeamMember> managers = teamMemberRepository.findTeamMemberByRolesAndTeamId(getRolesByNames("MANAGER"), team.getId());
+        if (managers.isEmpty()) {
+            throw new NotManagerException("Team has no manager, cannot send invitation.");
+        }
+        TeamMember manager = managers.getFirst();
+
+        sendNotificationMessage(manager.getUserId(), userId, teamId, "Manager invited " + userDto.getEmail() + " to team: " + team.getTeamName(), "PLAYER_INVITED");
+        sendNotificationMessage(userId, null, null, "You have been invited to join the team: " + team.getTeamName(), "TEAM_INVITATION");
     }
 
     @Transactional
@@ -189,9 +205,77 @@ public class TeamService {
         if(authClientFeign.getToken("User:" + userByEmail.getId() + "teamInvitation").equals(team.getId() + "" + userByEmail.getId())) {
             teamMemberRepository.save(teamMember);
 
-            sendNotificationMessage(userByEmail.getId(), "You accepted an invitation to join the team: " + team.getTeamName(), "TEAM_JOINED");
+            List<TeamMember> managers = teamMemberRepository.findTeamMemberByRolesAndTeamId(getRolesByNames("MANAGER"), team.getId());
+            if (managers.isEmpty()) {
+                throw new NotManagerException("Team has no manager, cannot send invitation.");
+            }
+            TeamMember manager = managers.getFirst();
+
+            sendNotificationMessage(userByEmail.getId(), null, null, "You accepted an invitation to join the team: " + team.getTeamName(), "TEAM_JOINED");
+            sendNotificationMessage(manager.getUserId(), null, team.getId(), userByEmail.getEmail() + " joined to team: " + team.getTeamName(), "PLAYER_JOINED");
+
+            notificationClientFeign.deleteTeamNotifications(
+                    getTokenFromRequest(),
+                    team.getId(),
+                    userByEmail.getId());
+
             authClientFeign.deleteToken("User:" + userByEmail.getId() + "teamInvitation");
         }
+    }
+
+    public void teamRejectRequest(String teamName) {
+        UserDto userByEmail = authClientFeign.getUserByEmail(getTokenFromRequest(), securityContext());
+
+        Team team = teamRepository.findTeamByTeamName(teamName)
+                .orElseThrow(() -> new TeamNotFoundException("Team does not exist"));
+
+        String token = authClientFeign.getToken("User:" + userByEmail.getId() + "teamInvitation");
+        if (token == null || !token.equals(team.getId() + "" + userByEmail.getId())) {
+            throw new InvitationException("No valid invitation found.");
+        }
+
+        authClientFeign.deleteToken("User:" + userByEmail.getId() + "teamInvitation");
+
+        List<TeamMember> managers = teamMemberRepository.findTeamMemberByRolesAndTeamId(getRolesByNames("MANAGER"), team.getId());
+        if (managers.isEmpty()) {
+            throw new NotManagerException("Team has no manager, cannot send invitation.");
+        }
+        TeamMember manager = managers.getFirst();
+
+        sendNotificationMessage(userByEmail.getId(), null, null,
+                "You have rejected the invitation to join the team: " + team.getTeamName(),
+                "TEAM_INVITATION_REJECTED");
+
+        sendNotificationMessage(manager.getUserId(),null, team.getId(),
+                userByEmail.getEmail() + " has rejected the invitation to join your team: " + team.getTeamName(),
+                "PLAYER_INVITATION_REJECTED");
+
+        notificationClientFeign.deleteTeamNotifications(
+                getTokenFromRequest(),
+                team.getId(),
+                userByEmail.getId());
+    }
+
+    public void revokeTeamJoinRequest(UUID teamId, Long userId) {
+        Team team = getTeamWithAccessCheck(teamId);
+
+        String token = authClientFeign.getToken("User:" + userId + "teamInvitation");
+        if (token == null || !token.equals(team.getId() + "" + userId)) {
+            throw new InvitationException("No valid invitation found.");
+        }
+
+        notificationClientFeign.deleteTeamNotifications(
+                getTokenFromRequest(),
+                team.getId(),
+                userId);
+
+        authClientFeign.deleteToken("User:" + userId + "teamInvitation");
+
+        sendNotificationMessage(
+                userId,
+                null,
+                null,
+                "You received a request to join the team: " + team.getTeamName() + ", but the manager revoked the request", "TEAM_JOIN_REQUEST_REVOKED");
     }
 
     @Transactional
@@ -211,7 +295,7 @@ public class TeamService {
             throw new UserNotFoundInTeamException("User is not a member of this team");
         }
 
-        sendNotificationMessage(userId, "You have been kicked out of the team: " + teamWithAccessCheck.getTeamName(), "TEAM_KICKED_OUT");
+        sendNotificationMessage(userId, null, null, "You have been kicked out of the team: " + teamWithAccessCheck.getTeamName(), "TEAM_KICKED_OUT");
     }
 
     public List<Team> findTeamsByUserId(Long userId) {
@@ -240,7 +324,7 @@ public class TeamService {
             if (allMembers.size() == 1) {
                 String teamGetName = teamByTeamName.getTeamName();
                 teamRepository.delete(teamByTeamName);
-                sendNotificationMessage(userByEmail.getId(), "You have left the team: " + teamGetName + " and team is deleted", "TEAM_LEFT_TEAM_DELETED");
+                sendNotificationMessage(userByEmail.getId(), null, null, "You have left the team: " + teamGetName + " and team is deleted", "TEAM_LEFT_TEAM_DELETED");
                 return;
             }
 
@@ -281,7 +365,7 @@ public class TeamService {
             }
         }
         teamMemberRepository.delete(optionalTeamMember.get());
-        sendNotificationMessage(userByEmail.getId(), "You have left the team: " + optionalTeamMember.get().getTeam(), "TEAM_LEFT");
+        sendNotificationMessage(userByEmail.getId(), null, null, "You have left the team: " + optionalTeamMember.get().getTeam(), "TEAM_LEFT");
     }
 
     @Transactional
@@ -333,9 +417,9 @@ public class TeamService {
 
         teamMember.setRoles(new ArrayList<>(updatedRoles));
         teamMemberRepository.save(teamMember);
-
-        sendNotificationMessage(playerId, "Your team member role has been updated.", "TEAM_ROLE_CHANGED");
-        sendNotificationMessage(manager.getFirst().getUserId(), "You have changed the role of your team member with ID: " + teamMember.getUserId(), "TEAM_ROLE_CHANGED");
+        UserDto userDto = authClientFeign.getUserDto(teamMember.getUserId());
+        sendNotificationMessage(playerId, null, null, "Your team member role has been updated.", "TEAM_ROLE_CHANGED");
+        sendNotificationMessage(manager.getFirst().getUserId(), null, teamId,"You have changed the role of your team member with email: " + userDto.getEmail(), "TEAM_ROLE_CHANGED");
     }
 
     @Transactional
@@ -349,10 +433,12 @@ public class TeamService {
         return teamMembers.stream().map(TeamMember::getTeam).collect(Collectors.toList());
     }
 
-    private void sendNotificationMessage(Long userId, String message, String eventType) {
+    private void sendNotificationMessage(Long userId, Long targetUserId, UUID teamId, String message, String eventType) {
         NotificationDto notification = NotificationDto.builder()
                 .id(UUID.randomUUID())
                 .userId(userId)
+                .targetUserId(targetUserId)
+                .teamId(teamId)
                 .message(message)
                 .eventType(eventType)
                 .isRead(false)
