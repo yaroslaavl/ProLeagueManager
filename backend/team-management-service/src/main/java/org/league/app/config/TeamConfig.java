@@ -51,7 +51,8 @@ public class TeamConfig {
                                 "/api/team/get-teams-by-userId",
                                 "/api/team/get-all-teamRoles",
                                 "/api/team/current/**",
-                                "/api/team/managed").permitAll())
+                                "/api/team/managed",
+                                "/api/team/search-team").permitAll())
 
                 .addFilterBefore(routeFilter, SecurityContextHolderFilter.class)
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
