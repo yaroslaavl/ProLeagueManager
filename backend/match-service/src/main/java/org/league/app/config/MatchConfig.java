@@ -38,6 +38,7 @@ public class MatchConfig {
                                 "/api/match/tourMatches/**",
                                 "/api/match/dynamic-all/**",
                                 "/api/match/grouped-by-stage/*",
+                                "/api/match/upcoming-top",
                                 "/api/match/id/**").permitAll()
                         .requestMatchers(
                                 "/api/match/confirmation").authenticated()
