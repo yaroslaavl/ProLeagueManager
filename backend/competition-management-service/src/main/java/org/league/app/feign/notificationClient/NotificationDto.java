@@ -16,6 +16,8 @@ public class NotificationDto {
 
     private UUID id;
     private Long userId;
+    private Long targetUserId;
+    private UUID teamId;
     private String message;
     private String eventType;
     private Boolean isRead;

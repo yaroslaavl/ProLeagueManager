@@ -30,6 +30,6 @@ public interface NotificationClientFeign {
         logger.warn("Notification service is down. Cannot send notification of category '{}'. Error: {}",
                 notificationCategory, t.getMessage());
 
-        return new NotificationDto(null, null, null, null, null, LocalDateTime.now());
+        return new NotificationDto(null, null, null, null, null, null, null, LocalDateTime.now());
     }
 }
