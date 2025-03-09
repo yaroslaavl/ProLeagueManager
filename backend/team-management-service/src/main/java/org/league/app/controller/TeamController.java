@@ -155,4 +155,13 @@ public class TeamController {
         TeamFeignDto teamFeignDto = teamMapper.toTeamFeignDto(teamById);
         return ResponseEntity.ok(teamFeignDto);
     }
+
+    @GetMapping("/search-team")
+    public ResponseEntity<List<TeamReadDto>> findAllTeamsByFiltersByDynamicSearch(
+            @RequestParam(required = false, name = "keyword") String keyword,
+            @RequestParam(required = false, name = "teamStatus") String teamStatus) {
+        List<TeamReadDto> allTeams = teamService.searchTeamByFilter(keyword, teamStatus);
+
+        return ResponseEntity.ok(allTeams);
+    }
 }
