@@ -15,5 +15,7 @@ public class EventReadDto {
     String eventType;
     String status;
     Boolean isPinned;
+    String category;
+    String eventImage;
     LocalDateTime createdAt;
 }

@@ -3,6 +3,7 @@ package org.league.app.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.league.app.database.entity.enums.Category;
 import org.league.app.database.entity.enums.EventType;
 import org.league.app.database.entity.enums.Status;
 
@@ -20,5 +21,7 @@ public class EventCreateEditDto {
     private EventType eventType;
     private Status status;
     private Boolean isPinned;
+    private Category category;
+    private String eventImage;
     private LocalDateTime createdAt;
 }
