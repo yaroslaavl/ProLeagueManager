@@ -305,7 +305,7 @@ footer {
 .content-placeholder {
   text-align: center;
   color: #bbb;
-  font-size: 16px;
+  font-size: 12px;
   display: flex;
   justify-items: center;
   justify-content: center;
@@ -345,6 +345,10 @@ footer {
 .columns>p{
   margin: 2px;
   font-weight: bold;
+}
+.teams-container{
+  display: block;
+  width: 100%;
 }
 .teams{
   margin-top: 10px;
@@ -459,4 +463,18 @@ footer {
 @keyframes toastFadeOut {
   from { opacity: 1; }
   to { opacity: 0; }
+}
+.createTeam{
+  background-color: #3861FB;
+  border-radius: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border: 0;
+  color: white;
+  margin-top: 10px;
+  padding: 10px 20px;
+}
+.createTeam:hover{
+  background-color: #808A9D;
 }

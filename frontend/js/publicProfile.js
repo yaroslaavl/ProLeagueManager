@@ -42,9 +42,7 @@ const refreshToken = localStorage.getItem("refToken");
 if(accToken === null || refreshToken === null){
   window.location.href =
     "main.html";
-}else{
-  getUserData();
-}
+}else{getUserData();}
 async function refreshtoken(){
   try {
     const url = "http://localhost:8765/auth/refresh-token";
@@ -142,68 +140,197 @@ async function getTeam(userId) {
 
     const data = await response.json();
 
+    const teamsContainer = document.getElementById('teams-container');
+    teamsContainer.innerHTML = ''; // Очищаем контейнер перед добавлением новых элементов
+
     if (!data || data.length === 0) {
       console.error("No teams found for this user.");
-      const teams = document.getElementById('teams');
-      teams.innerHTML = '<p style="color: #808A9D;">Nie nalezy do zadnego zespolu</p>';
-      teams.style.backgroundColor= '#EFF2F5';
-      teams.style.display = 'block';
-      teams.style.justifyContent = 'center';
+
       return;
     }
 
     console.log(data);
 
-    // Установить имя команды
-    document.getElementById('team_name').innerText = data[0].teamName;
+    for (let team of data) {
+      const teamElement = document.createElement("div");
+      teamElement.classList.add("teams");
 
-    try {
-      const logoUrl = `http://localhost:8765/team/team-logo/${data[0].teamName}`;
-      const logoResponse = await fetch(logoUrl);
+      const teamImage = document.createElement("img");
+      teamImage.alt = "Team_avatar";
 
-      if (!logoResponse.ok) {
-        console.error("Failed to fetch team logo");
-        return;
+      try {
+        const logoResponse = await fetch(`http://localhost:8765/team/team-logo/${team.id}`);
+        if (logoResponse.ok) {
+          const logoUrl = await logoResponse.text();
+          teamImage.src = logoUrl;
+        } else {
+          teamImage.src = "img/default-team-avatar.png"; // Заглушка, если нет логотипа
+        }
+      } catch (err) {
+        console.error("Error while receiving team logo", err);
+        teamImage.src = "img/default-team-avatar.png"; // Если ошибка, используем дефолтное изображение
       }
 
-      // Установить URL логотипа
-      document.getElementById('Team_avatar').src = logoUrl;
-    } catch (err) {
-      console.error("Error while receiving team logo");
+      const teamNameLink = document.createElement("a");
+      teamNameLink.href = "teamPage.html";
+      teamNameLink.style.color = "#000000";
+      teamNameLink.style.fontWeight = "bold";
+
+      const teamName = document.createElement("p");
+      teamName.innerText = team.teamName;
+      teamNameLink.appendChild(teamName);
+
+      teamName.addEventListener("click", () => {
+        localStorage.setItem("MyTeam", team.teamName);
+      });
+
+      const roleElement = document.createElement("p");
+      roleElement.innerText = "Ładowanie ról...";
+
+      try {
+        const roleResponse = await fetch(`http://localhost:8765/team/get-team-member-by-team-and-userId?teamId=${team.id}&userId=${userId}`);
+        if (roleResponse.ok) {
+          const roleData = await roleResponse.json();
+          if (roleData.roles && roleData.roles.length > 0) {
+            roleElement.innerText = roleData.roles.map(role => role.name).join(", ");
+          } else {
+            roleElement.innerText = "Brak ról";
+          }
+        } else {
+          roleElement.innerText = "Błąd wczytywania ról";
+        }
+      } catch (err) {
+        console.error("Error while fetching team role:", err);
+        roleElement.innerText = "Błąd wczytywania ról";
+      }
+
+      teamElement.appendChild(teamImage);
+      teamElement.appendChild(teamNameLink);
+      teamElement.appendChild(roleElement);
+
+      teamsContainer.appendChild(teamElement);
     }
-    try {
-      const roleUrl = `http://localhost:8765/team/get-team-member-by-team-and-userId?teamId=${data[0].id}&userId=${userId}`;
-      const roleResponse = await fetch(roleUrl);
-
-      if (!roleResponse.ok) {
-        console.error("Failed to fetch team role");
-        return;
-      }
-
-      // Парсинг JSON-ответа
-      const roleData = await roleResponse.json();
-
-      // Логирование ответа
-      console.log("Role data:", roleData);
-      let role = roleData.roles;
-      console.log(role[0].name,role[1].name,role[2].name)
-      document.getElementById('roles').innerText = `${role[2].name},${role[1].name},${role[0].name}`;
-      // Проверяем наличие данных
-      if (!roleData || Object.keys(roleData).length === 0) {
-        console.error("No role data found");
-        return;
-      }
-
-      // Выполните дальнейшие действия с roleData
-    } catch (err) {
-      console.error("Error while fetching team role:", err);
-    }
-
   } catch (err) {
-    console.error(`Error while receiving data from server`);
+    console.error(`Error while receiving data from server:`, err);
   }
 }
 
-document.getElementById('team_name').addEventListener('click',()=>{
-  localStorage.setItem('MyTeam',document.getElementById('team_name').innerText);
-})
+document.addEventListener("DOMContentLoaded", function () {
+  const createTeamBtn = document.getElementById("create_team_btn");
+  if (createTeamBtn) {
+    createTeamBtn.addEventListener("click", function () {
+      openCreateTeamDialog();
+    });
+  } else {
+    console.error("Кнопка создания команды не найдена в DOM");
+  }
+});
+
+
+function openCreateTeamDialog() {
+  // Создание затемненного фона
+  const overlay = document.createElement("div");
+  overlay.style.position = "fixed";
+  overlay.style.top = "0";
+  overlay.style.left = "0";
+  overlay.style.width = "100%";
+  overlay.style.height = "100%";
+  overlay.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
+  overlay.style.display = "flex";
+  overlay.style.justifyContent = "center";
+  overlay.style.alignItems = "center";
+  overlay.style.zIndex = "1000";
+
+  // Создание диалогового окна
+  const dialog = document.createElement("div");
+  dialog.style.background = "#fff";
+  dialog.style.padding = "20px 20px";
+  dialog.style.borderRadius = "8px";
+  dialog.style.boxShadow = "0 4px 6px rgba(0, 0, 0, 0.1)";
+  dialog.style.minWidth = "400px";
+  dialog.style.textAlign = "center";
+
+  // Заголовок
+  const title = document.createElement("h2");
+  title.textContent = "Stworzenie zespolu";
+  const paragraph = document.createElement("p");
+  paragraph.innerHTML = "Wpisz nazwę swojego zespołu.<br>Pamiętaj, że wulgarna nazwa zespołu spowoduje:<br> - zablokowanie<br> - usunięcie zespołu<br> - zablokowanie twórcy zespołu!";
+  paragraph.style.color = "#808A9D";
+  paragraph.style.textIndent = "20px";
+
+  // Поле ввода
+  const input = document.createElement("input");
+  input.type = "text";
+  input.placeholder = "Nazwa zespołu";
+  input.style.width = "80%";
+  input.style.padding = "8px";
+  input.style.margin = "10px 0";
+  input.style.border = "1px solid #ccc";
+  input.style.borderRadius = "4px";
+
+  // Кнопка подтверждения
+  const confirmBtn = document.createElement("button");
+  confirmBtn.textContent = "Potwierdzić";
+  confirmBtn.style.padding = "8px 16px";
+  confirmBtn.style.border = "none";
+  confirmBtn.style.backgroundColor = "#007bff";
+  confirmBtn.style.color = "white";
+  confirmBtn.style.borderRadius = "4px";
+  confirmBtn.style.cursor = "pointer";
+
+  confirmBtn.addEventListener("click", async function () {
+    const teamName = input.value.trim();
+    const teamNameUpload = {
+      teamName: teamName,
+    }
+    if (teamName) {
+      try {
+
+        const response = await fetch(`http://localhost:8765/team/create-team`,{
+          method: "POST",
+          body: JSON.stringify(teamNameUpload),
+          headers: {
+            "Authorization": `Bearer ${localStorage.getItem('accToken')}`,
+            "Content-type": "application/json"
+          }
+        });
+        if (!response.ok) {
+          throw new Error(`Error: ${response.status}`);
+        };
+        const data = await response.json();
+        console.log("Server response:", data);
+        location.reload();
+      } catch (err) {
+        console.error("Problem with creating team!", err);
+      }
+      document.body.removeChild(overlay);
+    } else {
+      alert("Proszę wprowadzić nazwę zespołu.");
+    }
+  });
+
+  // Кнопка закрытия окна
+  const closeButton = document.createElement("button");
+  closeButton.textContent = "X";
+  closeButton.style.position = "absolute";
+  closeButton.style.top = "10px";
+  closeButton.style.right = "10px";
+  closeButton.style.background = "none";
+  closeButton.style.border = "none";
+  closeButton.style.fontSize = "16px";
+  closeButton.style.cursor = "pointer";
+
+  closeButton.addEventListener("click", function () {
+    document.body.removeChild(overlay);
+  });
+
+  dialog.style.position = "relative";
+
+  dialog.appendChild(closeButton);
+  dialog.appendChild(title);
+  dialog.appendChild(paragraph);
+  dialog.appendChild(input);
+  dialog.appendChild(confirmBtn);
+  overlay.appendChild(dialog);
+  document.body.appendChild(overlay);
+}
