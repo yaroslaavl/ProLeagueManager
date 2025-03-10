@@ -203,7 +203,7 @@ body {
 
 .team-container {
   max-width: 1200px;
-  margin: 50px auto;
+  margin: 15px auto;
   background-color: #ffffff;
   border-radius: 20px;
   padding: 20px;
@@ -393,4 +393,117 @@ footer {
   background-color: #3861FB;
   color: #ffffff;
 }
+.leave-team{
+  color: white;
+  background-color: #EA3943;
+}
 
+.manager_menu{
+  display: flex;
+  margin: auto;
+  margin-top: 5px;
+  max-width: 1200px;
+  justify-content: space-between;
+}
+.search_user{
+  width: 550px;
+  height: 300px;
+  background-color: #EFF2F5;
+  border-radius: 20px;
+  padding: 20px;
+  display: block;
+}
+.search_user>p{
+  text-align: center;
+  font-size: 16px;
+  color: #000000;
+  font-weight: bold;
+}
+.search_user>input{
+  margin-top:10px;
+  margin-left: 5px;
+  padding: 0 0 0 5px;
+  border-radius: 8px;
+  border: #808A9D 1px solid;
+  color: #808A9D;
+  font-weight: bold;
+  font-size: 12px;
+  height: 30px;
+  width: 80%;
+  font-family: Inter, sans-serif;
+}
+.search_user>button{
+  margin-top:10px;
+  margin-left:10px;
+  width: 80px;
+  height: 30px;
+  background-color: #3861FB;
+  border-radius: 8px;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+.search_user>button:hover{
+  background-color: #d9dadf;
+}
+.users_found{
+  margin-top: 10px;
+  border-top: #dddddd solid 1px;
+}
+.user{
+  background-color: white;
+  display: flex;
+  border-radius: 16px;
+  justify-content: space-between;
+  padding: 10px;
+  margin-top: 15px;
+}
+.user>div>img{
+  width: 40px;
+  height: 40px;
+  border: #808A9D 1px solid;
+  border-radius: 50%;
+}
+.user>button{
+  height: 30px;
+  margin-top: 8px;
+  background-color: #3861FB;
+  color: white;
+  border-radius: 12px;
+  border: none;
+  width: 80px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+.user>button:hover{
+  background-color: #d9dadf;
+}
+.user_info{
+  font-weight: bold;
+  font-size: 10px;
+  color:#000000;
+  margin-top: 10px;
+}
+.user_info>p{
+  margin: 0;
+}
+.avata_and_info{
+  display: flex;
+  gap: 20px;
+}
+.sended_inventation{
+  display: block;
+  width: 550px;
+  height: 300px;
+  background-color: #EFF2F5;
+  border-radius: 20px;
+  padding: 20px;
+}
+.sended_inventation>p{
+  font-size: 16px;
+  color: #000000;
+  font-weight: bold;
+}

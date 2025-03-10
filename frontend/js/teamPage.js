@@ -1,3 +1,4 @@
+refreshToken();
 document.addEventListener("DOMContentLoaded", () => {
   const pageLoadSpan = document.querySelector(".footer-content span:nth-child(3)");
   const htmlLoadSpan = document.querySelector(".footer-content span:nth-child(4)");
@@ -88,7 +89,7 @@ async function logOut(){
 if (document.getElementById('log-out') !== null){
   const logOutBtn = document.getElementById('log-out').addEventListener('click',logOut);
 }
-
+let teamInfo;
 async function getData(){
   try {
     if(localStorage.getItem('MyTeam') === null && localStorage.getItem('SearchResult') === null) throw new Error('No result by search or redirecting');
@@ -98,7 +99,7 @@ async function getData(){
     const res = await fetch(`http://localhost:8765/team/currentTeam/${Team}`);
     const receivedData = await res.json();
 
-    let teamInfo = receivedData.team;
+    teamInfo = receivedData.team;
     let members = receivedData.members;
 
     console.log(teamInfo);
@@ -106,8 +107,8 @@ async function getData(){
 
     document.getElementById('team_name').innerText = `${teamInfo.teamName}`;
     document.getElementById('createdAt').innerText = `${new Date(teamInfo.createdAt).toLocaleDateString()}`
-    let teamimg = await fetch(`http://localhost:8765/team/team-logo/${Team}`);
-    document.getElementById('team_img').src = teamimg.url;
+    let teamimg = await fetch(`http://localhost:8765/team/team-logo/${teamInfo.id}`);
+    document.getElementById('team_img').src = await teamimg.text();
 
 
     for (const member of members) {
@@ -121,13 +122,13 @@ async function getData(){
 
       try {
         const userId = member.userId;
-        const response =  await fetch(`http://localhost:8765/user/id/${userId}`);
+        const response =  await fetch(`http://localhost:8765/user/getUser/${userId}`);
         playerInfo = await response.json();
 
       }catch (err) {console.log(err);}
       try {
         const response = await fetch(`http://localhost:8765/user/avatar/${playerInfo.username}`);
-        playerImg = response.url;
+        playerImg = await response.text();
       }catch (err){console.log(err);}
       if(isManager === true){
         document.getElementById('players').innerHTML += `
@@ -135,7 +136,7 @@ async function getData(){
           <img src=${playerImg} alt="Avatar" class="player-avatar">
           <div class="player-info">
             <p class="player-name" style="color: #3861FB">${playerInfo.firstName + " " + playerInfo.lastName}</p>
-            <p class="player-nickname">${playerInfo.username}</p>
+            <a href="public-profile.html"><p class="player-nickname">${playerInfo.username}</p></a>
             <p class="player-joined">${new Date(member.joinedAt).toLocaleDateString()}</p>
             <p class="player-roles">${rolesText}</p>
           </div>
@@ -148,7 +149,7 @@ async function getData(){
           <img src=${playerImg} alt="Avatar" class="player-avatar">
           <div class="player-info">
             <p class="player-name" style="color: darkgoldenrod">${playerInfo.firstName + " " + playerInfo.lastName}</p>
-            <p class="player-nickname">${playerInfo.username}</p>
+            <a href="public-profile.html"><p class="player-nickname">${playerInfo.username}</p></a>
             <p class="player-joined">${new Date(member.joinedAt).toLocaleDateString()}</p>
             <p class="player-roles">${rolesText}</p>
           </div>
@@ -159,7 +160,7 @@ async function getData(){
           <img src=${playerImg} alt="Avatar" class="player-avatar">
           <div class="player-info">
             <p class="player-name">${playerInfo.firstName + " " + playerInfo.lastName}</p>
-            <p class="player-nickname">${playerInfo.username}</p>
+            <a href="public-profile.html"><p class="player-nickname">${playerInfo.username}</p></a>
             <p class="player-joined">${new Date(member.joinedAt).toLocaleDateString()}</p>
             <p class="player-roles">${rolesText}</p>
           </div>
@@ -171,5 +172,180 @@ async function getData(){
     console.error(err);
   }
 }
-
 getData();
+document.addEventListener("DOMContentLoaded", function () {
+  const confirmButton = document.getElementById("leave_btn");
+  if (confirmButton) {
+    confirmButton.addEventListener("click", function () {
+      openConfirmationDialog();
+    });
+  } else {
+    console.error("Кнопка подтверждения не найдена в DOM");
+  }
+});
+function openConfirmationDialog() {
+  // Затемненный фон
+  const overlay = document.createElement("div");
+  overlay.style.position = "fixed";
+  overlay.style.top = "0";
+  overlay.style.left = "0";
+  overlay.style.width = "100%";
+  overlay.style.height = "100%";
+  overlay.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
+  overlay.style.display = "flex";
+  overlay.style.justifyContent = "center";
+  overlay.style.alignItems = "center";
+  overlay.style.zIndex = "1000";
+
+  // Диалоговое окно
+  const dialog = document.createElement("div");
+  dialog.style.background = "#fff";
+  dialog.style.padding = "20px";
+  dialog.style.borderRadius = "8px";
+  dialog.style.boxShadow = "0 4px 6px rgba(0, 0, 0, 0.1)";
+  dialog.style.minWidth = "300px";
+  dialog.style.textAlign = "center";
+
+  // Заголовок
+  const title = document.createElement("h2");
+  title.textContent = "Czy napewno chcesz kontynuowac?";
+  const paragraph = document.createElement("p");
+  paragraph.innerHTML = " - Opuścisz drużynę i nie będziesz już mógł uczestniczyć w przyszłych turniejach ani meczach. <br> - Jeśli jesteś menadżerem drużyny, Twoja rola zostanie przeniesiona na kapitana lub starszego gracza. <br> - Jeśli jesteś jedynym graczem w drużynie, Twoja drużyna zostanie usunięta z listy zespolow!"
+  paragraph.style.color = "#808A9D";
+  paragraph.style.textAlign = 'left';
+  paragraph.style.fontStyle = "bold";
+  paragraph.style.fontSize = "12px";
+  // Кнопки
+  const buttonContainer = document.createElement("div");
+  buttonContainer.style.marginTop = "15px";
+
+  const yesButton = document.createElement("button");
+  yesButton.textContent = "Tak";
+  yesButton.style.padding = "8px 16px";
+  yesButton.style.marginRight = "10px";
+  yesButton.style.border = "none";
+  yesButton.style.backgroundColor = "#28a745";
+  yesButton.style.color = "white";
+  yesButton.style.borderRadius = "4px";
+  yesButton.style.cursor = "pointer";
+
+  const noButton = document.createElement("button");
+  noButton.textContent = "Nie";
+  noButton.style.padding = "8px 16px";
+  noButton.style.border = "none";
+  noButton.style.backgroundColor = "#dc3545";
+  noButton.style.color = "white";
+  noButton.style.borderRadius = "4px";
+  noButton.style.cursor = "pointer";
+
+  yesButton.addEventListener("click", async function () {
+    const teamName = document.getElementById('team_name').textContent;
+    console.log(teamName);
+    try {
+      const response = await fetch(`http://localhost:8765/team/team-leave/${teamName}`,{
+        method:"PUT",
+        headers:{
+          "Authorization": `Bearer ${localStorage.getItem('accToken')}`,
+          "Content-type": "application/json",
+        }
+      });
+
+      setTimeout(function(){
+        location.href = 'main.html';
+      }, 2000);
+    } catch (err) {
+      console.error("Error while leaving from team");
+    }
+
+    document.body.removeChild(overlay);
+  });
+
+  noButton.addEventListener("click", function () {
+    document.body.removeChild(overlay);
+  });
+
+  buttonContainer.appendChild(yesButton);
+  buttonContainer.appendChild(noButton);
+
+  dialog.appendChild(title);
+  dialog.appendChild(paragraph)
+  dialog.appendChild(buttonContainer);
+  overlay.appendChild(dialog);
+  document.body.appendChild(overlay);
+}
+document.getElementById('search_username').addEventListener('click', async function () {
+  try {
+    let wordInput = document.getElementById('usernameInput').value;
+    const response = await fetch(`http://localhost:8765/user/search-user?keyword=${wordInput}`);
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const users = await response.json();
+    displayUsers(users);
+  } catch (err) {
+    console.error("Error fetching users:", err);
+  }
+});
+async function displayUsers(users) {
+  const usersContainer = document.querySelector('.users_found');
+  usersContainer.innerHTML = ''; // Очищаем предыдущие результаты
+  for (const user of users) {
+    const userElement = document.createElement('div');
+    userElement.classList.add('user');
+    let userAvatar;
+    try {
+      const response = await fetch(`http://localhost:8765/user/avatar/${user.username}`)
+      userAvatar = await response.text()
+    } catch (err){
+      console.error(`Error while receiveing player avatar ${err}`);
+    }
+    if (user.username === document.getElementById('manager_name').textContent) {
+      userElement.innerHTML = `
+            <div class="avata_and_info">
+                <img src="${userAvatar}" alt="Avatar">
+                <div class="user_info">
+                    <p>${user.username}</p>
+                    <p>${user.email}</p>
+                </div>
+            </div>
+        `;
+    }else{
+      userElement.innerHTML = `
+            <div class="avata_and_info">
+                <img src="${userAvatar}" alt="Avatar">
+                <div class="user_info">
+                    <p>${user.username}</p>
+                    <p>${user.email}</p>
+                </div>
+            </div>
+            <button onclick="inviteUser('${user.id}')">Zaprosic</button>
+        `;
+    }
+
+
+    usersContainer.appendChild(userElement);
+  }
+}
+async function inviteUser(targetId) {
+
+  try {
+    const response = await fetch(`http://localhost:8765/team/team-invite/${teamInfo.id}/${targetId}`,{
+      method: 'POST',
+      headers:{
+        "Authorization": `Bearer ${localStorage.getItem('accToken')}`,
+        "Content-type": "application/json",
+      }
+    });
+    console.log(`Server response:`,response.status);
+    alert("Zaproszenie bylo odeslane!");
+    clearSearch();
+  } catch (err) {
+    console.error(`Error while sending the invantation: ${err}`);
+  }
+}
+function clearSearch() {
+  document.getElementById('usernameInput').value = '';
+  document.querySelector('.users_found').innerHTML = '';
+}
