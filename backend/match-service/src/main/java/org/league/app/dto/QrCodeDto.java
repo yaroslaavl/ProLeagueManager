@@ -15,5 +15,6 @@ public class QrCodeDto {
     private UUID matchId;
     private UUID teamId;
     private List<Long> startingPlayers;
+    private String matchDate;
     private String timestamp;
 }
