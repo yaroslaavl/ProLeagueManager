@@ -23,13 +23,14 @@ public class QrCodeGeneratorService {
 
     @SneakyThrows
     public File generateQrCode(QrCodeDto qrCodeDto) {
-        log.info("Generate QR Code for matchId={}, teamId={}, players={}, timestamp={}",
-                qrCodeDto.getMatchId(), qrCodeDto.getTeamId(), qrCodeDto.getStartingPlayers(), qrCodeDto.getTimestamp());
+        log.info("Generate QR Code for matchId={}, teamId={}, players={}, matchDate={}, timestamp={}",
+                qrCodeDto.getMatchId(), qrCodeDto.getTeamId(), qrCodeDto.getStartingPlayers(), qrCodeDto.getMatchDate(), qrCodeDto.getTimestamp());
 
         Map<String, Object> qrData = new HashMap<>();
         qrData.put("matchId", qrCodeDto.getMatchId());
         qrData.put("teamId", qrCodeDto.getTeamId());
         qrData.put("startingPlayers", qrCodeDto.getStartingPlayers());
+        qrData.put("matchDate", qrCodeDto.getMatchDate());
         qrData.put("timeStamp", qrCodeDto.getTimestamp());
         try {
             String jsonString = new ObjectMapper().writeValueAsString(qrData);

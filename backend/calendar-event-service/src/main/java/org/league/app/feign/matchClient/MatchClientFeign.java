@@ -14,7 +14,7 @@ import java.util.UUID;
 @FeignClient("match-service")
 public interface MatchClientFeign {
 
-    @Retry(name = "matchRetry", fallbackMethod = "fallbackMatch")
+    @Retry(name = "matchServiceRetry", fallbackMethod = "fallbackMatch")
     @GetMapping("/api/match/upcoming-top")
     List<UUID> findUpcomingTopMatchesByStage(@RequestParam("isEsport") Boolean isEsport);
 

@@ -3,7 +3,9 @@ package org.league.app.service.jobs;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.league.app.database.entity.Notification;
+import org.league.app.database.entity.enums.EventType;
 import org.league.app.database.repository.NotificationRepository;
+import org.league.app.exception.NotificationNotFound;
 import org.league.app.feign.authClient.AuthClientFeign;
 import org.league.app.service.NotificationService;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -26,6 +28,7 @@ public class TeamInvitationScheduler {
     public void cleanExpiredNotifications() {
         log.info("Cleaning expired notifications if exists");
         List<Notification> allNotifications = notificationService.findAllTeamInvitations();
+        List<UUID> userNotifications = new ArrayList<>();
         List<UUID> deletedNotificationIds = new ArrayList<>();
 
         for (Notification notification : allNotifications) {
@@ -34,6 +37,9 @@ public class TeamInvitationScheduler {
 
             if (token == null || token.isEmpty()) {
                 deletedNotificationIds.add(notification.getId());
+                userNotifications.add(notificationRepository.findIdByEventTypeAndUserId(
+                                EventType.TEAM_INVITATION, notification.getTargetUserId())
+                        .orElseThrow(() -> new NotificationNotFound("Notification not found")));
                 log.info("Deleting expired notification: {} for user {} in team {}",
                         notification.getEventType(), notification.getTargetUserId(), notification.getTeamId());
             }
@@ -41,7 +47,9 @@ public class TeamInvitationScheduler {
 
         if (!deletedNotificationIds.isEmpty()) {
             notificationRepository.deleteAllById(deletedNotificationIds);
-            log.info("Deleted {} expired notifications", deletedNotificationIds.size());
+            notificationRepository.deleteAllById(userNotifications);
+            log.info("Deleted {} expired notifications by managers", deletedNotificationIds.size());
+            log.info("Deleted {} expired team user invitations", userNotifications.size());
         } else {
             log.info("No expired notifications found.");
         }

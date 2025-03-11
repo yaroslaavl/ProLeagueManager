@@ -29,4 +29,8 @@ public interface NotificationRepository extends JpaRepository<Notification, UUID
     int deletePlayerInvitedByTargetUserIdAndTeamId(@Param("userId") Long userId, @Param("teamId") UUID teamId);
 
     List<Notification> findAllByEventTypeAndTargetUserIdNotNull(EventType eventType);
+
+    @Query("SELECT n.id FROM Notification n WHERE n.eventType = :eventType AND n.userId = :userId")
+    Optional<UUID> findIdByEventTypeAndUserId(@Param("eventType") EventType eventType, @Param("userId") Long userId);
+
 }
