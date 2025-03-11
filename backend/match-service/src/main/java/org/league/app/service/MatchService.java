@@ -573,12 +573,12 @@ public class MatchService {
     }
 
     private void sendQrCodeAndNotification(Match match, UUID teamId, List<Long> playerIds, Long recipientId, CompetitionDto competitionDto) {
-        File qrFile = qrCodeGeneratorService.generateQrCode(new QrCodeDto(match.getId(), teamId, playerIds, LocalDateTime.now().toString()));
+        File qrFile = qrCodeGeneratorService.generateQrCode(new QrCodeDto(match.getId(), teamId, playerIds, match.getMatchDate().toString(), LocalDateTime.now().toString()));
 
         boolean emailSent = Boolean.parseBoolean(notificationClient.sendMailWithQrCode(getTokenFromRequest(), new EmailRequestWithQrCode(
                 securityContext(), "QR Confirmation Code",
                 "<p>You have received a new match confirmation QR code.</p>" +
-                        "<p>Please show this code to our representative on the ground.</p>",
+                        "<p>Show this to the on-site representative as early as possible. The confirmation is closed 5 minutes before the match starts.</p>",
                 qrFile
         )));
 
