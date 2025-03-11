@@ -21,7 +21,7 @@ public interface CompetitionClientFeign {
     @GetMapping("/api/competition/players/{competitionId}/{teamId}")
     Set<Long> findCompetitionParticipantsById(@PathVariable("competitionId") UUID id, @PathVariable("teamId") UUID teamId);
 
-    @Retry(name = "competitionRetry", fallbackMethod = "fallbackCompetition")
+    @Retry(name = "competitionServiceRetry", fallbackMethod = "fallbackCompetition")
     @GetMapping("/api/competition/get/{id}")
     CompetitionDto findById(@PathVariable("id") UUID id);
 
@@ -30,7 +30,7 @@ public interface CompetitionClientFeign {
         Logger logger = LoggerFactory.getLogger(CompetitionClientFeign.class);
         logger.warn("Competition service is down. ID: '{}'. Error: {}",
                 id, t.getMessage());
-        throw new RuntimeException("Competition service is down", t);
+        throw new RuntimeException("Service did not send data", t);
     }
 
     @GetMapping("/api/competition/active-competitions")

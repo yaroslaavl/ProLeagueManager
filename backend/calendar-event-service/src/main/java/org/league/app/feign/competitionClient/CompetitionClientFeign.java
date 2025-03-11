@@ -15,11 +15,11 @@ import java.util.UUID;
 @FeignClient(name = "competition-management-service")
 public interface CompetitionClientFeign {
 
-    @Retry(name = "tournamentRetry", fallbackMethod = "fallbackCompetition")
+    @Retry(name = "tournamentServiceRetry", fallbackMethod = "fallbackCompetition")
     @GetMapping("/api/competition/closest-tournaments")
     List<UUID> getClosestTournaments(@RequestParam("isEsport") Boolean isEsport);
 
-    @Retry(name = "leagueRetry", fallbackMethod = "fallbackCompetition")
+    @Retry(name = "leagueServiceRetry", fallbackMethod = "fallbackCompetition")
     @GetMapping("/api/competition/closest-leagues")
     List<UUID> getClosestLeagues(@RequestParam("isEsport") Boolean isEsport);
 
