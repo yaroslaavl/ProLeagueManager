@@ -40,9 +40,9 @@ public class GameSystemController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<GameSystemCreateCompetitionDto>> searchGameSystem(@RequestParam("query") String query) {
-        log.info("Searching game systems with query: {}", query);
-        List<GameSystemCreateCompetitionDto> results = gameSystemService.searchGameSystem(query);
+    public ResponseEntity<List<GameSystemCreateCompetitionDto>> searchGameSystem(@RequestParam("keyword") String keyword) {
+        log.info("Searching game systems with keyword: {}", keyword);
+        List<GameSystemCreateCompetitionDto> results = gameSystemService.searchGameSystem(keyword);
         log.info("Found {} game systems", results.size());
         return ResponseEntity.ok(results);
     }
