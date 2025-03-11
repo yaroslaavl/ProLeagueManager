@@ -8,7 +8,6 @@ import org.league.app.database.entity.Competition;
 import org.league.app.database.entity.CompetitionParticipant;
 import org.league.app.database.entity.TournamentStage;
 import org.league.app.database.entity.enums.CompetitionStatus;
-import org.league.app.database.entity.enums.CompetitionType;
 import org.league.app.database.repository.CompetitionParticipantRepository;
 import org.league.app.database.repository.CompetitionRepository;
 import org.league.app.database.repository.TournamentStageRepository;
@@ -131,13 +130,11 @@ public class TournamentStageService {
                 tempStage = "1/" + i;
             }
 
-            String rules = competition.getGameSystem().getRules();
-            boolean isElimination = rules.startsWith("Single Elimination");
             TournamentStage tournamentStage = TournamentStage.builder()
                     .competition(competition)
                     .stageName(tempStage)
                     .stageOrder(counter)
-                    .isElimination(isElimination)
+                    .isElimination(Boolean.TRUE)
                     .build();
 
             tournamentStageRepository.saveAndFlush(tournamentStage);
