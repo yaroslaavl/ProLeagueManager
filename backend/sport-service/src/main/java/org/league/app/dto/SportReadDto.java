@@ -9,10 +9,7 @@ import java.time.LocalDateTime;
 public class SportReadDto {
 
     Integer id;
-
     String name;
-
     Boolean isEsport;
-
     LocalDateTime createdAt;
 }
