@@ -19,7 +19,6 @@ import org.league.app.feign.notificationClient.NotificationClientFeign;
 import org.league.app.feign.notificationClient.NotificationDto;
 import org.league.app.feign.authClient.UserDto;
 import org.league.app.mapper.TeamMapper;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,13 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -164,9 +157,8 @@ public class TeamService {
             throw new UserAlreadyInThisTeamException("User is already in this team");
         }
 
-        authClientFeign.setToken("User:" + userId + "teamInvitation",team.getId() + "" + userId,1, TimeUnit.DAYS);
-
         UserDto userDto = authClientFeign.getUserDto(userId);
+        authClientFeign.setToken("User:" + userId + "teamInvitation",team.getId() + "" + userId,1, TimeUnit.DAYS);
 
         List<TeamMember> managers = teamMemberRepository.findTeamMemberByRolesAndTeamId(getRolesByNames("MANAGER"), team.getId());
         if (managers.isEmpty()) {
@@ -236,14 +228,13 @@ public class TeamService {
             throw new InvitationException("No valid invitation found.");
         }
 
-        authClientFeign.deleteToken("User:" + userByEmail.getId() + "teamInvitation");
-
         List<TeamMember> managers = teamMemberRepository.findTeamMemberByRolesAndTeamId(getRolesByNames("MANAGER"), team.getId());
         if (managers.isEmpty()) {
             throw new NotManagerException("Team has no manager, cannot send invitation.");
         }
         TeamMember manager = managers.getFirst();
 
+        authClientFeign.deleteToken("User:" + userByEmail.getId() + "teamInvitation");
         sendNotificationMessage(userByEmail.getId(), null, null,
                 "You have rejected the invitation to join the team: " + team.getTeamName(),
                 "TEAM_INVITATION_REJECTED");
@@ -272,7 +263,6 @@ public class TeamService {
                 userId);
 
         authClientFeign.deleteToken("User:" + userId + "teamInvitation");
-
         sendNotificationMessage(
                 userId,
                 null,
