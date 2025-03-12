@@ -28,10 +28,8 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -125,16 +123,26 @@ public class NotificationService {
             throw new UserNotFoundException("User not found");
         }
 
-        List<Notification> allByUserId = notificationRepository.findAllByUserIdAndTeamIdNull(userByEmail.getId());
+        List<EventType> excludedEventTypes = List.of(
+                EventType.PLAYER_INVITED,
+                EventType.PLAYER_JOINED,
+                EventType.PLAYER_INVITATION_REJECTED,
+                EventType.PLAYER_JOIN_REQUEST,
+                EventType.PLAYER_JOIN_ACCEPTED
+        );
+
+        List<Notification> allByUserId = notificationRepository.findAllByUserIdExcludingEventTypes(
+                userByEmail.getId(), excludedEventTypes);
+
         allByUserId.stream()
                 .filter(notification -> !notification.getIsRead())
                 .forEach(notification -> notification.setIsRead(Boolean.TRUE));
 
         notificationRepository.saveAll(allByUserId);
 
-        return allByUserId.stream()
-                .toList();
+        return allByUserId;
     }
+
 
     @Transactional
     public List<Notification> getAllNotificationsForTeam(UUID teamId) {
@@ -156,7 +164,17 @@ public class NotificationService {
             return Collections.emptyList();
         }
 
-        List<Notification> allByTeamId = notificationRepository.findAllByTeamId(teamById.getId());
+        List<EventType> excludedEventTypes = List.of(
+                EventType.TEAM_INVITATION,
+                EventType.TEAM_JOINED,
+                EventType.TEAM_INVITATION_REJECTED,
+                EventType.TEAM_JOIN_REQUEST_REVOKED,
+                EventType.TEAM_JOIN_REQUEST,
+                EventType.TEAM_JOIN_ACCEPTED,
+                EventType.TEAM_JOIN_DENIED
+        );
+
+        List<Notification> allByTeamId = notificationRepository.findAllByTeamId(teamById.getId(), excludedEventTypes);
         allByTeamId.stream()
                 .filter(notification -> !notification.getIsRead())
                 .forEach(notification -> notification.setIsRead(Boolean.TRUE));
@@ -170,14 +188,27 @@ public class NotificationService {
     @Transactional
     public void deleteTeamNotifications(Long userId, UUID teamId) {
         int deletedInvited = notificationRepository.deletePlayerInvitedByTargetUserIdAndTeamId(userId, teamId);
-        int deletedInvitation = notificationRepository.deleteTeamInvitationByUserId(userId);
+        int deletedInvitation = notificationRepository.deleteTeamInvitationByUserId(userId, teamId);
 
         log.info("Deleted {} PLAYER_INVITED and {} TEAM_INVITATION notifications for user {}",
                 deletedInvited, deletedInvitation, userId);
     }
 
-    public List<Notification> findAllTeamInvitations() {
-        return notificationRepository.findAllByEventTypeAndTargetUserIdNotNull(EventType.PLAYER_INVITED);
+    @Transactional
+    public void deleteUserTeamJoinRequest(Long userId, UUID teamId, List<String> eventTypes) {
+        List<EventType> eventTypesList = eventTypes.stream()
+                .map(EventType::valueOf)
+                .collect(Collectors.toList());
+
+        notificationRepository.deletePlayerJoinRequestByUserIdAndTeamId(userId, teamId, eventTypesList);
+
+        log.info("Deleted join request {} and {} notifications for user {}",
+                eventTypesList.getFirst(), eventTypesList.getLast(), userId);
+    }
+
+
+    public List<Notification> findAllTeamInvitations(EventType eventType) {
+        return notificationRepository.findAllByEventTypeAndTargetUserIdNotNull(eventType);
     }
 
     private String getTokenFromRequest() {
