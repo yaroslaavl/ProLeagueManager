@@ -2,9 +2,13 @@ package org.league.app.database.entity.enums;
 
 public enum TeamStatus {
 
-    //Team is registered in competition
-    REGISTERED,
+    /**
+     * The team is considering applications to join
+     */
+    OPEN,
 
-    //Team is not registered in competition and does not play anywhere at this moment
-    INACTIVE,
+    /**
+     * Recruitment is closed, the team is complete
+     */
+    CLOSED
 }
