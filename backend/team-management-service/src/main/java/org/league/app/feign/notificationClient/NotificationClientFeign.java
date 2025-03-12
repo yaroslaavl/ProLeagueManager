@@ -35,4 +35,10 @@ public interface NotificationClientFeign {
     void deleteTeamNotifications(@RequestHeader("Authorization") String token,
                                  @PathVariable("teamId") UUID teamId,
                                  @PathVariable("userId") Long userId);
+
+    @DeleteMapping("/api/my-notifications/team-join-request/{teamId}/{userId}")
+    void deleteUserJoinRequest(@RequestHeader("Authorization") String token,
+                               @PathVariable("teamId") UUID teamId,
+                               @PathVariable("userId") Long userId,
+                               @RequestParam("eventTypes") List<String> eventTypes);
 }
