@@ -33,6 +33,7 @@ public class TeamConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/api/team/create-team",
+                                "/api/team/send-join-request/**",
                                 "/api/team/join-accept/**").hasAuthority("AUTHORISED_USER")
                         .requestMatchers(
                                 "/api/team/update-team-name/**",
@@ -43,6 +44,8 @@ public class TeamConfig {
                                 "/api/team/user-deletion/**",
                                 "/api/team/leave/**",
                                 "/api/team/join-reject/**",
+                                "/api/team/status/*",
+                                "/api/team/accept-player/*",
                                 "/api/team/update-role/**").authenticated()
                         .requestMatchers("/api/team/allTeams",
                                 "/api/team/currentTeam/**",
@@ -55,7 +58,6 @@ public class TeamConfig {
                                 "/api/team/current/**",
                                 "/api/team/managed",
                                 "/api/team/search-team").permitAll())
-
                 .addFilterBefore(routeFilter, SecurityContextHolderFilter.class)
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(session ->

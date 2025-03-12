@@ -320,6 +320,55 @@ public class CompetitionService {
         }
     }
 
+    @Transactional
+    public void disqualifyFromCompetition(UUID competitionId, UUID teamId, Long userId) {
+        Competition competition = competitionRepository.findById(competitionId)
+                .orElseThrow(() -> new CompetitionNotFoundException("Competition not found"));
+
+        if (competition.getCompetitionType().equals(CompetitionType.LEAGUE)) {
+            if (!competition.getStatus().equals(CompetitionStatus.NONE)) {
+                throw new CompetitionStatusException("Error. Competition status is " + competition.getStatus());
+            }
+        } else {
+            if (!competition.getStatus().equals(CompetitionStatus.UPCOMING)) {
+                throw new CompetitionStatusException("Error. Competition status is " + competition.getStatus());
+            }
+        }
+
+        if (teamId != null && userId == null) {
+            List<CompetitionParticipant> participants = competitionParticipantRepository.findAllByCompetitionIdAndTeamId(competitionId, teamId);
+
+            if (participants.isEmpty()) {
+                log.warn("No participants found for teamId '{}' in competition '{}'", teamId, competitionId);
+            }
+
+            for (CompetitionParticipant participant : participants) {
+                participant.setCompetitionParticipantStatus(CompetitionParticipantStatus.DISQUALIFIED);
+                sendNotificationMessage(participant.getPlayerId(), null, null, "Your team has been disqualified from: " + competition.getName(), "DISQUALIFIED", competition.getCompetitionType().toString());
+            }
+
+            leagueStandingRepository.delete(leagueStandingRepository.findLeagueStandingByCompetitionIdAndTeamIdOrPlayerId(competitionId, teamId, null));
+            competitionParticipantRepository.saveAll(participants);
+            log.info("{} participants disqualified from team '{}' in competition '{}'", participants.size(), teamId, competitionId);
+        }
+
+        if (userId != null && teamId == null) {
+            CompetitionParticipant participant = competitionParticipantRepository.findByCompetitionIdAndPlayerId(competitionId, userId);
+
+            if (participant == null) {
+                log.warn("No participant found for userId '{}' in competition '{}'", userId, competitionId);
+                return;
+            }
+
+            log.info("Player with ID: '{}' disqualified from competition '{}'", userId, competitionId);
+            participant.setCompetitionParticipantStatus(CompetitionParticipantStatus.DISQUALIFIED);
+            sendNotificationMessage(userId, null, null, "You have been disqualified from: " + competition.getName(), "DISQUALIFIED", competition.getCompetitionType().toString());
+            leagueStandingRepository.delete(leagueStandingRepository.findLeagueStandingByCompetitionIdWhereTeamIdOrPlayerId(competitionId, null, userId));
+            competitionParticipantRepository.save(participant);
+        }
+    }
+
+
     /**
      * Method for searching tournaments by filters and with dynamic search by keyword ‘name’
      *

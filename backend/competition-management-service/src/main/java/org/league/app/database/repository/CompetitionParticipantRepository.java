@@ -17,9 +17,9 @@ public interface CompetitionParticipantRepository extends JpaRepository<Competit
 
     @Query("SELECT CASE " +
             "WHEN c.gameSystem.isIndividual = TRUE THEN " +
-                "(SELECT COUNT(cp.playerId) FROM CompetitionParticipant cp WHERE cp.competition.id = c.id) " +
+                "(SELECT COUNT(cp.playerId) FROM CompetitionParticipant cp WHERE cp.competition.id = c.id AND cp.competitionParticipantStatus = 'REGISTERED') " +
             "ELSE " +
-                "(SELECT COUNT(DISTINCT cp.teamId) FROM CompetitionParticipant cp WHERE cp.competition.id = c.id) END " +
+                "(SELECT COUNT(DISTINCT cp.teamId) FROM CompetitionParticipant cp WHERE cp.competition.id = c.id AND cp.competitionParticipantStatus = 'REGISTERED') END " +
             "FROM Competition c " +
             "WHERE c.id = :competitionId")
     Integer countTeamsOrUsersByCompetitionId(@Param("competitionId")UUID competitionId);
@@ -28,7 +28,8 @@ public interface CompetitionParticipantRepository extends JpaRepository<Competit
 
     Optional<CompetitionParticipant> findCompetitionParticipantByPlayerIdAndCompetitionId(Long id, UUID competitionId);
 
-    List<CompetitionParticipant> findAllByCompetitionId(UUID competitionId);
+    @Query("SELECT p FROM CompetitionParticipant p WHERE p.competition.id = :competitionId AND p.competitionParticipantStatus = 'REGISTERED'")
+    List<CompetitionParticipant> findAllByCompetitionId(@Param("competitionId") UUID competitionId);
 
     @Query("SELECT cp.playerId FROM CompetitionParticipant cp " +
             "WHERE cp.competition.id = :competitionId " +
@@ -46,4 +47,8 @@ public interface CompetitionParticipantRepository extends JpaRepository<Competit
 
     @Query("SELECT cp.teamId FROM CompetitionParticipant cp WHERE cp.playerId = :userId")
     UUID findTeamByUserId(@Param("userId") Long userId);
+
+    List<CompetitionParticipant> findAllByCompetitionIdAndTeamId(UUID competitionId, UUID teamId);
+
+    CompetitionParticipant findByCompetitionIdAndPlayerId(UUID competitionId, Long playerId);
 }

@@ -16,7 +16,7 @@ public interface TeamClientFeign {
     @GetMapping("/api/team/current/{id}")
     TeamFeignDto findTeamById(@PathVariable("id") UUID id);
 
-    default String fallbackTeamId(UUID id, Throwable t) {
+    default TeamFeignDto fallbackTeamId(UUID id, Throwable t) {
         Logger logger = LoggerFactory.getLogger(TeamClientFeign.class);
         logger.warn("Team service is down");
         throw new RuntimeException("Team service is down", t);

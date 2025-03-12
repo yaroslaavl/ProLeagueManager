@@ -3,11 +3,13 @@ package org.league.app.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.league.app.dto.*;
+import org.league.app.exception.CompetitionNotFoundException;
 import org.league.app.service.CompetitionService;
 import org.league.app.service.MinioService;
 import org.league.app.service.TournamentStageService;
 import org.league.app.validation.CreateAction;
 import org.league.app.validation.EditAction;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -191,5 +193,27 @@ public class CompetitionController {
         List<UUID> allTopStagesByActiveTournaments = tournamentStageService.getAllTopStagesByActiveTournaments(isEsport);
 
         return ResponseEntity.ok(allTopStagesByActiveTournaments == null || allTopStagesByActiveTournaments.isEmpty() ? Collections.emptyList() : allTopStagesByActiveTournaments);
+    }
+
+    @PutMapping("/disqualify/{competitionId}")
+    public ResponseEntity<String> disqualifyCompetition(@PathVariable("competitionId") UUID competitionId,
+                                                        @RequestParam(name = "teamId", required = false) UUID teamId,
+                                                        @RequestParam(name = "userId", required = false) Long userId) {
+        if (teamId == null && userId == null) {
+            return ResponseEntity.badRequest().body("Either 'teamId' or 'userId' must be provided.");
+        }
+
+        if (teamId != null && userId != null) {
+            return ResponseEntity.badRequest().body("Both 'teamId' and 'userId' cannot be provided simultaneously.");
+        }
+
+        try {
+            competitionService.disqualifyFromCompetition(competitionId, teamId, userId);
+            return ResponseEntity.ok("Disqualified successfully.");
+        } catch (CompetitionNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Competition not found.");
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while processing the request.");
+        }
     }
 }

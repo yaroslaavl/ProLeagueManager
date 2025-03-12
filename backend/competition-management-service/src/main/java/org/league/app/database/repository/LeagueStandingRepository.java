@@ -46,4 +46,11 @@ public interface LeagueStandingRepository extends JpaRepository<LeagueStanding, 
     ORDER BY rank
     """, nativeQuery = true)
     List<LeagueStanding> findAllByCompetitionIdOrderByPointsDesc(@Param("competitionId") UUID competitionId);
+
+    @Query("SELECT l FROM LeagueStanding l WHERE l.competition.id = :competitionId AND (l.teamId = :teamId OR l.playerId = :userId)")
+    LeagueStanding findLeagueStandingByCompetitionIdAndTeamIdOrPlayerId(
+            @Param("competitionId") UUID competitionId,
+            @Param("teamId") UUID teamId,
+            @Param("userId") Long userId
+    );
 }

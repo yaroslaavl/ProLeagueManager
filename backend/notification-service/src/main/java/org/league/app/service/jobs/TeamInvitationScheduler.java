@@ -25,20 +25,20 @@ public class TeamInvitationScheduler {
     private final NotificationRepository notificationRepository;
 
     @Scheduled(fixedDelay = 60000)
-    public void cleanExpiredNotifications() {
+    public void cleanExpiredTeamInvitations() {
         log.info("Cleaning expired notifications if exists");
-        List<Notification> allNotifications = notificationService.findAllTeamInvitations();
+        List<Notification> allNotifications = notificationService.findAllTeamInvitations(EventType.PLAYER_INVITED);
         List<UUID> userNotifications = new ArrayList<>();
         List<UUID> deletedNotificationIds = new ArrayList<>();
 
         for (Notification notification : allNotifications) {
-            String redisKey = "User:" + notification.getTargetUserId() + "teamInvitation";
-            String token = authClient.getToken(redisKey);
+            String invitationKey = "User:" + notification.getTargetUserId() + "teamInvitationId:" + notification.getTeamId();
+            String invitationToken = authClient.getToken(invitationKey);
 
-            if (token == null || token.isEmpty()) {
+            if (invitationToken == null || invitationToken.isEmpty()) {
                 deletedNotificationIds.add(notification.getId());
                 userNotifications.add(notificationRepository.findIdByEventTypeAndUserId(
-                                EventType.TEAM_INVITATION, notification.getTargetUserId())
+                                EventType.TEAM_INVITATION, notification.getTargetUserId(), notification.getTeamId())
                         .orElseThrow(() -> new NotificationNotFound("Notification not found")));
                 log.info("Deleting expired notification: {} for user {} in team {}",
                         notification.getEventType(), notification.getTargetUserId(), notification.getTeamId());
@@ -55,4 +55,34 @@ public class TeamInvitationScheduler {
         }
     }
 
+    @Scheduled(fixedDelay = 60000)
+    public void cleanExpiredTeamJoinRequests() {
+        log.info("Cleaning expired team join notifications if exists");
+        List<Notification> allNotifications = notificationService.findAllTeamInvitations(EventType.PLAYER_JOIN_REQUEST);
+        List<UUID> userNotifications = new ArrayList<>();
+        List<UUID> deletedNotificationIds = new ArrayList<>();
+
+        for (Notification notification : allNotifications) {
+            String requestKey = "User:" + notification.getUserId() + "requestToJoinTeamId:" + notification.getTeamId();
+            String requestToken = authClient.getToken(requestKey);
+
+            if (requestToken == null || requestToken.isEmpty()) {
+                deletedNotificationIds.add(notification.getId());
+                userNotifications.add(notificationRepository.findIdByEventTypeAndUserId(
+                                EventType.TEAM_JOIN_REQUEST, notification.getUserId(), notification.getTeamId())
+                        .orElseThrow(() -> new NotificationNotFound("Notification not found")));
+                log.info("Deleting expired team join notification: {} for user {} in team {}",
+                        notification.getEventType(), notification.getTargetUserId(), notification.getTeamId());
+            }
+        }
+
+        if (!deletedNotificationIds.isEmpty()) {
+            notificationRepository.deleteAllById(deletedNotificationIds);
+            notificationRepository.deleteAllById(userNotifications);
+            log.info("Deleted {} expired team join notifications to team managers", deletedNotificationIds.size());
+            log.info("Deleted {} expired team user join request", userNotifications.size());
+        } else {
+            log.info("No expired team join notifications found.");
+        }
+    }
 }

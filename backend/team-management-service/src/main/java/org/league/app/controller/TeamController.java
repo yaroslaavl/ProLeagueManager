@@ -1,6 +1,7 @@
 package org.league.app.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.league.app.database.entity.Team;
 import org.league.app.database.entity.TeamMember;
 import org.league.app.database.entity.TeamRole;
@@ -25,6 +26,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/team")
@@ -177,5 +179,33 @@ public class TeamController {
         List<TeamReadDto> allTeams = teamService.searchTeamByFilter(keyword, teamStatus);
 
         return ResponseEntity.ok(allTeams);
+    }
+
+    @PutMapping("/status/{teamId}")
+    public ResponseEntity<TeamReadDto> changeTeamStatus(@PathVariable("teamId") UUID teamId,
+                                                        @RequestParam("teamStatus") String teamStatus) {
+
+        log.info("Team status changed to: '{}'", teamStatus);
+        TeamReadDto teamReadDto = teamService.changeTeamStatus(teamId, teamStatus);
+
+        return ResponseEntity.ok(teamReadDto);
+    }
+
+    @PostMapping("/send-join-request/{teamId}")
+    public ResponseEntity<String> sendRequestToJoinTeam(@PathVariable("teamId") UUID teamId) {
+        log.info("Request to join team: '{}'", teamId);
+        teamService.sendRequestToJoinTeam(teamId);
+
+        return ResponseEntity.ok("You sent a join request");
+    }
+
+    @PutMapping("/accept-player/{teamId}")
+    public ResponseEntity<String> acceptPlayer(@PathVariable("teamId") UUID teamId,
+                                               @RequestParam("userId") Long userId,
+                                               @RequestParam("isAccepted") Boolean isAccepted) {
+        log.info("Player accepted to team: '{}'", teamId);
+        teamService.processUserTeamJoinRequest(teamId, userId, isAccepted);
+
+        return ResponseEntity.ok(isAccepted ? "You accepted a new player" : "You denied a new player");
     }
 }

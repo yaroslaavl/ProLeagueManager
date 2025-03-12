@@ -61,6 +61,7 @@ public class CompetitionManagementConfig {
                                 "/api/game-system/search",
                                 "/api/game-system/update/**",
                                 "/api/competition/upload-image/*",
+                                "/api/competition/disqualify/*",
                                 "/api/game-system/**").hasAuthority("EDITOR")
                         .requestMatchers(
                                 "/api/competition/participation").authenticated())

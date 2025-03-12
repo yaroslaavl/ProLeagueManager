@@ -119,8 +119,20 @@ public class TournamentStageService {
         }
 
         Integer maxTeamSize = competition.getGameSystem().getMaxTeamSize();
+        Integer minTeamSize = competition.getGameSystem().getMinTeamSize();
+
+        long actualParticipantsCount = competitionParticipantRepository.countTeamsOrUsersByCompetitionId(competitionId);
+
+        int startingRound;
+
+        if (actualParticipantsCount == minTeamSize) {
+            startingRound = 16;
+        } else {
+            startingRound = maxTeamSize;
+        }
+
         int counter = 1;
-        for (int i = maxTeamSize / 2; i >= 1; i = i / 2) {
+        for (int i = startingRound / 2; i >= 1; i = i / 2) {
             String tempStage = "";
             if (i == 1) {
                 tempStage = "FINAL";
