@@ -26,7 +26,7 @@ public class CompetitionScheduler {
     private final CompetitionRepository competitionRepository;
     private final TournamentStageService tournamentStageService;
 
-    @Scheduled(fixedRate = 60000)
+    @Scheduled(fixedDelay = 60000)
     public void autoStartLeague() {
         log.info("Checking leagues at {}", LocalDateTime.now());
 
