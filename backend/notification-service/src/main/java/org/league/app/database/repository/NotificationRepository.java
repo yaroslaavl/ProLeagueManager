@@ -15,22 +15,33 @@ import java.util.UUID;
 @Repository
 public interface NotificationRepository extends JpaRepository<Notification, UUID> {
 
-    List<Notification> findAllByUserIdAndTeamIdNull(Long userId);
+    @Query("SELECT n FROM Notification n WHERE n.userId = :userId AND n.eventType NOT IN :excludedEventTypes ORDER BY n.createdAt DESC")
+    List<Notification> findAllByUserIdExcludingEventTypes(
+            @Param("userId") Long userId,
+            @Param("excludedEventTypes") List<EventType> excludedEventTypes
+    );
 
-    @Query("SELECT n FROM Notification n WHERE n.teamId = :teamId ORDER BY n.createdAt DESC")
-    List<Notification> findAllByTeamId(@Param("teamId") UUID teamId);
+    @Query("SELECT n FROM Notification n WHERE n.teamId = :teamId AND n.eventType NOT IN :excludedEventTypes ORDER BY n.createdAt DESC")
+    List<Notification> findAllByTeamId(@Param("teamId") UUID teamId,
+                                       @Param("excludedEventTypes") List<EventType> excludedEventTypes);
 
     @Modifying
-    @Query("DELETE FROM Notification n WHERE n.userId = :userId AND n.eventType = 'TEAM_INVITATION'")
-    int deleteTeamInvitationByUserId(@Param("userId") Long userId);
+    @Query("DELETE FROM Notification n WHERE n.userId = :userId AND n.teamId = :teamId AND n.eventType = 'TEAM_INVITATION'")
+    int deleteTeamInvitationByUserId(@Param("userId") Long userId, @Param("teamId") UUID teamId);
 
     @Modifying
     @Query("DELETE FROM Notification n WHERE n.targetUserId = :userId AND n.teamId = :teamId AND n.eventType = 'PLAYER_INVITED'")
     int deletePlayerInvitedByTargetUserIdAndTeamId(@Param("userId") Long userId, @Param("teamId") UUID teamId);
 
+    @Modifying
+    @Query("DELETE FROM Notification n WHERE n.userId = :userId AND n.teamId = :teamId AND n.eventType IN :eventTypes")
+    int deletePlayerJoinRequestByUserIdAndTeamId(@Param("userId") Long userId,
+                                                 @Param("teamId") UUID teamId,
+                                                 @Param("eventTypes") List<EventType> eventTypes);
+
     List<Notification> findAllByEventTypeAndTargetUserIdNotNull(EventType eventType);
 
-    @Query("SELECT n.id FROM Notification n WHERE n.eventType = :eventType AND n.userId = :userId")
-    Optional<UUID> findIdByEventTypeAndUserId(@Param("eventType") EventType eventType, @Param("userId") Long userId);
+    @Query("SELECT n.id FROM Notification n WHERE n.eventType = :eventType AND n.userId = :userId AND n.teamId = :teamId")
+    Optional<UUID> findIdByEventTypeAndUserId(@Param("eventType") EventType eventType, @Param("userId") Long userId, @Param("teamId") UUID teamId);
 
 }
