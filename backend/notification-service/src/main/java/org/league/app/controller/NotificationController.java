@@ -106,6 +106,15 @@ public class NotificationController {
         notificationService.deleteTeamNotifications(userId, teamId);
     }
 
+    @DeleteMapping("/team-join-request/{teamId}/{userId}")
+    public void deleteUserJoinRequest(@RequestHeader("Authorization") String token,
+                                      @PathVariable("teamId") UUID teamId,
+                                      @PathVariable("userId") Long userId,
+                                      @RequestParam("eventTypes") List<String> eventTypes) {
+
+        notificationService.deleteUserTeamJoinRequest(userId, teamId, eventTypes);
+    }
+
     private void sendSseNotification(Long userId, String message) {
         SseEmitter emitter = sseEmitters.get(userId.toString());
         if (emitter != null) {

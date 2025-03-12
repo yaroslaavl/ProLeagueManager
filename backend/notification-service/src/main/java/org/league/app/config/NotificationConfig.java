@@ -40,6 +40,7 @@ public class NotificationConfig {
                                 "/api/my-notifications/send-notification",
                                 "/api/notification/send-email-with-qr-code",
                                 "/api/my-notifications/get-team/*",
+                                "/api/my-notifications/team-join-request/**",
                                 "/api/my-notifications/team/**"
                         ).authenticated()
                         .requestMatchers(
