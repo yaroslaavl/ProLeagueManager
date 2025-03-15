@@ -17,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-@Table(schema = "public", name = "team_member")
+@Table(schema = "team_management", name = "team_member")
 public class TeamMember {
 
     @Id

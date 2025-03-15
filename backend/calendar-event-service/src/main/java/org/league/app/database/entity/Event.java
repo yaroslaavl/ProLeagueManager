@@ -19,7 +19,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
-@Table(schema = "public", name = "event")
+@Table(schema = "calendar_event", name = "event")
 public class Event {
 
     @Id
@@ -46,7 +46,7 @@ public class Event {
     @Column(name = "event_image")
     private String eventImage;
 
-    @Column(name = "isPinned")
+    @Column(name = "is_pinned")
     private Boolean isPinned;
 
     @Column(name = "category")

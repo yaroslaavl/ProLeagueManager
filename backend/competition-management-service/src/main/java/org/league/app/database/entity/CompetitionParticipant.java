@@ -18,7 +18,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-@Table(schema = "public", name = "competition_participant")
+@Table(schema = "competition_management", name = "competition_participant")
 public class CompetitionParticipant {
 
     @Id
