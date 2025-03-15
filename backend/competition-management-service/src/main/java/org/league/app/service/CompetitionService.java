@@ -104,12 +104,17 @@ public class CompetitionService {
             throw new CompetitionAlreadyExistsException("Competition with name:" + newCompetition.getName() + " already exists");
         }
 
-        GameSystem gameSystem = gameSystemRepository.findById(newCompetition.getGameSystemId())
-                .orElseThrow(() -> new GameSystemNotFoundException("Game System not found"));
+        GameSystem gameSystem = Optional.ofNullable(newCompetition.getGameSystemId())
+                .flatMap(gameSystemRepository::findById)
+                .orElse(null);
 
         Optional.ofNullable(newCompetition.getName()).ifPresent(currentCompetition::setName);
         Optional.ofNullable(newCompetition.getSportId()).ifPresent(currentCompetition::setSportId);
-        Optional.ofNullable(newCompetition.getGameSystemId()).ifPresent(gameSystem::setId);
+
+        if (gameSystem != null) {
+            currentCompetition.setGameSystem(gameSystem);
+        }
+
         Optional.ofNullable(newCompetition.getCompetitionType()).map(CompetitionType::valueOf).ifPresent(currentCompetition::setCompetitionType);
         Optional.ofNullable(newCompetition.getStartDate()).ifPresent(currentCompetition::setStartDate);
         Optional.ofNullable(newCompetition.getEndDate()).ifPresent(currentCompetition::setEndDate);
@@ -176,7 +181,7 @@ public class CompetitionService {
 
             boolean captainExists = teamById.getTeamMembers().stream()
                     .filter(member -> member.getRoles().stream()
-                            .anyMatch(role -> role.getRoleName().equalsIgnoreCase("CAPITAN")))
+                            .anyMatch(role -> role.getRoleName().equalsIgnoreCase("CAPTAIN")))
                     .anyMatch(member -> selectedPlayerIds.contains(member.getUserId()));
 
             if (!captainExists) {
@@ -362,7 +367,6 @@ public class CompetitionService {
             competitionParticipantRepository.save(participant);
         }
     }
-
 
     /**
      * Method for searching tournaments by filters and with dynamic search by keyword ‘name’
