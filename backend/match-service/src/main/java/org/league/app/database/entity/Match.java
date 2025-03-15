@@ -17,7 +17,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
-@Table(schema = "public", name = "match")
+@Table(schema = "match", name = "match")
 public class Match {
 
     @Id

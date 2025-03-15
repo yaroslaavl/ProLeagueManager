@@ -55,7 +55,7 @@ public class TeamService {
             throw new TeamNameAlreadyExistsException("This teamName is already yours. Please choose another one");
         }
 
-        List<TeamRole> teamRoleList = getRolesByNames("PLAYER", "CAPITAN", "MANAGER");
+        List<TeamRole> teamRoleList = getRolesByNames("PLAYER", "CAPTAIN", "MANAGER");
 
         Team team = Optional.of(teamCreateEditDto)
                 .map(dto -> {
@@ -434,8 +434,8 @@ public class TeamService {
                 return;
             }
 
-            List<TeamMember> teamMemberWithCapitanRole = teamMemberRepository.findTeamMemberByRolesAndTeamId(getRolesByNames("CAPITAN"), teamByTeamName.getId());
-            if (teamMemberWithCapitanRole.size() == 1 && teamMember.getRoles().stream().noneMatch(getRolesByNames("CAPITAN")::contains)) {
+            List<TeamMember> teamMemberWithCapitanRole = teamMemberRepository.findTeamMemberByRolesAndTeamId(getRolesByNames("CAPTAIN"), teamByTeamName.getId());
+            if (teamMemberWithCapitanRole.size() == 1 && teamMember.getRoles().stream().noneMatch(getRolesByNames("CAPTAIN")::contains)) {
                 TeamMember teamMemberWithCapitanRoleFirst = teamMemberWithCapitanRole.getFirst();
                 List<TeamRole> currentRoles = new ArrayList<>(teamMemberWithCapitanRoleFirst.getRoles());
 
@@ -457,7 +457,7 @@ public class TeamService {
                 TeamMember teamMemberWithPlayerRoleFirst = otherPlayers.get();
                 List<TeamRole> currentRoles = new ArrayList<>(teamMemberWithPlayerRoleFirst.getRoles());
 
-                List<TeamRole> newRoles = getRolesByNames("MANAGER", "CAPITAN");
+                List<TeamRole> newRoles = getRolesByNames("MANAGER", "CAPTAIN");
                 for (TeamRole role : newRoles) {
                     if (!currentRoles.contains(role)) {
                         currentRoles.add(role);
@@ -471,7 +471,7 @@ public class TeamService {
             }
         }
         teamMemberRepository.delete(optionalTeamMember.get());
-        sendNotificationMessage(userByEmail.getId(), null, null, "You have left the team: " + optionalTeamMember.get().getTeam(), "TEAM_LEFT");
+        sendNotificationMessage(userByEmail.getId(), null, null, "You have left the team: " + optionalTeamMember.get().getTeam().getTeamName(), "TEAM_LEFT");
     }
 
     @Transactional
@@ -502,20 +502,20 @@ public class TeamService {
                     }
                     updatedRoles.add(getRolesByNames(roleName).getFirst());
                 }
-                if (roleName.equals("CAPITAN")) {
+                if (roleName.equals("CAPTAIN")) {
                     List<TeamMember> capitan = teamMemberRepository.findTeamMemberByRolesAndTeamId
-                            (getRolesByNames("CAPITAN"), teamWithAccessCheck.getId());
+                            (getRolesByNames("CAPTAIN"), teamWithAccessCheck.getId());
 
                     if (capitan != null && !capitan.getFirst().equals(teamMember)) {
                         TeamMember currentCapitan = capitan.getFirst();
-                        currentCapitan.getRoles().remove(getRolesByNames("CAPITAN").getFirst());
+                        currentCapitan.getRoles().remove(getRolesByNames("CAPTAIN").getFirst());
                         teamMemberRepository.save(currentCapitan);
                     }
-                    updatedRoles.add(getRolesByNames("CAPITAN").getFirst());
+                    updatedRoles.add(getRolesByNames("CAPTAIN").getFirst());
                     updatedRoles.add(getRolesByNames("PLAYER").getFirst());
                 }
 
-                if (!"MANAGER".equals(roleName) && !"CAPITAN".equals(roleName)) {
+                if (!"MANAGER".equals(roleName) && !"CAPTAIN".equals(roleName)) {
                     updatedRoles.add(getRolesByNames(roleName).getFirst());
                 }
             }

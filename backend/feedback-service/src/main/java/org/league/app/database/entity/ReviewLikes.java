@@ -13,7 +13,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
-@Table(schema = "public", name = "review_likes")
+@Table(schema = "feedback", name = "review_likes")
 public class ReviewLikes {
 
     @Id

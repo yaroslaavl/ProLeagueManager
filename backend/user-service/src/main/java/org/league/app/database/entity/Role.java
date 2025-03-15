@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-@Table(schema = "public", name = "role")
+@Table(schema = "user_data", name = "role")
 public class Role {
 
     @Id

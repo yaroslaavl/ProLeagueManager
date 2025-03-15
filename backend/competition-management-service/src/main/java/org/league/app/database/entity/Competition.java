@@ -19,7 +19,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-@Table(schema = "public", name = "competition")
+@Table(schema = "competition_management", name = "competition")
 public class Competition {
 
     @Id
@@ -33,7 +33,7 @@ public class Competition {
     @Column(name = "sport_id")
     private Integer sportId;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "game_system_id", nullable = false)
     private GameSystem gameSystem;
 

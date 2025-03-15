@@ -33,7 +33,16 @@ public class EventConfig {
                 .authorizeHttpRequests(
                         authorizeRequests -> authorizeRequests
                                 .requestMatchers(
-                                        "/actuator/health").permitAll()
+                                        "/actuator/health",
+                                        "/api/event/published",
+                                        "/api/event/pinned",
+                                        "/api/event/image/*",
+                                        "/api/event/id/*").permitAll()
+                                .requestMatchers(
+                                        "/api/event/upload-pinned-image/*",
+                                        "/api/event/all",
+                                        "/api/event/pinned/*",
+                                        "/api/event/pinned").hasAuthority("MODERATOR")
                 )
                 .addFilterBefore(routeFilter, SecurityContextHolderFilter.class)
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)

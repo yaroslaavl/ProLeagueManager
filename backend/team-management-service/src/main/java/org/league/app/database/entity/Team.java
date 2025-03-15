@@ -16,7 +16,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 @ToString(exclude = "teamMemberList")
-@Table(schema = "public", name = "team")
+@Table(schema = "team_management", name = "team")
 public class Team {
 
     @Id

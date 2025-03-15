@@ -213,7 +213,7 @@ public class MatchService {
             TeamFeignDto teamById = teamClient.findTeamById(teamId);
             TeamMemberFeignDto capitan = teamById.getTeamMembers().stream()
                     .filter(member -> member.getRoles().stream()
-                            .anyMatch(role -> "CAPITAN".equalsIgnoreCase(role.getRoleName())))
+                            .anyMatch(role -> "CAPTAIN".equalsIgnoreCase(role.getRoleName())))
                     .findFirst()
                     .orElseThrow(() -> new PlayerNotFoundException("Capitan not found"));
 

@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.concurrent.TimeUnit;
+
 @FeignClient("user-service")
 public interface AuthClientFeign {
 
@@ -20,6 +22,12 @@ public interface AuthClientFeign {
 
     @GetMapping("/api/auth/get-token")
     String getToken(@RequestParam("key") String key);
+
+    @PostMapping("/api/auth/set-token")
+    String setToken(@RequestParam("key") String key,
+                    @RequestParam("value") String value,
+                    @RequestParam("timeToLive") long timeToLive,
+                    @RequestParam("timeUnit") TimeUnit timeUnit);
 
     @GetMapping("/api/auth/load-user-by-email")
     UserDto loadUserByEmail(@RequestHeader("Authorization") String token, @RequestParam("email") String email);

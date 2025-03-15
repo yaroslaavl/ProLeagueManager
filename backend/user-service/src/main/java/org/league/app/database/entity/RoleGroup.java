@@ -17,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-@Table(schema = "public", name = "role_group")
+@Table(schema = "user_data", name = "role_group")
 public class RoleGroup {
 
     @Id

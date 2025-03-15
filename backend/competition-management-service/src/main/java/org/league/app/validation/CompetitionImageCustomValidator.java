@@ -6,7 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class CompetitionImageCustomValidator implements ConstraintValidator<CompetitionImageCustom, MultipartFile> {
 
-    private static final long MAX_SIZE = 7 * 1024 * 1024;
+    private static final long MAX_SIZE = 3 * 1024 * 1024;
     private static final String[] CONTENT_TYPES = {"image/jpeg", "image/png", "image/jpg", "image/svg+xml"};
     private static final String[] VALID_EXTENSIONS = {".jpeg", ".jpg", ".png", ".svg"};
 

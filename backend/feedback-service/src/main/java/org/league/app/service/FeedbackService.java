@@ -63,7 +63,7 @@ public class FeedbackService {
             tonality = azure.getSentiment(message);
             lang = azure.getLanguage(message);
         } catch (Exception e) {
-            log.error("Azure Text Analytics error: {}", e.getMessage());
+            log.error("Azure Text Analytics error while creating: {}", e.getMessage());
             tonality = "unknown";
             lang = "unknown";
         }

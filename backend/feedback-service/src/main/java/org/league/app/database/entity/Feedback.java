@@ -15,7 +15,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-@Table(schema = "public", name = "feedback")
+@Table(schema = "feedback", name = "feedback")
 public class Feedback {
 
     @Id

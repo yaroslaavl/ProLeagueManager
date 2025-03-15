@@ -15,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 @ToString(exclude = "team")
-@Table(schema = "public", name = "team_member")
+@Table(schema = "team_management", name = "team_member")
 public class TeamMember {
 
     @Id
