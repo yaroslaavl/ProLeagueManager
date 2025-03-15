@@ -118,5 +118,4 @@ async function getRoles() {
     console.error(err);
   }
 }
-
 getRoles();

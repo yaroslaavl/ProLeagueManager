@@ -393,10 +393,21 @@ footer {
   background-color: #3861FB;
   color: #ffffff;
 }
-.leave-team{
-  color: white;
-  background-color: #EA3943;
+.leave-team {
+  color: #EA3943;
+  background-color: #ffffff;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  font-weight: bold;
+  border: #EA3943 1px solid;
+  padding: 5px 5px;
 }
+
+.leave-team:hover {
+  background-color: #EA3943;
+  color: #ffffff;
+  border-color: #EA3943;
+}
+
 
 .manager_menu{
   display: flex;
@@ -414,7 +425,9 @@ footer {
   display: block;
 }
 .search_user>p{
-  text-align: center;
+  text-align: left;
+  padding: 0 0 15px 0;
+  border-bottom: 1px #dddddd solid;
   font-size: 16px;
   color: #000000;
   font-weight: bold;
@@ -422,21 +435,21 @@ footer {
 .search_user>input{
   margin-top:10px;
   margin-left: 5px;
-  padding: 0 0 0 5px;
+  padding:10px;
   border-radius: 8px;
-  border: #808A9D 1px solid;
+  border: none;
   color: #808A9D;
   font-weight: bold;
   font-size: 12px;
   height: 30px;
-  width: 80%;
+  width:95%;
   font-family: Inter, sans-serif;
 }
 .search_user>button{
   margin-top:10px;
   margin-left:10px;
-  width: 80px;
-  height: 30px;
+  width: 95px;
+  height: 50px;
   background-color: #3861FB;
   border-radius: 8px;
   border: none;
@@ -445,12 +458,13 @@ footer {
   font-weight: bold;
   transition: background-color 0.3s ease;
 }
-.search_user>button:hover{
-  background-color: #d9dadf;
+.invite-btn{
+  width: 20px;
+  height: 20px;
+  filter: url(#filter_B);
 }
 .users_found{
   margin-top: 10px;
-  border-top: #dddddd solid 1px;
 }
 .user{
   background-color: white;
@@ -469,7 +483,7 @@ footer {
 .user>button{
   height: 30px;
   margin-top: 8px;
-  background-color: #3861FB;
+  background-color: #dddddd;
   color: white;
   border-radius: 12px;
   border: none;
@@ -479,7 +493,7 @@ footer {
   transition: background-color 0.3s ease;
 }
 .user>button:hover{
-  background-color: #d9dadf;
+  background-color: #3861FB;
 }
 .user_info{
   font-weight: bold;
@@ -494,7 +508,7 @@ footer {
   display: flex;
   gap: 20px;
 }
-.sended_inventation{
+.inventations{
   display: block;
   width: 550px;
   height: 300px;
@@ -502,7 +516,10 @@ footer {
   border-radius: 20px;
   padding: 20px;
 }
-.sended_inventation>p{
+.inventations>p{
+  text-align: left;
+  padding: 0 0 15px 0;
+  border-bottom: 1px #dddddd solid;
   font-size: 16px;
   color: #000000;
   font-weight: bold;
