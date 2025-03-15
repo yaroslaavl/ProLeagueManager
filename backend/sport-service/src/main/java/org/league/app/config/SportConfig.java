@@ -33,7 +33,7 @@ public class SportConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/sport/create-new-sport",
                                 "/api/sport/edit-sport/**",
-                                "/api/sport/delete-sport/**").hasAuthority("EDITOR")
+                                "/api/sport/delete-sport/**").hasAuthority("MODERATOR")
                         .requestMatchers("/api/sport/allSports",
                                 "/api/sport/e-sports",
                                 "/api/sport/regular-sports",

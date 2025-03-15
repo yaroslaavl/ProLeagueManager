@@ -62,7 +62,7 @@ public class CompetitionManagementConfig {
                                 "/api/game-system/update/**",
                                 "/api/competition/upload-image/*",
                                 "/api/competition/disqualify/*",
-                                "/api/game-system/**").hasAuthority("EDITOR")
+                                "/api/game-system/**").hasAuthority("MODERATOR")
                         .requestMatchers(
                                 "/api/competition/participation").authenticated())
                 .addFilterBefore(routeFilter, SecurityContextHolderFilter.class)
