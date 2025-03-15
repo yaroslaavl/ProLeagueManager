@@ -28,7 +28,11 @@ public class JWTFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getServletPath();
-        return path.equals("/actuator/health");
+        return path.equals("/actuator/health")
+                || path.equals("/api/event/published")
+                || path.equals("/api/event/pinned")
+                || path.startsWith("/api/event/image/")
+                || path.startsWith("/api/event/id/");
     }
 
     @Override
