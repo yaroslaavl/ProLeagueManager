@@ -394,6 +394,7 @@ public class TeamService {
             if (teamMember.getRoles().equals(getRolesByNames("MANAGER"))) {
                 throw new RuntimeException("You cannot delete yourself from the team");
             }
+            teamWithAccessCheck.getTeamMemberList().remove(teamMember);
             teamMemberRepository.delete(teamMember);
         } else {
             log.warn("User with ID {} is not a member of team {}", userId, teamWithAccessCheck.getTeamName());

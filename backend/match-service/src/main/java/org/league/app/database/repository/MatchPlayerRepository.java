@@ -4,9 +4,12 @@ import org.league.app.database.entity.MatchPlayer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
 public interface MatchPlayerRepository extends JpaRepository<MatchPlayer, UUID> {
+
+    Optional<MatchPlayer> findMatchPlayerByMatchIdAndPlayerId(UUID matchId, Long playerId);
 
 }

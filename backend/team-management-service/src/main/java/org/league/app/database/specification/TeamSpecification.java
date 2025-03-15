@@ -10,17 +10,23 @@ public class TeamSpecification {
 
     public static Specification<Team> search(String keyword) {
         return (root, query, criteriaBuilder) -> {
+            assert query != null;
+            query.orderBy(criteriaBuilder.asc(root.get("teamName")));
             if (keyword == null || keyword.isEmpty()) {
                 return criteriaBuilder.conjunction();
             }
             return criteriaBuilder.like(
-                    criteriaBuilder.lower(root.get("teamName")), "%" + keyword.toLowerCase() + "%"
+                    criteriaBuilder.lower(root.get("teamName")), keyword.toLowerCase() + "%"
             );
         };
     }
 
     public static Specification<Team> hasStatus(String teamStatus) {
-        return (root, query, criteriaBuilder) ->
-            criteriaBuilder.equal(root.get("teamStatus"), teamStatus);
+        return (root, query, criteriaBuilder) -> {
+            if (teamStatus == null || teamStatus.isEmpty()) {
+                return criteriaBuilder.conjunction();
+            }
+            return criteriaBuilder.equal(root.get("teamStatus"), teamStatus);
+        };
     }
 }

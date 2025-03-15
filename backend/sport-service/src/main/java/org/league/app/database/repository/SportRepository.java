@@ -17,7 +17,7 @@ public interface SportRepository extends JpaRepository<Sport, Integer> {
 
     int deleteSportByName(String name);
 
-    @Query("SELECT s FROM Sport s WHERE LOWER(s.name) LIKE LOWER(CONCAT('%', :sportName, '%'))")
+    @Query("SELECT s FROM Sport s WHERE LOWER(s.name) LIKE LOWER(CONCAT(:sportName, '%')) ORDER BY LOWER(s.name) ASC")
     List<Sport> findByNameSearch(@Param("sportName") String sportName);
 
     List<Sport> findSportsByIsEsport(Boolean isEsport);

@@ -175,7 +175,7 @@ public class MatchService {
                 LeagueStandingDto d2 = temp.get(temp.size() - 2 - i);
 
                 if (round == totalRounds - 1 && matchDay.isAfter(endDate)) {
-                    matchDay = matchDay.minusHours(5);
+                    matchDay = endDate.minusHours(5);
                 }
                 createAndSaveMatch(competition, d1, d2, matchDay, round + 1);
                 matchCounter++;
@@ -190,6 +190,10 @@ public class MatchService {
     public boolean matchConfirmation(UUID matchId, UUID teamId, Long userId, List<Long> playerIds) {
         Match match = matchRepository.findById(matchId)
                 .orElseThrow(() -> new MatchNotFoundException("Match not found"));
+
+        if (matchPlayerRepository.findMatchPlayerByMatchIdAndPlayerId(matchId, userId).isPresent()) {
+            throw new RuntimeException("You have already confirmed your participation in match");
+        }
 
         if (match.getMatchStatus() != MatchStatus.SCHEDULED) {
             throw new InvalidMatchStateException("Match is not scheduled");
@@ -774,9 +778,14 @@ public class MatchService {
                     .teamAId(dtoA.getTeamId())
                     .teamBId(dtoB.getTeamId())
                     .matchDate(matchDate)
+                    .matchStatus(MatchStatus.SCHEDULED)
                     .leagueTourNumber(round)
                     .scoreA(0)
                     .scoreB(0)
+                    .isOvertime(false)
+                    .isDraw(false)
+                    .aConfirmed(false)
+                    .bConfirmed(false)
                     .build();
             matchRepository.save(match);
         }
@@ -823,7 +832,7 @@ public class MatchService {
 
     private String securityContext() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication.getPrincipal() instanceof UserDto userDto){
+        if (authentication.getPrincipal() instanceof UserDto userDto) {
             return userDto.getEmail();
         }
         return authentication.getName();

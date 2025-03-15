@@ -68,12 +68,13 @@ public class CompetitionService {
             throw new CompetitionAlreadyExistsException("Competition with current name already exists");
         }
 
-        if (competitionCreate.getStartDate().isAfter(competitionCreate.getEndDate())) {
+        boolean isLeague = competitionCreate.getCompetitionType().toUpperCase().equals(CompetitionType.LEAGUE.toString());
+        if (isLeague && competitionCreate.getStartDate().isAfter(competitionCreate.getEndDate())) {
             throw new TimeErrorException("Start date cannot be after end date");
         }
 
         CompetitionStatus competitionStatus;
-        if (competitionCreate.getCompetitionType().toUpperCase().equals(CompetitionType.LEAGUE.toString())) {
+        if (isLeague) {
             competitionStatus = CompetitionStatus.NONE;
         } else {
             competitionStatus = CompetitionStatus.UPCOMING;
@@ -126,13 +127,17 @@ public class CompetitionService {
 
     @Transactional
     public boolean delete(String competitionName) {
-        return competitionRepository.findCompetitionByName(competitionName)
-                .map(entity -> {
-                    int deleted = competitionRepository.deleteCompetitionByName(competitionName);
-                    competitionRepository.flush();
-                    return deleted > 0;
-                })
-                .orElse(false);
+        Competition competition = competitionRepository.findCompetitionByName(competitionName)
+                .orElseThrow(() -> new CompetitionNotFoundException("Competition with name: " + competitionName + " not found"));
+
+        if (competition.getStatus().equals(CompetitionStatus.ACTIVE) || competition.getStatus().equals(CompetitionStatus.COMPLETED)) {
+            throw new RuntimeException("You can't delete this competition because it is active or already ended");
+        }
+
+        int deleted = competitionRepository.deleteCompetitionByName(competitionName);
+        competitionRepository.flush();
+        log.info("{} with type {} was deleted successfully", competitionName, competition.getCompetitionType());
+        return deleted > 0;
     }
 
     @Transactional
@@ -174,7 +179,7 @@ public class CompetitionService {
             return true;
         } else {
             TeamFeignDto teamById = teamClientFeign.findTeamById(teamId);
-            if (competitionParticipantRepository.findCompetitionParticipantByTeamIdAndCompetitionId(teamById.getId(), competitionId).getFirst() != null) {
+            if (!competitionParticipantRepository.findCompetitionParticipantByTeamIdAndCompetitionId(teamById.getId(), competitionId).isEmpty()) {
                 throw new TeamAlreadyParticipating("Team is already participating");
             }
             log.info("Team data: '{}'", teamById);

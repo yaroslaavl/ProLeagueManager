@@ -46,7 +46,6 @@ public class Competition {
     private LocalDateTime startDate;
 
     @Column(name = "end_date")
-    @NotNull(message = "Write the end date of your competition")
     private LocalDateTime endDate;
 
     @Enumerated(EnumType.STRING)
