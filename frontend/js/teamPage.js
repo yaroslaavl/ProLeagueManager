@@ -273,7 +273,8 @@ function openConfirmationDialog() {
   overlay.appendChild(dialog);
   document.body.appendChild(overlay);
 }
-document.getElementById('search_username').addEventListener('click', async function () {
+document.getElementById('usernameInput').addEventListener('input', async function () {
+
   try {
     let wordInput = document.getElementById('usernameInput').value;
     const response = await fetch(`http://localhost:8765/user/search-user?keyword=${wordInput}`);
@@ -286,6 +287,7 @@ document.getElementById('search_username').addEventListener('click', async funct
     displayUsers(users);
   } catch (err) {
     console.error("Error fetching users:", err);
+    clearSearch();
   }
 });
 async function displayUsers(users) {
@@ -320,7 +322,7 @@ async function displayUsers(users) {
                     <p>${user.email}</p>
                 </div>
             </div>
-            <button onclick="inviteUser('${user.id}')">Zaprosic</button>
+            <button onclick="inviteUser('${user.id}')"><img class="invite-btn" src="https://www.svgrepo.com/show/513862/user-add.svg" alt=""></button>
         `;
     }
 

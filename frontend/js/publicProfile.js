@@ -214,7 +214,6 @@ async function getTeam(userId) {
     console.error(`Error while receiving data from server:`, err);
   }
 }
-
 document.addEventListener("DOMContentLoaded", function () {
   const createTeamBtn = document.getElementById("create_team_btn");
   if (createTeamBtn) {
@@ -225,8 +224,6 @@ document.addEventListener("DOMContentLoaded", function () {
     console.error("Кнопка создания команды не найдена в DOM");
   }
 });
-
-
 function openCreateTeamDialog() {
   // Создание затемненного фона
   const overlay = document.createElement("div");

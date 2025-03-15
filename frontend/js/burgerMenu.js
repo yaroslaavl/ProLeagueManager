@@ -93,6 +93,5 @@ async function refreshtoken() {
     console.error(err);
   }
 }
-
 // Вызов fetchUserInfo при загрузке
 fetchUserInfo();

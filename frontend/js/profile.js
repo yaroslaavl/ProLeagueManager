@@ -223,6 +223,5 @@ async function refreshToken(){
     console.error(err);
   }
 }
-
 getUsername();
 const submit = document.getElementById("submit").addEventListener('click',updateUserProfile);
