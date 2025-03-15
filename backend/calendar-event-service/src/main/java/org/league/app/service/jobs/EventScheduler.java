@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.league.app.database.entity.Event;
 import org.league.app.database.entity.enums.EventType;
+import org.league.app.database.entity.enums.Status;
 import org.league.app.database.repository.EventRepository;
+import org.league.app.feign.authClient.AuthClientFeign;
 import org.league.app.feign.competitionClient.CompetitionClientFeign;
 import org.league.app.feign.matchClient.MatchClientFeign;
 import org.league.app.service.EventService;
@@ -33,6 +35,7 @@ public class EventScheduler {
     private final Map<UUID, Boolean> matchTypeMap = new HashMap<>();
 
     private final ReentrantLock lock = new ReentrantLock();
+    private final AuthClientFeign authClientFeign;
 
     @Scheduled(fixedDelay = 30000)
     public void executeScheduledTasks() {
@@ -48,6 +51,36 @@ public class EventScheduler {
             createAutoTopMatchesEvents();
         } finally {
             lock.unlock();
+        }
+    }
+
+    @Scheduled(fixedDelay = 90000)
+    public void checkPinnedEvents() {
+        log.info("Checking pinned events");
+        List<Event> eventsByEventTypeAndStatus = eventRepository.findEventsByEventTypeAndStatus(EventType.GLOBAL, Status.PUBLISHED);
+        List<UUID> changeStatusList = new ArrayList<>();
+
+        if (eventsByEventTypeAndStatus.isEmpty()) {
+            return;
+        }
+
+        for (Event event : eventsByEventTypeAndStatus) {
+            String global = "GLOBAL_EVENT:" + event.getId();
+            String globalToken = authClientFeign.getToken(global);
+
+            if (globalToken == null || globalToken.isEmpty()) {
+                changeStatusList.add(event.getId());
+
+                log.info("Changing status for expired event: {} with type {}",
+                        event.getId(), event.getEventType());
+            }
+        }
+
+        if (!changeStatusList.isEmpty()) {
+            eventService.changePinnedEventsStatus(Status.ARCHIVED, changeStatusList);
+            log.info("Changed status for expired events: {}", changeStatusList.size());
+        } else {
+            log.info("No expired global events found");
         }
     }
 
