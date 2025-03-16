@@ -1,8 +1,10 @@
 package org.league.app.config;
 
+import io.micrometer.core.instrument.MeterRegistry;
 import lombok.SneakyThrows;
 import org.league.app.filter.JWTFilter;
 import org.league.app.filter.RouteFilter;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -49,7 +51,8 @@ public class TeamConfig {
                                 "/api/team/update-role/**").authenticated()
                         .requestMatchers("/api/team/allTeams",
                                 "/api/team/currentTeam/**",
-                                "/actuator/health",
+                                "/actuator/**",
+                                "/actuator",
                                 "/api/team/*/user-role",
                                 "/api/team/team-logo/**",
                                 "/api/team/get-team-member-by-team-and-userId",

@@ -32,7 +32,8 @@ public class CompetitionManagementConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/actuator/health",
+                                "/actuator/**",
+                                "/actuator",
                                 "/api/competition/search-leagues",
                                 "/api/competition/get/**",
                                 "/api/competition/all",

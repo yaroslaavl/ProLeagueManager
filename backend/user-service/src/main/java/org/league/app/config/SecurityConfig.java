@@ -70,6 +70,7 @@ public class SecurityConfig {
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/actuator/**", "/actuator").permitAll()
                         .requestMatchers(
                                 "/api/auth/login",
                                 "/api/auth/registration",
@@ -87,8 +88,7 @@ public class SecurityConfig {
                                 "/api/user/avatar/*",
                                 "/api/user/search-user",
                                 "/api/user/getUser/*",
-                                "/api/user/id-dto/*",
-                                "/actuator/health").permitAll()
+                                "/api/user/id-dto/*").permitAll()
                         .requestMatchers(
                                 "/api/auth/logout",
                                 "/api/auth/extract-email",
