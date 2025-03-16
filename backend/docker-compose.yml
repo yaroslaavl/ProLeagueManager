@@ -1,0 +1,262 @@
+name: ProLeagueManager
+services:
+  consul-server:
+    image: hashicorp/consul
+    container_name: consul-server-1
+    environment:
+      - CONSUL_BIND_INTERFACE=eth0
+    ports:
+      - "8500:8500"
+      - "8600:8600/udp"
+    volumes:
+      - consul_data:/consul/data
+    command: agent -server -data-dir=/consul/data -bootstrap-expect=1 -ui -client 0.0.0.0
+    restart: always
+    depends_on:
+      - redis
+    networks:
+      - ProLeagueManager
+
+  redis:
+    image: redis:latest
+    container_name: redis-server
+    environment:
+      ALLOW_EMPTY_PASSWORD: yes
+      REDIS_DISABLE_COMMANDS: FLUSHDB,FLUSHALL
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6380:6379"
+    restart: always
+    networks:
+      - ProLeagueManager
+
+  minio:
+    image: quay.io/minio/minio
+    container_name: minio-server
+    environment:
+      MINIO_ROOT_USER: admin
+      MINIO_ROOT_PASSWORD: password
+    volumes:
+      - minio_data:/data
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    command: server /data --console-address ":9090"
+    restart: always
+    networks:
+      - ProLeagueManager
+
+  rabbitmq:
+    image: rabbitmq:4.0-management
+    container_name: rabbitmq-server
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    networks:
+      - ProLeagueManager
+
+  data-base:
+    image: postgres:16.1
+    container_name: league-database
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: league
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - ProLeagueManager
+
+  gateway:
+    build:
+      context: .
+      dockerfile: gateway/gateway.Dockerfile
+    container_name: gateway
+    ports:
+      - "8765:8765"
+    environment:
+      SPRING_PROFILES_ACTIVE: default
+      SPRING_CLOUD_CONSUL_HOST: consul-server
+      SPRING_CLOUD_CONSUL_PORT: 8500
+    depends_on:
+      - consul-server
+      - rabbitmq
+      - minio
+      - data-base
+    networks:
+      - ProLeagueManager
+
+
+  user-service:
+    build:
+      context: .
+      dockerfile: user-service/user-service.Dockerfile
+    container_name: user-service
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: default
+      SPRING_CLOUD_CONSUL_HOST: consul-server
+      SPRING_CLOUD_CONSUL_PORT: 8500
+      SPRING_DATASOURCE_URL: jdbc:postgresql://league-database:5432/league
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+    depends_on:
+      - gateway
+    networks:
+      - ProLeagueManager
+
+
+  team-management-service:
+    build:
+      context: .
+      dockerfile: team-management-service/team-management-service.Dockerfile
+    container_name: team-management-service
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_PROFILES_ACTIVE: default
+      SPRING_CLOUD_CONSUL_HOST: consul-server
+      SPRING_CLOUD_CONSUL_PORT: 8500
+      SPRING_DATASOURCE_URL: jdbc:postgresql://league-database:5432/league
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+    depends_on:
+      - user-service
+    networks:
+      - ProLeagueManager
+
+  sport-service:
+    build:
+      context: .
+      dockerfile: sport-service/sport-service.Dockerfile
+    container_name: sport-service
+    ports:
+      - "8083:8083"
+    environment:
+      SPRING_PROFILES_ACTIVE: default
+      SPRING_CLOUD_CONSUL_HOST: consul-server
+      SPRING_CLOUD_CONSUL_PORT: 8500
+      SPRING_DATASOURCE_URL: jdbc:postgresql://league-database:5432/league
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+    depends_on:
+      - team-management-service
+    networks:
+      - ProLeagueManager
+
+  notification-service:
+    build:
+      context: .
+      dockerfile: notification-service/notification-service.Dockerfile
+    container_name: notification-service
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_PROFILES_ACTIVE: default
+      SPRING_CLOUD_CONSUL_HOST: consul-server
+      SPRING_CLOUD_CONSUL_PORT: 8500
+      SPRING_DATASOURCE_URL: jdbc:postgresql://league-database:5432/league
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+    depends_on:
+      - sport-service
+    networks:
+      - ProLeagueManager
+
+  competition-management-service:
+    build:
+      context: .
+      dockerfile: competition-management-service/competition-management-service.Dockerfile
+    container_name: competition-management-service
+    ports:
+      - "8084:8084"
+    environment:
+      SPRING_PROFILES_ACTIVE: default
+      SPRING_CLOUD_CONSUL_HOST: consul-server
+      SPRING_CLOUD_CONSUL_PORT: 8500
+      SPRING_DATASOURCE_URL: jdbc:postgresql://league-database:5432/league
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+    depends_on:
+      - notification-service
+    networks:
+      - ProLeagueManager
+
+  match-service:
+    build:
+      context: .
+      dockerfile: match-service/match-service.Dockerfile
+    container_name: match-service
+    ports:
+      - "8085:8085"
+    environment:
+      SPRING_PROFILES_ACTIVE: default
+      SPRING_CLOUD_CONSUL_HOST: consul-server
+      SPRING_CLOUD_CONSUL_PORT: 8500
+      SPRING_DATASOURCE_URL: jdbc:postgresql://league-database:5432/league
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+    depends_on:
+      - competition-management-service
+    networks:
+      - ProLeagueManager
+
+  feedback-service:
+    build:
+      context: .
+      dockerfile: feedback-service/feedback-service.Dockerfile
+    container_name: feedback-service
+    ports:
+      - "8086:8086"
+    environment:
+      SPRING_PROFILES_ACTIVE: default
+      SPRING_CLOUD_CONSUL_HOST: consul-server
+      SPRING_CLOUD_CONSUL_PORT: 8500
+      SPRING_DATASOURCE_URL: jdbc:postgresql://league-database:5432/league
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+    depends_on:
+      - match-service
+    networks:
+      - ProLeagueManager
+
+  calendar-event-service:
+    build:
+      context: .
+      dockerfile: calendar-event-service/calendar-event-service.Dockerfile
+    container_name: calendar-event-service
+    ports:
+      - "8087:8087"
+    environment:
+      SPRING_PROFILES_ACTIVE: default
+      SPRING_CLOUD_CONSUL_HOST: consul-server
+      SPRING_CLOUD_CONSUL_PORT: 8500
+      SPRING_DATASOURCE_URL: jdbc:postgresql://league-database:5432/league
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+    depends_on:
+      - feedback-service
+    networks:
+      - ProLeagueManager
+
+networks:
+  ProLeagueManager:
+    driver: bridge
+
+volumes:
+  redis_data:
+    driver: local
+
+  minio_data:
+
+  consul_data:
+    driver: local
+
+  postgres-data:
