@@ -24,12 +24,14 @@ public class RouteFilter extends OncePerRequestFilter {
     }
 
     private static final Set<String> EXCLUDED_PATHS = Set.of(
-            "/actuator/health",
-            "/actuator/info",
             "/oauth2/authorization/google",
             "/login/oauth2/code/google",
             "/login"
     );
+
+    private static boolean isExcluded(String path) {
+        return EXCLUDED_PATHS.contains(path) || path.startsWith("/actuator/") || path.equals("/actuator");
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -38,7 +40,7 @@ public class RouteFilter extends OncePerRequestFilter {
 
         String path = request.getServletPath();
 
-        if(EXCLUDED_PATHS.contains(path)) {
+        if(isExcluded(path)) {
             filterChain.doFilter(request, response);
             return;
         }
