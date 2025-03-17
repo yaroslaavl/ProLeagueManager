@@ -145,9 +145,4 @@ public class RabbitMqConfig {
     public MessageConverter messageConverter() {
         return new Jackson2JsonMessageConverter();
     }
-
-    @Bean
-    public Queue finalizedCompetitionQueue() {
-        return new Queue("finalized-competition-rpc-queue", true, false, false);
-    }
 }
