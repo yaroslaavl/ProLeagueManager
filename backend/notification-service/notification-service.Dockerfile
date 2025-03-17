@@ -6,5 +6,4 @@ COPY notification-service/target/notification-service-1.0-SNAPSHOT.jar /notifica
 COPY notification-service/src/main/resources/application.yml /notification-service/application.yml
 
 EXPOSE 8081
-ENTRYPOINT ["java", "-jar", "notification-service.jar"]
-CMD ["--spring.config.location=file:/notification-service/application.yml"]
+ENTRYPOINT ["sh", "-c", "sleep 40 && exec java -jar notification-service.jar --spring.config.location=file:/notification-service/application.yml"]

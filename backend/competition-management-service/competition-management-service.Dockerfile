@@ -6,5 +6,4 @@ COPY competition-management-service/target/competition-management-service-1.0-SN
 COPY competition-management-service/src/main/resources/application.yml /competition-management-service/application.yml
 
 EXPOSE 8084
-ENTRYPOINT ["java", "-jar", "competition-management-service.jar"]
-CMD ["--spring.config.location=file:/competition-management-service/application.yml"]
+ENTRYPOINT ["sh", "-c", "sleep 60 && exec java -jar competition-management-service.jar --spring.config.location=file:/competition-management-service/application.yml"]
