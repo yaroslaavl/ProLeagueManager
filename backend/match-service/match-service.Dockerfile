@@ -6,5 +6,4 @@ COPY match-service/target/match-service-1.0-SNAPSHOT.jar /match-service/match-se
 COPY match-service/src/main/resources/application.yml /match-service/application.yml
 
 EXPOSE 8085
-ENTRYPOINT ["java", "-jar", "match-service.jar"]
-CMD ["--spring.config.location=file:/match-service/application.yml"]
+ENTRYPOINT ["sh", "-c", "sleep 90 && exec java -jar match-service.jar --spring.config.location=file:/match-service/application.yml"]

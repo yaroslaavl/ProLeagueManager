@@ -7,4 +7,4 @@ COPY sport-service/src/main/resources/application.yml /sport-service/application
 
 EXPOSE 8083
 ENTRYPOINT ["java", "-jar", "sport-service.jar"]
-CMD ["--spring.config.location=file:/sport-service/application.yml"]
+ENTRYPOINT ["sh", "-c", "sleep 20 && exec java -jar sport-service.jar --spring.config.location=file:/sport-service/application.yml"]

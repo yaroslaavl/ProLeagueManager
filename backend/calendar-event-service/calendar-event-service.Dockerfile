@@ -6,5 +6,4 @@ COPY calendar-event-service/target/calendar-event-service-1.0-SNAPSHOT.jar /cale
 COPY calendar-event-service/src/main/resources/application.yml /calendar-event-service/application.yml
 
 EXPOSE 8087
-ENTRYPOINT ["java", "-jar", "calendar-event-service.jar"]
-CMD ["--spring.config.location=file:/calendar-event-service/application.yml"]
+ENTRYPOINT ["sh", "-c", "sleep 100 && exec java -jar calendar-event-service.jar --spring.config.location=file:/calendar-event-service/application.yml"]
