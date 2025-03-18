@@ -27,6 +27,9 @@ public class MinioService {
     @Value("${minio.url}")
     private String minioUrl;
 
+    public static String MINIO_INTERNAL_URL = "minio";
+    public static String MINIO_PUBLIC_URL = "localhost";
+
     private final MinioClient minioClient;
     private final CompetitionRepository competitionRepository;
 
@@ -82,7 +85,9 @@ public class MinioService {
                         .build()
         );
 
-        competition.setCompetitionImage(minioUrl + "/" + bucket + "/" + objectName);
+        competition.setCompetitionImage(minioUrl.contains(MINIO_INTERNAL_URL)
+                ? minioUrl.replace(MINIO_INTERNAL_URL, MINIO_PUBLIC_URL) + "/" + bucket + "/" + objectName
+                : minioUrl + "/" + bucket + "/" + objectName);
         competitionRepository.save(competition);
     }
 

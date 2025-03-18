@@ -220,6 +220,34 @@ services:
     networks:
       - ProLeagueManager
 
+  victoriametrics:
+    image: victoriametrics/victoria-metrics:latest
+    container_name: victoriametrics
+    ports:
+      - "8428:8428"
+    volumes:
+      - victoriametrics_data:/victoriametrics-data
+      - ./promscrape.yaml:/etc/promscrape.yaml:ro
+    command: -promscrape.config=/etc/promscrape.yaml -storageDataPath=/victoriametrics-data
+    restart: always
+    networks:
+      - ProLeagueManager
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=proleague
+    volumes:
+      - grafana_data:/var/lib/grafana
+    restart: always
+    depends_on:
+      - victoriametrics
+    networks:
+      - ProLeagueManager
 
 networks:
   ProLeagueManager:
@@ -235,3 +263,7 @@ volumes:
     driver: local
 
   postgres-data:
+
+  victoriametrics_data:
+
+  grafana_data:

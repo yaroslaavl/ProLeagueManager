@@ -30,6 +30,9 @@ public class MinioService {
     @Value("${minio.url}")
     private String minioUrl;
 
+    public static String MINIO_INTERNAL_URL = "minio";
+    public static String MINIO_PUBLIC_URL = "localhost";
+
     private final MinioClient minioClient;
     private final TeamRepository teamRepository;
 
@@ -84,7 +87,9 @@ public class MinioService {
                         .build()
         );
 
-        team.setTeamImage(minioUrl + "/" + bucket + "/" + objectName);
+        team.setTeamImage(minioUrl.contains(MINIO_INTERNAL_URL)
+                ? minioUrl.replace(MINIO_INTERNAL_URL, MINIO_PUBLIC_URL) + "/" + bucket + "/" + objectName
+                : minioUrl + "/" + bucket + "/" + objectName);
         teamRepository.save(team);
     }
 
