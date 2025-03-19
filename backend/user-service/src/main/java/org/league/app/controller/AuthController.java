@@ -15,6 +15,7 @@ import org.league.app.exception.UserEmailNotFoundException;
 import org.league.app.feign.UserDto;
 import org.league.app.redisclient.RedisClient;
 import org.league.app.service.JWTService;
+import org.league.app.service.UserMetrics;
 import org.league.app.service.UserService;
 import org.league.app.validation.CreateAction;
 import org.springframework.http.HttpHeaders;
@@ -47,6 +48,7 @@ public class AuthController {
     private final UserRepository userRepository;
     private final RedisClient redisClient;
     private final AuthenticationManager authenticationManager;
+    private final UserMetrics userMetrics;
 
     @PostMapping("/registration")
     public ResponseEntity<UserReadDto> registration(@RequestBody @Validated(CreateAction.class) UserCreateDto userCreate, BindingResult bindingResult){
@@ -85,6 +87,8 @@ public class AuthController {
                 "whitelist:" + loginDto.getEmail() + ":accessToken", accessToken, 15, TimeUnit.MINUTES);
         redisClient.set(
                 "whitelist:" + loginDto.getEmail() + ":refreshToken", refreshToken, 1, TimeUnit.DAYS);
+
+        userMetrics.countLoginMethodCall();
         return AuthResponseDto.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
