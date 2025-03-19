@@ -1,128 +1,150 @@
-refreshToken();
-getUserData();
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
+  try {
+    // Проверяем наличие токенов
+    const accToken = localStorage.getItem("accToken");
+    const refToken = localStorage.getItem("refToken");
+
+    if (!accToken || !refToken) {
+      window.location.href = "main.html";
+      return;
+    }
+
+    // Обновляем токены перед загрузкой данных
+    await refreshToken();
+
+    // Загружаем данные пользователя
+    await getUserData();
+
+    // Устанавливаем обработчик на загрузку страницы для метрик
+    setupPageLoadMetrics();
+
+    // Проверяем сохранённый таймаут кнопки верификации
+    checkVerifyButtonState();
+
+  } catch (err) {
+    console.error("Ошибка при загрузке страницы:", err);
+  }
+});
+
+// Функция обновления токена
+async function refreshToken() {
+  try {
+    const url = "http://localhost:8765/auth/refresh-token";
+    const refToken = localStorage.getItem("refToken");
+
+    if (!refToken) throw new Error("Отсутствует refreshToken");
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${refToken}`,
+        "Content-Type": "application/json"
+      }
+    });
+
+    if (!response.ok) throw new Error("Ошибка при обновлении токена");
+
+    const Tokens = await response.json();
+    localStorage.setItem("accToken", Tokens.accessToken);
+    localStorage.setItem("refToken", Tokens.refreshToken);
+  } catch (err) {
+    console.error("Ошибка обновления токена:", err);
+    logOut();
+  }
+}
+
+// Функция получения данных пользователя
+async function getUserData() {
+  try {
+    const url = "http://localhost:8765/user/profile";
+    const accToken = localStorage.getItem('accToken');
+
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${accToken}`,
+        "Content-Type": "application/json"
+      }
+    });
+
+    if (!response.ok) throw new Error(`Ошибка загрузки данных: ${response.status}`);
+
+    const data = await response.json();
+
+    // Обновляем UI
+    document.getElementById('e-mail').innerText = data.email;
+    const statusElement = document.getElementById('status');
+    const verifyBtn = document.getElementById('verify');
+
+    if (data.isVerified) {
+      statusElement.innerHTML = "On";
+      statusElement.style.color = "green";
+      verifyBtn.remove();
+    } else {
+      statusElement.innerHTML = "Off";
+      statusElement.style.color = "red";
+    }
+
+  } catch (err) {
+    console.error("Ошибка загрузки данных пользователя:", err);
+  }
+}
+
+// Функция выхода из системы
+async function logOut() {
+  try {
+    const accToken = localStorage.getItem("accToken");
+
+    const response = await fetch('http://localhost:8765/auth/logout', {
+      method: 'POST',
+      headers: {
+        "Authorization": `Bearer ${accToken}`,
+        "Content-Type": "application/json"
+      }
+    });
+
+    if (!response.ok) throw new Error(`Ошибка выхода: ${response.status}`);
+
+  } catch (err) {
+    console.error("Ошибка при выходе:", err);
+  } finally {
+    localStorage.clear();
+    window.location.href = "main.html";
+  }
+}
+
+// Функция измерения времени загрузки страницы
+function setupPageLoadMetrics() {
   const pageLoadSpan = document.querySelector(".footer-content span:nth-child(3)");
   const htmlLoadSpan = document.querySelector(".footer-content span:nth-child(4)");
 
   if (pageLoadSpan && htmlLoadSpan) {
-    // Ждём окончания полной загрузки страницы
     window.addEventListener("load", () => {
       setTimeout(() => {
-        const performanceTiming = performance.timing;
+        const timing = performance.timing;
 
-        // Время полной загрузки страницы
-        const pageLoadTime = performanceTiming.loadEventEnd - performanceTiming.navigationStart;
+        const pageLoadTime = timing.loadEventEnd - timing.navigationStart;
+        const htmlLoadTime = timing.responseEnd - timing.responseStart;
 
-        // Время загрузки HTML
-        const htmlLoadTime = performanceTiming.responseEnd - performanceTiming.responseStart;
-
-        // Проверяем, что значения корректны
-        const validPageLoadTime = pageLoadTime > 0 ? pageLoadTime : performance.now(); // Используем performance.now() как fallback
+        const validPageLoadTime = pageLoadTime > 0 ? pageLoadTime : performance.now();
         const validHtmlLoadTime = htmlLoadTime > 0 ? htmlLoadTime : 0;
 
-        // Обновляем значения в DOM с обёрткой для стилей
         pageLoadSpan.innerHTML = `Strona: <span class="blue">${Math.round(validPageLoadTime)}ms</span>`;
         htmlLoadSpan.innerHTML = `Szablon: <span class="blue">${Math.round(validHtmlLoadTime)}ms</span>`;
 
-        // Логируем значения для отладки
         console.log("Page Load Time (ms):", validPageLoadTime);
         console.log("HTML Load Time (ms):", validHtmlLoadTime);
       }, 0);
     });
   }
-});
-document.addEventListener("DOMContentLoaded",()=>{
-  const accToken = localStorage.getItem("accToken");
-  const refreshToken = localStorage.getItem("refToken");
-  if(accToken === null || refreshToken === null){
-    window.location.href = "main.html";
-  }
-})
-
-const accToken = localStorage.getItem('accToken');
-const deleteAcc = document.getElementById('deleteAcc').addEventListener('click',openOverlay);
-const changePasswordOverlay = document.getElementById('changePassword').addEventListener('click',changePasswordOpenOverlay);
-const verify = document.getElementById("verify").addEventListener('click',verifyEmail);
-const changePassword = document.getElementById("updatePassword").addEventListener('click',updatePassword);
-
-async function delAcc() {
-  try {
-    const url = "http://localhost:8765/user/delete-user-account";
-    const password = document.getElementById('pass').value;
-
-    const response = await fetch(url, {
-      method: "DELETE",
-      headers: {
-        "Authorization": `Bearer ${accToken}`, // Добавляем заголовок Authorization
-        "Content-Type": "application/json" // Указываем формат данных
-      },
-      body: JSON.stringify({ password }) // Отправляем объект JSON с паролем
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    alert("Account has been deleted.");
-    localStorage.clear();
-    window.location.href = "main.html";
-  } catch (err) {
-    console.error(err);
-    alert('Nie poprawne haslo');
-  }
 }
-async function getUserData(){
-  try {
-    const mail = document.getElementById('e-mail');
-    const status = document.getElementById('status')
-    const url = "http://localhost:8765/user/profile"
-    const accToken = localStorage.getItem('accToken');
-    const verifyBtn = document.getElementById('verify');
-    const response = await fetch(url, {
-      method: "GET", // Указываем метод GET
-      headers: {
-        "Authorization": `Bearer ${accToken}`, // Добавляем заголовок Authorization
-        "Content-Type": "application/json" // Указываем формат данных
-      }
-    });
-    if(!response.ok){
-      throw new Error(`Error ${response.status}`);
-    }
-    const data = await response.json();
-    if (data.isVerified === true){
-      status.innerHTML = "On";
-      status.style = "color: Green";
-      verifyBtn.remove();
-    }
-    mail.innerHTML = data.email;
-  }catch(err){
-    console.error(err);
-  }
-}
-async function logOut(){
-  try {
-    let accToken = localStorage.getItem("accToken");
-    let refToken = localStorage.getItem("refToken");
-    const response = await fetch('http://localhost:8765/auth/logout',{
-      method: 'POST',
-      headers: {
-        "Authorization": `Bearer ${accToken}`, // Добавляем заголовок Authorization
-        "Content-Type": "application/json" // Указываем формат данных
-      }
-    });
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    localStorage.clear();
-    window.location.href = "main.html";
-  }catch (err){
-    console.error(`${err}`);
-  }
-}
+
+// Функция верификации email
 async function verifyEmail() {
   try {
     const accToken = localStorage.getItem('accToken');
     const url = "http://localhost:8765/user/resend-activation-email";
+
     const response = await fetch(url, {
       method: "POST",
       headers: {
@@ -130,21 +152,22 @@ async function verifyEmail() {
         "Content-Type": "application/json"
       }
     });
-    if (!response.ok) throw new Error("HTTP Request error");
 
-    console.log(response);
-    alert("Powiadomienie o weryfikacji bylo wyslane");
+    if (!response.ok) throw new Error("Ошибка запроса");
 
-    // Установить таймаут в localStorage
-    const timeoutEnd = Date.now() + 60000; // 60 секунд (1 минута)
+    alert("Powiadomienie o weryfikacji było wysłane");
+
+    // Устанавливаем таймаут
+    const timeoutEnd = Date.now() + 60000;
     localStorage.setItem("verifyTimeout", timeoutEnd);
-
-    // Обновить состояние кнопки
     updateVerifyButtonState(timeoutEnd);
+
   } catch (err) {
     console.error(err);
   }
 }
+
+// Функция обновления состояния кнопки верификации
 function updateVerifyButtonState(timeoutEnd) {
   const verifyButton = document.getElementById("verify");
   const interval = setInterval(() => {
@@ -161,72 +184,45 @@ function updateVerifyButtonState(timeoutEnd) {
     }
   }, 1000);
 }
+
 // Проверяем сохранённый таймаут при загрузке страницы
-document.addEventListener("DOMContentLoaded", () => {
+function checkVerifyButtonState() {
   const savedTimeout = localStorage.getItem("verifyTimeout");
   if (savedTimeout && Date.now() < savedTimeout) {
     updateVerifyButtonState(Number(savedTimeout));
   }
-});
-async function updatePassword(){
+}
+
+// Функции для работы с паролями и удалением аккаунта
+async function updatePassword() {
   try {
     const accToken = localStorage.getItem('accToken');
     const url = "http://localhost:8765/user/change-user-password";
-    const oldPassword = document.getElementById("oldPass");
-    const newPassword = document.getElementById("newPass");
+    const oldPassword = document.getElementById("oldPass").value;
+    const newPassword = document.getElementById("newPass").value;
+
     const response = await fetch(url, {
       method: "PUT",
-      body: JSON.stringify({
-        oldPassword: oldPassword.value,
-        newPassword: newPassword.value
-      }),
+      body: JSON.stringify({ oldPassword, newPassword }),
       headers: {
         "Authorization": `Bearer ${accToken}`,
         "Content-Type": "application/json"
       }
     });
-    if(!response.ok)throw new Error("Error HTTP Request");
-    console.log(response);
+
+    if (!response.ok) throw new Error("Ошибка смены пароля");
+
     changePasswordCloseOverlay();
     localStorage.clear();
     window.location.href = "login.html";
-  }catch (err){
+
+  } catch (err) {
     console.error(err);
   }
-}
-async function refreshToken(){
-  try {
-    const url = "http://localhost:8765/auth/refresh-token";
-    const refToken = localStorage.getItem("refToken");
-    const response = await fetch(url,{
-      method:"POST",
-      headers:{
-        "Authorization": `Bearer ${refToken}`,
-        "Content-Type": "application/json"
-      }
-    })
-    if(!response.ok)throw new Error("Error Refresh Token");
-    const Tokens = await response.json();
-    localStorage.setItem("accToken",Tokens.accessToken);
-    localStorage.setItem("refToken",Tokens.refreshToken);
-  }catch (err){
-    console.error(err);
-  }
-}
-function openOverlay() {
-  const overlay = document.getElementById('passwordOverlay');
-  overlay.style.display = 'flex';
-}
-function closeOverlay() {
-  const overlay = document.getElementById('passwordOverlay');
-  overlay.style.display = 'none';
-}
-function changePasswordOpenOverlay() {
-  const overlay = document.getElementById('changePasswordOverlay');
-  overlay.style.display = 'flex';
-}
-function changePasswordCloseOverlay() {
-  const overlay = document.getElementById('changePasswordOverlay');
-  overlay.style.display = 'none';
 }
 
+// Открытие/закрытие оверлеев
+function openOverlay() { document.getElementById('passwordOverlay').style.display = 'flex'; }
+function closeOverlay() { document.getElementById('passwordOverlay').style.display = 'none'; }
+function changePasswordOpenOverlay() { document.getElementById('changePasswordOverlay').style.display = 'flex'; }
+function changePasswordCloseOverlay() { document.getElementById('changePasswordOverlay').style.display = 'none'; }

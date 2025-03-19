@@ -1,155 +1,138 @@
-refreshtoken();
-document.addEventListener("DOMContentLoaded", () => {
-  const pageLoadSpan = document.querySelector(".footer-content span:nth-child(3)");
-  const htmlLoadSpan = document.querySelector(".footer-content span:nth-child(4)");
+document.addEventListener("DOMContentLoaded", async () => {
+  try {
+    // Проверяем наличие токенов
+    const accToken = localStorage.getItem("accToken");
+    const refToken = localStorage.getItem("refToken");
 
-  if (pageLoadSpan && htmlLoadSpan) {
-    // Ждём окончания полной загрузки страницы
-    window.addEventListener("load", () => {
-      setTimeout(() => {
-        const performanceTiming = performance.timing;
+    if (!accToken || !refToken) {
+      window.location.href = "main.html";
+      return;
+    }
 
-        // Время полной загрузки страницы
-        const pageLoadTime = performanceTiming.loadEventEnd - performanceTiming.navigationStart;
+    // Обновляем токены перед загрузкой данных
+    await refreshToken();
 
-        // Время загрузки HTML
-        const htmlLoadTime = performanceTiming.responseEnd - performanceTiming.responseStart;
+    // Загружаем данные пользователя
+    await getUserData();
 
-        // Проверяем, что значения корректны
-        const validPageLoadTime = pageLoadTime > 0 ? pageLoadTime : performance.now(); // Используем performance.now() как fallback
-        const validHtmlLoadTime = htmlLoadTime > 0 ? htmlLoadTime : 0;
+    // Устанавливаем обработчик на загрузку страницы для метрик
+    setupPageLoadMetrics();
 
-        // Обновляем значения в DOM с обёрткой для стилей
-        pageLoadSpan.innerHTML = `Strona: <span class="blue">${Math.round(validPageLoadTime)}ms</span>`;
-        htmlLoadSpan.innerHTML = `Szablon: <span class="blue">${Math.round(validHtmlLoadTime)}ms</span>`;
-
-        // Логируем значения для отладки
-        console.log("Page Load Time (ms):", validPageLoadTime);
-        console.log("HTML Load Time (ms):", validHtmlLoadTime);
-      }, 0);
-    });
+  } catch (err) {
+    console.error("Ошибка при загрузке страницы:", err);
   }
 });
-document.addEventListener("DOMContentLoaded",()=>{
-  const accToken = localStorage.getItem("accToken");
-  const refreshToken = localStorage.getItem("refToken");
-  if(accToken === null || refreshToken === null){
-    window.location.href = "main.html";
-  }
-})
-const accToken = localStorage.getItem("accToken");
-const refreshToken = localStorage.getItem("refToken");
-if(accToken === null || refreshToken === null){
-  window.location.href =
-    "main.html";
-}else{getUserData();}
-async function refreshtoken(){
+
+// Функция обновления токена
+async function refreshToken() {
   try {
     const url = "http://localhost:8765/auth/refresh-token";
     const refToken = localStorage.getItem("refToken");
-    const response = await fetch(url,{
-      method:"POST",
-      headers:{
+
+    if (!refToken) throw new Error("Отсутствует refreshToken");
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
         "Authorization": `Bearer ${refToken}`,
         "Content-Type": "application/json"
       }
-    })
-    if(!response.ok)throw new Error("Error Refresh Token");
+    });
+
+    if (!response.ok) throw new Error("Ошибка при обновлении токена");
+
     const Tokens = await response.json();
-    localStorage.setItem("accToken",Tokens.accessToken);
-    localStorage.setItem("refToken",Tokens.refreshToken);
-  }catch (err){
-    console.error(err);
+    localStorage.setItem("accToken", Tokens.accessToken);
+    localStorage.setItem("refToken", Tokens.refreshToken);
+  } catch (err) {
+    console.error("Ошибка обновления токена:", err);
+    logOut();
   }
 }
+
+// Функция получения данных пользователя
 async function getUserData() {
   try {
     const url = `http://localhost:8765/user/profile`;
+    const accToken = localStorage.getItem("accToken");
+
     const response = await fetch(url, {
-      method: "GET", // Указываем метод GET
+      method: "GET",
       headers: {
-        "Authorization": `Bearer ${accToken}`, // Добавляем заголовок Authorization
-        "Content-Type": "application/json" // Указываем формат данных
+        "Authorization": `Bearer ${accToken}`,
+        "Content-Type": "application/json"
       }
     });
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
+    if (!response.ok) throw new Error(`Ошибка загрузки данных пользователя: ${response.status}`);
 
-    const data = await response.json(); // Парсим JSON-ответ
-    console.log(data); // Выводим данные в консоль или используем их дальше
-    const userName = data.username;
-    const firstName = data.firstName;
-    const lastName = data.lastName;
-    const dateOfBirth = data.birthDate.split('-');
-    let createdAt = new Date(data.createdAt).toLocaleDateString();
-    let userImg;
+    const data = await response.json();
+
+    // Устанавливаем данные пользователя в UI
+    document.getElementById('first_last_name').innerHTML = `${data.firstName} ${data.lastName}`;
+    document.getElementById("nickname").innerHTML = data.username;
+    document.getElementById("date_of_birth").innerHTML = data.birthDate.split('-').reverse().join('.');
+    document.getElementById("creation-date").innerHTML = new Date(data.createdAt).toLocaleDateString();
+
+    // Загружаем команды пользователя
     await getTeam(data.id);
+
+    // Загружаем аватар
     try {
-
-      const res = await fetch(`http://localhost:8765/user/avatar/${userName}`);
-      const urlImg =await res.text();
-      console.log(urlImg);
-      userImg = urlImg;
-    }catch (err){
-      console.error('User image are not received!');
+      const res = await fetch(`http://localhost:8765/user/avatar/${data.username}`);
+      const urlImg = await res.text();
+      document.getElementById('profile_img').src = urlImg;
+    } catch (err) {
+      console.error('Ошибка при загрузке аватара пользователя!');
     }
-
-  console.log(firstName + " " + lastName)
-  document.getElementById('first_last_name').innerHTML = firstName + " " + lastName;
-  document.getElementById("nickname").innerHTML = userName;
-  document.getElementById("date_of_birth").innerHTML = dateOfBirth[2]+'.'+dateOfBirth[1]+'.'+dateOfBirth[0]
-  document.getElementById("creation-date").innerHTML = createdAt;
-  document.getElementById('profile_img').src = userImg;
 
   } catch (err) {
-    console.error(`Error: ${err}`);
+    console.error(`Ошибка загрузки данных пользователя: ${err}`);
   }
-
 }
-async function logOut(){
+
+// Функция выхода из системы
+async function logOut() {
   try {
-    let accToken = localStorage.getItem("accToken");
-    let refToken = localStorage.getItem("refToken");
-    const response = await fetch('http://localhost:8765/auth/logout',{
+    const accToken = localStorage.getItem("accToken");
+
+    const response = await fetch('http://localhost:8765/auth/logout', {
       method: 'POST',
       headers: {
-        "Authorization": `Bearer ${accToken}`, // Добавляем заголовок Authorization
-        "Content-Type": "application/json" // Указываем формат данных
+        "Authorization": `Bearer ${accToken}`,
+        "Content-Type": "application/json"
       }
     });
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
+
+    if (!response.ok) throw new Error(`Ошибка выхода: ${response.status}`);
+
+  } catch (err) {
+    console.error("Ошибка при выходе:", err);
+  } finally {
     localStorage.clear();
     window.location.href = "main.html";
-  }catch (err){
-    console.error(`${err}`);
   }
 }
+
+// Функция загрузки команд пользователя
 async function getTeam(userId) {
   try {
     const url = `http://localhost:8765/team/get-teams-by-userId?userId=${userId}`;
     const response = await fetch(url);
 
     if (!response.ok) {
-      console.error("Failed to fetch teams");
+      console.error("Ошибка загрузки команд");
       return;
     }
 
     const data = await response.json();
-
     const teamsContainer = document.getElementById('teams-container');
-    teamsContainer.innerHTML = ''; // Очищаем контейнер перед добавлением новых элементов
+    teamsContainer.innerHTML = '';
 
     if (!data || data.length === 0) {
-      console.error("No teams found for this user.");
-
+      console.warn("Нет команд для данного пользователя.");
       return;
     }
-
-    console.log(data);
 
     for (let team of data) {
       const teamElement = document.createElement("div");
@@ -161,29 +144,14 @@ async function getTeam(userId) {
       try {
         const logoResponse = await fetch(`http://localhost:8765/team/team-logo/${team.id}`);
         if (logoResponse.ok) {
-          const logoUrl = await logoResponse.text();
-          teamImage.src = logoUrl;
+          teamImage.src = await logoResponse.text();
         } else {
-          teamImage.src = "img/default-team-avatar.png"; // Заглушка, если нет логотипа
+          teamImage.src = "img/default-team-avatar.png";
         }
       } catch (err) {
-        console.error("Error while receiving team logo", err);
-        teamImage.src = "img/default-team-avatar.png"; // Если ошибка, используем дефолтное изображение
+        console.error("Ошибка при загрузке логотипа команды", err);
+        teamImage.src = "img/default-team-avatar.png";
       }
-
-      const teamNameLink = document.createElement("a");
-      teamNameLink.href = "teamPage.html";
-      teamNameLink.style.color = "#000000";
-      teamNameLink.style.fontWeight = "bold";
-
-      const teamName = document.createElement("p");
-      teamName.innerText = team.teamName;
-      teamNameLink.appendChild(teamName);
-
-      teamName.addEventListener("click", () => {
-        localStorage.setItem("MyTeam", team.teamName);
-      });
-
       const roleElement = document.createElement("p");
       roleElement.innerText = "Ładowanie ról...";
 
@@ -204,26 +172,61 @@ async function getTeam(userId) {
         roleElement.innerText = "Błąd wczytywania ról";
       }
 
+
+
+      const teamNameLink = document.createElement("a");
+      teamNameLink.href = "teamPage.html";
+      teamNameLink.style.color = "#000000";
+      teamNameLink.style.fontWeight = "bold";
+      teamNameLink.innerText = team.teamName;
+      teamNameLink.addEventListener("click", () => localStorage.setItem("MyTeam", team.teamName));
+
       teamElement.appendChild(teamImage);
       teamElement.appendChild(teamNameLink);
-      teamElement.appendChild(roleElement);
-
       teamsContainer.appendChild(teamElement);
+      teamElement.appendChild(roleElement);
     }
   } catch (err) {
-    console.error(`Error while receiving data from server:`, err);
+    console.error("Ошибка при получении списка команд:", err);
   }
 }
+
+// Функция измерения времени загрузки страницы
+function setupPageLoadMetrics() {
+  const pageLoadSpan = document.querySelector(".footer-content span:nth-child(3)");
+  const htmlLoadSpan = document.querySelector(".footer-content span:nth-child(4)");
+
+  if (pageLoadSpan && htmlLoadSpan) {
+    window.addEventListener("load", () => {
+      setTimeout(() => {
+        const timing = performance.timing;
+
+        const pageLoadTime = timing.loadEventEnd - timing.navigationStart;
+        const htmlLoadTime = timing.responseEnd - timing.responseStart;
+
+        const validPageLoadTime = pageLoadTime > 0 ? pageLoadTime : performance.now();
+        const validHtmlLoadTime = htmlLoadTime > 0 ? htmlLoadTime : 0;
+
+        pageLoadSpan.innerHTML = `Strona: <span class="blue">${Math.round(validPageLoadTime)}ms</span>`;
+        htmlLoadSpan.innerHTML = `Szablon: <span class="blue">${Math.round(validHtmlLoadTime)}ms</span>`;
+
+        console.log("Page Load Time (ms):", validPageLoadTime);
+        console.log("HTML Load Time (ms):", validHtmlLoadTime);
+      }, 0);
+    });
+  }
+}
+
+// Обработчик для кнопки создания команды
 document.addEventListener("DOMContentLoaded", function () {
   const createTeamBtn = document.getElementById("create_team_btn");
   if (createTeamBtn) {
-    createTeamBtn.addEventListener("click", function () {
-      openCreateTeamDialog();
-    });
+    createTeamBtn.addEventListener("click", openCreateTeamDialog);
   } else {
     console.error("Кнопка создания команды не найдена в DOM");
   }
 });
+
 function openCreateTeamDialog() {
   // Создание затемненного фона
   const overlay = document.createElement("div");
