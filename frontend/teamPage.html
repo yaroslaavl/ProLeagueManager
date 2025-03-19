@@ -14,7 +14,7 @@
   <title>Team Page</title>
 </head>
 <body>
-<div class="container">
+<div class="container" id="main-container">
   <header class="header">
 
     <div class="header-center">
@@ -90,11 +90,51 @@
         <img src="img/profile.svg" id="team_img" alt="">
       </div>
       <div class="team-info-management">
-        <div style="border-bottom: 1px solid #EFF2F5;padding: 0px 0px 10px">
+        <div class="team-title">
           <div class="team-info">
             <p class="team-name" id = "team_name">Nazwa drużyny</p>
             <p class="manager-name" id="manager_name">Manager_nickname</p>
 
+          </div>
+          <!-- Dodaj przycisk do otwarcia okna modalnego -->
+          <div class="manager-options" id="manager-options">
+            <button onclick="openManagerSettings()">
+              <img src="https://www.svgrepo.com/show/343430/options-preferences-settings-2.svg" alt="" style="width: 30px; height:30px">
+            </button>
+          </div>
+
+          <!-- Okno modalne -->
+          <div id="managerSettingsModal" class="modal" style="display: none;">
+            <div class="modal-content">
+              <span class="close" onclick="closeManagerSettings()">&times;</span>
+              <h2>Ustawienia drużyny</h2>
+
+              <div class="modal-section">
+                <img id="currentTeamLogo" src="" alt="Aktualne logo" class="team-logo-preview">
+              </div>
+
+              <div class="modal-section">
+                <label for="teamNameInput">Nazwa drużyny:</label>
+                <input type="text" id="teamNameInput">
+                <button class="modal-save-btn" onclick="saveTeamName()">Zapisz nazwę</button>
+              </div>
+
+              <div class="modal-section">
+                <label for="teamLogoInput">Zmień logo drużyny:</label>
+                <input type="file" id="teamLogoInput" accept="image/*" onchange="previewTeamLogo()">
+                <button class="modal-save-btn" onclick="saveTeamLogo()">Zapisz logo</button>
+              </div>
+
+              <div class="modal-section">
+                <label for="teamStatus">Status drużyny:</label>
+                <select id="teamStatus">
+                  <option value="Open">Aktywna</option>
+                  <option value="Closed">Nieaktywna</option>
+                </select>
+                <button class="modal-save-btn" onclick="saveTeamStatus()">Zapisz status</button>
+              </div>
+
+            </div>
           </div>
         </div>
         <div class="info-buttons">
@@ -115,12 +155,13 @@
       <h2>Zawodnicy</h2>
       <div class="players" id="players">
         <div class="player" style="font-size: 10px;color:#808A9D;background-color:#EFF2F5;margin-bottom: -25px">
-          <p>Zdjęcie:</p>
-          <div class="player-info">
+
+          <div class="player-info" style="gap: 290px">
+            <p>Zdjęcie:</p>
             <p >Imię i Nazwisko:</p>
             <p >Nickname:</p>
             <p>Dołączony:</p>
-            <p>Role:</p>
+            <p></p>
           </div>
         </div>
       </div>
@@ -128,15 +169,16 @@
   </div>
 
 
-  <div class="manager_menu">
+  <div class="manager_menu" id="manager-menu">
     <div class="search_user">
       <p>Wyszukiwarka uzytkownikow:</p>
       <input type="text" placeholder="Nazwa uzytkownika" id="usernameInput">
 
       <div class="users_found"></div>
     </div>
-    <div class="inventations">
+    <div class="manager-notifications">
       <p>Wiadomosci zespolu:</p>
+      <div class="notifications-container"></div>
     </div>
   </div>
 

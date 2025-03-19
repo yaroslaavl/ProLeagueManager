@@ -118,7 +118,7 @@ async function getData(){
       let playerImg;
       // Проверяем, есть ли среди ролей "MANAGER"
       let isManager = member.roles.some(role => role.name === 'MANAGER');
-      let isCapitan = member.roles.some(role => role.name === 'CAPITAN');
+      let isCapitan = member.roles.some(role => role.name === 'CAPTAIN');
 
       try {
         const userId = member.userId;
@@ -133,12 +133,12 @@ async function getData(){
       if(isManager === true){
         document.getElementById('players').innerHTML += `
         <div class="player">
-          <img src=${playerImg} alt="Avatar" class="player-avatar">
           <div class="player-info">
+          <img src=${playerImg} alt="Avatar" class="player-avatar">
             <p class="player-name" style="color: #3861FB">${playerInfo.firstName + " " + playerInfo.lastName}</p>
             <a href="public-profile.html"><p class="player-nickname">${playerInfo.username}</p></a>
             <p class="player-joined">${new Date(member.joinedAt).toLocaleDateString()}</p>
-            <p class="player-roles">${rolesText}</p>
+
           </div>
         </div>`;
         document.getElementById('manager_name').innerText = `${playerInfo.username}`;
@@ -146,23 +146,25 @@ async function getData(){
       else if(isCapitan === true){
         document.getElementById('players').innerHTML += `
         <div class="player">
-          <img src=${playerImg} alt="Avatar" class="player-avatar">
+
           <div class="player-info">
+            <img src=${playerImg} alt="Avatar" class="player-avatar">
             <p class="player-name" style="color: darkgoldenrod">${playerInfo.firstName + " " + playerInfo.lastName}</p>
             <a href="public-profile.html"><p class="player-nickname">${playerInfo.username}</p></a>
             <p class="player-joined">${new Date(member.joinedAt).toLocaleDateString()}</p>
-            <p class="player-roles">${rolesText}</p>
+
           </div>
         </div>`;}
       else{
         document.getElementById('players').innerHTML += `
         <div class="player">
-          <img src=${playerImg} alt="Avatar" class="player-avatar">
+
           <div class="player-info">
+          <img src=${playerImg} alt="Avatar" class="player-avatar">
             <p class="player-name">${playerInfo.firstName + " " + playerInfo.lastName}</p>
             <a href="public-profile.html"><p class="player-nickname">${playerInfo.username}</p></a>
             <p class="player-joined">${new Date(member.joinedAt).toLocaleDateString()}</p>
-            <p class="player-roles">${rolesText}</p>
+
           </div>
         </div>`;}
       }
@@ -242,7 +244,7 @@ function openConfirmationDialog() {
     const teamName = document.getElementById('team_name').textContent;
     console.log(teamName);
     try {
-      const response = await fetch(`http://localhost:8765/team/team-leave/${teamName}`,{
+      const response = await fetch(`http://localhost:8765/team/leave/${teamName}`,{
         method:"PUT",
         headers:{
           "Authorization": `Bearer ${localStorage.getItem('accToken')}`,
@@ -331,9 +333,8 @@ async function displayUsers(users) {
   }
 }
 async function inviteUser(targetId) {
-
   try {
-    const response = await fetch(`http://localhost:8765/team/team-invite/${teamInfo.id}/${targetId}`,{
+    const response = await fetch(`http://localhost:8765/team/invite/${teamInfo.id}/${targetId}`,{
       method: 'POST',
       headers:{
         "Authorization": `Bearer ${localStorage.getItem('accToken')}`,
@@ -351,3 +352,346 @@ function clearSearch() {
   document.getElementById('usernameInput').value = '';
   document.querySelector('.users_found').innerHTML = '';
 }
+async function getTeamNotifications() {
+  try {
+    let Team = localStorage.getItem('MyTeam');
+    if (!Team) Team = localStorage.getItem('SearchResult');
+
+    // Получаем ID текущей команды
+    const res = await fetch(`http://localhost:8765/team/currentTeam/${Team}`);
+    const receivedData = await res.json();
+    const teamId = receivedData.team.id;
+
+    // Запрос на получение уведомлений команды
+    const url = `http://localhost:8765/my-notifications/get-team/${teamId}`;
+    const params = {
+      method: 'POST',
+      headers: {
+        "Authorization": `Bearer ${localStorage.getItem('accToken')}`,
+        "Content-type": "application/json",
+      }
+    };
+
+    const response = await fetch(url, params);
+    if (!response.ok) throw new Error(`Ошибка: ${response.status}`);
+
+    const notifications = await response.json();
+    console.log("📜 Уведомления команды:", notifications);
+
+    // Вызываем функцию отображения уведомлений
+    displayTeamNotifications(notifications);
+  } catch (err) {
+    console.error("❌ Ошибка получения уведомлений команды:", err);
+  }
+}
+// 🔹 Функция отображения уведомлений
+function displayTeamNotifications(notifications) {
+  const notificationsContainer = document.querySelector(".notifications-container");
+
+  // Очищаем контейнер перед добавлением новых уведомлений
+  notificationsContainer.innerHTML = "";
+
+  if (!notifications.length) {
+    notificationsContainer.innerHTML = `<p class="no-notifications">Brak powiadomień.</p>`;
+    return;
+  }
+
+  notifications.forEach(notification => {
+    const notificationItem = document.createElement("div");
+    notificationItem.classList.add("manager-notification-item");
+
+    let message = notification.message;
+
+    // Проверяем тип уведомления
+    if (notification.eventType === "PLAYER_INVITED" || notification.eventType === "PLAYER_DECLINED") {
+      message = `${notification.message}`;
+    }
+
+    notificationItem.innerHTML = `
+            <p class="manager-notification-message">${message}</p>
+            <span class="manager-notification-time">${new Date(notification.createdAt).toLocaleDateString()}</span>
+        `;
+
+    notificationsContainer.appendChild(notificationItem);
+  });
+}
+// 🔹 Функция извлечения названия команды
+function extractTeamName(notificationMessage) {
+  const match = notificationMessage.match(/team:\s(.+)/);
+  return match ? match[1] : null;
+}
+// Загружаем уведомления при загрузке страницы
+async function getUserTeamRole() {
+  try {
+    await refreshToken();
+    let Team = localStorage.getItem('MyTeam') || localStorage.getItem('SearchResult');
+    if (!Team) {
+      console.error("❌ Ошибка: Не найдена команда в localStorage!");
+      return;
+    }
+    const token = localStorage.getItem('accToken');
+    if (!token) {
+      console.error("❌ Ошибка: Токен авторизации отсутствует!");
+      return;
+    }
+    // Запрашиваем ID команды
+    const res = await fetch(`http://localhost:8765/team/currentTeam/${Team}`, {
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json"
+      }
+    });
+    if (!res.ok) {
+      console.error(`❌ Ошибка при получении ID команды: ${res.status}`);
+      return;
+    }
+    const receivedData = await res.json();
+    const teamId = receivedData?.team?.id;
+    if (!teamId) {
+      console.error("❌ Ошибка: ID команды не найден в ответе сервера.");
+      return;
+    }
+    // Запрос на роль пользователя
+    const response = await fetch(`http://localhost:8765/team/${teamId}/user-role`, {
+      headers: {
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json"
+      }
+    });
+    if (!response.ok) {
+      console.error(`❌ Ошибка при получении роли пользователя: ${response.status}`);
+      return;
+    }
+    let Role = await response.json();
+    if (!Role.roles || !Array.isArray(Role.roles)) {
+      console.error("❌ Ошибка: Некорректный формат данных о ролях.");
+      return;
+    }
+    // Проверка роли менеджера
+    if (Role.roles.some(role => role.name === 'MANAGER')) {
+      await getTeamNotifications();
+
+    } else {
+      document.getElementById('manager-menu').innerHTML = "";
+      document.getElementById('manager-options').innerHTML = "";
+    }
+  } catch (err) {
+    console.error("❌ Ошибка выполнения getUserTeamRole:", err);
+  }
+}
+// Вызываем функцию
+getUserTeamRole();
+// Добавляем после загрузки данных о пользователях функцию для рендера кнопки настроек, если роль - менеджер
+async function getUserTeamRoleInfo() {
+  await refreshToken();
+  const res = await fetch(`http://localhost:8765/team/currentTeam/${localStorage.getItem('MyTeam')}`);
+  const data = await res.json();
+  const teamId = data.team.id;
+
+  const response = await fetch(`http://localhost:8765/team/${teamId}/user-role`, {
+    headers: {
+      "Authorization": `Bearer ${localStorage.getItem('accToken')}`,
+      "Content-Type": "application/json"
+    }
+  });
+  const Role = await response.json();
+  return { isManager: Role.roles.some(r => r.name === 'MANAGER'), teamId };
+}
+// Добавляем после загрузки данных о пользователях функцию для рендера кнопки настроек, если роль - менеджер
+async function addRoleEditButtons() {
+  const roleCheck = await getUserTeamRoleInfo();
+  if (!roleCheck.isManager) return; // Если не менеджер - не показываем кнопки
+
+  const playerCards = document.querySelectorAll('.player');
+  playerCards.forEach((card) => {
+    const nicknameElement = card.querySelector('.player-nickname');
+    if (!nicknameElement) return; // Пропускаем карточки без nickname
+
+    const playerNickname = nicknameElement.textContent;
+
+    const settingsBtn = document.createElement('button');
+    settingsBtn.innerHTML = '<img src="https://www.svgrepo.com/show/447437/menu-alt3.svg" style="width: 24px; height:24px">';
+    settingsBtn.style.background = 'none';
+    settingsBtn.style.border = 'none';
+    settingsBtn.style.cursor = 'pointer';
+    settingsBtn.style.margin = "0";
+    settingsBtn.addEventListener('click', () => toggleRoleEditor(card, playerNickname, roleCheck.teamId));
+
+    card.querySelector('.player-info').appendChild(settingsBtn);
+  });
+}
+
+async function toggleRoleEditor(playerCard, username, teamId) {
+  let existingEditor = playerCard.querySelector('.role-editor');
+  if (existingEditor) {
+    existingEditor.remove();
+    return;
+  }
+
+  const userInfo = await fetch(`http://localhost:8765/user/search-user?keyword=${username}`)
+    .then(res => res.json());
+  const userId = userInfo[0].id;
+
+  const rolesResponse = await fetch(`http://localhost:8765/team/get-team-member-by-team-and-userId?teamId=${teamId}&userId=${userId}`);
+  const memberData = await rolesResponse.json();
+  const userRoles = memberData.roles.map(role => role.name);
+
+  const editor = document.createElement('div');
+  editor.classList.add('role-editor');
+  editor.style = 'width: 90%; background: #F9FAFB; border-top: 1px solid #ddd; padding: 15px; border-bottom-left-radius: 12px; border-bottom-right-radius: 12px;';
+
+  editor.innerHTML = `
+    <div style="display: block; flex-direction: column; gap: 10px;">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span>Kapitan</span>
+        <input type="checkbox" id="role-capitan-${userId}" ${userRoles.includes('CAPTAIN') ? 'checked' : ''}>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span>Manager</span>
+        <input type="checkbox" id="role-manager-${userId}" ${userRoles.includes('MANAGER') ? 'checked' : ''}>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <span>Gracz</span>
+        <input type="checkbox" id="role-gracz-${userId}" ${userRoles.includes('PLAYER') ? 'checked' : ''}>
+      </div>
+      <div style="display: flex; gap: 10px; margin-top: 15px;">
+        <button onclick="kickPlayer('${userId}')" style="flex: 1; background: #EA3943; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold;cursor: pointer;">Wyrzucić</button>
+        <button onclick="saveRoles('${userId}')" style="flex: 2; background: #3861FB; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold;cursor: pointer;">Zapisz</button>
+      </div>
+    </div>
+  `;
+
+  playerCard.appendChild(editor);
+}
+
+async function saveRoles(userId) {
+  const teamId = teamInfo.id; // Используем уже полученный объект teamInfo для ID команды
+
+  const currentRolesResponse = await fetch(`http://localhost:8765/team/get-team-member-by-team-and-userId?teamId=${teamId}&userId=${userId}`, {
+    headers: {
+      "Authorization": `Bearer ${localStorage.getItem('accToken')}`,
+      "Content-Type": "application/json"
+    }
+  });
+  if (!currentRolesResponse.ok) {
+    alert('Ошибка при получении текущих ролей. Убедитесь, что у вас есть права менеджера.');
+    return;
+  }
+
+  const currentMemberData = await currentRolesResponse.json();
+  const currentRoles = currentMemberData.roles.map(role => role.name);
+
+  const newRoles = [];
+  if (document.getElementById(`role-manager-${userId}`).checked) newRoles.push('MANAGER');
+  if (document.getElementById(`role-capitan-${userId}`).checked) newRoles.push('CAPTAIN');
+  if (document.getElementById(`role-gracz-${userId}`).checked) newRoles.push('PLAYER');
+
+  const addedRoles = newRoles.filter(role => !currentRoles.includes(role));
+  const removedRoles = currentRoles.filter(role => !newRoles.includes(role));
+
+  await fetch(`http://localhost:8765/team/update-role/${teamId}/${userId}`, {
+    method: 'PUT',
+    headers: {
+      "Authorization": `Bearer ${localStorage.getItem('accToken')}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      addedRoles: addedRoles.length > 0 ? addedRoles : [],
+      removedRoles: removedRoles.length > 0 ? removedRoles : []
+    })
+  });
+
+  alert('Role updated!');
+  location.reload();
+}
+
+async function kickPlayer(userId) {
+  const { teamId } = await getUserTeamRoleInfo();
+  await fetch(`http://localhost:8765/team/user-deletion/${teamId}/${userId}`, {
+    method: 'PUT',
+    headers: {
+      "Authorization": `Bearer ${localStorage.getItem('accToken')}`
+    }
+  });
+  alert('Player removed!');
+  location.reload();
+}
+
+addRoleEditButtons();
+
+function openManagerSettings() {
+  document.getElementById('managerSettingsModal').style.display = 'flex';
+  document.getElementById('teamNameInput').value = document.getElementById('team_name').textContent;
+  document.getElementById('currentTeamLogo').src = document.getElementById('team_img').src;
+}
+
+function closeManagerSettings() {
+  document.getElementById('managerSettingsModal').style.display = 'none';
+}
+
+function previewTeamLogo() {
+  const fileInput = document.getElementById('teamLogoInput');
+  const file = fileInput.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      document.getElementById('currentTeamLogo').src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+async function saveTeamName() {
+  const newName = document.getElementById('teamNameInput').value;
+  const response = await fetch(`http://localhost:8765/team/update-team-name/${teamInfo.id}`, {
+    method: 'PUT',
+    headers: {
+      'Authorization': `Bearer ${localStorage.getItem('accToken')}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ teamName: newName })
+  });
+  if (response.ok) {
+    alert('Nazwa drużyny została zaktualizowana!');
+    location.href = 'public-profile.html';
+  }
+}
+
+async function saveTeamLogo() {
+  const fileInput = document.getElementById('teamLogoInput');
+  const file = fileInput.files[0];
+  const formData = new FormData();
+  formData.append('teamLogo', file);
+  console.log(formData);
+  const response = await fetch(`http://localhost:8765/team/upload-team-logo/${teamInfo.id}`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${localStorage.getItem('accToken')}`
+    },
+    body: formData
+  });
+  if (response.ok) {
+    alert('Logo drużyny zostało zaktualizowane!');
+    location.href = 'public-profile.html';
+  }
+}
+
+async function saveTeamStatus() {
+  const status = document.getElementById('teamStatus').value;
+  const response = await fetch(`http://localhost:8765/team/status/${teamInfo.id}?teamStatus=${status.toUpperCase()}`, {
+    method: 'PUT',
+    headers: {
+      'Authorization': `Bearer ${localStorage.getItem('accToken')}`,
+      'Content-Type': 'application/json'
+    },
+  });
+  if (response.ok) {
+    alert('Status drużyny został zaktualizowany!');
+    location.href = 'public-profile.html';
+  }
+}
+
+
+
+
+

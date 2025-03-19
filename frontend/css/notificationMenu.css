@@ -4,8 +4,8 @@
   display: none;
   position: absolute;
   top: 60px;
-  right: 60px;
-  width: 220px;
+  right: 0px;
+  width: 380px;
   background: white;
   border-radius: 10px;
   border: 1px solid rgb(239, 242, 245);
@@ -89,4 +89,28 @@
 @keyframes toastFadeOut {
   from { opacity: 1; }
   to { opacity: 0; }
+}
+
+.accept-btn{
+  padding: 5px;
+  color: white;
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.decline-btn{
+  cursor: pointer;
+  padding: 5px;
+  color: white;
+  background-color: #EA3943;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+}
+.notification-actions{
+  display: flex;
+  gap: 10px;
+  justify-content: right;
 }

@@ -1,61 +1,162 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
+  try {
+    // Проверяем наличие токенов
+    const accToken = localStorage.getItem("accToken");
+    const refToken = localStorage.getItem("refToken");
+
+    if (!accToken || !refToken) {
+      window.location.href = "main.html";
+      return;
+    }
+
+    // Обновляем токены перед загрузкой данных
+    await refreshToken();
+
+    // Загружаем данные пользователя
+    await getUsername();
+
+    // Устанавливаем обработчик на загрузку страницы для метрик
+    setupPageLoadMetrics();
+
+  } catch (err) {
+    console.error("Ошибка при загрузке страницы:", err);
+  }
+});
+
+// Функция обновления токена
+async function refreshToken() {
+  try {
+    const url = "http://localhost:8765/auth/refresh-token";
+    const refToken = localStorage.getItem("refToken");
+
+    if (!refToken) throw new Error("Отсутствует refreshToken");
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${refToken}`,
+        "Content-Type": "application/json"
+      }
+    });
+
+    if (!response.ok) throw new Error("Ошибка при обновлении токена");
+
+    const Tokens = await response.json();
+    localStorage.setItem("accToken", Tokens.accessToken);
+    localStorage.setItem("refToken", Tokens.refreshToken);
+  } catch (err) {
+    console.error("Ошибка обновления токена:", err);
+    logOut();
+  }
+}
+
+// Функция измерения времени загрузки страницы
+function setupPageLoadMetrics() {
   const pageLoadSpan = document.querySelector(".footer-content span:nth-child(3)");
   const htmlLoadSpan = document.querySelector(".footer-content span:nth-child(4)");
 
   if (pageLoadSpan && htmlLoadSpan) {
-    // Ждём окончания полной загрузки страницы
     window.addEventListener("load", () => {
       setTimeout(() => {
-        const performanceTiming = performance.timing;
+        const timing = performance.timing;
 
-        // Время полной загрузки страницы
-        const pageLoadTime = performanceTiming.loadEventEnd - performanceTiming.navigationStart;
+        const pageLoadTime = timing.loadEventEnd - timing.navigationStart;
+        const htmlLoadTime = timing.responseEnd - timing.responseStart;
 
-        // Время загрузки HTML
-        const htmlLoadTime = performanceTiming.responseEnd - performanceTiming.responseStart;
-
-        // Проверяем, что значения корректны
-        const validPageLoadTime = pageLoadTime > 0 ? pageLoadTime : performance.now(); // Используем performance.now() как fallback
+        const validPageLoadTime = pageLoadTime > 0 ? pageLoadTime : performance.now();
         const validHtmlLoadTime = htmlLoadTime > 0 ? htmlLoadTime : 0;
 
-        // Обновляем значения в DOM с обёрткой для стилей
         pageLoadSpan.innerHTML = `Strona: <span class="blue">${Math.round(validPageLoadTime)}ms</span>`;
         htmlLoadSpan.innerHTML = `Szablon: <span class="blue">${Math.round(validHtmlLoadTime)}ms</span>`;
 
-        // Логируем значения для отладки
         console.log("Page Load Time (ms):", validPageLoadTime);
         console.log("HTML Load Time (ms):", validHtmlLoadTime);
       }, 0);
     });
   }
-});
-document.addEventListener("DOMContentLoaded",()=>{
-  const accToken = localStorage.getItem("accToken");
-  const refreshToken = localStorage.getItem("refToken");
-  if(accToken === null || refreshToken === null){
-    window.location.href = "main.html";
-  }
-})
-refreshToken();
-function enforceNumberLimits(input, min, max) {
-  input.addEventListener('input', () => {
-    const value = parseInt(input.value, 10);
-
-    if (isNaN(value)) {
-      input.value = ''; // Удаляет недопустимые символы
-    } else if (value < min) {
-      input.value = min; // Принудительно устанавливает минимальное значение
-    } else if (value > max) {
-      input.value = max; // Принудительно устанавливает максимальное значение
-    }
-  });
 }
-document.addEventListener('DOMContentLoaded', () => {
-  // Ограничиваем ввод для дня (1-31), месяца (1-12) и года (1900-2100)
-  enforceNumberLimits(document.getElementById('dayInput'), 1, 31);
-  enforceNumberLimits(document.getElementById('monthInput'), 1, 12);
-  enforceNumberLimits(document.getElementById('yearInput'), 1, 2025);
-});
+
+// Функция получения данных пользователя
+async function getUsername() {
+  try {
+    const url = "http://localhost:8765/user/profile";
+    const accToken = localStorage.getItem("accToken");
+
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${accToken}`,
+        "Content-Type": "application/json"
+      }
+    });
+
+    if (!response.ok) throw new Error("Ошибка получения данных пользователя");
+
+    const data = await response.json();
+
+    // Заполняем данные пользователя в форме
+    document.getElementById("nickname").value = data.username;
+    document.getElementById("email").value = data.email;
+    document.getElementById("firstName").value = data.firstName;
+    document.getElementById("lastName").value = data.lastName;
+
+    // Устанавливаем дату рождения
+    const [year, month, day] = data.birthDate.split("-");
+    document.getElementById("dayInput").value = day;
+    document.getElementById("monthInput").value = month;
+    document.getElementById("yearInput").value = year;
+
+    // Загружаем аватар
+    const avatarResponse = await fetch(`http://localhost:8765/user/avatar/${data.username}`);
+    if (avatarResponse.ok) {
+      const blob = await avatarResponse.text();
+      console.log(blob)
+      document.getElementById("avatarPreview").src = blob;
+    } else {
+      console.warn("Аватар не найден:", avatarResponse.status);
+    }
+  } catch (err) {
+    console.error("Ошибка загрузки профиля:", err);
+  }
+}
+
+// Функция обновления данных пользователя
+async function updateUserProfile() {
+  try {
+    const accToken = localStorage.getItem('accToken');
+    const url = "http://localhost:8765/user/update-user-personal-data";
+
+    const firstName = document.getElementById("firstName").value;
+    const lastName = document.getElementById("lastName").value;
+    const username = document.getElementById("nickname").value;
+    const day = document.getElementById("dayInput").value.padStart(2, '0');
+    const month = document.getElementById("monthInput").value.padStart(2, '0');
+    const year = document.getElementById("yearInput").value;
+
+    let birthDate = `${year}-${month}-${day}`;
+
+    const response = await fetch(url, {
+      method: "PUT",
+      headers: {
+        "Authorization": `Bearer ${accToken}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        username,
+        firstName,
+        lastName,
+        birthDate
+      })
+    });
+
+    if (!response.ok) throw new Error("Ошибка обновления данных");
+
+    console.log("Данные успешно обновлены");
+    alert("Dane profilu zmienione");
+  } catch (err) {
+    console.error(err);
+  }
+}
 document.addEventListener("DOMContentLoaded", () => {
   const editAvatarBtn = document.getElementById("editAvatarBtn"); // Кнопка "Edytuj"
   const avatarInput = document.getElementById("avatarInput"); // Скрытый input type="file"
@@ -112,116 +213,49 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
-
-async function logOut(){
+// Функция выхода из системы
+async function logOut() {
   try {
     const accToken = localStorage.getItem("accToken");
-    const response = await fetch('http://localhost:8765/auth/logout',{
+
+    const response = await fetch('http://localhost:8765/auth/logout', {
       method: 'POST',
       headers: {
-        "Authorization": `Bearer ${accToken}`, // Добавляем заголовок Authorization
-        "Content-Type": "application/json" // Указываем формат данных
+        "Authorization": `Bearer ${accToken}`,
+        "Content-Type": "application/json"
       }
     });
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
+
+    if (!response.ok) throw new Error(`Ошибка выхода: ${response.status}`);
+
+  } catch (err) {
+    console.error("Ошибка при выходе:", err);
+  } finally {
     localStorage.clear();
     window.location.href = "main.html";
-  }catch (err){
-    console.error(`${err}`);
   }
 }
-async function getUsername() {
-  try {
-    const url = "http://localhost:8765/user/profile";
-    const accToken = localStorage.getItem("accToken");
-    const response = await fetch(url, {
-      method: "GET",
-      headers: {
-        "Authorization": `Bearer ${accToken}`,
-        "Content-Type": "application/json"
-      }
-    });
 
-    if (!response.ok) throw new Error("Error while fetch data");
-
-    const data = await response.json();
-
-    // Устанавливаем данные пользователя
-    document.getElementById("nickname").value = data.username;
-    document.getElementById("email").value = data.email;
-    document.getElementById("firstName").value = data.firstName;
-    document.getElementById("lastName").value = data.lastName;
-
-    // Устанавливаем дату рождения
-    const [year, month, day] = data.birthDate.split("-");
-    document.getElementById("dayInput").value = day;
-    document.getElementById("monthInput").value = month;
-    document.getElementById("yearInput").value = year;
-
-    // Загрузка аватара
-    const avatarResponse = await fetch(`http://localhost:8765/user/avatar/${data.username}`);
-    if (avatarResponse.ok) {
-      const blob = await avatarResponse;
-      const objectURL = await blob.text();
-      document.getElementById("avatarPreview").src = objectURL;
-    } else {
-      console.warn("Аватар не найден:", avatarResponse.status);
+// Ограничение ввода чисел в полях даты
+function enforceNumberLimits(input, min, max) {
+  input.addEventListener('input', () => {
+    const value = parseInt(input.value, 10);
+    if (isNaN(value)) {
+      input.value = '';
+    } else if (value < min) {
+      input.value = min;
+    } else if (value > max) {
+      input.value = max;
     }
-  } catch (err) {
-    console.error(err);
-  }
+  });
 }
-async function updateUserProfile(){
-  try {
-    const accToken = localStorage.getItem('accToken');
-    const url = "http://localhost:8765/user/update-user-personal-data";
-    const firstName = document.getElementById("firstName");
-    const lastName = document.getElementById("lastName");
-    const username = document.getElementById("nickname");
-    const day = document.getElementById("dayInput");
-    const month = document.getElementById("monthInput");
-    const year = document.getElementById("yearInput");
-    let birthDate = `${year.value}-${month.value.padStart(2, '0')}-${day.value.padStart(2, '0')}`;
-    const response = await fetch(url, {
-      method: "PUT",
-      headers: {
-        "Authorization": `Bearer ${accToken}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        username: username.value,
-        firstName: firstName.value,
-        lastName: lastName.value,
-        birthDate: `${birthDate}`
-      })
-    });
-    if(!response.ok)throw new Error("Error HTTP Request");
-    console.log(response);
-    alert("Dane profilu zmienione");
-  }catch (err){
-    console.error(err);
-  }
-}
-async function refreshToken(){
-  try {
-    const url = "http://localhost:8765/auth/refresh-token";
-    const refToken = localStorage.getItem("refToken");
-    const response = await fetch(url,{
-      method:"POST",
-      headers:{
-        "Authorization": `Bearer ${refToken}`,
-        "Content-Type": "application/json"
-      }
-    })
-    if(!response.ok)throw new Error("Error Refresh Token");
-    const Tokens = await response.json();
-    localStorage.setItem("accToken",Tokens.accessToken);
-    localStorage.setItem("refToken",Tokens.refreshToken);
-  }catch (err){
-    console.error(err);
-  }
-}
-getUsername();
-const submit = document.getElementById("submit").addEventListener('click',updateUserProfile);
+
+// Применение ограничений к полям даты
+document.addEventListener('DOMContentLoaded', () => {
+  enforceNumberLimits(document.getElementById('dayInput'), 1, 31);
+  enforceNumberLimits(document.getElementById('monthInput'), 1, 12);
+  enforceNumberLimits(document.getElementById('yearInput'), 1900, 2025);
+});
+
+// Привязываем обновление профиля к кнопке
+document.getElementById("submit").addEventListener('click', updateUserProfile);
