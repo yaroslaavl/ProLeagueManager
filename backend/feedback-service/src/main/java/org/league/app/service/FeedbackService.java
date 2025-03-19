@@ -28,8 +28,8 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -42,6 +42,7 @@ public class FeedbackService {
     private final AzureTextAnalyticsService azure;
     private final FeedbackMapper feedbackMapper;
     private final ReviewLikesRepository reviewLikesRepository;
+    private final FeedbackMetrics feedbackMetrics;
 
     @Transactional
     public FeedbackReadDto sendFeedback(UUID competitionId, String message) {
@@ -162,6 +163,20 @@ public class FeedbackService {
         return feedbackRepository.findAllSortByCreatedAt().stream().map(feedbackMapper::toDto).toList();
     }
 
+    public Map<String, Long> findAllByTonality(LocalDateTime from, LocalDateTime to) {
+        List<Object[]> allByTolerance = feedbackRepository.findAllByTonality(from, to);
+
+        for (Object[] objects : allByTolerance) {
+            feedbackMetrics.recordReturnedByTonality((String) objects[0], (Long) objects[1]);
+        }
+
+        return allByTolerance.stream()
+                .collect(Collectors.toMap(
+                        row -> (String) row[0],
+                        row -> (Long) row[1]
+                ));
+    }
+
     public List<FeedbackReadDto> findAllFeedbackByDate(Integer days) {
         Specification<Feedback> specification = Specification.where(FeedbackSpecification.findAllFeedbackByDaysWeeksMonths(days));
 
@@ -169,7 +184,7 @@ public class FeedbackService {
     }
 
     private String getTokenFromRequest() {
-            ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         if (attributes != null) {
             HttpServletRequest request = attributes.getRequest();
             return request.getHeader("Authorization");
