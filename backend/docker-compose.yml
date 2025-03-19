@@ -227,8 +227,8 @@ services:
       - "8428:8428"
     volumes:
       - victoriametrics_data:/victoriametrics-data
-      - ./promscrape.yaml:/etc/promscrape.yaml:ro
-    command: -promscrape.config=/etc/promscrape.yaml -storageDataPath=/victoriametrics-data
+      - ./promscrape.yml:/etc/promscrape.yml:ro
+    command: -promscrape.config=/etc/promscrape.yml -storageDataPath=/victoriametrics-data
     restart: always
     networks:
       - ProLeagueManager

@@ -31,10 +31,12 @@ public class FeedbackConfig {
                 .authorizeHttpRequests(
                         authorizeRequests -> authorizeRequests
                                 .requestMatchers(
-                                        "/actuator/health").permitAll()
+                                        "/actuator/**",
+                                        "/actuator").permitAll()
                                 .requestMatchers("/api/feedback/create/*",
                                         "/api/feedback/edit/*",
                                         "/api/feedback/delete/*",
+                                        "/api/feedback/count/by/tonality",
                                         "/api/feedback/like/*").authenticated()
                                 .requestMatchers("/api/feedback/interval/*").hasAuthority("MODERATOR")
                 )

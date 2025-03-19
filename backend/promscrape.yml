@@ -1,0 +1,10 @@
+scrape_configs:
+  - job_name: "user-service"
+    static_configs:
+      - targets: ["user-service:8080"]
+    metrics_path: "/actuator/prometheus"
+
+  - job_name: "feedback-service"
+    static_configs:
+      - targets: ["feedback-service:8086"]
+    metrics_path: "/actuator/prometheus"
