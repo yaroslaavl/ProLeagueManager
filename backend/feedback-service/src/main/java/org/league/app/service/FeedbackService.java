@@ -165,16 +165,20 @@ public class FeedbackService {
 
     public Map<String, Long> findAllByTonality(LocalDateTime from, LocalDateTime to) {
         List<Object[]> allByTolerance = feedbackRepository.findAllByTonality(from, to);
-
-        for (Object[] objects : allByTolerance) {
-            feedbackMetrics.recordReturnedByTonality((String) objects[0], (Long) objects[1]);
-        }
-
-        return allByTolerance.stream()
+        Map<String, Long> countsMap = allByTolerance.stream()
                 .collect(Collectors.toMap(
                         row -> (String) row[0],
                         row -> (Long) row[1]
                 ));
+
+        List<String> allTonalities = List.of("positive", "neutral", "negative");
+
+        for (String tonality : allTonalities) {
+            long count = countsMap.getOrDefault(tonality, 0L);
+            feedbackMetrics.recordReturnedByTonality(tonality, count);
+        }
+
+        return countsMap;
     }
 
     public List<FeedbackReadDto> findAllFeedbackByDate(Integer days) {

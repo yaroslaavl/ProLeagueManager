@@ -128,7 +128,8 @@ public class NotificationService {
                 EventType.PLAYER_JOINED,
                 EventType.PLAYER_INVITATION_REJECTED,
                 EventType.PLAYER_JOIN_REQUEST,
-                EventType.PLAYER_JOIN_ACCEPTED
+                EventType.PLAYER_JOIN_ACCEPTED,
+                EventType.PLAYER_ROLE_CHANGED
         );
 
         List<Notification> allByUserId = notificationRepository.findAllByUserIdExcludingEventTypes(
@@ -171,7 +172,8 @@ public class NotificationService {
                 EventType.TEAM_JOIN_REQUEST_REVOKED,
                 EventType.TEAM_JOIN_REQUEST,
                 EventType.TEAM_JOIN_ACCEPTED,
-                EventType.TEAM_JOIN_DENIED
+                EventType.TEAM_JOIN_DENIED,
+                EventType.TEAM_ROLE_CHANGED
         );
 
         List<Notification> allByTeamId = notificationRepository.findAllByTeamId(teamById.getId(), excludedEventTypes);
