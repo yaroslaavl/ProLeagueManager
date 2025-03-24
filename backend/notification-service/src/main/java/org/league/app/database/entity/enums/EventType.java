@@ -3,6 +3,7 @@ package org.league.app.database.entity.enums;
 public enum EventType {
 
     TEAM_JOIN_DENIED,
+    PLAYER_ROLE_CHANGED,
     PLAYER_JOIN_ACCEPTED,
     TEAM_JOIN_ACCEPTED,
     TEAM_JOIN_REQUEST,
