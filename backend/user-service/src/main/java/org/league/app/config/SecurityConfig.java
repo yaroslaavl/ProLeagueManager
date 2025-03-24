@@ -97,6 +97,10 @@ public class SecurityConfig {
                                 "/api/auth/validate-token",
                                 "/api/auth/get-user-by-email"
                                 ).authenticated()
+                        .requestMatchers(
+                                "/api/user/admin-deletion/**",
+                                "/api/user/change-user-role/**"
+                        ).hasAuthority("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 -> oauth2

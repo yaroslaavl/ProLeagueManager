@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -42,6 +43,21 @@ public class UserController {
     public ResponseEntity<?> deleteUser(@RequestBody @Validated({EditAction.class}) UserDeleteDto userDeleteDto) {
         userService.delete(userDeleteDto);
         return ResponseEntity.ok("User account deleted successfully");
+    }
+
+    @DeleteMapping("/admin-deletion/{userId}")
+    public ResponseEntity<?> adminDeletion(@PathVariable("userId") Long userId) {
+        String userName = Objects.requireNonNull(getUser(userId).getBody()).getUsername();
+        userService.deleteUser(userId);
+        return ResponseEntity.ok("You have deleted user " + userName + " successfully");
+    }
+
+    @PostMapping("/change-user-role/{userId}")
+    public ResponseEntity<?> changeUserRole(@PathVariable("userId") Long userId,
+                                            @RequestParam("role") String role) {
+        String userName = Objects.requireNonNull(getUser(userId).getBody()).getUsername();
+        userService.changeUserRole(userId, role);
+        return ResponseEntity.ok("You have changed " + userName + "'s role to " + role + " successfully");
     }
 
     @PutMapping("/change-user-password")

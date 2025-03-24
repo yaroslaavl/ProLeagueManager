@@ -231,6 +231,37 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
+    public void deleteUser(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User with id: " + " not found"));
+
+        redisClient.delete("whitelist:" + user.getEmail() + ":accessToken");
+        redisClient.delete("whitelist:" + user.getEmail() + ":refreshToken");
+
+        userRepository.delete(user);
+    }
+
+    @Transactional
+    public void changeUserRole(Long userId, String role) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User with id: " + " not found"));
+
+        RoleGroup roleGroupToSet = roleGroupRepository.findByName(role.toUpperCase())
+                .orElseThrow(() -> new RoleGroupNotFoundException("Group not found"));
+
+        if (roleGroupToSet.getName().equals(user.getRoleGroup().getName())) {
+            throw new UserAlreadyHasRoleException("User already has " + role + " role");
+        }
+
+        if (role.equals("USER")) {
+            user.setIsVerified(false);
+        }
+        user.setRoleGroup(roleGroupToSet);
+
+        userRepository.saveAndFlush(user);
+    }
+
+    @Transactional
     public void changePassword(UserChangePasswordDto userChangePasswordDto) {
         User user = userRepository.findByEmail(securityContext())
                 .orElseThrow(() -> new UserEmailNotFoundException("User with e  mail: " + securityContext() + " not found"));
