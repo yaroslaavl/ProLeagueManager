@@ -3,7 +3,6 @@ package org.league.app.service;
 import lombok.RequiredArgsConstructor;
 import org.league.app.exception.*;
 import org.league.app.redisclient.RedisClient;
-import org.springframework.beans.factory.annotation.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.league.app.database.entity.RoleGroup;
 import org.league.app.database.entity.User;
@@ -22,13 +21,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -253,9 +246,7 @@ public class UserService implements UserDetailsService {
             throw new UserAlreadyHasRoleException("User already has " + role + " role");
         }
 
-        if (role.equals("USER")) {
-            user.setIsVerified(false);
-        }
+        user.setIsVerified(!role.equals("USER"));
         user.setRoleGroup(roleGroupToSet);
 
         userRepository.saveAndFlush(user);
