@@ -525,7 +525,7 @@ public class TeamService {
         teamMemberRepository.save(teamMember);
         UserDto userDto = authClientFeign.getUserDto(teamMember.getUserId());
         sendNotificationMessage(playerId, null, null, "Your team member role has been updated.", "TEAM_ROLE_CHANGED");
-        sendNotificationMessage(manager.getFirst().getUserId(), null, teamId,"You have changed the role of your team member with email: " + userDto.getEmail(), "TEAM_ROLE_CHANGED");
+        sendNotificationMessage(manager.getFirst().getUserId(), null, teamId,"Manager changed the role of your team member with email: " + userDto.getEmail(), "PLAYER_ROLE_CHANGED");
     }
 
     @Transactional
