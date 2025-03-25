@@ -70,6 +70,7 @@ services:
       POSTGRES_PASSWORD: postgres
     volumes:
       - postgres-data:/var/lib/postgresql/data
+    command: ["postgres", "-c", "max_connections=200"]
     networks:
       - ProLeagueManager
 
@@ -92,131 +93,274 @@ services:
     networks:
       - ProLeagueManager
 
-  user-service:
+  user-service-instance1:
     build:
       context: .
       dockerfile: user-service/user-service.Dockerfile
-    container_name: user-service
+    container_name: user-service-instance1
     ports:
       - "8080:8080"
     environment:
       SPRING_PROFILES_ACTIVE: default
       SPRING_CLOUD_CONSUL_HOST: consul
       SPRING_CLOUD_CONSUL_PORT: 8500
+      SPRING_CLOUD_CONSUL_DISCOVERY_INSTANCE_ID: user-service-instance1
     depends_on:
       - gateway
     networks:
       - ProLeagueManager
 
-  team-management-service:
+  user-service-instance2:
+    build:
+      context: .
+      dockerfile: user-service/user-service.Dockerfile
+    container_name: user-service-instance2
+    ports:
+      - "7080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: default
+      SPRING_CLOUD_CONSUL_HOST: consul
+      SPRING_CLOUD_CONSUL_PORT: 8500
+      SPRING_CLOUD_CONSUL_DISCOVERY_INSTANCE_ID: user-service-instance2
+    depends_on:
+      - gateway
+    networks:
+      - ProLeagueManager
+
+  team-management-service-instance1:
     build:
       context: .
       dockerfile: team-management-service/team-management-service.Dockerfile
-    container_name: team-management-service
+    container_name: team-management-service-instance1
     ports:
       - "8082:8082"
     environment:
       SPRING_PROFILES_ACTIVE: default
       SPRING_CLOUD_CONSUL_HOST: consul
       SPRING_CLOUD_CONSUL_PORT: 8500
+      SPRING_CLOUD_CONSUL_DISCOVERY_INSTANCE_ID: team-management-service-instance1
     depends_on:
-      - user-service
+      - user-service-instance2
     networks:
       - ProLeagueManager
 
-  sport-service:
+  team-management-service-instance2:
+    build:
+      context: .
+      dockerfile: team-management-service/team-management-service.Dockerfile
+    container_name: team-management-service-instance2
+    ports:
+      - "7082:8082"
+    environment:
+      SPRING_PROFILES_ACTIVE: default
+      SPRING_CLOUD_CONSUL_HOST: consul
+      SPRING_CLOUD_CONSUL_PORT: 8500
+      SPRING_CLOUD_CONSUL_DISCOVERY_INSTANCE_ID: team-management-service-instance2
+    depends_on:
+      - team-management-service-instance1
+    networks:
+      - ProLeagueManager
+
+  sport-service-instance1:
     build:
       context: .
       dockerfile: sport-service/sport-service.Dockerfile
-    container_name: sport-service
+    container_name: sport-service-instance1
     ports:
       - "8083:8083"
     environment:
       SPRING_PROFILES_ACTIVE: default
       SPRING_CLOUD_CONSUL_HOST: consul
       SPRING_CLOUD_CONSUL_PORT: 8500
+      SPRING_CLOUD_CONSUL_DISCOVERY_INSTANCE_ID: sport-service-instance1
     depends_on:
-      - team-management-service
+      - team-management-service-instance2
     networks:
       - ProLeagueManager
 
-  notification-service:
+  sport-service-instance2:
+    build:
+      context: .
+      dockerfile: sport-service/sport-service.Dockerfile
+    container_name: sport-service-instance2
+    ports:
+      - "7083:8083"
+    environment:
+      SPRING_PROFILES_ACTIVE: default
+      SPRING_CLOUD_CONSUL_HOST: consul
+      SPRING_CLOUD_CONSUL_PORT: 8500
+      SPRING_CLOUD_CONSUL_DISCOVERY_INSTANCE_ID: sport-service-instance2
+    depends_on:
+      - sport-service-instance1
+    networks:
+      - ProLeagueManager
+
+  notification-service-instance1:
     build:
       context: .
       dockerfile: notification-service/notification-service.Dockerfile
-    container_name: notification-service
+    container_name: notification-service-instance1
     ports:
       - "8081:8081"
     environment:
       SPRING_PROFILES_ACTIVE: default
       SPRING_CLOUD_CONSUL_HOST: consul
-      SPRING_CLOUD_CONSUL_PORT: 8500
+      SPRING_CLOUD_CONSUL_DISCOVERY_INSTANCE_ID: notification-service-instance1
     depends_on:
-      - sport-service
+      - sport-service-instance2
     networks:
       - ProLeagueManager
 
-  competition-management-service:
+  notification-service-instance2:
+    build:
+      context: .
+      dockerfile: notification-service/notification-service.Dockerfile
+    container_name: notification-service-instance2
+    ports:
+      - "7081:8081"
+    environment:
+      SPRING_PROFILES_ACTIVE: default
+      SPRING_CLOUD_CONSUL_HOST: consul
+      SPRING_CLOUD_CONSUL_PORT: 8500
+      SPRING_CLOUD_CONSUL_DISCOVERY_INSTANCE_ID: notification-service-instance2
+    depends_on:
+      - notification-service-instance1
+    networks:
+      - ProLeagueManager
+
+  competition-management-service-instance1:
     build:
       context: .
       dockerfile: competition-management-service/competition-management-service.Dockerfile
-    container_name: competition-management-service
+    container_name: competition-management-service-instance1
     ports:
       - "8084:8084"
     environment:
       SPRING_PROFILES_ACTIVE: default
       SPRING_CLOUD_CONSUL_HOST: consul
       SPRING_CLOUD_CONSUL_PORT: 8500
+      SPRING_CLOUD_CONSUL_DISCOVERY_INSTANCE_ID: competition-management-service-instance1
     depends_on:
-      - notification-service
+      - notification-service-instance2
     networks:
       - ProLeagueManager
 
-  feedback-service:
+  competition-management-service-instance2:
+    build:
+      context: .
+      dockerfile: competition-management-service/competition-management-service.Dockerfile
+    container_name: competition-management-service-instance2
+    ports:
+      - "7084:8084"
+    environment:
+      SPRING_PROFILES_ACTIVE: default
+      SPRING_CLOUD_CONSUL_HOST: consul
+      SPRING_CLOUD_CONSUL_PORT: 8500
+      SPRING_CLOUD_CONSUL_DISCOVERY_INSTANCE_ID: competition-management-service-instance2
+    depends_on:
+      - competition-management-service-instance1
+    networks:
+      - ProLeagueManager
+
+  feedback-service-instance1:
     build:
       context: .
       dockerfile: feedback-service/feedback-service.Dockerfile
-    container_name: feedback-service
+    container_name: feedback-service-instance1
     ports:
       - "8086:8086"
     environment:
       SPRING_PROFILES_ACTIVE: default
       SPRING_CLOUD_CONSUL_HOST: consul
       SPRING_CLOUD_CONSUL_PORT: 8500
+      SPRING_CLOUD_CONSUL_DISCOVERY_INSTANCE_ID: feedback-service-instance1
     depends_on:
-      - competition-management-service
+      - competition-management-service-instance2
     networks:
       - ProLeagueManager
 
-  match-service:
+  feedback-service-instance2:
+    build:
+      context: .
+      dockerfile: feedback-service/feedback-service.Dockerfile
+    container_name: feedback-service-instance2
+    ports:
+      - "7086:8086"
+    environment:
+      SPRING_PROFILES_ACTIVE: default
+      SPRING_CLOUD_CONSUL_HOST: consul
+      SPRING_CLOUD_CONSUL_PORT: 8500
+      SPRING_CLOUD_CONSUL_DISCOVERY_INSTANCE_ID: feedback-service-instance2
+    depends_on:
+      - feedback-service-instance1
+    networks:
+      - ProLeagueManager
+
+  match-service-instance1:
     build:
       context: .
       dockerfile: match-service/match-service.Dockerfile
-    container_name: match-service
+    container_name: match-service-instance1
     ports:
       - "8085:8085"
     environment:
       SPRING_PROFILES_ACTIVE: default
       SPRING_CLOUD_CONSUL_HOST: consul
       SPRING_CLOUD_CONSUL_PORT: 8500
+      SPRING_CLOUD_CONSUL_DISCOVERY_INSTANCE_ID: match-service-instance1
     depends_on:
-      - feedback-service
+      - feedback-service-instance2
     networks:
       - ProLeagueManager
 
-  calendar-event-service:
+  match-service-instance2:
+    build:
+      context: .
+      dockerfile: match-service/match-service.Dockerfile
+    container_name: match-service-instance2
+    ports:
+      - "7085:8085"
+    environment:
+      SPRING_PROFILES_ACTIVE: default
+      SPRING_CLOUD_CONSUL_HOST: consul
+      SPRING_CLOUD_CONSUL_PORT: 8500
+      SPRING_CLOUD_CONSUL_DISCOVERY_INSTANCE_ID: match-service-instance2
+    depends_on:
+      - match-service-instance1
+    networks:
+      - ProLeagueManager
+
+  calendar-event-service-instance1:
     build:
       context: .
       dockerfile: calendar-event-service/calendar-event-service.Dockerfile
-    container_name: calendar-event-service
+    container_name: calendar-event-service-instance1
     ports:
       - "8087:8087"
     environment:
       SPRING_PROFILES_ACTIVE: default
       SPRING_CLOUD_CONSUL_HOST: consul
       SPRING_CLOUD_CONSUL_PORT: 8500
+      SPRING_CLOUD_CONSUL_DISCOVERY_INSTANCE_ID: calendar-event-service-instance1
     depends_on:
-      - match-service
+      - match-service-instance2
+    networks:
+      - ProLeagueManager
+
+  calendar-event-service-instance2:
+    build:
+      context: .
+      dockerfile: calendar-event-service/calendar-event-service.Dockerfile
+    container_name: calendar-event-service-instance2
+    ports:
+      - "7087:8087"
+    environment:
+      SPRING_PROFILES_ACTIVE: default
+      SPRING_CLOUD_CONSUL_HOST: consul
+      SPRING_CLOUD_CONSUL_PORT: 8500
+      SPRING_CLOUD_CONSUL_DISCOVERY_INSTANCE_ID: calendar-event-service-instance2
+    depends_on:
+      - calendar-event-service-instance1
     networks:
       - ProLeagueManager
 
