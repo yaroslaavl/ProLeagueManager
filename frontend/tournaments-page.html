@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/tournaments-page.css">
+  <link rel="stylesheet" href="css/notificationMenu.css">
+  <script src="js/main.js" defer></script> <!-- Подключение скрипта -->
+  <script src="js/burgerMenu.js" defer></script>
+  <script src="js/notificationMenu.js" defer></script>
+  <title>Main</title>
+</head>
+
+<body>
+<div class="container">
+  <header class="header">
+    <div class="header-center">
+      <div style="display: flex;">
+        <a href="main.html"><img src="img/blogo_text.svg" alt="Logo" class="logo"></a>
+        <div style="margin-top: 25px;margin-right: 10px;color: #808A9D;font-size: 25px">|</div>
+        <div style="display: flex;gap: 60px">
+        <nav class="nav">
+          <img src="img/home.png" alt="" style="height: 20px">
+          <a href="main.html" class="nav-link-header">Glówna</a>
+          <img src="img/open-menu-btn.png" alt="" style="margin-left: 10px;height: 10px;cursor: pointer">
+        </nav>
+        <nav class="nav">
+          <img src="img/sport.png" alt="" style="height: 20px">
+          <a href="main.html" class="nav-link-header">Sporty</a>
+          <img src="img/open-menu-btn.png" alt="" style="margin-left: 10px;height: 10px;cursor: pointer">
+        </nav>
+        <nav class="nav">
+          <img src="img/tournaments.png" alt="" style="height: 20px">
+          <a href="main.html" class="nav-link-header">Zawody</a>
+          <img src="img/open-menu-btn.png" alt="" style="margin-left: 10px;height: 10px;cursor: pointer">
+        </nav></div>
+      </div>
+      <div class="search-container">
+        <img src="img/search.svg" alt="Szukaj" class="search-icon">
+        <input type="text" placeholder="Szukaj" class="search-input">
+      </div>
+      <div style="display: flex;margin-bottom: 15px">
+        <div id="notification_button" onclick="toggleNotifications(event)">
+          <button style="background: none;" class="icon-btn notification-btn">
+            <img style="width: 25px; height: 25px" src="img/notification-bell.svg" alt="Powiadomienia">
+          </button>
+          <div class="notification-popup" id="notificationPopup">
+            <div class="notification-header">
+              <span>Powiadomienia</span>
+            </div>
+            <div class="notification-list">
+              <div class="notification-item">
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="header-right" id="header_right" onclick="toggleMenu()">
+          <div class="menu-container" >
+            <button class="icon-btn menu-btn" style="margin-top: 0">
+              <img src="img/menu-hamburger.svg" alt="Menu">
+            </button>
+            <div class="menu-popup" id="menuPopup">
+              <div class="menu-header">
+                <div class="user-info">
+                  <img src="img/profile.svg" alt="Avatar" class="user-avatar" id="avatarBurger">
+                  <div>
+                    <span id="greeting" style="font-size: 14px">Cześć, <span id="userName">User</span></span>
+                    <span id="userEmail" class="email">email@example.com</span>
+                  </div>
+                </div>
+              </div>
+              <div class="menu-settings">
+                <div class="setting-item">
+                  <span>Język</span>
+                  <span class="value">Polski</span>
+                </div>
+                <div class="setting-item">
+                  <span>Ciemny tryb</span>
+                  <input type="checkbox" id="darkThemeToggle">
+                </div>
+              </div>
+              <div class="menu-links">
+                <a href="public-profile.html" class="menu-link">Profil publiczny</a>
+                <a href="profile-settings.html" class="menu-link">Ustawienie</a>
+                <a href="#" class="menu-link" id="logOut" onclick="logOut()">Log Out</a>
+              </div>
+            </div>
+          </div >
+
+          <img class="icon-btn profile-btn" src="img/profile.svg" alt="Profil" >
+
+        </div>
+      </div>
+    </div>
+  </header>
+  <div class="tournament-tittle">
+    <div style="display: flex;margin-left: 400px">
+    <img src="https://www.svgrepo.com/show/521592/cup.svg" alt="" style="height: 60px;margin-top: 20px">
+    <p style="font-weight: bold;font-size: 25px;margin-top: 40px">Turneje</p>
+    </div>
+  </div>
+  <div class="content">
+    <div class="content-left">
+    <div class="side-menu">
+      <button class="createTeam">Stworzyc zespol</button>
+      <div style="display: flex">
+        <div>
+        <div style="display: flex">
+      <input type="checkbox" id="active" name="active">
+      <label for="active">Aktywne</label>
+      </div>
+        <div style="display: flex">
+      <input type="checkbox" id="past" name="past">
+      <label for="past">Poprzednie</label>
+      </div>
+      </div>
+        <div>
+        <div style="display: flex">
+      <input type="checkbox" id="future" name="future">
+      <label for="future">Nadchodzace</label>
+      </div>
+        <div style="display: flex">
+      <input type="checkbox" id="isIndividual" name="isIndividual">
+      <label for="isIndividual">Indywidualne</label>
+      </div>
+      </div>
+      </div>
+    </div>
+  </div>
+    <div class="content-right">
+      <div class="main-menu">
+      <p class="main-menu-tittle">Turneje:</p>
+      <div class="tournaments-list">
+        <div class="tournament">
+          <div>
+            <img src="img/google-logo.svg" alt="">
+            <div class="tournament-name">
+            <p class="name">Nazwa turneja</p>
+            <p class="status">Status</p>
+          </div>
+          </div>
+          <div style="gap:40px;margin-right: 20px">
+            <div class="start-time">
+            <p>Start:</p>
+            <p class="start-date">01.01.2025</p>
+          </div>
+            <div class="end-time">
+            <p>Koniec:</p>
+            <p class="end-date">01.01.2025</p>
+          </div>
+            <div class="game-system">
+            <p>Tryb:</p>
+            <p class="system">1v1</p>
+          </div>
+            <div class="teams">
+            <p>Zespoly:</p>
+            <p class="count">52/64</p>
+          </div>
+            <a href=""><img src="img/style=linear.svg" alt="" style="height: 20px;margin-top: 40px"></a>
+          </div>
+        </div>
+        <div class="tournament">
+          <div>
+            <img src="img/google-logo.svg" alt="">
+            <div class="tournament-name">
+              <p class="name">Nazwa turneja</p>
+              <p class="status">Status</p>
+            </div>
+          </div>
+          <div style="gap:40px;margin-right: 20px">
+            <div class="start-time">
+              <p>Start:</p>
+              <p class="start-date">01.01.2025</p>
+            </div>
+            <div class="end-time">
+              <p>Koniec:</p>
+              <p class="end-date">01.01.2025</p>
+            </div>
+            <div class="game-system">
+              <p>Tryb:</p>
+              <p class="system">1v1</p>
+            </div>
+            <div class="teams">
+              <p>Zespoly:</p>
+              <p class="count">52/64</p>
+            </div>
+            <a href=""><img src="img/style=linear.svg" alt="" style="height: 20px;margin-top: 40px"></a>
+          </div>
+        </div>
+        <div class="tournament">
+          <div>
+            <img src="img/google-logo.svg" alt="">
+            <div class="tournament-name">
+              <p class="name">Nazwa turneja</p>
+              <p class="status">Status</p>
+            </div>
+          </div>
+          <div style="gap:40px;margin-right: 20px">
+            <div class="start-time">
+              <p>Start:</p>
+              <p class="start-date">01.01.2025</p>
+            </div>
+            <div class="end-time">
+              <p>Koniec:</p>
+              <p class="end-date">01.01.2025</p>
+            </div>
+            <div class="game-system">
+              <p>Tryb:</p>
+              <p class="system">1v1</p>
+            </div>
+            <div class="teams">
+              <p>Zespoly:</p>
+              <p class="count">52/64</p>
+            </div>
+            <a href=""><img src="img/style=linear.svg" alt="" style="height: 20px;margin-top: 40px"></a>
+          </div>
+        </div>
+        <div class="tournament">
+          <div>
+            <img src="img/google-logo.svg" alt="">
+            <div class="tournament-name">
+              <p class="name">Nazwa turneja</p>
+              <p class="status">Status</p>
+            </div>
+          </div>
+          <div style="gap:40px;margin-right: 20px">
+            <div class="start-time">
+              <p>Start:</p>
+              <p class="start-date">01.01.2025</p>
+            </div>
+            <div class="end-time">
+              <p>Koniec:</p>
+              <p class="end-date">01.01.2025</p>
+            </div>
+            <div class="game-system">
+              <p>Tryb:</p>
+              <p class="system">1v1</p>
+            </div>
+            <div class="teams">
+              <p>Zespoly:</p>
+              <p class="count">52/64</p>
+            </div>
+            <a href=""><img src="img/style=linear.svg" alt="" style="height: 20px;margin-top: 40px"></a>
+          </div>
+        </div>
+        <div class="tournament">
+          <div>
+            <img src="img/google-logo.svg" alt="">
+            <div class="tournament-name">
+              <p class="name">Nazwa turneja</p>
+              <p class="status">Status</p>
+            </div>
+          </div>
+          <div style="gap:40px;margin-right: 20px">
+            <div class="start-time">
+              <p>Start:</p>
+              <p class="start-date">01.01.2025</p>
+            </div>
+            <div class="end-time">
+              <p>Koniec:</p>
+              <p class="end-date">01.01.2025</p>
+            </div>
+            <div class="game-system">
+              <p>Tryb:</p>
+              <p class="system">1v1</p>
+            </div>
+            <div class="teams">
+              <p>Zespoly:</p>
+              <p class="count">52/64</p>
+            </div>
+            <a href=""><img src="img/style=linear.svg" alt="" style="height: 20px;margin-top: 40px"></a>
+          </div>
+        </div>
+        <div class="tournament">
+          <div>
+            <img src="img/google-logo.svg" alt="">
+            <div class="tournament-name">
+              <p class="name">Nazwa turneja</p>
+              <p class="status">Status</p>
+            </div>
+          </div>
+          <div style="gap:40px;margin-right: 20px">
+            <div class="start-time">
+              <p>Start:</p>
+              <p class="start-date">01.01.2025</p>
+            </div>
+            <div class="end-time">
+              <p>Koniec:</p>
+              <p class="end-date">01.01.2025</p>
+            </div>
+            <div class="game-system">
+              <p>Tryb:</p>
+              <p class="system">1v1</p>
+            </div>
+            <div class="teams">
+              <p>Zespoly:</p>
+              <p class="count">52/64</p>
+            </div>
+            <a href=""><img src="img/style=linear.svg" alt="" style="height: 20px;margin-top: 40px"></a>
+          </div>
+        </div>
+        <div class="tournament">
+          <div>
+            <img src="img/google-logo.svg" alt="">
+            <div class="tournament-name">
+              <p class="name">Nazwa turneja</p>
+              <p class="status">Status</p>
+            </div>
+          </div>
+          <div style="gap:40px;margin-right: 20px">
+            <div class="start-time">
+              <p>Start:</p>
+              <p class="start-date">01.01.2025</p>
+            </div>
+            <div class="end-time">
+              <p>Koniec:</p>
+              <p class="end-date">01.01.2025</p>
+            </div>
+            <div class="game-system">
+              <p>Tryb:</p>
+              <p class="system">1v1</p>
+            </div>
+            <div class="teams">
+              <p>Zespoly:</p>
+              <p class="count">52/64</p>
+            </div>
+            <a href=""><img src="img/style=linear.svg" alt="" style="height: 20px;margin-top: 40px"></a>
+          </div>
+        </div>
+        <div class="tournament">
+          <div>
+            <img src="img/google-logo.svg" alt="">
+            <div class="tournament-name">
+              <p class="name">Nazwa turneja</p>
+              <p class="status">Status</p>
+            </div>
+          </div>
+          <div style="gap:40px;margin-right: 20px">
+            <div class="start-time">
+              <p>Start:</p>
+              <p class="start-date">01.01.2025</p>
+            </div>
+            <div class="end-time">
+              <p>Koniec:</p>
+              <p class="end-date">01.01.2025</p>
+            </div>
+            <div class="game-system">
+              <p>Tryb:</p>
+              <p class="system">1v1</p>
+            </div>
+            <div class="teams">
+              <p>Zespoly:</p>
+              <p class="count">52/64</p>
+            </div>
+            <a href=""><img src="img/style=linear.svg" alt="" style="height: 20px;margin-top: 40px"></a>
+          </div>
+        </div>
+        <div class="tournament">
+          <div>
+            <img src="img/google-logo.svg" alt="">
+            <div class="tournament-name">
+              <p class="name">Nazwa turneja</p>
+              <p class="status">Status</p>
+            </div>
+          </div>
+          <div style="gap:40px;margin-right: 20px">
+            <div class="start-time">
+              <p>Start:</p>
+              <p class="start-date">01.01.2025</p>
+            </div>
+            <div class="end-time">
+              <p>Koniec:</p>
+              <p class="end-date">01.01.2025</p>
+            </div>
+            <div class="game-system">
+              <p>Tryb:</p>
+              <p class="system">1v1</p>
+            </div>
+            <div class="teams">
+              <p>Zespoly:</p>
+              <p class="count">52/64</p>
+            </div>
+            <a href=""><img src="img/style=linear.svg" alt="" style="height: 20px;margin-top: 40px"></a>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+  <!-- Контейнер для всплывающих уведомлений -->
+
+  <div id="toastContainer"></div>
+  <footer>
+    <div class="footer-content">
+      <span>Wspierane przez: <a href="https://zut.edu.pl" target="_blank">ZUT</a></span>
+      <span>Wersja: <a href="#">1.0.0</a></span>
+      <span>Strona: 2ms</span>
+      <span>Szablon: 0ms</span>
+    </div>
+    <div class="footer-links">
+      <a href="#">Licencje</a>
+      <a href="#">API</a>
+    </div>
+  </footer>
+</div>
+
+
+<link rel="stylesheet" href="css/burgerMenu.css">
+</body>
+
+</html>

@@ -520,7 +520,6 @@ async function addRoleEditButtons() {
     card.querySelector('.player-info').appendChild(settingsBtn);
   });
 }
-
 async function toggleRoleEditor(playerCard, username, teamId) {
   let existingEditor = playerCard.querySelector('.role-editor');
   if (existingEditor) {
@@ -563,7 +562,6 @@ async function toggleRoleEditor(playerCard, username, teamId) {
 
   playerCard.appendChild(editor);
 }
-
 async function saveRoles(userId) {
   const teamId = teamInfo.id; // Используем уже полученный объект teamInfo для ID команды
 
@@ -604,7 +602,6 @@ async function saveRoles(userId) {
   alert('Role updated!');
   location.reload();
 }
-
 async function kickPlayer(userId) {
   const { teamId } = await getUserTeamRoleInfo();
   await fetch(`http://localhost:8765/team/user-deletion/${teamId}/${userId}`, {
@@ -616,19 +613,15 @@ async function kickPlayer(userId) {
   alert('Player removed!');
   location.reload();
 }
-
 addRoleEditButtons();
-
 function openManagerSettings() {
   document.getElementById('managerSettingsModal').style.display = 'flex';
   document.getElementById('teamNameInput').value = document.getElementById('team_name').textContent;
   document.getElementById('currentTeamLogo').src = document.getElementById('team_img').src;
 }
-
 function closeManagerSettings() {
   document.getElementById('managerSettingsModal').style.display = 'none';
 }
-
 function previewTeamLogo() {
   const fileInput = document.getElementById('teamLogoInput');
   const file = fileInput.files[0];
@@ -640,7 +633,6 @@ function previewTeamLogo() {
     reader.readAsDataURL(file);
   }
 }
-
 async function saveTeamName() {
   const newName = document.getElementById('teamNameInput').value;
   const response = await fetch(`http://localhost:8765/team/update-team-name/${teamInfo.id}`, {
@@ -656,7 +648,6 @@ async function saveTeamName() {
     location.href = 'public-profile.html';
   }
 }
-
 async function saveTeamLogo() {
   const fileInput = document.getElementById('teamLogoInput');
   const file = fileInput.files[0];
@@ -675,7 +666,6 @@ async function saveTeamLogo() {
     location.href = 'public-profile.html';
   }
 }
-
 async function saveTeamStatus() {
   const status = document.getElementById('teamStatus').value;
   const response = await fetch(`http://localhost:8765/team/status/${teamInfo.id}?teamStatus=${status.toUpperCase()}`, {
