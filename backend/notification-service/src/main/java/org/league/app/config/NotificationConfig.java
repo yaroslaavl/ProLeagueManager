@@ -44,7 +44,8 @@ public class NotificationConfig {
                                 "/api/my-notifications/team/**"
                         ).authenticated()
                         .requestMatchers(
-                                "/actuator/health",
+                                "/actuator/**",
+                                "/actuator",
                                 "/api/my-notifications/subscribe/**",
                                 "/api/notification/send-email").permitAll()
                 )

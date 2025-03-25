@@ -41,7 +41,8 @@ public class SportConfig {
                                 "/api/sport/id/**",
                                 "/api/sport/get-sports-by-name",
                                 "/api/sport/type-of-sport",
-                                "/actuator/health").permitAll())
+                                "/actuator/**",
+                                "/actuator").permitAll())
                 .addFilterBefore(routeFilter, SecurityContextHolderFilter.class)
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(session ->
