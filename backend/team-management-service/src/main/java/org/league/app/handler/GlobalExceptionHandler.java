@@ -1,7 +1,9 @@
 package org.league.app.handler;
 
+import org.league.app.exception.InvitationException;
 import org.league.app.exception.TeamNameAlreadyExistsException;
 import org.league.app.exception.TeamNotFoundException;
+import org.league.app.exception.UserAlreadyInThisTeamException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -49,4 +51,19 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
+    @ExceptionHandler(InvitationException.class)
+    public ResponseEntity<Map<String, String>> handleInvitationException(InvitationException ex) {
+        Map<String, String> errorResponse = new HashMap<>();
+        errorResponse.put("error", "Invitation Failed");
+        errorResponse.put("message", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
+
+    @ExceptionHandler(UserAlreadyInThisTeamException.class)
+    public ResponseEntity<Map<String, String>> handleUserAlreadyInThisTeamException(UserAlreadyInThisTeamException ex) {
+        Map<String, String> errorResponse = new HashMap<>();
+        errorResponse.put("error", "Bad credentials");
+        errorResponse.put("message", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
 }
