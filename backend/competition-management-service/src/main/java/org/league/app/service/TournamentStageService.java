@@ -159,7 +159,6 @@ public class TournamentStageService {
                 .orElseThrow(() -> new CompetitionNotFoundException("Competition not found"));
 
         return competitionWithGameSystem.getGameSystem().getMinTeamSize() >
-                competitionParticipantRepository.countTeamsOrUsersByCompetitionId(competitionId)
-                 && LocalDateTime.now().isAfter(competitionWithGameSystem.getStartDate().minusHours(1));
+                competitionParticipantRepository.countTeamsOrUsersByCompetitionId(competitionId);
     }
 }
