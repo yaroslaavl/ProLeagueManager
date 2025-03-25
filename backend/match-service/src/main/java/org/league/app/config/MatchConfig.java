@@ -33,7 +33,8 @@ public class MatchConfig {
                 .authorizeHttpRequests(
                 authorizeRequests -> authorizeRequests
                         .requestMatchers(
-                                "/actuator/health",
+                                "/actuator/**",
+                                "/actuator",
                                 "/api/match/leagueTours/**",
                                 "/api/match/tourMatches/**",
                                 "/api/match/dynamic-all/**",

@@ -33,7 +33,8 @@ public class EventConfig {
                 .authorizeHttpRequests(
                         authorizeRequests -> authorizeRequests
                                 .requestMatchers(
-                                        "/actuator/health",
+                                        "/actuator",
+                                        "/actuator/**",
                                         "/api/event/published",
                                         "/api/event/pinned",
                                         "/api/event/image/*",
