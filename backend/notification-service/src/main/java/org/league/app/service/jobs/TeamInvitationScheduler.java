@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.league.app.database.entity.Notification;
 import org.league.app.database.entity.enums.EventType;
 import org.league.app.database.repository.NotificationRepository;
-import org.league.app.exception.NotificationNotFound;
+import org.league.app.exception.NotificationNotFoundException;
 import org.league.app.feign.authClient.AuthClientFeign;
 import org.league.app.service.NotificationService;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -39,7 +39,7 @@ public class TeamInvitationScheduler {
                 deletedNotificationIds.add(notification.getId());
                 userNotifications.add(notificationRepository.findIdByEventTypeAndUserId(
                                 EventType.TEAM_INVITATION, notification.getTargetUserId(), notification.getTeamId())
-                        .orElseThrow(() -> new NotificationNotFound("Notification not found")));
+                        .orElseThrow(() -> new NotificationNotFoundException("Notification not found")));
                 log.info("Deleting expired notification: {} for user {} in team {}",
                         notification.getEventType(), notification.getTargetUserId(), notification.getTeamId());
             }
@@ -70,7 +70,7 @@ public class TeamInvitationScheduler {
                 deletedNotificationIds.add(notification.getId());
                 userNotifications.add(notificationRepository.findIdByEventTypeAndUserId(
                                 EventType.TEAM_JOIN_REQUEST, notification.getUserId(), notification.getTeamId())
-                        .orElseThrow(() -> new NotificationNotFound("Notification not found")));
+                        .orElseThrow(() -> new NotificationNotFoundException("Notification not found")));
                 log.info("Deleting expired team join notification: {} for user {} in team {}",
                         notification.getEventType(), notification.getTargetUserId(), notification.getTeamId());
             }

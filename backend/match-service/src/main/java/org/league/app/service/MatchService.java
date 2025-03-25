@@ -192,7 +192,7 @@ public class MatchService {
                 .orElseThrow(() -> new MatchNotFoundException("Match not found"));
 
         if (matchPlayerRepository.findMatchPlayerByMatchIdAndPlayerId(matchId, userId).isPresent()) {
-            throw new RuntimeException("You have already confirmed your participation in match");
+            throw new InvalidMatchStateException("You have already confirmed your participation in match");
         }
 
         if (match.getMatchStatus() != MatchStatus.SCHEDULED) {
