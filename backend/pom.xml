@@ -14,7 +14,6 @@
         <module>notification-service</module>
         <module>feedback-service</module>
         <module>team-management-service</module>
-        <module>admin-dashboard-service</module>
         <module>user-service</module>
         <module>calendar-event-service</module>
         <module>sport-service</module>
