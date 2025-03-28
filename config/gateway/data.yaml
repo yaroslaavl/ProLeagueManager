@@ -1,0 +1,127 @@
+server:
+  port: 8765
+  
+spring:
+  cloud:
+    gateway:
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins:
+              - "http://localhost:63880"
+              - "http://localhost:63342"
+            allowedMethods:
+              - "GET"
+              - "POST"
+              - "PUT"
+              - "DELETE"
+              - "OPTIONS"
+            allowedHeaders:
+              - "*"
+            exposedHeaders:
+              - "Authorization"
+            allowCredentials: true
+      discovery:
+        locator:
+          enabled: true
+          lower-case: true
+      routes:
+        - id: auth-service
+          uri: lb://user-service
+          predicates:
+            - Path=/auth/**
+          filters:
+            - AuthenticationFilter
+            - RewritePath=/auth/(?<remaining>.*), /api/auth/${remaining}
+        
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/user/**
+          filters:
+            - AuthenticationFilter
+            - RewritePath=/user/(?<remaining>.*), /api/user/${remaining}
+            
+        - id: team-management-service
+          uri: lb://team-management-service
+          predicates:
+            - Path=/team/**
+          filters:
+            - AuthenticationFilter
+            - RewritePath=/team/(?<remaining>.*), /api/team/${remaining}   
+            
+        - id: sport-service
+          uri: lb://sport-service
+          predicates:
+            - Path=/sport/**
+          filters:
+            - AuthenticationFilter
+            - RewritePath=/sport/(?<remaining>.*), /api/sport/${remaining}
+            
+        - id: notification-service
+          uri: lb://notification-service
+          predicates:
+            - Path=/notification/**
+          filters:
+            - AuthenticationFilter
+            - RewritePath=/notification/(?<remaining>.*), /api/notification/${remaining}
+        
+        - id: my-notifications-service
+          uri: lb://notification-service
+          predicates:
+            - Path=/my-notifications/**
+          filters:
+            - AuthenticationFilter
+            - RewritePath=/my-notifications/(?<remaining>.*), /api/my-notifications/${remaining}
+            
+        - id: game-system-service
+          uri: lb://competition-management-service
+          predicates:
+            - Path=/game-system/**
+          filters:
+            - AuthenticationFilter
+            - RewritePath=/game-system/(?<remaining>.*), /api/game-system/${remaining}
+            
+        - id: competition-service
+          uri: lb://competition-management-service
+          predicates:
+            - Path=/competition/**
+          filters:
+            - AuthenticationFilter
+            - RewritePath=/competition/(?<remaining>.*), /api/competition/${remaining}
+        
+        - id: tournament-stage-service
+          uri: lb://competition-management-service
+          predicates:
+            - Path=/stage/**
+          filters:
+            - AuthenticationFilter
+            - RewritePath=/stage/(?<remaining>.*), /api/stage/${remaining} 
+            
+        - id: match-service
+          uri: lb://match-service
+          predicates:
+            - Path=/match/**
+          filters:
+            - AuthenticationFilter
+            - RewritePath=/match/(?<remaining>.*), /api/match/${remaining}
+        
+        - id: feedback-service
+          uri: lb://feedback-service
+          predicates:
+            - Path=/feedback/**
+          filters:
+            - AuthenticationFilter
+            - RewritePath=/feedback/(?<remaining>.*), /api/feedback/${remaining}
+            
+        - id: calendar-event-service
+          uri: lb://calendar-event-service
+          predicates:
+            - Path=/event/**
+          filters:
+            - AuthenticationFilter
+            - RewritePath=/event/(?<remaining>.*), /api/event/${remaining}    
+   
+token:
+  signing:
+    key: X16FXf2ORqbOmJ4ud290vJnM/D+mXnGyQ7BKL2P3GqA=
