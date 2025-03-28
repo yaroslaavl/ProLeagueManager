@@ -1,0 +1,116 @@
+server:
+  port: 8084
+
+spring:
+  data:
+    redis:
+      host: redis
+      port: 6379
+  flyway:
+    enabled: true
+    create-schemas: true  
+    baseline-on-migrate: true  
+    default-schema: competition_management
+    locations: classpath:db/migration
+  datasource:
+    url: jdbc:postgresql://data-base:5432/league
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
+      database-platform: org.hibernate.dialect.PostgreSQLDialect
+    open-in-view: false
+    properties:
+      hibernate:
+        default_schema: competition_management 
+  rabbitmq:
+    host: rabbitmq-server
+    port: 5672
+    username: guest
+    password: guest
+    listener:
+      simple:
+        default-requeue-rejected: false
+
+rabbitmq:
+  tournament:
+    exchange: tournament.exchange               
+    dead-letter-exchange: tournament.dlx
+
+    queues:
+      start:
+        name: tournament.start.queue
+        routing-key: tournament.start.key
+        arguments:
+          x-dead-letter-exchange: tournament.dlx
+          x-dead-letter-routing-key: dlx.tournament
+          x-message-ttl: 5000
+
+      dead-letter:
+        queue:
+          name: tournament.dead-letter.queue
+          durable: true
+          auto-delete: false
+          arguments:
+            x-message-ttl: 5000
+            x-max-length: 5
+
+
+  league:
+    exchange: league.exchange
+    dead-letter-exchange: league.dlx
+
+    queues:
+      start:
+        name: league.start.queue
+        routing-key: league.start.key
+        arguments:
+          x-dead-letter-exchange: league.dlx
+          x-dead-letter-routing-key: dlx.league
+          x-message-ttl: 5000
+
+      dead-letter:
+        queue:
+          name: league.dead-letter.queue
+          durable: true
+          auto-delete: false
+          arguments:
+            x-message-ttl: 5000
+            x-max-length: 5
+      
+token:
+  signing:
+    key: X16FXf2ORqbOmJ4ud290vJnM/D+mXnGyQ7BKL2P3GqA=
+
+minio:
+  url: http://minio:9000
+  accessKey: admin
+  secretKey: password
+  bucket-name: competition-image-bucket
+  secure: false  
+  
+resilience4j:
+  retry:
+    configs:
+      default:
+        max-attempts: 3    
+        wait-duration: 2s   
+        retry-exceptions:   
+          - org.springframework.web.client.HttpServerErrorException
+          - feign.FeignException
+          - feign.RetryableException
+          - java.net.SocketTimeoutException
+        ignore-exceptions:
+          - org.springframework.web.client.HttpClientErrorException$BadRequest
+          - org.springframework.web.client.HttpClientErrorException$NotFound
+          - org.springframework.web.bind.MethodArgumentNotValidException
+        event-consumer-buffer-size: 10
+    instances:
+      notificationServiceRetry:
+        base-config: default
+      sportServiceRetry:
+        base-config: default
+      teamServiceRetry:
+        base-config: default
