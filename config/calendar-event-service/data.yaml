@@ -1,0 +1,62 @@
+server:
+  port: 8087
+  
+spring:
+  data:
+    redis:
+      host: redis
+      port: 6379
+  flyway:
+    enabled: true
+    create-schemas: true  
+    baseline-on-migrate: true  
+    default-schema: calendar_event
+    locations: classpath:db/migration
+  datasource:
+    url: jdbc:postgresql://data-base:5432/league 
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
+      database-platform: org.hibernate.dialect.PostgreSQLDialect
+    open-in-view: false
+    properties:
+      hibernate:
+        default_schema: calendar_event 
+
+token:
+  signing:
+    key: X16FXf2ORqbOmJ4ud290vJnM/D+mXnGyQ7BKL2P3GqA=
+    
+resilience4j:
+  retry:
+    configs:
+      default:
+        max-attempts: 3    
+        wait-duration: 2s   
+        retry-exceptions:   
+          - org.springframework.web.client.HttpServerErrorException
+          - feign.FeignException
+          - feign.RetryableException
+          - java.net.SocketTimeoutException
+        ignore-exceptions:
+          - org.springframework.web.client.HttpClientErrorException$BadRequest
+          - org.springframework.web.client.HttpClientErrorException$NotFound
+          - org.springframework.web.bind.MethodArgumentNotValidException
+        event-consumer-buffer-size: 10
+    instances:
+      leagueServiceRetry:
+        base-config: default
+      tournamentServiceRetry:
+        base-config: default
+      matchServiceRetry:
+        base-config: default 
+        
+minio:
+  url: http://minio:9000  
+  accessKey: admin
+  secretKey: password
+  bucket-name: event-image-bucket
+  secure: false
