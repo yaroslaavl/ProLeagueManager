@@ -1,0 +1,57 @@
+server:
+  port: 8081
+  
+spring:
+  flyway:
+    enabled: true
+    create-schemas: true  
+    baseline-on-migrate: true  
+    default-schema: notification
+    locations: classpath:db/migration
+  datasource:
+    url: jdbc:postgresql://data-base:5432/league
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
+      database-platform: org.hibernate.dialect.PostgreSQLDialect
+    open-in-view: false
+    properties:
+      hibernate:
+        default_schema: notification 
+  mail:
+    default-encoding: UTF-8
+    host: your-host
+    username: your-mail
+    password: your-password
+    port: your-port
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+    protocol: smtp
+    test-connection: false
+    
+resilience4j:
+  retry:
+    configs:
+      default:
+        max-attempts: 3    
+        wait-duration: 4s   
+        retry-exceptions:   
+          - org.springframework.web.client.HttpServerErrorException
+          - feign.FeignException
+          - feign.RetryableException
+          - java.net.SocketTimeoutException
+        ignore-exceptions:
+          - org.springframework.web.client.HttpClientErrorException$BadRequest
+          - org.springframework.web.client.HttpClientErrorException$NotFound
+          - org.springframework.web.bind.MethodArgumentNotValidException
+        event-consumer-buffer-size: 10
+    instances:
+      teamServiceRetry:
+        base-config: default
