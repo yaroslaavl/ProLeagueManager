@@ -3,7 +3,7 @@
 ## Overview
 Service for creating and managing leagues and tournaments. Allows users and teams to participate in multiple sports disciplines.
 
-## Features
+## User capabilities
 ### User registration and authentication
 ### User dashboard access
    - Set avatar
@@ -20,21 +20,21 @@ Service for creating and managing leagues and tournaments. Allows users and team
    - Accept or decline user requests
    - Manage team roster (add/remove players)
    - View team notifications in the "Invitations" tab
+   - Manage team notifications
 
  ### Competition management
    - Register a team for tournaments/leagues
-   - Set minimum required players for a match
    - Automatic captain inclusion in the lineup
    - Select active players and substitutes before a match
-   - Generate QR code for team verification in traditional sports    
+   - Get QR code for team verification in traditional sports    
 
  ### Event display
-   - Categorized events based on ESPORT or SPORT selection
-   - Global messages pinned on the main page for important updates
-   - Display upcoming tournaments and key matches (semi-finals, finals, top 5 matches)
+   - Watch categorized events based on ESPORT or SPORT selection
+   - Watch Global messages pinned on the main page for important updates
+   - Watch upcoming tournaments and key matches (semi-finals, finals, top 5 matches)
 
 ### Administrator functionalities
-  - Create, modify, and delete tournaments, leagues, and teams
+  - Create, modify, and delete tournaments, leagues, and teams, game systems, sports
   - Add or remove teams from competitions
   - Publish global announcements for matches, tournaments, or leagues
   - Add or remove user roles and user accounts
@@ -55,6 +55,7 @@ Service for creating and managing leagues and tournaments. Allows users and team
 - MapStruct
 - RESTful API
 - Maven
+- JWT
 - Docker
 - MinIo
 
