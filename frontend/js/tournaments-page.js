@@ -92,3 +92,87 @@ if (document.getElementById('log-out') !== null){
   const logOutBtn = document.getElementById('log-out').addEventListener('click',logOut);
 }
 
+async function getTournamentsByFilter(){
+  try{
+    let active = document.getElementById('active').checked;
+    let past =document.getElementById('past').checked;
+    let future =document.getElementById('future').checked;
+    let isIndividual =document.getElementById('isIndividual').checked;
+
+    let isEsport;
+    if(document.getElementById('sportyButton').textContent === 'Sporty'){
+      isEsport = false;
+    }else{isEsport = true;}
+    let response = await fetch(`http://localhost:8765/competition/search-tournaments?isIndividual=${isIndividual}&status=${active? 'ACTIVE': 'UPCOMING'}&isEsport=${isEsport}`)
+    let data = await response.json();
+    console.log(data);
+    addTournamentsToTheList(data);
+  }catch(err){
+    console.error(`Error while receiving tournaments ${err}`);
+  }
+}
+async function addTournamentsToTheList(receivedData) {
+  try {
+    const list = document.getElementById('tournaments-list');
+    list.innerHTML = '';
+
+    for (const tournament of receivedData) {
+      const [systemResponse, imageResponse] = await Promise.all([
+        fetch(`http://localhost:8765/game-system/${tournament.gameSystemId}`, {
+          headers: { 'Authorization': `Bearer ${localStorage.getItem("accToken")}` }
+        }),
+        fetch(`http://localhost:8765/competition/get-image/${tournament.id}`, {
+          headers: { 'Authorization': `Bearer ${localStorage.getItem("accToken")}` }
+        })
+      ]);
+
+      const system = systemResponse.ok ? await systemResponse.json() : null;
+      const imageUrl = imageResponse.ok ? await imageResponse.text() : 'img/google-logo.svg';
+
+      const formatDate = (dateStr) => {
+        if (!dateStr) return "-";
+        const date = new Date(dateStr);
+        return date.toLocaleDateString("pl-PL");
+      };
+
+      const tournamentEl = document.createElement('div');
+      tournamentEl.classList.add('tournament');
+      tournamentEl.innerHTML = `
+        <div>
+          <img src="${imageUrl}" alt="Turniej" style="border-radius: 10px">
+          <div class="tournament-name">
+            <p class="name">${tournament.name}</p>
+            <p class="status">${tournament.status}</p>
+          </div>
+        </div>
+        <div style="gap:40px;margin-right: 20px">
+          <div class="start-time">
+            <p>Start:</p>
+            <p class="start-date">${formatDate(tournament.startDate)}</p>
+          </div>
+          <div class="end-time">
+            <p>Koniec:</p>
+            <p class="end-date">${formatDate(tournament.endDate)}</p>
+          </div>
+          <div class="game-system">
+            <p>Tryb:</p>
+            <p class="system">${system?.systemName ?? "-"}</p>
+          </div>
+          <div class="teams">
+            <p>Zespoly:</p>
+            <p class="count">${system?.minTeamSize ?? "?"}/${system?.maxTeamSize ?? "?"}</p>
+          </div>
+          <a href=""><img src="img/style=linear.svg" alt="" style="height: 20px;margin-top: 40px"></a>
+        </div>
+      `;
+
+      list.appendChild(tournamentEl);
+    }
+
+  } catch (err) {
+    console.error(`Error while adding tournaments to the list ${err}`);
+  }
+}
+
+
+
