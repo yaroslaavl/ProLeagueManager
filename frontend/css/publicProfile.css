@@ -32,7 +32,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 60px;
+
 }
 .nav-link-header {
   text-decoration: none;
@@ -42,9 +42,9 @@ body {
   font-size: 14px;
 }
 .header-center {
-  gap: 540px;
+  justify-content: space-between;
   display: flex;
-  justify-content: center;
+  gap: 150px;
 }
 input
 {
@@ -72,7 +72,7 @@ input
   outline: none;
   font-family: Inter, sans-serif;
   color: #808A9D;
-  width: 350px; /* Ширина поля */
+  width: 450px; /* Ширина поля */
 
   font-size: 14px;
   font-weight: bold;
@@ -96,7 +96,16 @@ input
   height: 20px;
 }
 
-
+.sporty-toggle{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.zawody-toggle{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 footer {
   display: flex;
@@ -202,6 +211,62 @@ footer {
   width: 20px;
   height: 20px;
 }
+.register{
+  width: 120px;
+  background: #3861FB;
+  color: white;
+  border-radius: 12px;
+  border: 0;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 14px;
+  font-size: 14px;
+}
+.blue {
+  color: #3861FB;
+  font-weight: bold;
+}
+.menu-container{
+  cursor: pointer;
+}
+/*menu for sport choose*/
+.sporty-wrapper {
+  position: relative; /* Чтобы позиционировать меню внутри */
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 70%; /* сразу под .sporty-toggle */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: white;
+  border: #CFD6E4 1px solid;
+  border-radius: 6px;
+  padding: 10px 0;
+  display: none;
+  flex-direction: column;
+  z-index: 1000;
+  min-width: 120px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+
+.dropdown-item {
+  padding: 8px 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  display: flex;
+}
+.dropdown-item>img{
+  width: 20px;
+  height: 20px;
+  margin-top: 10px;
+}
+.dropdown-item:hover {
+  background-color: #f0f0f0;
+}
+
 .profile-container {
   max-width: 1200px;
   margin: 50px auto;
