@@ -4,16 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/tournaments-page.css">
+  <link rel="stylesheet" href="css/leagues-page.css">
   <link rel="stylesheet" href="css/notificationMenu.css">
-  <script src="js/main.js" defer></script> <!-- Подключение скрипта -->
+  <script src="js/main.js" defer></script>
   <script src="js/burgerMenu.js" defer></script>
   <script src="js/notificationMenu.js" defer></script>
-  <script src="js/tournaments-page.js" ></script>
-  <script src="js/header.js" ></script>
-  <title>Turneje</title>
+  <script src="js/leagues-page.js"></script>
+  <script src="js/header.js"></script>
+  <title>Ligi</title>
 </head>
-
 <body>
 <div class="container">
   <header class="header">
@@ -121,59 +120,57 @@
       </div>
     </div>
   </header>
+
   <div class="tournament-tittle">
     <div style="display: flex;margin-left: 400px">
-    <img src="https://www.svgrepo.com/show/521592/cup.svg" alt="" style="height: 60px;margin-top: 20px">
-    <p style="font-weight: bold;font-size: 25px;margin-top: 40px">Turneje</p>
+      <img src="img/uefa-europa-league-soccer-svgrepo-com.svg" alt="" style="height: 60px;margin-top: 20px">
+      <p style="font-weight: bold;font-size: 25px;margin-top: 40px">Ligi</p>
     </div>
   </div>
+
   <div class="content">
     <div class="content-left">
-    <div class="side-menu">
-      <button class="createTeam">Stworzyc zespol</button>
-      <div style="display: flex">
-        <div>
+      <div class="side-menu">
+        <button class="createTeam">Stworzyć zespół</button>
         <div style="display: flex">
-      <input onclick="getTournamentsByFilter()" type="checkbox" id="active" name="active">
-      <label for="active">Aktywne</label>
-      </div>
-        <div style="display: flex">
-      <input onclick="getTournamentsByFilter()" type="checkbox" id="past" name="past">
-      <label for="past">Poprzednie</label>
-      </div>
-      </div>
-        <div>
-        <div style="display: flex">
-      <input onclick="getTournamentsByFilter()" type="checkbox" id="future" name="future">
-      <label for="future">Nadchodzace</label>
-      </div>
-        <div style="display: flex">
-      <input onclick="getTournamentsByFilter()" type="checkbox" id="isIndividual" name="isIndividual">
-      <label for="isIndividual">Indywidualne</label>
-      </div>
-      </div>
+          <div>
+            <div style="display: flex">
+              <input onclick="getLeaguesByFilter()" type="checkbox" id="active" name="active">
+              <label for="active">Aktywne</label>
+            </div>
+            <div style="display: flex">
+              <input onclick="getLeaguesByFilter()" type="checkbox" id="past" name="past">
+              <label for="past">Poprzednie</label>
+            </div>
+          </div>
+          <div>
+            <div style="display: flex">
+              <input onclick="getLeaguesByFilter()" type="checkbox" id="future" name="future">
+              <label for="future">Nadchodzące</label>
+            </div>
+            <div style="display: flex">
+              <input onclick="getLeaguesByFilter()" type="checkbox" id="isIndividual" name="isIndividual">
+              <label for="isIndividual">Indywidualne</label>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
+
     <div class="content-right">
       <div class="main-menu">
-      <p class="main-menu-tittle">Turneje:</p>
-      <div class="tournaments-list" id="tournaments-list">
-        <p style="font-size: 40px;font-weight: bold;color: #808A9D">Uzyj menu filterow</p>
+        <p class="main-menu-tittle">Ligi:</p>
+        <!-- Обратите внимание, что id изменён на leagues-list -->
+        <div class="tournaments-list" id="leagues-list">
+          <p style="font-size: 40px;font-weight: bold;color: #808A9D">Użyj menu filtrów</p>
+        </div>
       </div>
-    </div>
     </div>
   </div>
 
-
-
-
-
-
-
   <!-- Контейнер для всплывающих уведомлений -->
-
   <div id="toastContainer"></div>
+
   <footer>
     <div class="footer-content">
       <span>Wspierane przez: <a href="https://zut.edu.pl" target="_blank">ZUT</a></span>
@@ -188,8 +185,6 @@
   </footer>
 </div>
 
-
 <link rel="stylesheet" href="css/burgerMenu.css">
 </body>
-
 </html>

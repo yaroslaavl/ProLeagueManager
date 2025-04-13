@@ -4,87 +4,123 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/tournaments-page.css">
   <link rel="stylesheet" href="css/notificationMenu.css">
   <script src="js/main.js" defer></script> <!-- Подключение скрипта -->
   <script src="js/burgerMenu.js" defer></script>
   <script src="js/notificationMenu.js" defer></script>
+
+  <script src="js/header.js" ></script>
   <title>Main</title>
 </head>
 
 <body>
 <div class="container">
   <header class="header">
-
     <div class="header-center">
-      <div style="display: flex">
-      <a href="main.html"><img src="img/blogo_text.svg" alt="Logo" class="logo"></a>
-      <nav class="nav">
-        <a href="main.html" class="nav-link-header">Sporty</a>
-      </nav>
+      <div style="display: flex;">
+        <a href="main.html"><img src="img/blogo_text.svg" alt="Logo" class="logo"></a>
+        <div style="margin-top: 25px;margin-right: 10px;color: #808A9D;font-size: 25px">|</div>
+        <div style="display: flex;gap: 60px">
+          <nav class="nav">
+            <img src="img/home.png" alt="" style="height: 20px">
+            <a href="#" class="nav-link-header" onclick="toMain()">Glówna</a>
+          </nav>
+          <nav class="nav sporty-wrapper">
+            <div class="sporty-toggle" onclick="toggleSportyMenu(event)">
+              <img src="img/sport.png" alt="" style="height: 20px" id="sport-image">
+              <a href="#" class="nav-link-header" id="sportyButton">Sporty</a>
+              <img src="img/open-menu-btn.png" alt="" style="margin-left: 5px; height: 10px; cursor: pointer">
+            </div>
+            <div class="dropdown-menu" id="sportyDropdown">
+              <div class="dropdown-item" onclick="selectSport('Sporty')">
+                <img src="img/sport.png" alt="" style="width: 20px;margin-right: 10px">
+                <p>Sporty</p>
+              </div>
+              <div class="dropdown-item" onclick="selectSport('E-sporty')">
+                <img src="img/image%208.png" alt="" style="width: 20px;margin-right: 10px">
+                <p>E-sporty</p>
+              </div>
+            </div>
+          </nav>
+          <nav class="nav zawody-wrapper">
+            <div class="button-container" style="position: relative;">
+              <div class="zawody-toggle" onclick="toggleZawodyMenu(event)">
+                <img src="img/tournaments.png" alt="" style="height: 20px">
+                <a href="#" class="nav-link-header" id="zawodyButton">Zawody</a>
+                <img src="img/open-menu-btn.png" alt="" style="margin-left: 10px;height: 10px;cursor: pointer">
+              </div>
+              <div class="dropdown-menu" id="zawodyDropdown" style="margin-top: 10px">
+                <div class="dropdown-item" onclick="selectZawody('Ligi')">
+                  <img src="img/league.png" alt="" style="width: 20px;margin-right: 10px">
+                  <p>Ligi</p>
+                </div>
+                <div class="dropdown-item" onclick="selectZawody('Turnieje')">
+                  <img src="img/tournaments.png" alt="" style="width: 20px;margin-right: 10px">
+                  <p>Turnieje</p>
+                </div>
+              </div>
+            </div>
+          </nav>
+        </div>
       </div>
       <div class="search-container">
         <img src="img/search.svg" alt="Szukaj" class="search-icon">
         <input type="text" placeholder="Szukaj" class="search-input">
       </div>
-     <div style="display: flex;margin-bottom: 15px">
-       <div id="notification_button" onclick="toggleNotifications(event)">
-         <button style="background: none;" class="icon-btn notification-btn">
-           <img style="width: 25px; height: 25px" src="img/notification-bell.svg" alt="Powiadomienia">
-         </button>
-         <div class="notification-popup" id="notificationPopup">
-           <div class="notification-header">
-             <span>Powiadomienia</span>
-           </div>
-           <div class="notification-list">
-             <div class="notification-item">
-
-             </div>
-           </div>
-         </div>
-       </div>
-
-       <div class="header-right" id="header_right" onclick="toggleMenu()">
-        <div class="menu-container" >
-          <button class="icon-btn menu-btn" style="margin-top: 0">
-            <img src="img/menu-hamburger.svg" alt="Menu">
+      <div style="display: flex;margin-bottom: 15px">
+        <div id="notification_button" onclick="toggleNotifications(event)">
+          <button style="background: none;" class="icon-btn notification-btn">
+            <img style="width: 25px; height: 25px" src="img/notification-bell.svg" alt="Powiadomienia">
           </button>
-          <div class="menu-popup" id="menuPopup">
-            <div class="menu-header">
-              <div class="user-info">
-                <img src="img/profile.svg" alt="Avatar" class="user-avatar" id="avatarBurger">
-                <div>
-                  <span id="greeting" style="font-size: 14px">Cześć, <span id="userName">User</span></span>
-                  <span id="userEmail" class="email">email@example.com</span>
-                </div>
-              </div>
+          <div class="notification-popup" id="notificationPopup">
+            <div class="notification-header">
+              <span>Powiadomienia</span>
             </div>
-            <div class="menu-settings">
-              <div class="setting-item">
-                <span>Język</span>
-                <span class="value">Polski</span>
+            <div class="notification-list">
+              <div class="notification-item">
+                <!-- Здесь могут быть уведомления -->
               </div>
-              <div class="setting-item">
-                <span>Ciemny tryb</span>
-                <input type="checkbox" id="darkThemeToggle">
-              </div>
-            </div>
-            <div class="menu-links">
-              <a href="public-profile.html" class="menu-link">Profil publiczny</a>
-              <a href="profile-settings.html" class="menu-link">Ustawienie</a>
-              <a href="#" class="menu-link" id="logOut" onclick="logOut()">Log Out</a>
             </div>
           </div>
-        </div >
-
-          <img class="icon-btn profile-btn" src="img/profile.svg" alt="Profil" >
-
+        </div>
+        <div class="header-right" id="header_right" onclick="toggleMenu()">
+          <div class="menu-container">
+            <button class="icon-btn menu-btn" style="margin-top: 0">
+              <img src="img/menu-hamburger.svg" alt="Menu">
+            </button>
+            <div class="menu-popup" id="menuPopup">
+              <div class="menu-header">
+                <div class="user-info">
+                  <img src="img/profile.svg" alt="Avatar" class="user-avatar" id="avatarBurger">
+                  <div>
+                    <span id="greeting" style="font-size: 14px">Cześć, <span id="userName">User</span></span>
+                    <span id="userEmail" class="email">email@example.com</span>
+                  </div>
+                </div>
+              </div>
+              <div class="menu-settings">
+                <div class="setting-item">
+                  <span>Język</span>
+                  <span class="value">Polski</span>
+                </div>
+                <div class="setting-item">
+                  <span>Ciemny tryb</span>
+                  <input type="checkbox" id="darkThemeToggle">
+                </div>
+              </div>
+              <div class="menu-links">
+                <a href="public-profile.html" class="menu-link">Profil publiczny</a>
+                <a href="profile-settings.html" class="menu-link">Ustawienie</a>
+                <a href="#" class="menu-link" id="logOut" onclick="logOut()">Log Out</a>
+              </div>
+            </div>
+          </div>
+          <img class="icon-btn profile-btn" src="img/profile.svg" alt="Profil">
+        </div>
       </div>
     </div>
-    </div>
   </header>
-
-
 
 
 
@@ -108,7 +144,6 @@
       <a href="#">API</a>
     </div>
   </footer>
-
 </div>
 
 

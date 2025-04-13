@@ -4,11 +4,11 @@
   display: none;
   position: absolute;
   top: 60px;
-  right: 0px;
+  right: 100px;
   width: 380px;
   background: white;
   border-radius: 10px;
-  border: 1px solid rgb(239, 242, 245);
+  border: 1px solid #dcdcdf;
   margin-top: 10px;
   overflow: hidden;
   z-index: 100;

@@ -37,10 +37,12 @@ body {
 }
 .nav-link-header {
   text-decoration: none;
+
   justify-content: center;
   color: #000;
   font-weight: bold;
   font-size: 14px;
+
 }
 .header-center {
   justify-content: space-between;
@@ -242,8 +244,16 @@ footer {
   font-size: 14px;
   font-weight: bold;
 }
-
-
+.sporty-toggle{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.zawody-toggle{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .dropdown-item {
   padding: 8px 12px;
   cursor: pointer;
@@ -361,16 +371,6 @@ footer {
   font-weight: bold;
   margin-bottom:5px;
 
-}
-.sporty-toggle{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.zawody-toggle{
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 .status{
   background-color: #3861FB;

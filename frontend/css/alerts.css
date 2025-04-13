@@ -32,7 +32,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 60px;
+
 }
 .nav-link-header {
   text-decoration: none;
@@ -42,10 +42,9 @@ body {
   font-size: 14px;
 }
 .header-center {
-  gap: 540px;
+  justify-content: space-between;
   display: flex;
-  justify-content: center;
-
+  gap: 150px;
 }
 input
 {
@@ -73,7 +72,7 @@ input
   outline: none;
   font-family: Inter, sans-serif;
   color: #808A9D;
-  width: 350px; /* Ширина поля */
+  width: 450px; /* Ширина поля */
 
   font-size: 14px;
   font-weight: bold;
@@ -96,6 +95,7 @@ input
   width: 20px;
   height: 20px;
 }
+
 
 
 footer {
@@ -154,6 +154,118 @@ footer {
   .footer-links {
     justify-content: center; /* Центрируем контент */
   }
+}
+.header-right {
+  display: flex;
+  align-items: center; /* Выравнивание по вертикали */
+  justify-content: center;
+  justify-items: center;
+  margin-top: 15px;
+  gap: 10px;
+  background: #EFF2F5;
+  width: 80px;
+  height: 45px;
+  border-radius: 20%;
+  cursor: pointer;
+}/**/
+.header-right > .icon-btn {
+  margin-bottom: 20px;
+}
+.icon-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: #f0f2f5;
+  border: none;
+  transition: background 0.3s ease;
+}
+.notification-btn{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  margin-right: 10px;
+}
+.icon-btn:hover {
+  cursor: pointer;
+}
+
+.icon-btn img {
+  width: 20px;
+  height: 20px;
+}
+.register{
+  width: 120px;
+  background: #3861FB;
+  color: white;
+  border-radius: 12px;
+  border: 0;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 14px;
+  font-size: 14px;
+}
+.blue {
+  color: #3861FB;
+  font-weight: bold;
+}
+.menu-container{
+  cursor: pointer;
+}
+/*menu for sport choose*/
+.sporty-wrapper {
+  position: relative; /* Чтобы позиционировать меню внутри */
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 70%; /* сразу под .sporty-toggle */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: white;
+  border: #CFD6E4 1px solid;
+  border-radius: 6px;
+  padding: 10px 0;
+  display: none;
+  flex-direction: column;
+  z-index: 1000;
+  min-width: 120px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+
+.dropdown-item {
+  padding: 8px 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  display: flex;
+}
+.dropdown-item>img{
+  width: 20px;
+  height: 20px;
+  margin-top: 10px;
+}
+.dropdown-item:hover {
+  background-color: #f0f0f0;
+}
+.sporty-toggle{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.zawody-toggle{
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .main {
   display: flex; /* Используем Flexbox */

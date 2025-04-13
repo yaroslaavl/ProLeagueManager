@@ -32,7 +32,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 60px;
+
 }
 .nav-link-header {
   text-decoration: none;
@@ -42,10 +42,9 @@ body {
   font-size: 14px;
 }
 .header-center {
-  gap: 540px;
+  justify-content: space-between;
   display: flex;
-  justify-content: center;
-
+  gap: 150px;
 }
 input
 {
@@ -73,7 +72,7 @@ input
   outline: none;
   font-family: Inter, sans-serif;
   color: #808A9D;
-  width: 350px; /* Ширина поля */
+  width: 450px; /* Ширина поля */
 
   font-size: 14px;
   font-weight: bold;
@@ -97,8 +96,171 @@ input
   height: 20px;
 }
 
+
+
+footer {
+  display: flex;
+  justify-content: space-between; /* Располагаем элементы по краям */
+  align-items: center; /* Выравниваем элементы по вертикали */
+  padding: 8px 40px; /* Отступы сверху/снизу и слева/справа */
+  color: #808A9D;
+  font-size: 12px;
+  background-color: #ffffff;
+  border-top: 1px solid #EFF2F5;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+
+}
+
+.footer-content,
+.footer-links {
+  display: flex;
+  flex-wrap: wrap; /* Чтобы элементы переносились на мобильных */
+  gap: 10px; /* Расстояние между элементами */
+  margin-right: 80px;
+}
+
+.footer-content a{
+  color: #3861FB;
+  font-weight: bold;
+
+
+}
+
+.footer-links a {
+  background-color: #EFF2F5;
+  color: #000000;
+  font-weight: bold;
+  text-decoration: none;
+
+  border-radius: 8px;
+  padding: 4px 8px;
+
+}
+
+.blue{
+  color: #3861FB;
+  font-weight:bold ;
+}
+
+@media (max-width: 600px) {
+  footer {
+    flex-direction: column; /* Вертикальное расположение элементов */
+    text-align: center; /* Центрируем текст */
+  }
+  .footer-content,
+  .footer-links {
+    justify-content: center; /* Центрируем контент */
+  }
+}
+.header-right {
+  display: flex;
+  align-items: center; /* Выравнивание по вертикали */
+  justify-content: center;
+  justify-items: center;
+  margin-top: 15px;
+  gap: 10px;
+  background: #EFF2F5;
+  width: 80px;
+  height: 45px;
+  border-radius: 20%;
+  cursor: pointer;
+}/**/
+.header-right > .icon-btn {
+  margin-bottom: 20px;
+}
+.icon-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: #f0f2f5;
+  border: none;
+  transition: background 0.3s ease;
+}
+.notification-btn{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  margin-right: 10px;
+}
+.icon-btn:hover {
+  cursor: pointer;
+}
+
+.icon-btn img {
+  width: 20px;
+  height: 20px;
+}
+.register{
+  width: 120px;
+  background: #3861FB;
+  color: white;
+  border-radius: 12px;
+  border: 0;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 14px;
+  font-size: 14px;
+}
+.blue {
+  color: #3861FB;
+  font-weight: bold;
+}
+.menu-container{
+  cursor: pointer;
+}
+/*menu for sport choose*/
+.sporty-wrapper {
+  position: relative; /* Чтобы позиционировать меню внутри */
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 70%; /* сразу под .sporty-toggle */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: white;
+  border: #CFD6E4 1px solid;
+  border-radius: 6px;
+  padding: 10px 0;
+  display: none;
+  flex-direction: column;
+  z-index: 1000;
+  min-width: 120px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+
+.dropdown-item {
+  padding: 8px 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  display: flex;
+}
+.dropdown-item>img{
+  width: 20px;
+  height: 20px;
+  margin-top: 10px;
+}
+.dropdown-item:hover {
+  background-color: #f0f0f0;
+}
+
+
 .nav-link {
-  padding: 0px 0px 0px 40px;
+
   display: flex;
   align-items: center;
   justify-content: left;
@@ -148,10 +310,11 @@ input
     background-color: #ffffff;
   }
 
-  .side-bar-left {
-    font-size: 20px; /* Уменьшаем размер шрифта */
-    width: 100%; /* Полная ширина */
-    border-bottom: 1px solid #ddd; /* Разделение */
+  .side-bar-left{
+    padding: 20px; /* Внутренние отступы */
+    min-width: 200px; /* Минимальная ширина */
+    text-align: left; /* Выравнивание текста по левому краю */
+    font-size: 16px;
   }
 
   .side-bar-right {
@@ -186,7 +349,12 @@ input
     height: 100px; /* Увеличиваем размер изображения */
   }
 }
-
+.side-bar-left{
+  padding: 20px; /* Внутренние отступы */
+  min-width: 200px; /* Минимальная ширина */
+  text-align: left; /* Выравнивание текста по левому краю */
+  font-size: 16px;
+}
 /* Для совсем маленьких экранов до 480px */
 @media (max-width: 480px) {
   .nav-link {
@@ -284,8 +452,8 @@ footer {
 .nav-icon {
   width: 20px; /* Размер иконок */
   height: 20px;
-  flex-shrink: 0; /* Предотвращаем сжатие иконок */
-  margin-bottom: -5px;
+
+  margin-left: 20px;
 
 }
 .side-bar-left > nav {
@@ -295,7 +463,16 @@ footer {
   align-items: flex-start;
 
 }
-
+.sporty-toggle{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.zawody-toggle{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .side-bar-left > nav > a {
   text-decoration: none;
   color: #000;
