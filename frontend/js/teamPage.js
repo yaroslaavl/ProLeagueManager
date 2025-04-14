@@ -162,7 +162,7 @@ async function getData(){
           <div class="player-info">
           <img src=${playerImg} alt="Avatar" class="player-avatar">
             <p class="player-name">${playerInfo.firstName + " " + playerInfo.lastName}</p>
-            <a href="public-profile.html"><p class="player-nickname">${playerInfo.username}</p></a>
+            <a href="open-profile.html" onclick="localStorage.setItem('searchedProfile', '${playerInfo.username}');"><p class="player-nickname">${playerInfo.username}</p></a>
             <p class="player-joined">${new Date(member.joinedAt).toLocaleDateString()}</p>
 
           </div>
@@ -510,12 +510,10 @@ async function addRoleEditButtons() {
     const playerNickname = nicknameElement.textContent;
 
     const settingsBtn = document.createElement('button');
+    settingsBtn.classList.add('role-button');
     settingsBtn.innerHTML = '<img src="https://www.svgrepo.com/show/447437/menu-alt3.svg" style="width: 24px; height:24px">';
-    settingsBtn.style.background = 'none';
-    settingsBtn.style.border = 'none';
-    settingsBtn.style.cursor = 'pointer';
-    settingsBtn.style.margin = "0";
     settingsBtn.addEventListener('click', () => toggleRoleEditor(card, playerNickname, roleCheck.teamId));
+    card.querySelector('.player-info').appendChild(settingsBtn);
 
     card.querySelector('.player-info').appendChild(settingsBtn);
   });

@@ -372,9 +372,14 @@ footer {
   margin-top: 10px;
 }
 .tournament-tittle{
+  display: block;
+  width: 120px;
   color: #808A9D;
   margin-bottom: -5px;
   font-weight: normal;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .tournament>img{
   margin-top:15px;
