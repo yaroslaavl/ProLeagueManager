@@ -38,7 +38,7 @@ public interface LeagueStandingRepository extends JpaRepository<LeagueStanding, 
     WITH ranked_standings AS (
        SELECT *,
               RANK() OVER (ORDER BY points DESC, wins DESC, draws, RANDOM()) AS rank
-       FROM league_standings ls
+       FROM competition_management.league_standings ls
        WHERE ls.competition_id = :competitionId
     )
     SELECT *
