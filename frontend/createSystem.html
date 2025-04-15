@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pro league manager - Create System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *{
+            font-family: 'Inter', sans-serif;
+        }
+
+        html {
+            display:flex;
+            width: 100%;
+            height: 100%;
+            justify-content: center;
+            align-items: center;
+
+        }
+        body {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+
+        .create-system-block{
+            padding: 25px;
+            border: solid 1px #808A9D;
+            border-radius: 20px;
+        }
+
+        .create-system-block h1 {
+            text-align: start;
+            color: #333;
+            padding: 10px;
+            border-bottom: 1px solid #808A9D;
+        }
+
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .create-system-block label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        
+        .custom-select-wrapper {
+            position: relative;
+            display: inline;
+          }
+          
+        .custom-select-wrapper select {
+            appearance: none; 
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            padding-right: 2rem; 
+            font-size: 16px;
+        }
+          
+        .custom-select-wrapper .chevron {
+            position: absolute;
+            right: 20px; 
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none; 
+            font-size: 24px; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            
+        }
+
+    
+
+        .create-system-block input[type="text"], 
+        .create-system-block input[type="number"], 
+        .create-system-block select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #808A9D;
+            border-radius: 10px;
+            box-sizing: border-box;
+        }
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .checkbox-group input {
+            margin: 0;
+        }
+        .checkbox-group label{
+            margin: 0;
+            font-weight: normal;
+            padding-bottom: -10px;
+            color: #808A9D;
+
+        }
+
+        .checkbox-div{
+            display: flex;
+            flex-direction: row;
+            gap:20px;
+            align-items: center;
+        }
+
+        .create-system-block button {
+            background: #3861FB;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            display: block;
+            margin-top: 20px;
+            width: 100%;
+        }
+        .create-system-block button:hover {
+            background-color: #1743e2;
+        }
+    </style>
+</head>
+<body>
+    <div class="create-system-block">    
+    <h1>Create System</h1>
+    <form id="systemForm">
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" placeholder="Please provide system name" required>
+        </div>
+
+        <div class="form-group ">
+            <label for="sport">Sport:</label>
+            <div class="custom-select-wrapper">
+            <select id="sport" name="sport" aria-placeholder="Select a sport" required>
+                <option value="" style="color: #f0f0f0;"></option>
+                <option value="football">Football</option>
+                <option value="basketball">Basketball</option>
+                <option value="tennis">Tennis</option>
+                <option value="volleyball">Volleyball</option>
+                <option value="handball">Handball</option>
+                <option value="baseball">Baseball</option>
+                <option value="hockey">Hockey</option>
+                <option value="rugby">Rugby</option>
+            </select>
+            <span class="chevron"><img src="./chevron-down.svg" alt=" "></span>
+            </div>
+        </div>
+
+        <div class="form-group checkbox-div">
+            <div class="checkbox-group">
+                <input type="checkbox" id="individual" name="individual">
+                <label for="individual">Individual?</label>
+            </div>
+            <div class="checkbox-group">
+                <input type="checkbox" id="possibleReplaces" name="possibleReplaces">
+                <label for="possibleReplaces">Possible Replaces?</label>
+            </div>
+        </div>
+
+
+
+
+        <div class="form-group">
+            <label for="maxReplaces">Max Quantity Replaces:</label>
+            <input type="number" id="maxReplaces" name="maxReplaces" placeholder="Please provide maximal quantity of replaces" min="0">
+        </div>
+        <div class="form-group">
+            <label for="minReplaces">Min Quantity Replaces:</label>
+            <input type="number" id="minReplaces" name="minReplaces" placeholder="Please provide minimal quantity of replaces" min="0">
+        </div>
+
+        <div class="form-group">
+            <label for="quantityPlayers">Quantity of Players:</label>
+            <input type="number" id="quantityPlayers" name="quantityPlayers" min="1" placeholder="Please provide normal quantity of players in team " required>
+        </div>
+
+        <div class="form-group">
+            <label for="maxQuantityPlayers">Max Quantity of Players:</label>
+            <input type="number" id="maxQuantityPlayers" name="maxQuantityPlayers" min="1" placeholder="Please provide maximal quatnity of players in team(incuding replacements)" required>
+        </div>
+
+        <button type="submit">Submit</button>
+    </form>
+
+</div>
+</body>
+</html>
