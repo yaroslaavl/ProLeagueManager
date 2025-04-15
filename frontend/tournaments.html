@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <title>Tournaments</title>
+    <style>
+        html, body {
+            font-family: 'Inter', sans-serif;
+            background: #FFF;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        
+            flex-direction: column;
+          }
+           
+          header {
+            height: 100px;
+            width: 100%;
+          }
+          
+          .container {
+            max-width: 1200px;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            margin: 100px 0px;
+          }
+
+          .container button{
+                
+            font-weight: 700;
+            font-size: 14px;
+            line-height: 100%;
+            letter-spacing: 0%;
+            padding: 10px 20px;
+
+          }
+          
+          .header-tounament {
+            background: #EFF2F5;
+            border-radius: 20px;
+          }
+          
+          .banner {
+            background: #ccc;
+            height: 400px;
+            border-radius: 10px;
+          }
+          
+          .tournament-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            margin: 25px;
+            
+            border-bottom: 1px solid #CFD6E4;
+          }
+
+          .tournament-info .tournament-name{
+            display: flex;
+            align-items: flex-start;
+            justify-content:center;
+            flex-direction: column;
+            gap:5px;
+          }
+          .tournament-info .tournament-name span{
+            color: #808A9D
+          }
+          
+          .profile {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+          }
+          
+          .avatar {
+            width: 50px;
+            height: 50px;
+            background: #aaa;
+            border-radius: 50%;
+            position: relative;
+          }
+
+          .avatar img{
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform: scale(0.8);
+          }
+          
+          .details {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            width: 60%;
+            justify-content:space-evenly;   
+        }
+
+          .details > div{
+            display: flex;
+            flex-direction: column;
+            gap:5px;
+            
+          }
+          .details > div > span{
+            color:#808A9D;
+          }
+          
+          .register-btn {
+            width: 169px;
+            height: 49px;
+            justify-content: space-between;
+            border-radius: 10px;
+            padding-top: 17.47px;
+            padding-right: 46.58px;
+            padding-bottom: 17.47px;
+            padding-left: 46.58px;
+
+            background: #3861FB;
+
+            color: white;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+          }
+          
+          .main {
+            display: flex;
+            margin-top: 20px;
+          }
+          
+          .sidebar {
+            background: white;
+            padding: 20px;
+            width: 180px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+          }
+          
+          .sidebar button {
+            background: none;
+            border:none;
+            border-radius: 20px;
+            text-align: left;
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: first baseline;
+            align-items: center;
+            gap:15px;
+
+            font-weight: 700;
+            font-size: 22px;
+            line-height: 100%;
+            letter-spacing: 0%;
+
+          }
+          
+          .sidebar button.active {
+            background: #EFF2F5;
+            font-weight: bold;
+          }
+          
+          .content {
+            width: 100%;
+
+          }
+
+          .matches{
+            background: #EFF2F5;
+            border-radius: 20px;
+            padding: 20px 40px;
+        }
+          
+          .match-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid  #CFD6E4;
+          }
+          
+          .match-header nav button {
+            font-family: 'Inter', sans-serif;
+            margin-left: 10px;
+            border: none;
+            font-weight: 600;
+            font-size: 15.58px;
+            line-height: 100%;
+            letter-spacing: 0%;
+            color: #808A9D ;
+
+          }
+          .match-header nav button:first-of-type{
+            color:#000;
+            font-weight: 700;
+            font-size: 15.58px;
+            line-height: 100%;
+            letter-spacing: 0%;
+
+            border-bottom: 1px solid #808A9D;
+
+          }
+          
+          .match-list {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+            justify-content: center;
+          }
+
+          .match-list-header{
+            display: flex;
+            align-items: center;
+            width: 90%;
+            justify-content: space-between;
+          }
+          .match-list-header span {
+            margin: 10px;
+            color: #808A9D;
+          }
+          
+          .match {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+          }
+
+          .team-details{
+            display: flex;
+            align-items: center;
+            gap:15px;
+          }
+          
+          
+          .feedback {
+            margin-top: 30px;
+            background: #EFF2F5;
+            border-radius: 20px;
+            padding: 20px 40px;
+          }
+
+          .feedback-header{
+            border-bottom: 1px solid  #CFD6E4;
+          }
+          
+          .feedback-input {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+
+          }
+          
+          .feedback-input input {
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 15px;
+            width: 70%;
+          }
+          
+          .feedback-input button {
+            width: 30%;
+            padding: 10px 20px;
+            background: #3861FB;
+            color: white;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+          }
+          
+          .comment {
+            background: white;
+            padding: 20px;
+            margin-top: 10px;
+            border-radius: 10px;
+            position: relative;
+          }
+
+          .avatar-comment {
+            width: 20px;
+            height: 20px;
+            background: #aaa;
+            border-radius: 50%;
+            position: relative;
+          }
+
+          .comment-header{
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap:5px;
+            color:#808A9D ;
+          }
+
+          .avatar-comment img{
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform: scale(0.8);
+          }
+          
+          .timestamp {
+            font-size: 14px;
+            color: gray;
+            position: absolute;
+            right: 10px;
+            top: 10px;
+          }
+
+          .comment-reactions{
+            position:absolute;
+            right: 10px;
+            bottom: 10px;
+            display: flex;
+            flex-direction: row;
+            
+            gap:10px;
+          }
+    </style>
+</head>
+<body>
+
+    <header>
+
+    </header>
+    <div class="container">
+        <div class="header-tounament">
+          <div class="banner"></div>
+          <div class="tournament-info">
+            <div class="profile">
+              <div class="avatar">
+                <img src="./user.svg" alt="user">
+              </div>
+              <div class="tournament-name">
+                <strong>Tournament Name</strong>
+                <span>FAST CUP</span>
+              </div>
+            </div>
+            <div class="details">
+              <div><span>Sport:</span><strong> Sport name </strong></div>
+              <div><span>Mode:</span><strong> 1v1 </strong></div>
+              <div><span>Teams:</span><strong> 52/64 </strong></div>
+              <div><span>Date:</span> <strong>01.01.2000 </strong></div>
+            </div>
+            <button class="register-btn">Sign In</button>
+          </div>
+        </div>
+    
+        <div class="main">
+          <aside class="sidebar">
+            <button> <img src="./shield-user.svg" alt=" "> Teams</button>
+            <button class="active"> <img src="./swords.svg" alt=""> Games</button>
+            <button> <img src="./network.svg" alt=""> Net</button>
+          </aside>
+    
+          <section class="content">
+            <div class="matches">
+              <div class="match-header">
+                <h3>Games:</h3>
+                <nav>
+                  <button class="active">Future</button>
+                  <button>Present</button>
+                  <button>Past</button>
+                </nav>
+              </div>
+    
+              
+              <div class="match-list">
+                <div class="match-list-header">
+                    <div><span>Start:</span></div>
+                    <div><span>Game:</span></div>
+                    <div><span>Round:</span></div>
+                </div>
+                <div class="match">
+                  <div>
+                    <strong>2:27</strong>
+                    <span> today</span>
+                  </div>
+                  <div class="team-details">
+                    <strong>zhan_karp</strong>
+                    <img src="./team-logo.png" alt="">
+                    <strong> -- : --</strong>
+                    <img src="./team-logo.png" alt="">
+                    <strong>zhan_karp</strong>
+                  </div>
+                  <div>
+                    <strong>1/256 final</strong>
+                  </div>
+                </div>
+
+                <div class="match">
+                    <div>
+                      <strong>2:27</strong>
+                      <span> today</span>
+                    </div>
+                    <div class="team-details">
+                      <strong>zhan_karp</strong>
+                      <img src="./team-logo.png" alt="">
+                      <strong> -- : --</strong>
+                      <img src="./team-logo.png" alt="">
+                      <strong>zhan_karp</strong>
+                    </div>
+                    <div>
+                      <strong>1/256 final</strong>
+                    </div>
+                  </div>
+
+                  <div class="match">
+                    <div>
+                      <strong>2:27</strong>
+                      <span> today</span>
+                    </div>
+                    <div class="team-details">
+                      <strong>zhan_karp</strong>
+                      <img src="./team-logo.png" alt="">
+                      <strong> -- : --</strong>
+                      <img src="./team-logo.png" alt="">
+                      <strong>zhan_karp</strong>
+                    </div>
+                    <div>
+                      <strong>1/256 final</strong>
+                    </div>
+                  </div>
+              </div>
+            </div>
+    
+            
+            <div class="feedback">
+                <div class="feedback-header">
+                    <h3>Feedback:</h3>
+                </div>
+              <div class="feedback-input">
+                <input type="text" placeholder="Send message..." />
+                <button>Submit</button>
+              </div>
+              <div class="comment">
+                <div class="comment-header">
+                    <div class="avatar-comment">
+                        <img src="./user.svg" alt="">
+                    </div>
+                    <span>zhan_karp</span>
+                </div>
+                <div>
+                    <p>Comment...</p>
+                </div>
+                <span class="timestamp">18:32 Nov 10</span>
+                <div class="comment-reactions">
+                    <img src="./smile.svg" alt="">
+                    <img src="./thumbs-up.svg" alt="">
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+</body>
+</html>
