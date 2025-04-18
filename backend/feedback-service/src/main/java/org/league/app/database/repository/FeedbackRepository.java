@@ -1,6 +1,7 @@
 package org.league.app.database.repository;
 
 import org.league.app.database.entity.Feedback;
+import org.league.app.dto.FeedbackReadDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -19,4 +20,6 @@ public interface FeedbackRepository extends JpaRepository<Feedback, UUID>, JpaSp
 
     @Query("SELECT f.tonality, COUNT(f) FROM Feedback f WHERE f.createdAt BETWEEN :from AND :to GROUP BY f.tonality")
     List<Object[]> findAllByTonality(@Param("from") LocalDateTime from, @Param("to") LocalDateTime to);
+
+    List<Feedback> findAllByCompetitionId(UUID competitionId);
 }

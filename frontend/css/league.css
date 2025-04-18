@@ -844,3 +844,25 @@ footer {
   color: #000000;
 }
 
+/* ----------  FEEDBACK / COMMENT  ---------- */
+.comment-header{
+  display:flex;              /* автор + ник в один ряд */
+  align-items:center;        /* вертикальное выравнивание */
+  gap:8px;                   /* расстояние между аватаром и ником */
+}
+
+.avatar-comment{
+  flex:0 0 35px;             /* фикс‑ширина/высота 35 px */
+  width:35px;
+  height:35px;
+  border-radius:50%;
+  overflow:hidden;           /* «обрезаем» лишнее у картинки */
+  background:#f0f3f6;        /* на случай, если изображение не успеет загрузиться */
+}
+
+.avatar-comment img{
+  width:100%;
+  height:100%;
+  object-fit:cover;          /* сохраняем пропорции, заполняем весь кружок */
+  display:block;
+}
