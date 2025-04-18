@@ -68,6 +68,11 @@ public class FeedbackController {
         return ResponseEntity.ok(feedbackService.findById(id));
     }
 
+    @GetMapping("/get-by-competition")
+    public ResponseEntity<List<FeedbackReadDto>> getByCompetition(@RequestParam("competitionId") UUID competitionId) {
+        return ResponseEntity.ok(feedbackService.findByCompetitionId(competitionId));
+    }
+
     @GetMapping("/all")
     public ResponseEntity<List<FeedbackReadDto>> findAll() {
         return ResponseEntity.ok(feedbackService.findAll());

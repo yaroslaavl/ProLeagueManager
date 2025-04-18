@@ -131,25 +131,25 @@
   <div class="content">
     <div class="content-left">
       <div class="side-menu">
-        <button class="createTeam">Stworzyć zespół</button>
+        <button class="createTeam" onclick="location.href = 'public-profile.html'">Stworzyć zespół</button>
         <div style="display: flex">
           <div>
             <div style="display: flex">
-              <input onclick="getLeaguesByFilter()" type="checkbox" id="active" name="active">
+              <input type="checkbox" id="active" name="active">
               <label for="active">Aktywne</label>
             </div>
             <div style="display: flex">
-              <input onclick="getLeaguesByFilter()" type="checkbox" id="past" name="past">
+              <input  type="checkbox" id="past" name="past">
               <label for="past">Poprzednie</label>
             </div>
           </div>
           <div>
             <div style="display: flex">
-              <input onclick="getLeaguesByFilter()" type="checkbox" id="future" name="future">
+              <input type="checkbox" id="future" name="future">
               <label for="future">Nadchodzące</label>
             </div>
             <div style="display: flex">
-              <input onclick="getLeaguesByFilter()" type="checkbox" id="isIndividual" name="isIndividual">
+              <input type="checkbox" id="isIndividual" name="isIndividual">
               <label for="isIndividual">Indywidualne</label>
             </div>
           </div>

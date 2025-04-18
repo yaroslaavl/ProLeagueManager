@@ -1,204 +1,137 @@
-// Если токены присутствуют, пытаемся обновить их
-if (localStorage.getItem('accToken') !== null && localStorage.getItem('refToken') !== null) {
-  refreshToken();
-}
+/* league‑list.js */
 
-document.addEventListener("DOMContentLoaded", () => {
-  const pageLoadSpan = document.querySelector(".footer-content span:nth-child(3)");
-  const htmlLoadSpan = document.querySelector(".footer-content span:nth-child(4)");
+/* ───────────────────  auth helper  ─────────────────── */
+if (localStorage.accToken && localStorage.refToken) refreshToken();
 
-  if (pageLoadSpan && htmlLoadSpan) {
-    // Ждем полной загрузки страницы
-    window.addEventListener("load", () => {
-      setTimeout(() => {
-        const performanceTiming = performance.timing;
-        const pageLoadTime = performanceTiming.loadEventEnd - performanceTiming.navigationStart;
-        const htmlLoadTime = performanceTiming.responseEnd - performanceTiming.responseStart;
-        const validPageLoadTime = pageLoadTime > 0 ? pageLoadTime : performance.now();
-        const validHtmlLoadTime = htmlLoadTime > 0 ? htmlLoadTime : 0;
-        pageLoadSpan.innerHTML = `Strona: <span class="blue">${Math.round(validPageLoadTime)}ms</span>`;
-        htmlLoadSpan.innerHTML = `Szablon: <span class="blue">${Math.round(validHtmlLoadTime)}ms</span>`;
-        console.log("Page Load Time (ms):", validPageLoadTime);
-        console.log("HTML Load Time (ms):", validHtmlLoadTime);
-      }, 0);
-    });
-  }
-});
-
-// Проверка наличия токенов
-let accToken = localStorage.getItem("accToken");
-let refToken = localStorage.getItem("refToken");
-if (accToken === null || refToken === null) {
-  const notifBtn = document.getElementById("notification_button");
-  const burgerAndUser = document.getElementById("header_right");
-  while (burgerAndUser.firstChild) {
-    burgerAndUser.removeChild(burgerAndUser.firstChild);
-  }
-  while (notifBtn.firstChild) {
-    notifBtn.removeChild(notifBtn.firstChild);
-  }
-  burgerAndUser.innerHTML = `
-    <a href="login.html">
-      <div class="registerBtn">
-        <button class="register">Zaloguj sie</button>
-      </div>
-    </a>
-  `;
-  burgerAndUser.style.backgroundColor = "white";
-}
-
-// Функция обновления токена
 async function refreshToken() {
   try {
-    const url = "http://localhost:8765/auth/refresh-token";
-    const refToken = localStorage.getItem("refToken");
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${refToken}`,
-        "Content-Type": "application/json"
-      }
+    const r = await fetch('http://localhost:8765/auth/refresh-token', {
+      method:'POST',
+      headers:{Authorization:`Bearer ${localStorage.refToken}`}
     });
-    if (!response.ok) throw new Error("Error Refresh Token");
-    const Tokens = await response.json();
-    localStorage.setItem("accToken", Tokens.accessToken);
-    localStorage.setItem("refToken", Tokens.refreshToken);
-  } catch (err) {
-    console.error(err);
-  }
+    if (!r.ok) throw new Error('refresh error');
+    const t = await r.json();
+    localStorage.accToken = t.accessToken;
+    localStorage.refToken = t.refreshToken;
+  } catch(e){ console.error(e); }
 }
 
-// Функция выхода из системы
-async function logOut() {
-  try {
-    let accToken = localStorage.getItem("accToken");
-    let refToken = localStorage.getItem("refToken");
-    const response = await fetch("http://localhost:8765/auth/logout", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${accToken}`,
-        "Content-Type": "application/json"
-      }
+/* ─────────────────── UI helpers ───────────────────── */
+document.addEventListener('DOMContentLoaded', () => {
+  const p = document.querySelector('.footer-content span:nth-child(3)');
+  const h = document.querySelector('.footer-content span:nth-child(4)');
+  if (p && h) window.addEventListener('load', () =>
+    setTimeout(()=>{
+      const t = performance.timing;
+      p.innerHTML = `Strona: <span class="blue">${Math.round(t.loadEventEnd-t.navigationStart)}ms</span>`;
+      h.innerHTML = `Szablon: <span class="blue">${Math.round(t.responseEnd-t.responseStart)}ms</span>`;
+    },0)
+  );
+
+  ['active','future','past','isIndividual'].forEach(id=>{
+    document.getElementById(id)?.addEventListener('change',applyFilters);
+  });
+  document.getElementById('sportyButton')?.addEventListener('click',e=>{
+    e.target.textContent = e.target.textContent.trim()==='Sporty'?'E-sporty':'Sporty';
+    applyFilters();
+  });
+
+  applyFilters();
+});
+
+/* ───────────── caches for repeat requests ──────────── */
+const sysCache   = new Map();
+const sportCache = new Map();
+const cntCache   = new Map();
+
+const fetchJSON = (url,opt)=>fetch(url,opt).then(r=>r.ok?r.json():null);
+
+async function getSystem(id){
+  if(sysCache.has(id)) return sysCache.get(id);
+  const js = await fetchJSON(`http://localhost:8765/game-system/${id}`,
+    {headers:{Authorization:`Bearer ${localStorage.accToken}`}});
+  sysCache.set(id,js); return js;
+}
+async function getSport(id){
+  if(sportCache.has(id)) return sportCache.get(id);
+  const js = await fetchJSON(`http://localhost:8765/sport/id/${id}`);
+  sportCache.set(id,js); return js;
+}
+async function getCount(cid){
+  if(cntCache.has(cid)) return cntCache.get(cid);
+  const arr = await fetchJSON(`http://localhost:8765/competition/league-table/${cid}`) || [];
+  cntCache.set(cid,arr.length); return arr.length;
+}
+
+/* ─────────────────── filter/loader ────────────────── */
+async function applyFilters(){
+  const active=document.getElementById('active')?.checked;
+  const future=document.getElementById('future')?.checked;
+  const past  =document.getElementById('past')?.checked;
+  const onlyInd=document.getElementById('isIndividual')?.checked;
+  const wantEs =document.getElementById('sportyButton').textContent.trim()!=='Sporty';
+
+  if(!active&&!future&&!past){
+    document.getElementById('leagues-list').innerHTML='';
+    return;
+  }
+  const need=[]; if(active)need.push('ACTIVE'); if(future)need.push('UPCOMING'); if(past)need.push('FINISHED');
+
+  const all=await fetchJSON('http://localhost:8765/competition/all')||[];
+  const leagues=all.filter(c=>c.competitionType==='LEAGUE'&&need.includes(c.status));
+
+  const result=[];
+  for(const c of leagues){
+    const [sys,sport]=await Promise.all([getSystem(c.gameSystemId),getSport(c.sportId)]);
+    if(onlyInd && !sys?.isIndividual) continue;
+    if(sport?.isEsport!==undefined && sport.isEsport!==wantEs) continue;
+    result.push({c,sys});
+  }
+  renderList(result);
+}
+window.getLeaguesByFilter=applyFilters;       // поддержка старых inline onclick
+
+/* ─────────────── render cards ─────────────────────── */
+async function renderList(listData){
+  const wrap=document.getElementById('leagues-list');
+  wrap.innerHTML='';
+
+  for(const {c,sys} of listData){
+    let img='img/google-logo.svg';
+    try{
+      const r=await fetch(`http://localhost:8765/competition/get-image/${c.id}`);
+      if(r.ok) img=await r.text();
+    }catch{}
+
+    const current=await getCount(c.id);
+    const maxCap=sys?.maxTeamSize ?? sys?.playersPerTeam ?? '?';
+    const fmt=d=>d?new Date(d).toLocaleDateString('pl-PL'):'-';
+
+    const card=document.createElement('div');
+    card.className='tournament';
+    card.innerHTML=`
+      <div>
+        <img src="${img}" alt="" style="border-radius:10px">
+        <div class="tournament-name">
+          <p class="name">${c.name}</p>
+          <p class="status">${c.status}</p>
+        </div>
+      </div>
+      <div style="gap:40px;margin-right:20px">
+        <div class="start-time"><p>Start:</p><p style="color:#000">${fmt(c.startDate)}</p></div>
+        <div class="end-time"><p>Koniec:</p><p style="color:#000">${fmt(c.endDate)}</p></div>
+        <div class="game-system"><p>Tryb:</p><p style="color:#000">${sys?.systemName ?? '-'}</p></div>
+        <div class="teams"><p>Uczestnicy:</p><p style="color:#000">${current} / ${maxCap}</p></div>
+        <a href="leagues.html" class="goto-league">
+          <img src="img/style=linear.svg" alt="" style="height:20px;margin-top:40px">
+        </a>
+      </div>
+    `;
+    /* при клике — кладём id и переходим */
+    card.querySelector('.goto-league').addEventListener('click',()=>{
+      localStorage.setItem('searchedLeague',c.id);
     });
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    localStorage.clear();
-    window.location.href = "main.html";
-  } catch (err) {
-    console.error(`${err}`);
-  }
-}
 
-// Привязываем событие на кнопку "Log Out", если она есть
-if (document.getElementById('log-out') !== null) {
-  document.getElementById('log-out').addEventListener('click', logOut);
-}
-
-/**
- * Функция получения лиг по фильтрам.
- * Пример запроса:
- * http://localhost:8765/competition/search-leagues?isIndividual=false&status=ACTIVE&isEsport=true
- */
-async function getLeaguesByFilter() {
-  try {
-    const active = document.getElementById('active').checked;
-    const past = document.getElementById('past').checked;       // пока не используется напрямую
-    const future = document.getElementById('future').checked;   // пока не используется напрямую
-    const isIndividual = document.getElementById('isIndividual').checked;
-    let isEsport = (document.getElementById('sportyButton').textContent === 'Sporty') ? false : true;
-
-    // Простейшая логика для определения статуса; можно расширить с учетом past/future
-    const statusParam = active ? 'ACTIVE' : 'UPCOMING';
-
-    const response = await fetch(
-      `http://localhost:8765/competition/search-leagues?isIndividual=${isIndividual}&status=${statusParam}&isEsport=${isEsport}`,
-      {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem("accToken")}`
-        }
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error(`Error fetching leagues: ${response.status}`);
-    }
-
-    let data = await response.json();
-    console.log(data);
-    addLeaguesToTheList(data);
-
-  } catch (err) {
-    console.error(`Error while receiving leagues: ${err}`);
-  }
-}
-
-/**
- * Функция добавления лиг в список.
- * Для корректного применения стилей создается блок с классом "tournament"
- * (так как в CSS стили карточек заданы для .tournament).
- */
-async function addLeaguesToTheList(receivedData) {
-  try {
-    const list = document.getElementById('leagues-list');
-    list.innerHTML = '';
-
-    for (const league of receivedData) {
-      // Параллельно получаем данные игровой системы и изображение
-      const [systemResponse, imageResponse] = await Promise.all([
-        fetch(`http://localhost:8765/game-system/${league.gameSystemId}`, {
-          headers: { 'Authorization': `Bearer ${localStorage.getItem("accToken")}` }
-        }),
-        fetch(`http://localhost:8765/competition/get-image/${league.id}`, {
-          headers: { 'Authorization': `Bearer ${localStorage.getItem("accToken")}` }
-        })
-      ]);
-
-      const system = systemResponse.ok ? await systemResponse.json() : null;
-      const imageUrl = imageResponse.ok ? await imageResponse.text() : 'img/google-logo.svg';
-
-      // Функция форматирования даты
-      const formatDate = (dateStr) => {
-        if (!dateStr) return "-";
-        const date = new Date(dateStr);
-        return date.toLocaleDateString("pl-PL");
-      };
-
-      // Создаем карточку лиги с классом "tournament" для применения заданных стилей
-      const leagueEl = document.createElement('div');
-      leagueEl.classList.add('tournament');
-      leagueEl.innerHTML = `
-        <div>
-          <img src="${imageUrl}" alt="Liga" style="border-radius: 10px">
-          <div class="tournament-name">
-            <p class="name">${league.name}</p>
-            <p class="status">${league.status}</p>
-          </div>
-        </div>
-        <div style="gap:40px;margin-right: 20px">
-          <div class="start-time">
-            <p>Start:</p>
-            <p class="start-date">${formatDate(league.startDate)}</p>
-          </div>
-          <div class="end-time">
-            <p>Koniec:</p>
-            <p class="end-date">${formatDate(league.endDate)}</p>
-          </div>
-          <div class="game-system">
-            <p>Tryb:</p>
-            <p class="system">${system?.systemName ?? "-"}</p>
-          </div>
-          <div class="teams">
-            <p>Zespoly:</p>
-            <p class="count">${system?.minTeamSize ?? "?"}/${system?.maxTeamSize ?? "?"}</p>
-          </div>
-          <a href=""><img src="img/style=linear.svg" alt="" style="height: 20px;margin-top: 40px"></a>
-        </div>
-      `;
-      list.appendChild(leagueEl);
-    }
-
-  } catch (err) {
-    console.error(`Error while adding leagues to the list: ${err}`);
+    wrap.appendChild(card);
   }
 }

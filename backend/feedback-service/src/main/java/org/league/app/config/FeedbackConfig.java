@@ -32,13 +32,16 @@ public class FeedbackConfig {
                         authorizeRequests -> authorizeRequests
                                 .requestMatchers(
                                         "/actuator/**",
-                                        "/actuator").permitAll()
+                                        "/actuator",
+                                        "/api/feedback/get-by-competition").permitAll()
                                 .requestMatchers("/api/feedback/create/*",
                                         "/api/feedback/edit/*",
                                         "/api/feedback/delete/*",
                                         "/api/feedback/count/by/tonality",
                                         "/api/feedback/like/*").authenticated()
-                                .requestMatchers("/api/feedback/interval/*").hasAuthority("MODERATOR")
+                                .requestMatchers(
+                                        "/api/feedback/interval/*",
+                                        "/api/feedback/all").hasAuthority("MODERATOR")
                 )
                 .addFilterBefore(routeFilter, SecurityContextHolderFilter.class)
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)

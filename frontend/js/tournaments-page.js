@@ -1,178 +1,138 @@
-if(localStorage.getItem('accToken') !== null && localStorage.getItem('refToken')!== null){
-  refreshToken();
-}
-document.addEventListener("DOMContentLoaded", () => {
-  const pageLoadSpan = document.querySelector(".footer-content span:nth-child(3)");
-  const htmlLoadSpan = document.querySelector(".footer-content span:nth-child(4)");
+/* tournaments‑list.js */
 
-  if (pageLoadSpan && htmlLoadSpan) {
-    // Ждём окончания полной загрузки страницы
-    window.addEventListener("load", () => {
-      setTimeout(() => {
-        const performanceTiming = performance.timing;
+/* ──────────── авторизация / refresh ──────────── */
+if (localStorage.accToken && localStorage.refToken) refreshToken();
 
-        // Время полной загрузки страницы
-        const pageLoadTime = performanceTiming.loadEventEnd - performanceTiming.navigationStart;
-
-        // Время загрузки HTML
-        const htmlLoadTime = performanceTiming.responseEnd - performanceTiming.responseStart;
-
-        // Проверяем, что значения корректны
-        const validPageLoadTime = pageLoadTime > 0 ? pageLoadTime : performance.now(); // Используем performance.now() как fallback
-        const validHtmlLoadTime = htmlLoadTime > 0 ? htmlLoadTime : 0;
-
-        // Обновляем значения в DOM с обёрткой для стилей
-        pageLoadSpan.innerHTML = `Strona: <span class="blue">${Math.round(validPageLoadTime)}ms</span>`;
-        htmlLoadSpan.innerHTML = `Szablon: <span class="blue">${Math.round(validHtmlLoadTime)}ms</span>`;
-
-        // Логируем значения для отладки
-        console.log("Page Load Time (ms):", validPageLoadTime);
-        console.log("HTML Load Time (ms):", validHtmlLoadTime);
-      }, 0);
-    });
-  }
-});
-let accToken = localStorage.getItem("accToken");
-let refToken = localStorage.getItem("refToken");
-if(accToken === null || refToken === null){
-  var notifBtn = document.getElementById("notification_button");
-  var burgerAndUser = document.getElementById("header_right");
-  while (burgerAndUser.firstChild) {
-    burgerAndUser.removeChild(burgerAndUser.firstChild);
-  }
-  while (notifBtn.firstChild) {
-    notifBtn.removeChild(notifBtn.firstChild);
-  }
-  burgerAndUser.innerHTML = `
-  <a href="login.html" ><div class="registerBtn"><button class="register">Zaloguj sie</button></div></a>
-  `
-  burgerAndUser.style.backgroundColor = "white"
-
-}
 async function refreshToken(){
-  try {
-    const url = "http://localhost:8765/auth/refresh-token";
-    const refToken = localStorage.getItem("refToken");
-    const response = await fetch(url,{
-      method:"POST",
-      headers:{
-        "Authorization": `Bearer ${refToken}`,
-        "Content-Type": "application/json"
-      }
-    })
-    if(!response.ok)throw new Error("Error Refresh Token");
-    const Tokens = await response.json();
-    localStorage.setItem("accToken",Tokens.accessToken);
-    localStorage.setItem("refToken",Tokens.refreshToken);
-  }catch (err){
-    console.error(err);
-  }
-}
-async function logOut(){
-  try {
-    let accToken = localStorage.getItem("accToken");
-    let refToken = localStorage.getItem("refToken");
-    const response = await fetch('http://localhost:8765/auth/logout',{
-      method: 'POST',
-      headers: {
-        "Authorization": `Bearer ${accToken}`, // Добавляем заголовок Authorization
-        "Content-Type": "application/json" // Указываем формат данных
-      }
-    });
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    localStorage.clear();
-    window.location.href = "main.html";
-  }catch (err){
-    console.error(`${err}`);
-  }
-}
-if (document.getElementById('log-out') !== null){
-  const logOutBtn = document.getElementById('log-out').addEventListener('click',logOut);
-}
-
-async function getTournamentsByFilter(){
   try{
-    let active = document.getElementById('active').checked;
-    let past =document.getElementById('past').checked;
-    let future =document.getElementById('future').checked;
-    let isIndividual =document.getElementById('isIndividual').checked;
-
-    let isEsport;
-    if(document.getElementById('sportyButton').textContent === 'Sporty'){
-      isEsport = false;
-    }else{isEsport = true;}
-    let response = await fetch(`http://localhost:8765/competition/search-tournaments?isIndividual=${isIndividual}&status=${active? 'ACTIVE': 'UPCOMING'}&isEsport=${isEsport}`)
-    let data = await response.json();
-    console.log(data);
-    addTournamentsToTheList(data);
-  }catch(err){
-    console.error(`Error while receiving tournaments ${err}`);
-  }
-}
-async function addTournamentsToTheList(receivedData) {
-  try {
-    const list = document.getElementById('tournaments-list');
-    list.innerHTML = '';
-
-    for (const tournament of receivedData) {
-      const [systemResponse, imageResponse] = await Promise.all([
-        fetch(`http://localhost:8765/game-system/${tournament.gameSystemId}`, {
-          headers: { 'Authorization': `Bearer ${localStorage.getItem("accToken")}` }
-        }),
-        fetch(`http://localhost:8765/competition/get-image/${tournament.id}`, {
-          headers: { 'Authorization': `Bearer ${localStorage.getItem("accToken")}` }
-        })
-      ]);
-
-      const system = systemResponse.ok ? await systemResponse.json() : null;
-      const imageUrl = imageResponse.ok ? await imageResponse.text() : 'img/google-logo.svg';
-
-      const formatDate = (dateStr) => {
-        if (!dateStr) return "-";
-        const date = new Date(dateStr);
-        return date.toLocaleDateString("pl-PL");
-      };
-
-      const tournamentEl = document.createElement('div');
-      tournamentEl.classList.add('tournament');
-      tournamentEl.innerHTML = `
-        <div>
-          <img src="${imageUrl}" alt="Turniej" style="border-radius: 10px">
-          <div class="tournament-name">
-            <p class="name">${tournament.name}</p>
-            <p class="status">${tournament.status}</p>
-          </div>
-        </div>
-        <div style="gap:40px;margin-right: 20px">
-          <div class="start-time">
-            <p>Start:</p>
-            <p class="start-date">${formatDate(tournament.startDate)}</p>
-          </div>
-          <div class="end-time">
-            <p>Koniec:</p>
-            <p class="end-date">${formatDate(tournament.endDate)}</p>
-          </div>
-          <div class="game-system">
-            <p>Tryb:</p>
-            <p class="system">${system?.systemName ?? "-"}</p>
-          </div>
-          <div class="teams">
-            <p>Zespoly:</p>
-            <p class="count">${system?.minTeamSize ?? "?"}/${system?.maxTeamSize ?? "?"}</p>
-          </div>
-          <a href=""><img src="img/style=linear.svg" alt="" style="height: 20px;margin-top: 40px"></a>
-        </div>
-      `;
-
-      list.appendChild(tournamentEl);
-    }
-
-  } catch (err) {
-    console.error(`Error while adding tournaments to the list ${err}`);
-  }
+    const r = await fetch('http://localhost:8765/auth/refresh-token',{
+      method:'POST',
+      headers:{Authorization:`Bearer ${localStorage.refToken}`}
+    });
+    if(!r.ok) throw new Error('refresh error');
+    const t = await r.json();
+    localStorage.accToken = t.accessToken;
+    localStorage.refToken = t.refreshToken;
+  }catch(e){console.error(e);}
 }
 
+/* ──────────────── DOM ready ─────────────────── */
+document.addEventListener('DOMContentLoaded',()=>{
+  /* метрики */
+  const p=document.querySelector('.footer-content span:nth-child(3)');
+  const h=document.querySelector('.footer-content span:nth-child(4)');
+  if(p&&h) window.addEventListener('load',()=>setTimeout(()=>{
+    const t=performance.timing;
+    p.innerHTML=`Strona: <span class="blue">${Math.round(t.loadEventEnd-t.navigationStart)}ms</span>`;
+    h.innerHTML=`Szablon: <span class="blue">${Math.round(t.responseEnd-t.responseStart)}ms</span>`;
+  },0));
 
+  /* чек‑боксы + переключатель */
+  ['active','future','past','isIndividual'].forEach(id=>{
+    document.getElementById(id)?.addEventListener('change',getTournamentsByFilter);
+  });
+  document.getElementById('sportyButton')?.addEventListener('click',e=>{
+    e.target.textContent = e.target.textContent.trim()==='Sporty'?'E-sporty':'Sporty';
+    getTournamentsByFilter();
+  });
 
+  /* первый рендер */
+  getTournamentsByFilter();
+});
+
+/* ─────────────── caches ─────────────── */
+const sysCache   = new Map();
+const imgCache   = new Map();
+const cntCache   = new Map();
+
+const fetchJSON = (u,opt)=>fetch(u,opt).then(r=>r.ok?r.json():null);
+
+async function getSystem(id){
+  if(sysCache.has(id)) return sysCache.get(id);
+  const js = await fetchJSON(`http://localhost:8765/game-system/${id}`,{
+    headers:{Authorization:`Bearer ${localStorage.accToken}`}
+  });
+  sysCache.set(id,js); return js;
+}
+async function getImage(cid){
+  if(imgCache.has(cid)) return imgCache.get(cid);
+  const r = await fetch(`http://localhost:8765/competition/get-image/${cid}`);
+  const url = r.ok ? await r.text() : 'img/google-logo.svg';
+  imgCache.set(cid,url); return url;
+}
+async function getCount(cid){
+  if(cntCache.has(cid)) return cntCache.get(cid);
+  const arr = await fetchJSON(`http://localhost:8765/competition/league-table/${cid}`) || [];
+  cntCache.set(cid,arr.length); return arr.length;
+}
+
+/* ───────────── фильтрация ───────────── */
+async function getTournamentsByFilter(){
+  const active = document.getElementById('active')?.checked;
+  const future = document.getElementById('future')?.checked;
+  const past   = document.getElementById('past')?.checked;
+  const onlyInd= document.getElementById('isIndividual')?.checked;
+  const wantEs = document.getElementById('sportyButton').textContent.trim()!=='Sporty';
+
+  if(!active&&!future&&!past){
+    document.getElementById('tournaments-list').innerHTML='';
+    return;
+  }
+  const statuses=[]; if(active)statuses.push('ACTIVE');
+  if(future)statuses.push('UPCOMING'); if(past)statuses.push('FINISHED');
+
+  const all = await fetchJSON('http://localhost:8765/competition/all') || [];
+  const tournaments = all.filter(c=>c.competitionType==='TOURNAMENT' && statuses.includes(c.status));
+
+  const out=[];
+  for(const t of tournaments){
+    const sys = await getSystem(t.gameSystemId);
+    if(onlyInd && !sys?.isIndividual) continue;
+
+    /* проверка e‑sport / sporty через sportId */
+    const sport = await fetchJSON(`http://localhost:8765/sport/id/${t.sportId}`);
+    if(sport?.isEsport!==undefined && sport.isEsport!==wantEs) continue;
+
+    out.push({t,sys});
+  }
+  renderTournamentCards(out);
+}
+/* делаем функцию глобальной, чтобы inline‑onclick тоже работали */
+window.getTournamentsByFilter = getTournamentsByFilter;
+
+/* ─────────────── render ─────────────── */
+async function renderTournamentCards(arr){
+  const wrap=document.getElementById('tournaments-list');
+  wrap.innerHTML='';
+
+  const fmt=d=>d?new Date(d).toLocaleDateString('pl-PL'):'-';
+
+  for(const {t,sys} of arr){
+    const [img,current]=await Promise.all([getImage(t.id),getCount(t.id)]);
+    const maxCap=sys?.maxTeamSize ?? sys?.playersPerTeam ?? '?';
+
+    const card=document.createElement('div');
+    card.className='tournament';
+    card.innerHTML=`
+      <div>
+        <img src="${img}" alt="" style="border-radius:10px">
+        <div class="tournament-name">
+          <p class="name">${t.name}</p>
+          <p class="status">${t.status}</p>
+        </div>
+      </div>
+      <div style="gap:40px;margin-right:20px">
+        <div class="start-time"><p>Start:</p><p class="start-date">${fmt(t.startDate)}</p></div>
+        <div class="end-time"><p>Koniec:</p><p class="end-date">${fmt(t.endDate)}</p></div>
+        <div class="game-system"><p>Tryb:</p><p class="system">${sys?.systemName ?? '-'}</p></div>
+        <div class="teams"><p>Uczestnicy:</p><p class="count">${current} / ${maxCap}</p></div>
+        <a href="tournaments.html" class="goto">
+          <img src="img/style=linear.svg" alt="" style="height:20px;margin-top:40px">
+        </a>
+      </div>`;
+    card.querySelector('.goto').addEventListener('click',()=>{
+      localStorage.setItem('searchedTournament',t.id);
+    });
+    wrap.appendChild(card);
+  }
+}

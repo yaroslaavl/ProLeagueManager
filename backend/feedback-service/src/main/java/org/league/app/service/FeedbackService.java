@@ -159,6 +159,10 @@ public class FeedbackService {
                 orElseThrow(() -> new FeedbackNotFoundException("There is no feedback with id: " + feedbackId));
     }
 
+    public List<FeedbackReadDto> findByCompetitionId(UUID competitionId) {
+        return feedbackRepository.findAllByCompetitionId(competitionId).stream().map(feedbackMapper::toDto).toList();
+    }
+
     public List<FeedbackReadDto> findAll() {
         return feedbackRepository.findAllSortByCreatedAt().stream().map(feedbackMapper::toDto).toList();
     }
