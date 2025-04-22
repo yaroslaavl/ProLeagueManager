@@ -52,7 +52,8 @@ public class CompetitionManagementConfig {
                                 "/api/competition/update-standing",
                                 "/api/competition/closest-tournaments",
                                 "/api/competition/closest-leagues",
-                                "/api/competition/top-stages").permitAll()
+                                "/api/competition/top-stages",
+                                "/api/game-system/get/*").permitAll()
                         .requestMatchers(
                                 "/api/competition/create",
                                 "/api/competition/edit/**",
@@ -62,8 +63,7 @@ public class CompetitionManagementConfig {
                                 "/api/game-system/search",
                                 "/api/game-system/update/**",
                                 "/api/competition/upload-image/*",
-                                "/api/competition/disqualify/*",
-                                "/api/game-system/**").hasAuthority("MODERATOR")
+                                "/api/competition/disqualify/*").hasAuthority("MODERATOR")
                         .requestMatchers(
                                 "/api/competition/participation").authenticated())
                 .addFilterBefore(routeFilter, SecurityContextHolderFilter.class)
