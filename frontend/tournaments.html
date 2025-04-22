@@ -10,7 +10,11 @@
     <link rel="stylesheet" href="css/notificationMenu.css">
     <link rel="stylesheet" href="css/burgerMenu.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <title>Tournaments</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-bracket@0.11.0/dist/jquery.bracket.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-bracket@0.11.0/dist/jquery.bracket.min.js"></script>
+
+  <title>Tournaments</title>
 </head>
 <body>
 
@@ -298,9 +302,23 @@
         </div>
       </div>
     </section>
+    <!-- где‑то рядом с <div id="tournament-bracket"></div> -->
+    <div id="bracketModal" class="modal hidden">
+      <div class="modal-backdrop"></div>
+      <div class="modal-content">
+        <button class="modal-close">✕</button>
+        <div id="modal-bracket"></div>
+      </div>
+    </div>
+
   </div>
 </div>
 <div id="toastContainer"></div>
+
+
+
+
+
 <footer>
   <div class="footer-content">
     <span>Wspierane przez: <a href="https://zut.edu.pl" target="_blank">ZUT</a></span>
@@ -313,5 +331,6 @@
     <a href="#">API</a>
   </div>
 </footer>
+
 </body>
 </html>

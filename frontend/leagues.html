@@ -137,11 +137,12 @@
               </div>
             </div>
             <div class="details">
-              <div><span>Sport:</span><strong> Counter Strike 2 </strong></div>
-              <div><span>Tryb:</span><strong> 5 vs 5 </strong></div>
-              <div><span>Uczestnicy:</span><strong> 12 / 14 </strong></div>
-              <div><span>Data:</span> <strong>01.01.2025 </strong></div>
+              <div><span>Sport:</span>       <strong data-field="sport">—</strong></div>
+              <div><span>Tryb:</span>        <strong data-field="mode">—</strong></div>
+              <div><span>Uczestnicy:</span>  <strong data-field="count">—</strong></div>
+              <div><span>Data:</span>        <strong data-field="date">—</strong></div>
             </div>
+
             <button class="register-btn">Rejestracja</button>
           </div>
           <div class="league-seasons">
@@ -338,6 +339,28 @@
         </div>
       </div>
 <div id="toastContainer"></div>
+<!-- ========== 1) TEAM SELECTION MODAL ========== -->
+<div id="teamModal" class="reg-modal hidden">
+  <div class="reg-modal__backdrop" onclick="closeAllModals()"></div>
+  <div class="reg-modal__window">
+    <h3>Wybierz zespół</h3>
+    <div class="reg-modal__divider"></div>
+    <div id="teamList" class="reg-modal__list"></div>
+    <button id="teamNextBtn" class="reg-modal__btn" disabled onclick="onTeamNext()">Dalej</button>
+  </div>
+</div>
+
+<!-- ========== 2) PLAYER SELECTION MODAL ========== -->
+<div id="playerModal" class="reg-modal hidden">
+  <div class="reg-modal__backdrop" onclick="closeAllModals()"></div>
+  <div class="reg-modal__window">
+    <h3>Wybierz członków</h3>
+    <div class="reg-modal__divider"></div>
+    <div id="playerList" class="reg-modal__list"></div>
+    <button id="playerConfirmBtn" class="reg-modal__btn" disabled onclick="onPlayersConfirm()">Zatwierdź</button>
+  </div>
+</div>
+
 <footer>
   <div class="footer-content">
     <span>Wspierane przez: <a href="https://zut.edu.pl" target="_blank">ZUT</a></span>

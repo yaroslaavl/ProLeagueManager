@@ -27,7 +27,7 @@ public class GameSystemController {
         return ResponseEntity.ok(createdGameSystem);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     public ResponseEntity<GameSystemReadDto> getGameSystemById(@PathVariable("id") Integer id) {
         GameSystemReadDto gameSystem = gameSystemService.getGameSystemById(id);
         return ResponseEntity.ok(gameSystem);
