@@ -1,10 +1,12 @@
+/* sport-main-page.js – версия с учётом правок */
+
 document.addEventListener('DOMContentLoaded', loadMainPageCompetitions);
-document.addEventListener("DOMContentLoaded", () => {
-  const pageLoadSpan = document.querySelector(".footer-content span:nth-child(3)");
-  const htmlLoadSpan = document.querySelector(".footer-content span:nth-child(4)");
+document.addEventListener('DOMContentLoaded', () => {
+  const pageLoadSpan = document.querySelector('.footer-content span:nth-child(3)');
+  const htmlLoadSpan = document.querySelector('.footer-content span:nth-child(4)');
 
   if (pageLoadSpan && htmlLoadSpan) {
-    window.addEventListener("load", () => {
+    window.addEventListener('load', () => {
       setTimeout(() => {
         const performanceTiming = performance.timing;
         const pageLoadTime = performanceTiming.loadEventEnd - performanceTiming.navigationStart;
@@ -13,8 +15,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const validHtmlLoadTime = htmlLoadTime > 0 ? htmlLoadTime : 0;
         pageLoadSpan.innerHTML = `Strona: <span class="blue">${Math.round(validPageLoadTime)}ms</span>`;
         htmlLoadSpan.innerHTML = `Szablon: <span class="blue">${Math.round(validHtmlLoadTime)}ms</span>`;
-        console.log("Page Load Time (ms):", validPageLoadTime);
-        console.log("HTML Load Time (ms):", validHtmlLoadTime);
+        console.log('Page Load Time (ms):', validPageLoadTime);
+        console.log('HTML Load Time (ms):', validHtmlLoadTime);
       }, 0);
     });
   }
@@ -22,20 +24,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
 async function loadMainPageCompetitions() {
   try {
-    const accToken = localStorage.getItem("accToken");
+    const accToken = localStorage.getItem('accToken');
 
     // 1) Получаем все соревнования
     const competitionsResponse = await fetch('http://localhost:8765/competition/all', {
-      headers: { 'Authorization': `Bearer ${accToken}` }
+      headers: { Authorization: `Bearer ${accToken}` },
     });
     if (!competitionsResponse.ok) {
       throw new Error(`Ошибка при получении соревнований: ${competitionsResponse.status}`);
     }
     let competitions = await competitionsResponse.json();
 
-    // 2) Для каждого соревнования получаем данные о спорте
+    // 🔥 Сразу считаем и выводим количество активных матчей (спорт / e‑спорт)
+    await updateActiveCompetitionsCount(competitions);
+
+    // 2) Для каждого соревнования получаем данные о спорте и баннере
     for (const competition of competitions) {
       try {
+        // Получаем данные о спорте
         const sportResponse = await fetch(`http://localhost:8765/sport/id/${competition.sportId}`);
         if (sportResponse.ok) {
           const sportData = await sportResponse.json();
@@ -45,16 +51,28 @@ async function loadMainPageCompetitions() {
           competition.sportName = 'Nieznany sport';
           competition.isEsport = false;
         }
+
+        // Получаем URL баннера
+        const bannerResponse = await fetch(`http://localhost:8765/competition/get-image/${competition.id}`, {
+          headers: { Authorization: `Bearer ${accToken}` },
+        });
+        if (bannerResponse.ok) {
+          const bannerUrl = await bannerResponse.text();
+          competition.bannerUrl = bannerUrl && !bannerUrl.includes('minio:9000') ? bannerUrl : 'img/blogo%202.png';
+        } else {
+          competition.bannerUrl = 'img/blogo%202.png';
+        }
       } catch {
         competition.sportName = 'Nieznany sport';
         competition.isEsport = false;
+        competition.bannerUrl = 'img/blogo%202.png';
       }
     }
 
-    // 3) Определяем тип (спорт или е-спорт)
-    const sportyText = document.getElementById("sportyButton")?.textContent.trim();
-    const isEsportRequired = (sportyText && sportyText.toLowerCase() !== "sporty");
-    competitions = competitions.filter(c => c.isEsport === isEsportRequired);
+    // 3) Определяем тип (спорт / е‑спорт) согласно кнопке меню
+    const sportyText = document.getElementById('sportyButton')?.textContent.trim();
+    const isEsportRequired = sportyText && sportyText.toLowerCase() !== 'sporty';
+    competitions = competitions.filter((c) => c.isEsport === isEsportRequired);
 
     // 4) Сортируем
     competitions.sort((a, b) => {
@@ -63,24 +81,24 @@ async function loadMainPageCompetitions() {
       return new Date(a.startDate) - new Date(b.startDate);
     });
 
-    // 5) Разделяем на турниры и лиги
-    let tournaments = competitions.filter(c => c.competitionType === 'TOURNAMENT');
-    let leagues     = competitions.filter(c => c.competitionType === 'LEAGUE');
+    // 5) Разделяем
+    let tournaments = competitions.filter((c) => c.competitionType === 'TOURNAMENT');
+    let leagues = competitions.filter((c) => c.competitionType === 'LEAGUE');
 
-    // 6) Оставляем только нужное количество
+    // 6) Ограничиваем вывод
     tournaments = tournaments.slice(0, 3);
-    leagues     = leagues.slice(0, 2);
+    leagues = leagues.slice(0, 2);
 
     // 7) Рендер турниров
     const tournamentsContainer = document.querySelector('.tournaments');
     tournamentsContainer.innerHTML = '';
     for (const tournament of tournaments) {
       const startDateStr = formatDateTime(tournament.startDate);
-      const endDateStr   = formatDateTime(tournament.endDate);
+      const endDateStr = formatDateTime(tournament.endDate);
       const tournamentEl = document.createElement('div');
       tournamentEl.classList.add('tournament');
       tournamentEl.innerHTML = `
-        <img src="img/google-logo.png" alt="Tournament Logo">
+        <img src="${tournament.bannerUrl}" alt="Tournament Logo" style="border-radius: 8px;" onerror="this.src='img/blogo%202.png'">
         <div class="tournament-name">
           <p class="tournament-tittle" style="font-weight: bold;color: #000">${tournament.name}</p>
           <p class="status">${tournament.status}</p>
@@ -91,25 +109,23 @@ async function loadMainPageCompetitions() {
         <div class="teams"><p class="tournament-tittle">Zespoly:</p><p class="count">?</p></div>
         <a href="tournaments.html" onclick="localStorage.setItem('searchedTournament', '${tournament.id}');">
           <img src="img/style=linear.svg" alt="" style="height: 20px;margin-top: 40px">
-        </a>
-      `;
+        </a>`;
       tournamentsContainer.appendChild(tournamentEl);
 
       // Подсчёт участников
       try {
-        const tableResp = await fetch(`http://localhost:8765/competition/league-table/${tournament.id}`);
-        if (tableResp.ok) {
-          const tableData = await tableResp.json();
-          let count = tableData.length;
-          if (count && tableData[0].playerId != null) {
-            count = tableData.filter(r => r.playerId != null).length;
-          } else if (count && tableData[0].teamId != null) {
-            count = tableData.filter(r => r.teamId != null).length;
-          }
+        const countResp = await fetch(
+          `http://localhost:8765/competition/count-of-signed-in?competitionId=${tournament.id}`,
+          { headers: { Authorization: `Bearer ${localStorage.getItem('accToken')}` } },
+        );
+        if (countResp.ok) {
+          const cnt = await countResp.json();
           const span = tournamentEl.querySelector('.teams .count');
-          if (span) span.textContent = count;
+          if (span) span.textContent = cnt;
         }
-      } catch { /* оставляем пустым */ }
+      } catch {
+        /* noop */
+      }
     }
 
     // 8) Рендер лиг
@@ -117,12 +133,12 @@ async function loadMainPageCompetitions() {
     leaguesContainer.innerHTML = '';
     for (const league of leagues) {
       const startDateStr = formatDateTime(league.startDate);
-      const endDateStr   = formatDateTime(league.endDate);
+      const endDateStr = formatDateTime(league.endDate);
       const leagueEl = document.createElement('div');
       leagueEl.classList.add('league');
       leagueEl.innerHTML = `
         <div class="league-tittle">
-          <img src="img/google-logo.png" alt="League Logo">
+          <img src="${league.bannerUrl}" alt="League Logo" style="border-radius: 8px;" onerror="this.src='img/blogo%202.png'">
           <div class="league-tittle-text">
             <div>
               <p style="font-weight: bold;margin-bottom:-5px">${league.name}</p>
@@ -139,46 +155,59 @@ async function loadMainPageCompetitions() {
           <div class="game-system"><p class="tournament-tittle">Sport:</p><p class="system">${league.sportName ?? '?'}</p></div>
           <div class="teams"><p class="tournament-tittle">Zespoly:</p><p class="count">?</p></div>
         </div>
-        <div class="top"></div>
-      `;
+        <div class="top"></div>`;
       leaguesContainer.appendChild(leagueEl);
 
-      // Подгружаем таблицу и топ‑3
+      // Таблица лиги + top‑3
       try {
         const resp = await fetch(`http://localhost:8765/competition/league-table/${league.id}`);
         if (resp.ok) {
           const table = await resp.json();
-          table.sort((a,b) => b.wins - a.wins);
-          const top3 = table.slice(0,3);
+          table.sort((a, b) => b.wins - a.wins);
+          const top3 = table.slice(0, 3);
           let count = table.length;
-          if (count && table[0].playerId!=null) count = table.filter(r=>r.playerId!=null).length;
-          if (count && table[0].teamId !=null) count = table.filter(r=>r.teamId!=null).length;
+          if (count && table[0].playerId != null) count = table.filter((r) => r.playerId != null).length;
+          if (count && table[0].teamId != null) count = table.filter((r) => r.teamId != null).length;
           const countSpan = leagueEl.querySelector('.teams .count');
           if (countSpan) countSpan.textContent = count;
 
           let html = '';
           for (const row of top3) {
             if (row.playerId) {
-              const u = await (await fetch(`http://localhost:8765/user/getUser/${row.playerId}`)).json();
-              const avatar = `http://localhost:8765/user/avatar/${u.username}`;
+              let userData;
+              let avatarUrl = 'http://localhost:9000/user-image-bucket/avatars/default-user.png';
+              try {
+                const userResponse = await fetch(`http://localhost:8765/user/getUser/${row.playerId}`);
+                if (userResponse.ok) {
+                  userData = await userResponse.json();
+                  const potentialAvatar = `http://localhost:8765/user/avatar/${userData.username}`;
+                  avatarUrl = potentialAvatar && !potentialAvatar.includes('minio:9000') ? potentialAvatar : avatarUrl;
+                } else {
+                  userData = { username: 'Nieznany' };
+                }
+              } catch {
+                userData = { username: 'Nieznany' };
+              }
+
               html += `
-                <div class="player">
-                  <div class="player-info">
-                    <img src="${avatar}" alt="Player">
-                    <p class="player-name">${u.username}</p>
+                <div class='player'>
+                  <div class='player-info'>
+                    <img src='${avatarUrl}' alt='Player' onerror="this.src='http://localhost:9000/user-image-bucket/avatars/default-user.png'">
+                    <p class='player-name'>${userData.username}</p>
                   </div>
-                  <div class="win-count">
+                  <div class='win-count'>
                     <p>Ilosc zwycienstw:</p>
-                    <p class="count">${row.wins ?? '?'}</p>
+                    <p class='count'>${row.wins ?? '?'}</p>
                   </div>
                 </div>`;
             }
           }
           leagueEl.querySelector('.top').innerHTML = html;
         }
-      } catch { /* silently */ }
+      } catch {
+        /* noop */
+      }
     }
-
   } catch (err) {
     console.error('Ошибка при загрузке данных соревнований:', err);
   }
@@ -187,7 +216,48 @@ async function loadMainPageCompetitions() {
 function formatDateTime(dateStr) {
   if (!dateStr) return '';
   return new Date(dateStr).toLocaleString('pl-PL', {
-    year: 'numeric', month: '2-digit',
-    day: '2-digit', hour: '2-digit', minute: '2-digit'
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
   });
+}
+
+// -----------------
+// Подсчёт активных соревнований (спорт / e‑спорт)
+// -----------------
+async function updateActiveCompetitionsCount(allCompetitions) {
+  try {
+    const sportyText = document.getElementById('sportyButton')?.textContent.trim();
+    const isEsportRequired = sportyText && sportyText.toLowerCase() !== 'sporty';
+
+    const isEsportMap = new Map();
+    let totalActive = 0;
+
+    for (const competition of allCompetitions) {
+      if (isEsportMap.has(competition.sportId)) {
+        if (isEsportMap.get(competition.sportId) === isEsportRequired) totalActive++;
+        continue;
+      }
+
+      try {
+        const resp = await fetch(`http://localhost:8765/sport/id/${competition.sportId}`);
+        if (resp.ok) {
+          const sportData = await resp.json();
+          isEsportMap.set(competition.sportId, sportData.isEsport);
+          if (sportData.isEsport === isEsportRequired) totalActive++;
+        }
+      } catch {
+        /* noop */
+      }
+    }
+
+    const tittleDown = document.querySelector('.tittle-down p');
+    if (tittleDown) {
+      tittleDown.innerHTML = `Aktywnych zawodow: <strong>${totalActive}</strong>`;
+    }
+  } catch (err) {
+    console.error('Ошибка при подсчёте активных матчей:', err);
+  }
 }

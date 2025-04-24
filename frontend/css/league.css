@@ -949,3 +949,222 @@ footer {
 .hidden { display: none; }
 .reg-modal__item { display:flex; justify-content: space-between; align-items:center; padding:8px; }
 .reg-modal__avatar { width:32px; height:32px; border-radius:50%; margin-right:8px; }
+/* Добавьте это в ваш CSS */
+.match-winner {
+  font-weight: bold; /* Или 700 */
+  color: #198754; /* Зеленый */
+}
+
+.match-loser {
+  color: #dc3545; /* Красный */
+  opacity: 0.8; /* Можно сделать проигравшего бледнее */
+}
+
+/* Стили для шапки списка матчей */
+.match-list-header {
+  display: grid;
+  grid-template-columns: 1fr 3fr 1fr;
+  padding: 10px 15px;
+  background-color: #f8f9fa;
+  font-weight: 600;
+  color: #6c757d;
+  font-size: 14px;
+  border-bottom: 1px solid #dee2e6;
+}
+.match-list-header > div:nth-child(2) { text-align: center; }
+.match-list-header > div:nth-child(3) { text-align: right; }
+
+/* Стили для строки матча */
+.match {
+  display: grid;
+  grid-template-columns: 1fr 3fr 1fr;
+  align-items: center;
+  padding: 12px 15px;
+  border-bottom: 1px solid #e9ecef;
+  gap: 10px; /* Добавим немного пространства между колонками */
+}
+.match:last-child {
+  border-bottom: none;
+}
+
+.match-time { font-size: 14px; }
+.match-time strong { display: block; }
+.match-time span { color: #6c757d; font-size: 13px; }
+
+.team-details {
+  display: flex;
+
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+}
+.team-details img {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.team-details strong:first-of-type { /* Имя левого игрока/команды */
+  flex: 1;
+  text-align: right;
+  margin-right: 5px;
+}
+.team-details strong:last-of-type { /* Имя правого игрока/команды */
+  flex: 1;
+  text-align: left;
+  margin-left: 5px;
+}
+.team-details strong:nth-of-type(2) { /* Счет */
+  font-size: 1.1em;
+  padding: 0 8px;
+  flex-shrink: 0; /* Не сжимать счет */
+}
+
+
+.match-stage {
+  font-size: 14px;
+  text-align: right;
+  color: #343a40;
+}
+
+/* Placeholder стили */
+.loading-placeholder, .info-placeholder, .error-placeholder {
+  text-align: center; padding: 30px 15px; color: #6c757d; font-style: italic;
+}
+.error-placeholder { color: #dc3545; font-style: normal; font-weight: 500; }
+/* Файл: league.css или общий CSS */
+
+/* --- ОБЩИЕ СТИЛИ ДЛЯ ВСЕХ ЭЛЕМЕНТОВ СПИСКА --- */
+.match { /* Базовые стили для всех .match (отступы, фон и т.д.) */
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 15px; /* Уменьшим немного */
+  width: auto;
+
+}
+
+/* --- СТИЛИ ДЛЯ СПИСКА УЧАСТНИКОВ --- */
+.participant-item {
+  display: flex; /* Используем flex для строки участника */
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #eee; /* Разделитель */
+  padding: 10px 15px; /* Меньше вертикальный паддинг */
+  margin-bottom: 0; /* Убираем нижний отступ */
+  border-radius: 0; /* Убираем скругление */
+  margin-left: 0;
+  margin-right: 0;
+}
+.participant-item:last-child {
+  border-bottom: none;
+}
+.participant-item .team-details { /* Стили для блока с аватаром и именем */
+  width: auto; /* Авто ширина */
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-grow: 1; /* Занимает место */
+}
+.participant-item .team-details img { /* Аватар */
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+.participant-item .details-arrow { /* Стрелка */
+  margin-left: 15px;
+  flex-shrink: 0;
+}
+
+
+/* --- СТИЛИ ДЛЯ СПИСКА ТОП --- */
+.top-item {
+  display: flex; /* Используем flex для строки топа */
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px; /* Отступ между блоками */
+}
+.top-item .team-details { /* Блок с аватаром и именем */
+  width: auto;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-grow: 1; /* Занимает доступное пространство */
+  /* Убираем стили, специфичные для grid */
+  text-align: left;
+  margin-right: 0;
+}
+.top-item .team-details img { /* Аватар */
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+.top-item .team-place,
+.top-item .team-victories { /* Блоки "Место" и "Победы" */
+  display: flex;
+  align-items: center; /* Выравниваем текст и число */
+  gap: 8px;
+  flex-shrink: 0; /* Не сжимать */
+  font-size: 14px;
+}
+.top-item .team-place span,
+.top-item .team-victories span {
+  color: #808A9D;
+  font-size: 13px;
+}
+.top-item .team-place strong,
+.top-item .team-victories strong {
+  font-size: 1.1em;
+  font-weight: 600;
+}
+.top-item .details-arrow { /* Стрелка */
+  margin-left: 15px;
+  flex-shrink: 0;
+}
+
+
+/* --- СТИЛИ ДЛЯ СПИСКА МАТЧЕЙ (match-item) И ЗАГОЛОВКА --- */
+.match-list-header,
+.match.match-item { /* Применяем grid только к этим элементам */
+  display: grid;
+  grid-template-columns: 1fr 3fr 1fr; /* Ваша структура колонок */
+  align-items: center;
+  gap: 10px; /* Пространство между колонками */
+}
+
+/* Остальные стили для .match-list-header, .match-time, .team-details внутри .match-item, .match-stage, .match-winner, .match-loser остаются как были в вашем предыдущем CSS */
+.match-list-header {
+  padding: 10px 15px; background-color: #f8f9fa; font-weight: 600; color: #6c757d; font-size: 14px; border-bottom: 1px solid #dee2e6;
+}
+.match-list-header > div:nth-child(2) { text-align: center; }
+.match-list-header > div:nth-child(3) { text-align: right; }
+
+.match-item .match-time { font-size: 14px; }
+.match-item .match-time strong { display: block; }
+.match-item .match-time span { color: #6c757d; font-size: 13px; }
+
+.match-item .team-details { /* Стили для блока с участниками в матче */
+  display: flex; justify-content: center; align-items: center; gap: 10px; text-align: center; padding: 0; /* Убираем паддинг, если он мешает */ width: auto; /* Сбрасываем ширину */
+}
+.match-item .team-details img { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; }
+.match-item .team-details strong:first-of-type { flex: 1; text-align: right; margin-right: 5px; } /* Имя левого */
+.match-item .team-details strong:last-of-type { flex: 1; text-align: left; margin-left: 5px; } /* Имя правого */
+.match-item .team-details strong:nth-of-type(2) { font-size: 1.1em; padding: 0 8px; flex-shrink: 0; } /* Счет */
+
+.match-item .match-stage { font-size: 14px; text-align: right; color: #343a40; }
+
+.match-winner { font-weight: bold; color: #198754; }
+.match-loser { color: #dc3545; opacity: 0.8; }
+
+/* Остальные стили (footer, header, feedback, etc.) */
+/* ... */
+.fb-like{
+  background: none;
+  border: none;
+}
