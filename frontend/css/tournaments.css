@@ -304,8 +304,8 @@ header {
 }
 
 .avatar-comment {
-  width: 20px;
-  height: 20px;
+  width: 25px;
+  height: 25px;
   background: #aaa;
   border-radius: 50%;
   position: relative;
@@ -323,7 +323,7 @@ header {
   position: absolute;
   width: 100%;
   height: 100%;
-  transform: scale(0.8);
+  transform: scale(1);
 }
 
 .timestamp {
@@ -882,5 +882,253 @@ footer {
   width: 32px; height: 32px;
   cursor: pointer;
 }
+/* Стили для списка матчей */
+.match-list {
+  margin-top: 20px;
+  display: block;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+  justify-content: center;
+  max-height: 500px;
+  overflow-y: auto;
+}
 
+.match-list .match {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 30px 40px;
+  margin-top: 20px;
+  border-radius: 12px;
+  background: white;
+  gap: 20px;
+}
 
+.match-list .match-time {
+  flex: 0 0 auto;
+}
+
+.match-list .match-time strong {
+  font-size: 18px;
+}
+
+.match-list .match-time span {
+  margin-left: 8px;
+  color: #808A9D;
+}
+
+.match-list .team-details {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.match-list .match-stage {
+  flex: 0 0 auto;
+}
+
+.match-list .match-stage strong {
+  font-size: 14px;
+  color: #333;
+}
+
+/* Стили для модального окна и сетки */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+}
+
+.modal.hidden {
+  display: none;
+}
+
+.modal-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  position: relative;
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  width: 90vw;
+  height: 90vh;
+  overflow: auto;
+}
+
+.modal-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: #eee;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+}
+
+#modal-bracket {
+  margin-top: 32px;
+  font-family: Inter, sans-serif;
+}
+
+/* Сбрасываем возможные конфликтующие стили для сетки */
+#modal-bracket .match {
+  display: block !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  background: none !important;
+  border-radius: 0 !important;
+}
+/* Файл: tournaments.css */
+
+/* Стили для блока аватара в шапке турнира */
+.tournament-info .profile .avatar {
+  /* Задайте желаемый размер контейнера аватара */
+  width: 80px;  /* Пример: 80px */
+  height: 80px; /* Пример: 80px */
+  border-radius: 50%; /* Делает контейнер круглым */
+  overflow: hidden; /* Обрезает изображение, выходящее за пределы круга */
+  background-color: #e0e0e0; /* Цвет фона на случай, если изображение не загрузится */
+  flex-shrink: 0; /* Предотвращает сжатие аватара, если имя турнира длинное */
+  border: 3px solid white; /* Добавляет белую рамку, как часто бывает у аватаров */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Небольшая тень для объема */
+  margin-right: 15px; /* Отступ справа от имени турнира */
+}
+
+/* Стили для самого изображения внутри блока аватара */
+.tournament-info .profile .avatar img {
+  display: block; /* Убирает лишние отступы под изображением */
+  width: 100%; /* Заполняет всю ширину контейнера */
+  height: 100%; /* Заполняет всю высоту контейнера */
+  object-fit: cover; /* Масштабирует изображение, сохраняя пропорции,
+                       чтобы оно полностью покрыло контейнер.
+                       Часть изображения может быть обрезана. */
+  /* Альтернатива: object-fit: contain; - Впишет всё изображение,
+     могут остаться пустые поля, если пропорции не совпадают */
+}
+
+/* Дополнительные стили для родительского блока .profile для выравнивания */
+.tournament-info .profile {
+  display: flex; /* Используем flexbox для выравнивания */
+  align-items: center; /* Выравниваем аватар и текст по вертикали */
+  margin-bottom: 15px; /* Отступ снизу, если нужно */
+}
+
+/* Стили для блока с именем турнира */
+.tournament-info .profile .tournament-name {
+  display: flex;
+  flex-direction: column; /* Имя и вид спорта друг под другом */
+  justify-content: center; /* Центрируем текст вертикально */
+}
+
+.tournament-info .profile .tournament-name strong {
+  font-size: 1.3em; /* Размер шрифта для названия турнира */
+  margin-bottom: 2px; /* Небольшой отступ под названием */
+}
+
+.tournament-info .profile .tournament-name span {
+  font-size: 1em; /* Размер шрифта для вида спорта */
+  color: #6c757d; /* Цвет текста для вида спорта */
+}
+.header-avatar>img{
+  width: 75px;
+  height: 75px;
+  border-radius: 50%;
+}
+.participant-link{
+  text-decoration: none;
+  color: #000000;
+  font-weight: bold;
+}
+.match-winner>a{
+  color: #16C784;
+}
+.match-loser>a{
+  color: #c82333;
+}
+/* Стили для контейнера навигации по стадиям */
+#stage-nav-container {
+  display: flex; /* Кнопки в ряд */
+  flex-wrap: wrap; /* Перенос кнопок, если не помещаются */
+  gap: 8px; /* Промежуток между кнопками */
+}
+
+/* Стили для кнопок стадий */
+.stage-nav-button {
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-radius: 15px; /* Скругленные края */
+  background-color: #f8f9fa;
+  color: #495057;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.stage-nav-button:hover {
+  background-color: #e9ecef;
+  border-color: #adb5bd;
+}
+
+/* Стиль для активной кнопки стадии */
+.stage-nav-button.active {
+  background-color: #0d6efd; /* Синий цвет, как у других активных элементов */
+  color: white;
+  border-color: #0d6efd;
+  font-weight: 500;
+}
+
+/* Стиль для плейсхолдеров загрузки/ошибок/инфо */
+.loading-placeholder,
+.error-placeholder,
+.info-placeholder {
+  text-align: center;
+  padding: 30px 15px;
+  color: #6c757d; /* Серый цвет текста */
+  font-style: italic;
+}
+.error-placeholder {
+  color: #dc3545; /* Красный для ошибок */
+  font-style: normal;
+  font-weight: 500;
+}
+
+/* Классы для стилизации победителя/проигравшего в loadMatches/loadBracketList */
+.match-winner {
+  font-weight: 700; /* Жирный шрифт для победителя */
+  color: #198754;   /* Зеленый цвет (пример) */
+}
+.match-loser {
+  color: #6c757d;   /* Серый цвет для проигравшего */
+  opacity: 0.8;
+}
+
+/* Стиль для заголовка стадии в loadBracketList */
+.stage-header {
+  font-size: 1.1em;
+  font-weight: 600;
+  color: #333;
+}
+
+/* Стили для participant-item (если нужно отличать от match) */
+.participant-item .team-details {
+  /* Можно добавить особые стили для списка участников */
+}
+.participant-item .details-arrow {
+  /* Стили для стрелки у участников */
+}

@@ -49,7 +49,7 @@ const fetchJSON = (u,opt)=>fetch(u,opt).then(r=>r.ok?r.json():null);
 
 async function getSystem(id){
   if(sysCache.has(id)) return sysCache.get(id);
-  const js = await fetchJSON(`http://localhost:8765/game-system/${id}`,{
+  const js = await fetchJSON(`http://localhost:8765/game-system/get/${id}`,{
     headers:{Authorization:`Bearer ${localStorage.accToken}`}
   });
   sysCache.set(id,js); return js;

@@ -48,7 +48,7 @@ const fetchJSON = (url,opt)=>fetch(url,opt).then(r=>r.ok?r.json():null);
 
 async function getSystem(id){
   if(sysCache.has(id)) return sysCache.get(id);
-  const js = await fetchJSON(`http://localhost:8765/game-system/${id}`,
+  const js = await fetchJSON(`http://localhost:8765/game-system/get/${id}`,
     {headers:{Authorization:`Bearer ${localStorage.accToken}`}});
   sysCache.set(id,js); return js;
 }
@@ -75,7 +75,7 @@ async function applyFilters(){
     document.getElementById('leagues-list').innerHTML='';
     return;
   }
-  const need=[]; if(active)need.push('ACTIVE'); if(future)need.push('UPCOMING'); if(past)need.push('FINISHED');
+  const need=[]; if(active)need.push('ACTIVE'); if(future)need.push('UPCOMING'); if(past)need.push('COMPLETED');
 
   const all=await fetchJSON('http://localhost:8765/competition/all')||[];
   const leagues=all.filter(c=>c.competitionType==='LEAGUE'&&need.includes(c.status));

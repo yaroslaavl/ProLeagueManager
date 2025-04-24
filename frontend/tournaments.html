@@ -1,19 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="js/header.js" defer></script>
-    <script src="js/tournaments.js" defer></script>
-    <script src="js/burgerMenu.js" defer></script>
-    <link rel="stylesheet" href="css/tournaments.css">
-    <link rel="stylesheet" href="css/notificationMenu.css">
-    <link rel="stylesheet" href="css/burgerMenu.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-bracket@0.11.0/dist/jquery.bracket.min.css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jquery-bracket@0.11.0/dist/jquery.bracket.min.js"></script>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="js/header.js" defer></script>
+  <script src="js/tournaments.js" defer></script>
+  <script src="js/burgerMenu.js" defer></script>
+  <link rel="stylesheet" href="css/tournaments.css">
+  <link rel="stylesheet" href="css/notificationMenu.css">
+  <link rel="stylesheet" href="css/burgerMenu.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-bracket@0.11.0/dist/jquery.bracket.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/jquery-bracket@0.11.0/dist/jquery.bracket.min.js"></script>
   <title>Tournaments</title>
 </head>
 <body>
@@ -128,7 +127,7 @@
     <div class="banner"></div>
     <div class="tournament-info">
       <div class="profile">
-        <div class="avatar">
+        <div class="header-avatar">
           <img src="img/user.svg" alt="user">
         </div>
         <div class="tournament-name">
@@ -164,7 +163,9 @@
           </nav>
         </div>
 
-
+        <div id="stage-nav-container" style="display: none; margin-top: 15px; border-bottom: 1px solid #ddd; padding-bottom: 10px;">
+          <!-- Кнопки стадий будут добавлены сюда через JS -->
+        </div>
         <div class="match-list">
           <div class="match-list-header">
             <div><span>Start:</span></div>
