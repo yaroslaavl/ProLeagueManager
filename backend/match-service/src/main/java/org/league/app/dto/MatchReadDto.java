@@ -9,6 +9,7 @@ import java.util.UUID;
 @Value
 public class MatchReadDto {
 
+    UUID id;
     UUID competitionId;
     UUID stageId;
     UUID teamAId;

@@ -207,9 +207,15 @@
       <div class="team-info-management">
         <div class="team-title">
           <div class="team-info">
-            <p class="team-name" id="team_name">Nazwa drużyny</p>
-            <p class="manager-name" id="manager_name">Manager_nickname</p>
+            <p class="team-name"    id="team_name">—</p>
+            <p class="manager-name" id="manager_name">—</p>
+
+            <!-- ✅ кнопка должна быть в разметке именно с таким id -->
+            <button id="joinTeamBtn" class="join-team-btn hidden">
+              Dołącz do drużyny
+            </button>
           </div>
+
           <!-- ПУБЛИЧНАЯ СТРАНИЦА: убираем "manager-options" и т.д. или скрываем -->
           <div class="manager-options" id="manager-options" style="display: none">
             <button onclick="openManagerSettings()">
@@ -230,8 +236,7 @@
                или тоже скрываем если нужно -->
           <div class="buttons">
             <button class="active">Zespół</button>
-            <button>Turnieje</button>
-            <button>Ligi</button>
+
           </div>
         </div>
       </div>

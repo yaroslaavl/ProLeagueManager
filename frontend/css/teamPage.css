@@ -761,10 +761,25 @@ footer {
   object-fit: cover;
   margin: 0 auto;
 }
-/* Если точно не нужно ограничивать всю страницу */
-.container,
-#main-container {
-  max-width: none !important;
-  width: 100%;
-  margin: 0;
+
+.join-team-btn{
+  margin-top:12px;
+  padding:10px 24px;
+  background:#F5A341;
+  color:#fff;
+  border:none;
+  border-radius:8px;
+  font-weight:600;
+  cursor:pointer;
+  transition:opacity .2s;
+  font-size: 10px;
 }
+.join-team-btn:disabled{ opacity:.55; cursor:default; }
+.hidden{ display:none; }
+.manager-notification-item      { position:relative; padding:12px 14px;
+  background:#F9FAFB; border-bottom:1px solid #eee; }
+.notif-btn-group                { margin-top:8px; display:flex; gap:8px; }
+.notif-btn                      { flex:1 1 0; border:none; padding:6px 0;
+  border-radius:6px; cursor:pointer; font-weight:600;}
+.notif-btn.accept               { background:#28a745; color:#fff; }
+.notif-btn.reject               { background:#EA3943; color:#fff; }

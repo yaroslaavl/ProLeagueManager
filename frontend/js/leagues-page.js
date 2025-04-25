@@ -135,3 +135,7 @@ async function renderList(listData){
     wrap.appendChild(card);
   }
 }
+
+if (document.getElementById('log-out') !== null){
+  const logOutBtn = document.getElementById('log-out').addEventListener('click',logOut);
+}

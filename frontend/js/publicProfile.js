@@ -1,3 +1,13 @@
+const API = 'http://localhost:8765';
+let currentUserId = null;                 // сюда запишем id пользователя
+
+function authHeaders () {
+  return {
+    'Authorization': `Bearer ${localStorage.getItem('accToken')}`,
+    'Content-Type' : 'application/json'
+  };
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
   try {
     // Проверяем наличие токенов
@@ -66,6 +76,7 @@ async function getUserData() {
     if (!response.ok) throw new Error(`Ошибка загрузки данных пользователя: ${response.status}`);
 
     const data = await response.json();
+    currentUserId = data.id;      // ← понадобится для запросов соревнований
 
     // Устанавливаем данные пользователя в UI
     document.getElementById('first_last_name').innerHTML = `${data.firstName} ${data.lastName}`;
@@ -338,4 +349,282 @@ function openCreateTeamDialog() {
   dialog.appendChild(confirmBtn);
   overlay.appendChild(dialog);
   document.body.appendChild(overlay);
+}
+
+async function safeJson (res) {
+  if (res.status === 204 || res.status === 205) return [];
+  const text = await res.text();
+  if (!text.trim()) return [];          // пустая строка
+  return JSON.parse(text);
+}
+/* ─── безопасный JSON уже есть (safeJson) ─── */
+async function fetchMatches () {
+  const url = `${API}/match/user?userId=${currentUserId}`;
+  const res = await fetch(url, { headers: authHeaders() });
+  if (!res.ok) throw new Error(res.status);
+  return safeJson(res);
+}
+
+async function fetchCompetitions (type) {
+  const url = `${API}/competition/user?userId=${currentUserId}` +
+    `&competitionType=${type}`;
+  const res = await fetch(url, { headers: authHeaders() });
+  if (!res.ok) throw new Error(res.status);
+  return safeJson(res);                 // ← теперь безопасно
+}
+/* ───────── выровненные матчи + переход ───────── */
+function renderMatches(list) {
+  const title = document.querySelector('.content-placeholder .title');
+  const cols  = document.querySelector('.content-placeholder .columns');
+  const body  = document.getElementById('teams-container');
+  const createBtn = document.getElementById('create_team_btn');
+
+  title.textContent = 'Mecze';
+  createBtn.style.display = 'none';
+
+  /* 1. шапка таблицы */
+  const gridDef = '120px 1fr 70px';               // дата | статус | wynik
+  cols.innerHTML = `
+      <span>Data:</span>
+      <span>Status:</span>
+      <span>Wynik:</span>`;
+  Object.assign(cols.style, {
+    marginTop           : '10px',
+    display             : 'grid',
+    gridTemplateColumns : gridDef,
+    alignItems          : 'center',
+    gap                 : '20px',
+    width               : '100%'
+  });
+
+  /* 2. если матчей нет */
+  if (!list.length) {
+    body.innerHTML = '<p style="padding:20px 0;">Brak danych</p>';
+    return;
+  }
+
+  /* 3. строки с матчами */
+  body.innerHTML = list.map(m => {
+    const score = `${m.scoreA ?? 0}:${m.scoreB ?? 0}`;
+    return `
+      <div class="match-row" data-id="${m.id ?? m.matchId ?? m.stageId}"
+           style="
+             display:grid;
+             grid-template-columns:${gridDef};
+             align-items:center;
+             gap:20px;
+             padding:10px;
+             margin:10px 0;
+             background:#fff;
+             border-radius:12px;
+             cursor:pointer;">
+        <span style="font-weight:bold;color: #000000;">${m.matchDate?.slice(0,10) || '-'}</span>
+        <span style="font-weight: bold">${m.matchStatus}</span>
+        <span style="font-weight:bold;color: #000000;">${score}</span>
+      </div>`;}).join('');
+
+  /* 4. кликаем по строке → переходим на страницу матча */
+  body.querySelectorAll('.match-row').forEach(row => {
+    const id = row.dataset.id;          // id матча (или stageId)
+    row.addEventListener('click', () => {
+      localStorage.setItem('searchedMatch', id);
+      location.href = 'match-page.html';
+    });
+  });
+}
+
+
+/* ─────────────  новый renderCompetitions()  ───────────── */
+/* ───── новая версия renderCompetitions ───── */
+/* ───────── renderCompetitions — без стрелки ───────── */
+/* ─────  align-grid renderCompetitions  ───── */
+async function renderCompetitions(list, type) {
+  const title  = document.querySelector('.content-placeholder .title');
+  const cols   = document.querySelector('.content-placeholder .columns');
+  const body   = document.getElementById('teams-container');
+  const create = document.getElementById('create_team_btn');
+
+  /* шаблон колонок: 45px – баннер, 1fr – название, 80px – статус, 130px – даты */
+  const gridDef = '45px 1fr 80px 130px';
+
+  /* заголовок + стили шапки */
+  title.textContent = type === 'LEAGUE' ? 'Ligi' : 'Turnieje';
+  cols.innerHTML = `
+      <span>Baner</span>
+      <span>Nazwa</span>
+      <span>Status</span>
+      <span>Od&nbsp;/&nbsp;Do</span>`;
+  Object.assign(cols.style, {
+    marginTop            : '10px',
+    display              : 'grid',
+    gridTemplateColumns  : gridDef,
+    alignItems           : 'center',
+    gap                  : '20px',
+    width                : '100%'
+  });
+
+  create.style.display = 'none';
+
+  if (!list.length) {
+    body.innerHTML = '<p style="padding:20px 0;">Brak danych</p>';
+    return;
+  }
+
+  /* строки */
+  body.innerHTML = list.map(c => `
+    <div class="competition-row" data-id="${c.id}"
+         style="
+           display:grid;
+           grid-template-columns:${gridDef};
+           align-items:center;
+           gap:20px;
+           padding:10px;
+           margin:10px 0;
+           background:#fff;
+           border-radius:12px;
+           cursor:pointer;">
+      <img class="comp-banner"
+           style="width:45px;height:45px;object-fit:cover;border-radius:12px"
+           src="" alt="banner">
+
+      <span style="font-weight:bold;color: #000000">${c.name}</span>
+      <span style="font-weight:bold;">${c.status}</span>
+      <span style="color: #000000;font-weight: bold">${c.startDate.slice(0,10)} ➜ ${c.endDate.slice(0,10)}</span>
+    </div>`).join('');
+
+  /* подгружаем баннеры */
+  await Promise.all(list.map(async c => {
+    try {
+      const res = await fetch(`${API}/competition/get-image/${c.id}`);
+      if (!res.ok) throw new Error(res.status);
+      const url = await res.text();
+
+      const img = body.querySelector(
+        `.competition-row[data-id="${c.id}"] .comp-banner`);
+      if (img) img.src = url;
+    } catch (e) {
+      console.warn('banner load fail', c.id, e);
+    }
+  }));
+
+  /* кликаем по строке */
+  body.querySelectorAll('.competition-row').forEach(row => {
+    const id = row.dataset.id;
+    row.addEventListener('click', () => {
+      if (type === 'LEAGUE') {
+        localStorage.setItem('searchedLeague', id);
+        location.href = 'leagues.html';
+      } else {
+        localStorage.setItem('searchedTournament', id);
+        location.href = 'tournaments.html';
+      }
+    });
+  });
+}
+
+
+
+
+async function handleTabClick (e) {
+  const tabText = e.target.textContent.trim();
+
+  // снимаем/ставим класс active
+  document.querySelectorAll('.profile-tabs .tab')
+    .forEach(t => t.classList.toggle('active', t === e.target));
+
+  try {
+    switch (tabText) {
+      case 'Ligi': {
+        const data = await fetchCompetitions('LEAGUE');
+        renderCompetitions(data, 'LEAGUE');
+        break;
+      }
+      case 'Turnieje': {
+        const data = await fetchCompetitions('TOURNAMENT');
+        renderCompetitions(data, 'TOURNAMENT');
+        break;
+      }
+      case 'Drużyny': {
+        // возвращаем исходный вид («команды»)
+        document.querySelector('.content-placeholder .title').textContent = 'Drużyny';
+        document.querySelector('.content-placeholder .columns').innerHTML = `
+             <p>Zdjęcie:</p><p>Nazwa:</p><p>Role:</p>`;
+        document.getElementById('teams-container').innerHTML = '';
+        document.getElementById('create_team_btn').style.display = 'block';
+        await getTeam(currentUserId);                  // перерисовать список команд
+        break;
+      }
+      case 'Mecze': {
+        const data = await fetchMatches();
+        renderMatches(data);
+        break;
+      }
+
+      default:
+        toast('Wkrótce ⚙️');
+    }
+  } catch (err) {
+    console.error(err);
+    toast('Błąd pobierania danych', true);
+  }
+}
+document.querySelectorAll('.profile-tabs .tab')
+  .forEach(t => t.addEventListener('click', handleTabClick));
+/* ─── Fallback для toast() ───────────────────────────────────────── */
+/* вставьте этот блок один раз — например, в самый конец publicProfile.js */
+
+if (typeof toast !== 'function') {
+  /**
+   * Показывает всплывающее сообщение.
+   * @param {string} txt  — текст сообщения
+   * @param {boolean} err — true ⇒ красный фон (ошибка), false ⇒ зелёный
+   * @param {number} ms   — время показа, мс (по умолчанию 3 сек)
+   */
+  function toast (txt, err = false, ms = 3000) {
+
+    // контейнер под все тосты
+    let box = document.getElementById('toastContainer');
+    if (!box) {
+      box = document.createElement('div');
+      box.id = 'toastContainer';
+      Object.assign(box.style, {
+        position : 'fixed',
+        bottom   : '20px',
+        right    : '20px',
+        zIndex   : 9999,
+        display  : 'flex',
+        flexDirection : 'column',
+        alignItems    : 'flex-end',
+        gap      : '8px',
+      });
+      document.body.appendChild(box);
+    }
+
+    // сам тост
+    const item = document.createElement('div');
+    item.textContent = txt;
+    Object.assign(item.style, {
+      maxWidth     : '260px',
+      padding      : '10px 14px',
+      borderRadius : '6px',
+      background   : err ? '#e84118' : '#2ecc71',
+      color        : '#fff',
+      fontSize     : '14px',
+      boxShadow    : '0 2px 6px rgba(0,0,0,.25)',
+      wordBreak    : 'break-word',
+      opacity      : '0',
+      transition   : 'opacity .2s ease',
+    });
+
+    box.appendChild(item);
+
+    // анимация появления
+    requestAnimationFrame(() => { item.style.opacity = '1'; });
+
+    // удаляем по таймеру
+    setTimeout(() => {
+      item.style.opacity = '0';
+      item.addEventListener('transitionend', () => item.remove());
+    }, ms);
+  }
 }
