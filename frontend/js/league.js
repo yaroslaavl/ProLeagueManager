@@ -578,7 +578,7 @@
         }
 
         list.insertAdjacentHTML('beforeend', `
-              <div class="match match-item">
+              <div class="match match-item" data-match-id="${m.id}">
                   <div class="match-time">
                       <strong>${timeStr}</strong>
                       <span> ${dateStr}</span>
@@ -653,3 +653,13 @@
   }
 
 })(); // End IIFE
+// Добавьте ЕДИНОЖДЫ в конце файла, внутри вашей IIFE
+document.addEventListener('click', e => {
+  const card = e.target.closest('.match-item[data-match-id]');
+  if (!card) return;                           // кликнули не по матчу
+  const matchId = card.dataset.matchId;
+  if (!matchId) return;
+
+  localStorage.setItem('searchedMatch', matchId);
+  window.location.href = 'match-page.html';
+});

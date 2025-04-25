@@ -1,204 +1,217 @@
-/**
- * public-teamPage.js
- *
- * Логика "публичного" просмотра команды.
- * 1) Из localStorage берем "searchedTeam" (название команды).
- * 2) Запрашиваем GET /team/currentTeam/{teamName} (или аналогичный публичный эндпоинт).
- * 3) Отрисовываем логотип, название, дату создания, участников.
- * 4) Участникам берем роли, дату присоединения и т.д.
- * 5) При закрытии вкладки / переходе - стираем "searchedTeam".
- */
-document.addEventListener('DOMContentLoaded', () => {
-  // 1) Проверяем searchedTeam
-  const searchedTeamName = localStorage.getItem('searchedTeam');
-  if (!searchedTeamName) {
-    console.warn('Нет searchedTeam в localStorage!');
-    window.location.href = 'main.html';
-    return;
-  }
-
-  loadPublicTeamData(searchedTeamName);
-
-  // Удаляем searchedTeam при закрытии/переходе
-  window.addEventListener('beforeunload', () => {
-    localStorage.removeItem('searchedTeam');
-  });
-});
-
-/**
- * Запрашиваем публичные данные команды по имени:
- * GET /team/currentTeam/{teamName}
- * В ответ (судя по скрину) приходит объект:
- * {
- *   "team": {
- *       "id": 4,
- *       "teamName": "Testik",
- *       "teamLogo": "...",
- *       "createdAt": "...",
- *       ...
- *   },
- *   "members": [
- *     {
- *       "id": 1,
- *       "userId": 10,
- *       "roles": [...],
- *       "joinedAt": "...",
- *       ...
- *     },
- *     ...
- *   ]
- * }
- */
-async function loadPublicTeamData(teamName) {
+async function logOut(){
   try {
-    const response = await fetch(`http://localhost:8765/team/currentTeam/${teamName}`, {
-      method: 'GET'
+    let accToken = localStorage.getItem("accToken");
+    let refToken = localStorage.getItem("refToken");
+    const response = await fetch('http://localhost:8765/auth/logout',{
+      method: 'POST',
+      headers: {
+        "Authorization": `Bearer ${accToken}`, // Добавляем заголовок Authorization
+        "Content-Type": "application/json" // Указываем формат данных
+      }
     });
     if (!response.ok) {
-      throw new Error(`Ошибка при получении данных команды: ${response.status}`);
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    localStorage.clear();
+    window.location.href = "main.html";
+  }catch (err){
+    console.error(`${err}`);
+  }
+}
+(() => {
+  const API  = 'http://localhost:8765';
+  const hdr  = () => {
+    const t = localStorage.getItem('accToken');
+    return t ? { Authorization:`Bearer ${t}` } : {};
+  };
+
+  /* ───────────────── DOM ready ───────────────── */
+  document.addEventListener('DOMContentLoaded', async () => {
+    const teamName = localStorage.getItem('searchedTeam');
+    if (!teamName){ location.href = 'main.html'; return; }
+
+    const teamData = await loadTeam(teamName);         if(!teamData) return;
+    const myId     = await getMyId();                  // null — если гость
+    const memberIds= teamData.members.map(m => m.userId);
+
+    renderTeamHeader(teamData, memberIds.includes(myId));
+    renderMembers(teamData.members);
+
+    /* кнопка JOIN */
+    if (myId && !memberIds.includes(myId)){
+      enableJoinButton(teamData.team.id, memberIds);
     }
 
-    const data = await response.json();
-    console.log('Public Team Data:', data);
 
-    if (!data.team) {
-      throw new Error('Некорректный ответ: нет поля "team"');
+  });
+
+  /* ───────────── API helpers ───────────── */
+  async function loadTeam(name){
+    try{
+      const r = await fetch(`${API}/team/currentTeam/${encodeURIComponent(name)}`,{headers:hdr()});
+      if(!r.ok) throw new Error(r.status);
+      return await r.json();
+    }catch(e){
+      console.error('loadTeam',e);
+      return null;
     }
+  }
+  async function getMyId(){
+    if(!localStorage.getItem('accToken')) return null;
+    try{
+      const r = await fetch(`${API}/user/profile`,{headers:hdr()});
+      return r.ok ? (await r.json()).id : null;
+    }catch{ return null; }
+  }
+  async function getUser(id){
+    return fetch(`${API}/user/getUser/${id}`).then(r=>r.ok?r.json():null);
+  }
+  async function getAvatar(username){
+    try{
+      const r = await fetch(`${API}/user/avatar/${username}`);
+      return r.ok ? await r.text() : 'img/profile.svg';
+    }catch{ return 'img/profile.svg'; }
+  }
 
-    // Извлекаем объект team и массив members
-    const { team, members } = data;
+  async function renderTeamHeader({ team, members = [] }, isMember) {
+    /* название, дата создания, лого */
+    $('#team_name').textContent = team.teamName;
+    $('#createdAt').textContent = team.createdAt
+      ? new Date(team.createdAt).toLocaleDateString('pl-PL')
+      : '—';
 
-    // Заполняем заголовок (название команды, дата создания)
-    document.getElementById('team_name').textContent = team.teamName ?? '---';
-    const createdAtDate = team.createdAt ? new Date(team.createdAt).toLocaleDateString() : '--.--.----';
-    document.getElementById('createdAt').textContent = createdAtDate;
-
-    // Лого команды
     try {
-      // Можно получить logo через /team/team-logo/{team.id}, либо team.teamLogo, если оно есть
-      const logoResp = await fetch(`http://localhost:8765/team/team-logo/${team.id}`);
-      if (logoResp.ok) {
-        const logoUrl = await logoResp.text();
-        document.getElementById('team_img').src = logoUrl;
-      }
-    } catch (err) {
-      console.warn('Не удалось загрузить логотип команды:', err);
-    }
+      const logoUrl = await fetch(`${API}/team/team-logo/${team.id}`)
+        .then(r => r.ok ? r.text() : '');
+      if (logoUrl) $('#team_img').src = logoUrl;
+    } catch {/* игнорируем ошибки лого */ }
 
-    // Ищем менеджера (MANAGER), чтобы вставить в manager_name
-    // Либо берем первого участника, у кого есть роль MANAGER
-    const managerMember = members.find(m => m.roles.some(r => r.name === 'MANAGER'));
+    /* ---------- менеджер команды ---------- */
+    /* массив участников может называться team.teamMembers ИЛИ members */
+    const membersArr =
+      team.teamMembers           // новая структура
+      ?? members                 // старая структура (параметр из loadTeam)
+      ?? [];
+
+    const managerMember = membersArr.find(m =>
+      (m.roles ?? []).some(r =>
+        (r.roleName ?? r.name) === 'MANAGER'));
+
     if (managerMember) {
-      // Получаем username (чтобы показать в manager_name)
-      // Для этого запрашиваем user, но только если хотите реально показать ник
-      const managerUser = await fetchUserData(managerMember.userId);
-      if (managerUser) {
-        document.getElementById('manager_name').textContent = managerUser.username;
-      } else {
-        document.getElementById('manager_name').textContent = 'Menadżer';
-      }
+      const usr = await getUser(managerMember.userId);
+      if (usr) $('#manager_name').textContent = usr.username;
     } else {
-      // Если нет менеджера
-      document.getElementById('manager_name').textContent = 'Brak Menadżera';
+      $('#manager_name').textContent = '—';
     }
 
-    // Отрисовываем членов команды
-    loadPublicTeamMembers(members);
+    /* ---------- кнопка JOIN ---------- */
+    const joinBtn = $('#joinTeamBtn');
+    if (!joinBtn) return;               // кнопки нет в шаблоне
 
-  } catch (err) {
-    console.error('Ошибка при загрузке публичной команды:', err);
-    // redirect or show error
-    // window.location.href = 'main.html';
+    if (isMember) {
+      joinBtn.classList.add('hidden');  // уже в команде → скрываем
+    } else {
+      joinBtn.classList.remove('hidden');
+    }
   }
-}
+  /* ───────────── JOIN button ───────────── */
+  function enableJoinButton(teamId){
+    const btn = $('#joinTeamBtn');
+    if (!btn) return;                 // ← кнопки нет – просто выходим
 
-/**
- * Функция для загрузки и отрисовки списка участников:
- * Для каждого member:
- *  - получаем userInfo (GET /user/getUser/{userId} или публичный)
- *  - аватар (GET /user/avatar/{username})
- *  - отображаем в #players
- */
-async function loadPublicTeamMembers(members) {
-  try {
-    const playersContainer = document.getElementById('players');
+    btn.classList.remove('hidden');
+    btn.disabled = false;
 
-    // Очищаем, кроме шапки (которая уже есть)
-    // Можно просто найти все .player:not(:first-child) и удалить их
-    const allPlayers = playersContainer.querySelectorAll('.player');
-    // Первый .player - шапка, оставляем
-    allPlayers.forEach((player, index) => {
-      if (index !== 0) player.remove();
-    });
-
-    for (const member of members) {
-      // Вычислим rolesText
-      const rolesText = member.roles.map(r => r.name).join(', ');
-      // Запрашиваем userInfo
-      const userInfo = await fetchUserData(member.userId);
-      if (!userInfo) {
-        console.warn(`Не удалось получить данные пользователя userId=${member.userId}`);
-        continue;
-      }
-      // Запрашиваем аватар
-      let avatarUrl = 'img/profile.svg'; // по умолчанию
-      try {
-        const avatarResp = await fetch(`http://localhost:8765/user/avatar/${userInfo.username}`);
-        if (avatarResp.ok) {
-          avatarUrl = await avatarResp.text();
+    btn.onclick = async () => {
+      btn.disabled = true;
+      try{
+        const r = await fetch(`${API}/team/send-join-request/${teamId}`,{
+          method:'POST', headers:hdr()
+        });
+        if(r.ok){
+          toast('Wysłano prośbę o dołączenie.');
+        }else if(r.status === 409){
+          toast('Prośba już istnieje.', true);
+        }else{
+          throw new Error(r.status);
         }
-      } catch (err) {
-        console.warn('Ошибка загрузки аватара пользователя:', err);
+      }catch(e){
+        console.error('join error',e);
+        toast('Błąd. Spróbuj ponownie.', true);
+        btn.disabled = false;
       }
+    };
+  }
+  async function renderMembers(members){
+    const box = $('#players');
+    // удалить старое, оставить заголовок
+    box.querySelectorAll('.player').forEach((p,i)=>{ if(i) p.remove(); });
 
-      // Создаём блок .player
-      const playerEl = document.createElement('div');
-      playerEl.classList.add('player');
+    for(const m of members){
+      const u   = await getUser(m.userId);
+      if(!u) continue;
+      const ava = await getAvatar(u.username);
+      const roles = m.roles.map(r=>r.roleName).join(', ');
+      box.insertAdjacentHTML('beforeend',`
+        <div class="player">
+          <div class="player-info">
+            <img src="${ava}" class="player-avatar">
+            <p class="player-name">${u.firstName||''} ${u.lastName||''}</p>
+            <a href="open-profile.html" onclick="localStorage.setItem('searchedProfile','${u.username}')">
+              <p class="player-nickname">${u.username}</p>
+            </a>
+            <p class="player-joined">${new Date(m.joinedAt).toLocaleDateString()}</p>
 
-      const playerInfoEl = document.createElement('div');
-      playerInfoEl.classList.add('player-info');
-      // Пример flex-логики: justify-content: space-between
-      // Но учтите, что в CSS у .player-info есть width:93% и т. п.
-
-      // Заполняем HTML
-      playerInfoEl.innerHTML = `
-        <img src="${avatarUrl}" alt="Avatar" class="player-avatar">
-        <p class="player-name">${userInfo.firstName ?? ''} ${userInfo.lastName ?? ''}</p>
-        <!-- При клике на ник - переходим к публичному профилю пользователя -->
-        <a href="open-profile.html" onclick="localStorage.setItem('searchedProfile', '${userInfo.username}')">
-          <p class="player-nickname">${userInfo.username}</p>
-        </a>
-        <p class="player-joined">${new Date(member.joinedAt).toLocaleDateString()}</p>
-      `;
-      playerEl.appendChild(playerInfoEl);
-
-      // Добавляем в список
-      playersContainer.appendChild(playerEl);
+          </div>
+        </div>`);
     }
-  } catch (err) {
-    console.error('Ошибка при отрисовке членов команды:', err);
   }
-}
+  document.addEventListener("DOMContentLoaded", () => {
+    const pageLoadSpan = document.querySelector(".footer-content span:nth-child(3)");
+    const htmlLoadSpan = document.querySelector(".footer-content span:nth-child(4)");
 
-/**
- * Вспомогательная функция, чтобы получить userInfo (username, firstName и т.д.)
- * по userId. Можно использовать /user/getUser/{userId}, если это публично доступно.
- */
-async function fetchUserData(userId) {
-  try {
-    const resp = await fetch(`http://localhost:8765/user/getUser/${userId}`);
-    if (!resp.ok) return null;
-    return await resp.json();
-  } catch (err) {
-    console.error(`fetchUserData error userId=${userId}`, err);
-    return null;
+    if (pageLoadSpan && htmlLoadSpan) {
+      // Ждём окончания полной загрузки страницы
+      window.addEventListener("load", () => {
+        setTimeout(() => {
+          const performanceTiming = performance.timing;
+
+          // Время полной загрузки страницы
+          const pageLoadTime = performanceTiming.loadEventEnd - performanceTiming.navigationStart;
+
+          // Время загрузки HTML
+          const htmlLoadTime = performanceTiming.responseEnd - performanceTiming.responseStart;
+
+          // Проверяем, что значения корректны
+          const validPageLoadTime = pageLoadTime > 0 ? pageLoadTime : performance.now(); // Используем performance.now() как fallback
+          const validHtmlLoadTime = htmlLoadTime > 0 ? htmlLoadTime : 0;
+
+          // Обновляем значения в DOM с обёрткой для стилей
+          pageLoadSpan.innerHTML = `Strona: <span class="blue">${Math.round(validPageLoadTime)}ms</span>`;
+          htmlLoadSpan.innerHTML = `Szablon: <span class="blue">${Math.round(validHtmlLoadTime)}ms</span>`;
+
+          // Логируем значения для отладки
+          console.log("Page Load Time (ms):", validPageLoadTime);
+          console.log("HTML Load Time (ms):", validHtmlLoadTime);
+        }, 0);
+      });
+    }
+  });
+
+
+  /* ───────────── toast ───────────── */
+  function toast(txt, err=false){
+    const c = document.getElementById('toastContainer') || (() => {
+      const d=document.createElement('div');d.id='toastContainer';
+      Object.assign(d.style,{position:'fixed',right:'0',left:'0',bottom:'30px',display:'flex',
+        flexDirection:'column',alignItems:'center',zIndex:'9999'});document.body.appendChild(d);return d;})();
+    const b=document.createElement('div');
+    Object.assign(b.style,{background:err?'#EA3943':'#3861FB',color:'#fff',padding:'8px 18px',
+      borderRadius:'8px',marginTop:'6px',fontSize:'14px',boxShadow:'0 2px 4px rgba(0,0,0,.2)'});
+    b.textContent=txt;c.prepend(b);setTimeout(()=>b.remove(),4000);
   }
-}
 
-/**
- * Пример логаута (если нужно)
- */
-function logOut() {
-  localStorage.clear();
-  window.location.href = 'main.html';
-}
+  /* jquery-style $ */
+  function $(sel){ return document.querySelector(sel); }
+
+})();

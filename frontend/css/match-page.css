@@ -1,0 +1,515 @@
+body {
+  font-family: Inter,sans-serif;
+  background-color: #ffffff;
+  animation: fadeIn 0.3s ease-in forwards;
+  margin: 0;
+  overflow-x: hidden;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+/* Стили для хедера */
+.header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ffffff;
+  border-bottom: 1px solid #EFF2F5;
+  width: 100%;
+  margin-right: -20px;
+
+}
+.logo {
+  height: 60px;
+  margin-right: 20px;
+  margin-top: 10px;
+}
+.nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+.nav-link-header {
+  text-decoration: none;
+  justify-content: center;
+  color: #000;
+  font-weight: bold;
+  font-size: 14px;
+}
+.header-center {
+  justify-content: space-between;
+  display: flex;
+  gap: 150px;
+}
+input
+{
+  color: #808A9D;
+}
+/* Контейнер для поля поиска и иконки */
+.search-container {
+  display: flex;
+  align-items: center; /* Центрируем иконку и инпут по вертикали */
+  position: relative; /* Для позиционирования иконки */
+}
+.search-icon {
+  position: absolute; /* Абсолютное позиционирование иконки */
+  left: 15px; /* Отступ от левого края */
+  width: 18px; /* Размер иконки */
+  height: 18px;
+  pointer-events: none; /* Чтобы клик не взаимодействовал с иконкой */
+}
+/* Поле поиска */
+.search-input {
+  padding: 15px 15px 15px 40px; /* Отступ слева увеличен для иконки */
+  border: none;
+  border-radius: 12px;
+  background-color: #EFF2F5;
+  outline: none;
+  font-family: Inter, sans-serif;
+  color: #808A9D;
+  width: 450px; /* Ширина поля */
+
+  font-size: 14px;
+  font-weight: bold;
+}
+.search-input::placeholder {
+  color: #808A9D; /* Цвет плейсхолдера */
+}
+.icon-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #f0f2f5;
+  border: none;
+  margin-top: 20px;
+}
+.icon-btn img {
+  width: 20px;
+  height: 20px;
+}
+
+
+
+footer {
+  display: flex;
+  justify-content: space-between; /* Располагаем элементы по краям */
+  align-items: center; /* Выравниваем элементы по вертикали */
+  padding: 8px 40px; /* Отступы сверху/снизу и слева/справа */
+  color: #808A9D;
+  font-size: 12px;
+  background-color: #ffffff;
+  border-top: 1px solid #EFF2F5;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+
+}
+
+.footer-content,
+.footer-links {
+  display: flex;
+  flex-wrap: wrap; /* Чтобы элементы переносились на мобильных */
+  gap: 10px; /* Расстояние между элементами */
+  margin-right: 80px;
+}
+
+.footer-content a{
+  color: #3861FB;
+  font-weight: bold;
+
+
+}
+
+.footer-links a {
+  background-color: #EFF2F5;
+  color: #000000;
+  font-weight: bold;
+  text-decoration: none;
+
+  border-radius: 8px;
+  padding: 4px 8px;
+
+}
+
+.blue{
+  color: #3861FB;
+  font-weight:bold ;
+}
+
+@media (max-width: 600px) {
+  footer {
+    flex-direction: column; /* Вертикальное расположение элементов */
+    text-align: center; /* Центрируем текст */
+  }
+  .footer-content,
+  .footer-links {
+    justify-content: center; /* Центрируем контент */
+  }
+}
+.header-right {
+  display: flex;
+  align-items: center; /* Выравнивание по вертикали */
+  justify-content: center;
+  justify-items: center;
+  margin-top: 15px;
+  gap: 10px;
+  background: #EFF2F5;
+  width: 80px;
+  height: 45px;
+  border-radius: 20%;
+  cursor: pointer;
+}/**/
+.header-right > .icon-btn {
+  margin-bottom: 20px;
+}
+.icon-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: #f0f2f5;
+  border: none;
+  transition: background 0.3s ease;
+}
+.notification-btn{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  margin-right: 10px;
+}
+.icon-btn:hover {
+  cursor: pointer;
+}
+
+.icon-btn img {
+  width: 20px;
+  height: 20px;
+}
+.register{
+  width: 120px;
+  background: #3861FB;
+  color: white;
+  border-radius: 12px;
+  border: 0;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 14px;
+  font-size: 14px;
+}
+.blue {
+  color: #3861FB;
+  font-weight: bold;
+}
+.menu-container{
+  cursor: pointer;
+}
+/*menu for sport choose*/
+.sporty-wrapper {
+  position: relative; /* Чтобы позиционировать меню внутри */
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 70%; /* сразу под .sporty-toggle */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: white;
+  border: #CFD6E4 1px solid;
+  border-radius: 6px;
+  padding: 10px 0;
+  display: none;
+  flex-direction: column;
+  z-index: 1000;
+  min-width: 120px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+
+.dropdown-item {
+  padding: 8px 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  display: flex;
+}
+.dropdown-item>img{
+  width: 20px;
+  height: 20px;
+  margin-top: 10px;
+}
+.dropdown-item:hover {
+  background-color: #f0f0f0;
+}
+
+
+
+
+
+.tournament-tittle{
+  width: 100%;
+  height: 120px;
+  background-color: #EFF2F5;
+  display: block;
+
+}
+.content{
+  display: flex;
+}
+.content-left{
+  width: 230px;
+  height: 130px;
+  border: none;
+  display: block;
+  border-radius: 10px;
+  margin-top: 15px;
+  margin-left: 200px;
+
+  background-color: #EFF2F5;
+}
+.side-menu{
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+.side-menu>div>div>div>label{
+  color: #808A9D;
+  font-size: 10px;
+  font-weight: bold;
+  margin-top: 3px;
+}
+
+.createTeam{
+  color: #ffffff;
+  background-color: #3861FB;
+  border: none;
+  cursor: pointer;
+  padding: 15px 40px 15px 40px;
+  text-align: center;
+  justify-content: center;
+  justify-items: center;
+  border-radius: 10px;
+  margin-top: 15px;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+.content-right{
+  display: block;
+  width: 50%;
+  height: 600px;
+  margin-left: 20px;
+  background-color: #EFF2F5;
+  margin-top: 15px;
+  border-radius: 10px;
+  justify-content:  center;
+  overflow-y: auto;
+}
+.main-menu-tittle{
+  justify-items: center;
+  padding: 10px 0;
+  margin-left: 48px;
+  width: 90%;
+  border-bottom: 1px #808A9D solid;
+  font-weight: bold;
+}
+.tournaments-list{
+  justify-items: center;
+  flex-direction: column;
+  display: block;
+  overflow-y: auto;
+}
+.tournament{
+  display: flex;
+  width: 90%;
+  height: 100px;
+  background-color: #ffffff;
+  margin-bottom: 20px;
+  justify-content: space-between;
+  border-radius: 10px;
+}
+.tournament>div{
+  display: flex;
+}
+.tournament>div>img{
+  margin-top:15px;
+  height: 60px;
+  margin-left: 15px;
+  margin-right: 15px;
+}
+.tournament-name{
+  margin-top: 5px;
+}
+.name{
+  font-weight: bold;
+  margin-bottom:5px;
+
+}
+.sporty-toggle{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.zawody-toggle{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.status{
+  background-color: #3861FB;
+  color:#ffffff;
+  text-align: center;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 2px 2px;
+  width: 100px;
+  border-radius: 5px;
+  margin: 0;
+}
+.start-time{
+  margin-top: 10px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #808A9D;
+
+}
+.start-date{
+  font-weight: bold;
+  color: #000000;
+
+}
+.end-time{
+  margin-top: 10px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #808A9D;
+
+}
+.end-date{
+  font-weight: bold;
+  color: #000000;
+
+}
+.game-system{
+  margin-top: 10px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #808A9D;
+
+}
+.system{
+  font-weight: bold;
+  color: #000000;
+
+}
+.teams{
+  margin-top: 10px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #808A9D;
+
+}
+.count{
+  font-weight: bold;
+  color: #000000;
+}
+.content{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 70px;
+}
+.playerLeft{
+  width: 300px;
+  height: auto;
+  margin-top: 40px;
+}
+.playerList{
+  display: flex;
+  flex-direction: column;
+  height: 330px;
+  overflow-y: auto;
+}
+.player{
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding: 10px 20px;
+  margin-bottom: 10px;
+}
+.playerRight{
+  width: 300px;
+  height: auto;
+
+  margin-top: 40px;
+}
+.playerRight>.playerRightHeader>.playerList>.player{
+  justify-content: right;
+
+}
+.player-avatar{
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  border: #808A9D 1px solid;
+}
+.main-content{
+  display: flex;
+  height: 490px;
+  padding: 20px 40px;
+  background-color: #EFF2F5;
+  border-radius: 12px;
+  margin-top: 20px;
+  font-weight: bold;
+  gap: 20px;
+}
+.match-info-header{
+  text-align: center;
+
+}
+.score-tab{
+  text-align: center;
+}
+.date{
+  display: flex;
+  gap: 10px;
+}
+.match-info{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.main-info{
+  font-size: 22px;
+}
+.main-info-sport{
+  color: #808A9D;
+  text-decoration: underline;
+}
+.start-date{
+  font-size: 12px;
+  color: #808A9D;
+}
+.end-date{
+  font-size: 12px;
+  color: #808A9D;
+}

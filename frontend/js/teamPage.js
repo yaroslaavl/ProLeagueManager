@@ -1,3 +1,10 @@
+let API = 'http://localhost:8765';
+function authHeaders () {
+  return {
+    'Authorization': `Bearer ${localStorage.getItem('accToken')}`,
+    'Content-Type' : 'application/json'
+  };
+}
 refreshToken();
 document.addEventListener("DOMContentLoaded", () => {
   const pageLoadSpan = document.querySelector(".footer-content span:nth-child(3)");
@@ -90,90 +97,67 @@ if (document.getElementById('log-out') !== null){
   const logOutBtn = document.getElementById('log-out').addEventListener('click',logOut);
 }
 let teamInfo;
-async function getData(){
+async function getData() {
   try {
-    if(localStorage.getItem('MyTeam') === null && localStorage.getItem('SearchResult') === null) throw new Error('No result by search or redirecting');
-    let Team = localStorage.getItem('MyTeam')
-    if(Team === null) Team = localStorage.getItem('SearchResult');
+    const storedTeam = localStorage.getItem('MyTeam') || localStorage.getItem('SearchResult');
+    if (!storedTeam) throw new Error('No selected team');
 
-    const res = await fetch(`http://localhost:8765/team/currentTeam/${Team}`);
-    const receivedData = await res.json();
+    // 1. Инфо о команде + массив участников
+    const res        = await fetch(`${API}/team/currentTeam/${storedTeam}`);
+    const {team, members} = await res.json();
+    teamInfo = team;
 
-    teamInfo = receivedData.team;
-    let members = receivedData.members;
+    // 2. Базовые данные в шапку
+    document.getElementById('team_name').textContent   = team.teamName;
+    document.getElementById('createdAt').textContent   = new Date(team.createdAt).toLocaleDateString();
+    document.getElementById('team_img').src            =
+      await (await fetch(`${API}/team/team-logo/${team.id}`)).text();
 
-    console.log(teamInfo);
-    console.log(members);
+    // 3. Готовим HTML для всех игроков ПАРАЛЛЕЛЬНО
+    const cards = await Promise.all(members.map(async m => {
+      const player    = await (await fetch(`${API}/user/getUser/${m.userId}`)).json();
+      const avatarUrl = await (await fetch(`${API}/user/avatar/${player.username}`)).text();
 
-    document.getElementById('team_name').innerText = `${teamInfo.teamName}`;
-    document.getElementById('createdAt').innerText = `${new Date(teamInfo.createdAt).toLocaleDateString()}`
-    let teamimg = await fetch(`http://localhost:8765/team/team-logo/${teamInfo.id}`);
-    document.getElementById('team_img').src = await teamimg.text();
+      const isManager = m.roles.some(r => r.name === 'MANAGER');
+      const isCaptain = m.roles.some(r => r.name === 'CAPTAIN');
 
+      if (isManager) {
+        document.getElementById('manager_name').textContent = player.username;
+      }
 
-    for (const member of members) {
-      // Формируем строку с ролями
-      let rolesText = member.roles.map(role => role.name).join(', ');
-      let playerInfo;
-      let playerImg;
-      // Проверяем, есть ли среди ролей "MANAGER"
-      let isManager = member.roles.some(role => role.name === 'MANAGER');
-      let isCapitan = member.roles.some(role => role.name === 'CAPTAIN');
+      /* цвет имени в зависимости от роли */
+      const color = isManager ? '#3861FB' :
+        isCaptain ? 'darkgoldenrod' : 'inherit';
 
-      try {
-        const userId = member.userId;
-        const response =  await fetch(`http://localhost:8765/user/getUser/${userId}`);
-        playerInfo = await response.json();
-
-      }catch (err) {console.log(err);}
-      try {
-        const response = await fetch(`http://localhost:8765/user/avatar/${playerInfo.username}`);
-        playerImg = await response.text();
-      }catch (err){console.log(err);}
-      if(isManager === true){
-        document.getElementById('players').innerHTML += `
+      return `
         <div class="player">
           <div class="player-info">
-          <img src=${playerImg} alt="Avatar" class="player-avatar">
-            <p class="player-name" style="color: #3861FB">${playerInfo.firstName + " " + playerInfo.lastName}</p>
-            <a href="public-profile.html"><p class="player-nickname">${playerInfo.username}</p></a>
-            <p class="player-joined">${new Date(member.joinedAt).toLocaleDateString()}</p>
-
+            <img class="player-avatar" src="${avatarUrl}" alt="Avatar">
+            <p class="player-name" style="color:${color}">
+              ${player.firstName} ${player.lastName}
+            </p>
+            <a href="open-profile.html"
+               onclick="localStorage.setItem('searchedProfile','${player.username}')">
+              <p class="player-nickname">${player.username}</p>
+            </a>
+            <p class="player-joined">
+              ${new Date(m.joinedAt).toLocaleDateString()}
+            </p>
           </div>
         </div>`;
-        document.getElementById('manager_name').innerText = `${playerInfo.username}`;
-      }
-      else if(isCapitan === true){
-        document.getElementById('players').innerHTML += `
-        <div class="player">
+    }));
 
-          <div class="player-info">
-            <img src=${playerImg} alt="Avatar" class="player-avatar">
-            <p class="player-name" style="color: darkgoldenrod">${playerInfo.firstName + " " + playerInfo.lastName}</p>
-            <a href="public-profile.html"><p class="player-nickname">${playerInfo.username}</p></a>
-            <p class="player-joined">${new Date(member.joinedAt).toLocaleDateString()}</p>
+    // 4. Вставляем ВСЕ карточки одной operацией
+    document.getElementById('players').innerHTML = cards.join('');
 
-          </div>
-        </div>`;}
-      else{
-        document.getElementById('players').innerHTML += `
-        <div class="player">
+    // 5. Рисуем кнопки настроек (теперь все карточки уже в DOM)
+    await addRoleEditButtons();
 
-          <div class="player-info">
-          <img src=${playerImg} alt="Avatar" class="player-avatar">
-            <p class="player-name">${playerInfo.firstName + " " + playerInfo.lastName}</p>
-            <a href="open-profile.html" onclick="localStorage.setItem('searchedProfile', '${playerInfo.username}');"><p class="player-nickname">${playerInfo.username}</p></a>
-            <p class="player-joined">${new Date(member.joinedAt).toLocaleDateString()}</p>
-
-          </div>
-        </div>`;}
-      }
-
-
-  }catch (err){
-    console.error(err);
+  } catch (err) {
+    console.error('getData error:', err);
   }
 }
+
 getData();
 document.addEventListener("DOMContentLoaded", function () {
   const confirmButton = document.getElementById("leave_btn");
@@ -384,42 +368,7 @@ async function getTeamNotifications() {
     console.error("❌ Ошибка получения уведомлений команды:", err);
   }
 }
-// 🔹 Функция отображения уведомлений
-function displayTeamNotifications(notifications) {
-  const notificationsContainer = document.querySelector(".notifications-container");
 
-  // Очищаем контейнер перед добавлением новых уведомлений
-  notificationsContainer.innerHTML = "";
-
-  if (!notifications.length) {
-    notificationsContainer.innerHTML = `<p class="no-notifications">Brak powiadomień.</p>`;
-    return;
-  }
-
-  notifications.forEach(notification => {
-    const notificationItem = document.createElement("div");
-    notificationItem.classList.add("manager-notification-item");
-
-    let message = notification.message;
-
-    // Проверяем тип уведомления
-    if (notification.eventType === "PLAYER_INVITED" || notification.eventType === "PLAYER_DECLINED") {
-      message = `${notification.message}`;
-    }
-
-    notificationItem.innerHTML = `
-            <p class="manager-notification-message">${message}</p>
-            <span class="manager-notification-time">${new Date(notification.createdAt).toLocaleDateString()}</span>
-        `;
-
-    notificationsContainer.appendChild(notificationItem);
-  });
-}
-// 🔹 Функция извлечения названия команды
-function extractTeamName(notificationMessage) {
-  const match = notificationMessage.match(/team:\s(.+)/);
-  return match ? match[1] : null;
-}
 // Загружаем уведомления при загрузке страницы
 async function getUserTeamRole() {
   try {
@@ -499,25 +448,24 @@ async function getUserTeamRoleInfo() {
 }
 // Добавляем после загрузки данных о пользователях функцию для рендера кнопки настроек, если роль - менеджер
 async function addRoleEditButtons() {
-  const roleCheck = await getUserTeamRoleInfo();
-  if (!roleCheck.isManager) return; // Если не менеджер - не показываем кнопки
+  const { isManager, teamId } = await getUserTeamRoleInfo();
+  if (!isManager) return;
 
-  const playerCards = document.querySelectorAll('.player');
-  playerCards.forEach((card) => {
-    const nicknameElement = card.querySelector('.player-nickname');
-    if (!nicknameElement) return; // Пропускаем карточки без nickname
+  document.querySelectorAll('.player').forEach(card => {
+    if (card.querySelector('.role-button')) return;            // уже есть
 
-    const playerNickname = nicknameElement.textContent;
+    const nick = card.querySelector('.player-nickname')?.textContent;
+    if (!nick) return;
 
-    const settingsBtn = document.createElement('button');
-    settingsBtn.classList.add('role-button');
-    settingsBtn.innerHTML = '<img src="https://www.svgrepo.com/show/447437/menu-alt3.svg" style="width: 24px; height:24px">';
-    settingsBtn.addEventListener('click', () => toggleRoleEditor(card, playerNickname, roleCheck.teamId));
-    card.querySelector('.player-info').appendChild(settingsBtn);
+    const btn  = document.createElement('button');
+    btn.className = 'role-button';
+    btn.innerHTML = '<img src="https://www.svgrepo.com/show/447437/menu-alt3.svg" style="width:24px;height:24px">';
+    btn.onclick   = () => toggleRoleEditor(card, nick, teamId);
 
-    card.querySelector('.player-info').appendChild(settingsBtn);
+    card.querySelector('.player-info').appendChild(btn);
   });
 }
+
 async function toggleRoleEditor(playerCard, username, teamId) {
   let existingEditor = playerCard.querySelector('.role-editor');
   if (existingEditor) {
@@ -676,6 +624,77 @@ async function saveTeamStatus() {
   if (response.ok) {
     alert('Status drużyny został zaktualizowany!');
     location.href = 'public-profile.html';
+  }
+}
+async function processJoin(teamId, userId, decision) {
+  const url = `${API}/team/accept-player/${teamId}` +
+    `?userId=${userId}&isAccepted=${decision}`;
+
+  try {
+    const res = await fetch(url, {
+      method : 'PUT',
+      headers: authHeaders()
+    });
+    if (!res.ok) throw new Error(res.status);
+
+    toast(decision ? 'Gracz zaakceptowany 👍'
+      : 'Prośba odrzucona 👋');
+    await getTeamNotifications();        // перечитать список
+  } catch (e) {
+    console.error(e);
+    toast(`Błąd operacji (${e.message})`, true);
+  }
+}
+
+const acceptJoin = (teamId, userId) => processJoin(teamId, userId, true);
+const rejectJoin = (teamId, userId) => processJoin(teamId, userId, false);
+function cleanTeamName(raw){
+  return encodeURIComponent(String(raw||'').trim());
+}
+
+
+
+function displayTeamNotifications(list) {
+  const box = document.querySelector('.notifications-container');
+  box.innerHTML = '';
+
+  if (!list.length) {
+    box.innerHTML = '<p class="no-notifications">Brak powiadomień.</p>';
+    return;
+  }
+
+  list.forEach(n => {
+    const item = document.createElement('div');
+    item.className = 'manager-notification-item';
+    item.innerHTML = `
+      <p  class="manager-notification-message">${n.message}</p>
+      <span class="manager-notification-time">
+        ${new Date(n.createdAt).toLocaleDateString('pl-PL')}
+      </span>`;
+
+    /* Кнопки выводим только на запросы о вступлении */
+    if (n.eventType === 'PLAYER_JOIN_REQUEST') {
+      const teamId = n.teamId || teamInfo?.id;   // бекенд шлёт прямо teamId
+      const userId = n.userId || n.data?.userId; // и id кандидата
+
+      const grp = document.createElement('div');
+      grp.className = 'notif-btn-group';
+      grp.innerHTML = `
+        <button class="notif-btn accept">Akceptuj</button>
+        <button class="notif-btn reject">Odrzuć</button>`;
+
+      grp.querySelector('.accept').onclick = () => acceptJoin(teamId, userId);
+      grp.querySelector('.reject' ).onclick = () => rejectJoin(teamId, userId);
+
+      item.appendChild(grp);
+    }
+    box.appendChild(item);
+  });
+}
+
+if(typeof toast!=='function'){
+  function toast(txt,err=false){
+    alert((err?'❌ ':'')+txt);
   }
 }
 

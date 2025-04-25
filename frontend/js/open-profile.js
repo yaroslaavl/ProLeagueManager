@@ -1,15 +1,4 @@
-/**
- * open-profile.js
- *
- * Код для публичного профиля (просмотр чужого пользователя).
- * 1) Берёт из localStorage ключ "searchedProfile" (username, который хотим отобразить).
- * 2) Делает запрос GET /user/profile/public/{username}, чтобы получить публичные данные (id, firstName...).
- * 3) Заполняет страницу (аватар, ФИО, ник, дата рождения, дата создания).
- * 4) По userId запрашивает GET /team/get-teams-by-userId?userId=... и отображает команды.
- * 5) Для каждой команды — запрашиваем роли пользователя через
- *    GET /team/get-team-member-by-team-and-userId?teamId=...&userId=...
- * 6) На закрытие вкладки или переход куда-то удаляем "searchedProfile" из localStorage.
- */
+
 document.addEventListener("DOMContentLoaded", () => {
   const pageLoadSpan = document.querySelector(".footer-content span:nth-child(3)");
   const htmlLoadSpan = document.querySelector(".footer-content span:nth-child(4)");
@@ -43,10 +32,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // 2) Загружаем публичные данные
   loadPublicUserData(searchedUsername);
 
-  // 3) На закрытие вкладки/переход - удаляем searchedProfile (по желанию)
-  window.addEventListener('beforeunload', () => {
-    localStorage.removeItem('searchedProfile');
-  });
 });
 
 /**
@@ -94,10 +79,12 @@ async function loadPublicUserData(username) {
       document.getElementById('profile_img').src = data.avatar;
     }
 
-    // 2) Загружаем команды пользователя (используем userId из data.id)
+
     if (data.id) {
       loadPublicUserTeamsByUserId(data.id);
+      initPublicTabs(data.id);          // ← вот эта строчка
     }
+
   } catch (err) {
     console.error('Ошибка при загрузке публичного профиля:', err);
     // Перенаправляем на главную или показываем ошибку
@@ -234,4 +221,142 @@ async function loadPublicUserTeamsByUserId(userId) {
 function logOut() {
   localStorage.clear();
   window.location.href = 'main.html';
+}
+async function safeJson(res) {
+  if (res.status === 204 || res.status === 205) return [];
+  const txt = await res.text();
+  return txt.trim() ? JSON.parse(txt) : [];
+}
+
+/* ======= запросы ======================================================= */
+const gridMatch = '120px 1fr 70px';            // дата | статус | счёт
+const gridComp  = '45px 1fr 80px 130px';       // баннер | название | статус | даты
+
+function fetchPublicMatches(userId) {
+  return fetch(`http://localhost:8765/match/user?userId=${userId}`)
+    .then(safeJson);
+}
+function fetchPublicCompetitions(userId, type) {
+  return fetch(
+    `http://localhost:8765/competition/user?userId=${userId}&competitionType=${type}`)
+    .then(safeJson);
+}
+
+/* ======= рендер матча ================================================== */
+function renderPublicMatches(list) {
+  const title = document.querySelector('.content-placeholder .title');
+  const cols  = document.querySelector('.content-placeholder .columns');
+  const body  = document.getElementById('teams-container');
+
+  title.textContent = 'Mecze';
+  cols.innerHTML = `<span>Data</span><span>Status</span><span>Wynik</span>`;
+  Object.assign(cols.style, {display:'grid',gridTemplateColumns:gridMatch,gap:'20px'});
+
+  if (!list.length) {
+    body.innerHTML = '<p style="padding:20px 0;">Brak danych</p>';
+    return;
+  }
+
+  /* ---------- 1. строим строки ---------- */
+  body.innerHTML = list.map(m => {
+    /* выбираем корректный идентификатор матча */
+    const matchId = m.id ?? m.matchId ?? m.stageId ?? m.nextMatchId;
+
+    const score   = `${m.scoreA ?? 0}:${m.scoreB ?? 0}`;
+    return `
+      <div class="public-match-row" data-id="${matchId ?? ''}"
+           style="display:grid;grid-template-columns:${gridMatch};
+                  gap:20px;align-items:center;padding:10px;margin:10px 0;
+                  background:#fff;border-radius:12px;cursor:${matchId ? 'pointer':'default'}">
+        <span style="font-weight:bold;color:#000000">${m.matchDate?.slice(0,10) || '-'}</span>
+        <span>${m.matchStatus}</span>
+        <span style="font-weight:bold;color:#000000">${score}</span>
+      </div>`;}).join('');
+
+  /* ---------- 2. вешаем переход ---------- */
+  body.querySelectorAll('.public-match-row').forEach(row=>{
+    const id = row.dataset.id;
+    if (!id) return;                           // если id нет – не кликаем
+
+    row.addEventListener('click', () => {
+      localStorage.setItem('searchedMatch', id);
+      location.href = 'match-page.html';
+    });
+  });
+}
+
+/* ======= рендер лиг/турниров ========================================== */
+async function renderPublicCompetitions(list, type) {
+  const title = document.querySelector('.content-placeholder .title');
+  const cols  = document.querySelector('.content-placeholder .columns');
+  const body  = document.getElementById('teams-container');
+
+  title.textContent = type === 'LEAGUE' ? 'Ligi' : 'Turnieje';
+  cols.innerHTML   = `<span>Baner</span><span>Nazwa</span><span>Status</span><span>Od&nbsp;/&nbsp;Do</span>`;
+  Object.assign(cols.style, {display:'grid',gridTemplateColumns:gridComp,gap:'20px'});
+
+  if (!list.length) {
+    body.innerHTML = '<p style="padding:20px 0;">Brak danych</p>';
+    return;
+  }
+
+  body.innerHTML = list.map(c=>`
+    <div class="public-comp-row" data-id="${c.id}"
+         style="display:grid;grid-template-columns:${gridComp};
+                gap:20px;align-items:center;padding:10px;margin:10px 0;
+                background:#fff;border-radius:12px;cursor:pointer">
+      <img class="comp-banner" style="width:45px;height:45px;border-radius:12px;
+           object-fit:cover" src="" alt="banner">
+      <span style="font-weight:bold;color: #000000">${c.name}</span>
+      <span style="font-weight: bold">${c.status}</span>
+      <span style="font-weight:bold;color: #000000">${c.startDate.slice(0,10)} ➜ ${c.endDate.slice(0,10)}</span>
+    </div>`).join('');
+
+  /* догружаем баннер */
+  await Promise.all(list.map(async c=>{
+    try{
+      const res = await fetch(`http://localhost:8765/competition/get-image/${c.id}`);
+      const url = res.ok ? await res.text() : null;
+      const img = body.querySelector(`.public-comp-row[data-id="${c.id}"] .comp-banner`);
+      if (url && img) img.src = url;
+    }catch(e){/* ignore */}
+  }));
+
+  /* переход на лигу/турнир */
+  body.querySelectorAll('.public-comp-row').forEach(row=>{
+    const id = row.dataset.id;
+    row.addEventListener('click',()=>{
+      if (type==='LEAGUE') {
+        localStorage.setItem('searchedLeague', id);
+        location.href = 'leagues.html';
+      } else {
+        localStorage.setItem('searchedTournament', id);
+        location.href = 'tournaments.html';
+      }
+    });
+  });
+}
+
+/* ======= инициализируем табы после того, как знаем userId ================ */
+function initPublicTabs(userId) {
+
+  async function handleTab(e){
+    const txt = e.target.textContent.trim();
+    document.querySelectorAll('.profile-tabs .tab')
+      .forEach(t=>t.classList.toggle('active',t===e.target));
+
+    if      (txt==='Mecze')   renderPublicMatches(await fetchPublicMatches(userId));
+    else if (txt==='Ligi')    renderPublicCompetitions(await fetchPublicCompetitions(userId,'LEAGUE'),'LEAGUE');
+    else if (txt==='Turnieje')renderPublicCompetitions(await fetchPublicCompetitions(userId,'TOURNAMENT'),'TOURNAMENT');
+    else if (txt==='Drużyny') {                // перерисовываем команды
+      document.querySelector('.content-placeholder .title').textContent = 'Drużyny';
+      document.querySelector('.content-placeholder .columns').innerHTML =
+        '<p>Zdjęcie:</p><p>Nazwa:</p><p>Role:</p>';
+      document.getElementById('teams-container').innerHTML = '';
+      loadPublicUserTeamsByUserId(userId);
+    }
+  }
+
+  document.querySelectorAll('.profile-tabs .tab')
+    .forEach(t=>t.addEventListener('click',handleTab));
 }

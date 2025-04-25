@@ -254,3 +254,7 @@ async function renderLeagues(leagues) {
     } catch {}
   }
 }
+
+if (document.getElementById('log-out') !== null){
+  const logOutBtn = document.getElementById('log-out').addEventListener('click',logOut);
+}
