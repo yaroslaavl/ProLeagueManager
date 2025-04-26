@@ -10,9 +10,7 @@
   <link rel="stylesheet" href="css/notificationMenu.css">
   <link rel="stylesheet" href="css/burgerMenu.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-bracket@0.11.0/dist/jquery.bracket.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/jquery-bracket@0.11.0/dist/jquery.bracket.min.js"></script>
+
   <title>Tournaments</title>
 </head>
 <body>
@@ -332,6 +330,28 @@
     <a href="#">API</a>
   </div>
 </footer>
+<!-- Team Selection Modal -->
+<div id="teamModal" class="hidden">
+  <div class="reg-modal__content">
+    <h3>Wybierz drużynę</h3>
+    <div id="teamList"></div>
+    <div class="reg-modal__buttons">
+      <button id="teamNextBtn" disabled>Dalej</button>
+      <button id="teamModalClose">Zamknij</button>
+    </div>
+  </div>
+</div>
 
+<!-- Player Selection Modal -->
+<div id="playerModal" class="hidden">
+  <div class="reg-modal__content">
+    <h3>Wybierz graczy</h3>
+    <div id="playerList"></div>
+    <div class="reg-modal__buttons">
+      <button id="playerConfirmBtn" disabled>Potwierdź</button>
+      <button id="playerModalClose">Zamknij</button>
+    </div>
+  </div>
+</div>
 </body>
 </html>

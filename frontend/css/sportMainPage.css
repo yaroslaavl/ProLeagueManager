@@ -534,3 +534,104 @@ footer {
   color: #000000;
   font-weight: bold;
 }
+/* ------ NEWS slider ------ */
+.news          { position: relative; }
+.news-content  { position: relative; }
+
+.news-track-wrapper{
+  overflow: hidden;
+  position: relative;
+  padding: 10px 0 25px;          /* место для стрелок */
+}
+.news-track{
+  display: flex;
+  gap: 16px;
+  transition: transform .4s ease;
+}
+.news-slide{
+  flex: 0 0 220px;
+  background: #fff;
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 13px;
+  font-weight: bold;
+  color: #000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.news-slide img{
+  width: 220px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+.news-slide time{
+  font-size: 11px;
+  color:#808A9D;
+  font-weight: normal;
+}
+
+.news-arrow{
+  position:absolute;
+  font-weight: bold;
+  top:50%;
+  transform:translateY(-50%);
+  border:none;
+  background:#3861FB;
+  color:#fff;
+  width:28px;height:28px;
+  margin-top: 20px;
+  border-radius:50%;
+  cursor:pointer;
+  z-index:2;
+}
+.news-prev{ left:-14px; }      /* половинка ширины */
+.news-next{ right:-14px; }
+.news-arrow:disabled{ opacity:.35; cursor:default; }
+/* ---- NEWS slide 2.0 ------------------------------------------- */
+.news-slide{
+  position: relative;
+  flex: 0 0 890px;                 /* <-- ширина карточки  */
+  height: 150px;                   /*   и её высота        */
+  border-radius: 16px;
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+/* тёмный градиент поверх картинки */
+.news-slide::after{
+  content:'';
+  position:absolute; inset:0;
+  background:linear-gradient(to bottom,
+  rgba(0,0,0,0) 40%, rgba(0,0,0,.55) 100%);
+}
+
+/* текст заголовка */
+.news-slide p{
+  position: absolute;
+  left: 12px; right: 12px;
+  bottom: 28px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  z-index: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* дата под заголовком */
+.news-slide time{
+  position: absolute;
+  left: 12px; bottom: 10px;
+  font-size: 11px;
+  color: #d9d9d9;
+  z-index: 1;
+}
+
+/* ширина+gap для «шага» в JS-слайдере */
+.news-track          { gap: 20px;  }

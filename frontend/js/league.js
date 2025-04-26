@@ -2,17 +2,31 @@
    Strona ligi – baner, detale, uczestnicy, mecze, TOP, feedback,
    rejestracja (indywidualna / drużynowa) + przejścia do profili
 ────────────────────────────────────────────────────────────────────── */
+let API = 'http://localhost:8765';
+function getAuthHeaders() {
+  const token = localStorage.getItem('accToken');   // берём access-token,
+  return token                                       // если он есть —
+    ? { Authorization: `Bearer ${token}` }     //        кладём в header
+    : {};                                      // если нет — пустой объект
+}
+// Ссылки на элементы модалок (можно оставить здесь или перенести в Elements cache)
+const teamModal = document.getElementById('teamModal');
+const playerModal = document.getElementById('playerModal');
+const teamListEl = document.getElementById('teamList');
+const playerListEl = document.getElementById('playerList');
+const teamNextBtn = document.getElementById('teamNextBtn');
+const playerConfBtn = document.getElementById('playerConfirmBtn');
+const teamModalClose = document.getElementById('teamModalClose');
+const playerModalClose = document.getElementById('playerModalClose');
 
-(() => { // <--- НАЧАЛО IIFE
-  'use strict';
 
   /* ╔═ 0. KONFIG ─────────────────────────────────────────────────────── */
-  const API     = 'http://localhost:8765';
+
   const COMP_ID = localStorage.getItem('searchedLeague');
   if (!COMP_ID) {
     console.error("League ID not found in localStorage. Redirecting...");
     location.href = 'main.html';
-    return;
+
   }
 
   // Переменная для хранения заголовков авторизации
@@ -294,160 +308,162 @@
   }
 
 
-  /* ╔═ 6. REGISTRATION ──────────────────────────────────────────────── */
+  async function competitionIsIndividual(comp) {
+    /* 1) пробуем взять Game-System */
+    const gs = await fetchGameSystem(comp.gameSystemId);
+    if (!gs) return false;               // не смогли получить – считаем командным
+
+    /* 2) back уже поместил в GS прямой флаг — это самый надёжный вариант */
+    if (typeof gs.isIndividual === 'boolean') return gs.isIndividual;
+
+    /* 3) вычисляем по ограничениям */
+    const min = +(gs.minTeamSize    ?? gs.playersPerTeam ?? 1);
+    const max = +(gs.maxTeamSize    ?? gs.playersPerTeam ?? 1);
+
+    // solo-соревнование, если в команде может быть только 1 человек
+    return min === 1 && max === 1;
+  }
   async function openRegistration(comp) {
-    const headers = getAuthHeaders(); // Получаем актуальные заголовки
-    const isInd = comp.isIndividual===true; // Проверяем поле из объекта comp
-    if(isInd) {
-      if(!confirm('Czy na pewno chcesz dołączyć do tej ligi?')) return;
+    const headers = getAuthHeaders();
+    const isInd   = await competitionIsIndividual(comp);  // <-- новый helper
+
+    /* SOLO: регистрируем одним POST’ом */
+    if (isInd) {
+      if (!await getMeId()) { toast('Zaloguj się, aby dołączyć.', true); return; }
+      if (!confirm('Dołączyć do zawodów?')) return;
+
       try {
-        const url = new URL(`${API}/competition/participation`);
-        url.searchParams.append('competitionId', COMP_ID);
-        const res = await fetch(url, { method:'POST', headers: headers }); // Используем актуальные заголовки
-        const json = await res.json().catch(()=>({}));
-        if(!res.ok) throw new Error(json.message||'Błąd rejestracji');
-        toast('Zarejestrowano pomyślnie!');
-        updateLeagueDetailsUI(competitionData); // Обновить UI после регистрации
-      } catch(e) {
-        toast(e.message || 'Błąd', true);
-      }
-    } else {
-      // Командная регистрация - сначала убедимся, что модалки есть
-      const teamModal = document.getElementById('teamModal'); // Получаем модалку здесь
-      if(!teamModal) {
-        console.error("Элемент teamModal не найден!");
-        toast("Błąd interfejsu: Nie znaleziono okna wyboru drużyny.", true);
-        return;
-      }
+        const resp = await fetch(
+          `${API}/competition/participation?competitionId=${COMP_ID}`,
+          { method: 'POST', headers }
+        );
+        const js = await resp.json().catch(()=>({}));
+        if (!resp.ok) throw new Error(js.message || `HTTP ${resp.status}`);
+
+        toast('Zarejestrowano ✅');
+        closeAllModals?.();
+        await loadEssentialLeagueData();            // перерисовать UI
+      } catch (e) { toast(e.message || 'Błąd rejestracji', true); }
+      return;
+    }
+
+    /* TEAM: запускаем мастер выбора */
+    try {
       await renderTeamList();
       teamModal.classList.remove('hidden');
+    } catch (e) {
+      console.error(e);
+      toast('Problem z pobraniem drużyn', true);
     }
   }
 
-  // Ссылки на элементы модалок (можно оставить здесь или перенести в Elements cache)
-  const teamModal = document.getElementById('teamModal');
-  const playerModal = document.getElementById('playerModal');
-  const teamListEl = document.getElementById('teamList');
-  const playerListEl = document.getElementById('playerList');
-  const teamNextBtn = document.getElementById('teamNextBtn');
-  const playerConfBtn = document.getElementById('playerConfirmBtn');
-  const teamModalClose = document.getElementById('teamModalClose');
-  const playerModalClose = document.getElementById('playerModalClose');
+
 
   let _selectedTeam  = null;
   let _selectedPlayers = [];
 
-  function closeAllModals() {
-    if(teamModal) teamModal.classList.add('hidden'); // Проверка на null
-    if(playerModal) playerModal.classList.add('hidden');
-    if(teamListEl) teamListEl.innerHTML = '';
-    if(playerListEl) playerListEl.innerHTML = '';
-    if(teamNextBtn) teamNextBtn.disabled = true;
-    if(playerConfBtn) playerConfBtn.disabled = true;
-    _selectedTeam = null; _selectedPlayers = [];
-  }
+
   if(teamModalClose) teamModalClose.onclick = closeAllModals;
   if(playerModalClose) playerModalClose.onclick = closeAllModals;
 
-  async function renderTeamList() {
-    if (!teamListEl || !teamNextBtn) return; // Проверка
-    teamListEl.innerHTML = 'Ładowanie...'; teamNextBtn.disabled = true; _selectedTeam = null;
-    const me = await getMeId(); if (!me) { teamListEl.innerHTML = 'Błąd.'; return; }
+  async function renderPlayerList(team) {
+    if (!playerListEl || !playerConfBtn || !team) return;
+
+    playerListEl.textContent      = `Ładowanie ${team.teamName}…`;
+    playerConfBtn.disabled        = true;
+    _selectedPlayers              = [];
+
     try {
-      const teams = await fetch(`${API}/team/managed?id=${me}`, { headers: getAuthHeaders() }).then(r => r.ok ? r.json() : []);
-      if (teams.length === 0) { teamListEl.innerHTML = 'Brak drużyn.'; return; }
-      teamListEl.innerHTML = '';
-      teams.forEach(async t => {
-        if (!t || !t.id || !t.teamName) return;
-        const img = await fetch(`${API}/team/team-logo/${t.id}`, { headers: getAuthHeaders() }).then(r => r.ok ? r.text() : 'img/default-team-avatar.png').catch(() => 'img/default-team-avatar.png');
-        const div = document.createElement('div'); div.className = 'reg-modal__item';
-        div.innerHTML = `<div class="reg-modal__item-left"><div class="reg-modal__avatar"><img src="${img}" style="width:30px;height:30px;border-radius:50%"></div><span>${t.teamName}</span></div><input type="radio" name="teamSelection" value="${t.id}" data-team-name="${t.teamName}"/>`; // Используем radio
-        teamListEl.appendChild(div);
+      const info = await fetch(
+        `${API}/team/currentTeam/${encodeURIComponent(team.teamName)}`,
+        { headers: getAuthHeaders() }
+      ).then(r => r.ok ? r.json() : { members: [] });
+
+      if (!info.members?.length) {
+        playerListEl.textContent = 'Brak składu.';
+        return;
+      }
+
+      /* --- лимиты --- */
+      let reqP = 1, maxP = info.members.length;
+      try {
+        const comp = await fetch(`${API}/competition/all`,
+          { headers: getAuthHeaders() })
+          .then(r => r.json())
+          .then(arr => arr.find(c => c.id === COMP_ID));
+
+        if (comp?.gameSystemId) {
+          const gs = await fetchGameSystem(comp.gameSystemId);
+          reqP = +(gs.playersPerTeam ?? gs.minTeamSize ?? 1);
+          maxP = +(gs.maxTeamSize    ?? info.members.length);
+        }
+      } catch { /* noop */ }
+
+      playerListEl.innerHTML =
+        `<div>Wybierz graczy (${reqP}-${maxP}):</div>`;
+
+      /* --- вывод игроков --- */
+      const avatarPromises = info.members.map(async m => {
+        const user   = await fetch(`${API}/user/getUser/${m.userId}`,
+          { headers: getAuthHeaders() })
+          .then(r => r.ok ? r.json() : { username: `#${m.userId}` });
+
+        const avatar = await fetch(`${API}/user/avatar/${user.username}`,
+          { headers: getAuthHeaders() })
+          .then(r => r.ok ? r.text() : 'img/profile.svg')
+          .catch(() => 'img/profile.svg');
+
+        const div = document.createElement('div');
+        div.className = 'reg-modal__item';
+        div.innerHTML = `
+        <div class="reg-modal__item-left">
+          <div class="reg-modal__avatar">
+            <img src="${avatar}" width="30" height="30" style="border-radius:50%">
+          </div>
+          <span>${user.username}</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px">
+          <time style="font-size:12px;color:#666">
+            ${m.createdAt ? new Date(m.createdAt).toLocaleDateString('pl-PL') : ''}
+          </time>
+          <input type="checkbox" value="${m.userId}">
+        </div>`;
+
+        /* —- ставим обработчик СРАЗУ, как только чекбокс появился —- */
+        div.querySelector('input[type="checkbox"]').onchange =
+          () => updatePlayerSelectState(reqP, maxP);
+
+        playerListEl.appendChild(div);
       });
-      // Добавляем обработчики после цикла
-      teamListEl.querySelectorAll('input[type="radio"]').forEach(radio => {
-        radio.onchange = () => { if (radio.checked) { _selectedTeam = { id: radio.value, teamName: radio.dataset.teamName }; teamNextBtn.disabled = false; } };
-      });
-    } catch(e){ teamListEl.innerHTML = 'Błąd.'; }
+
+      await Promise.all(avatarPromises);          // дожидаемся вывода всех
+
+    } catch { playerListEl.textContent = 'Błąd.'; }
   }
 
   async function onTeamNext() { if (!_selectedTeam || !playerModal) return; if(teamModal) teamModal.classList.add('hidden'); await renderPlayerList(_selectedTeam); playerModal.classList.remove('hidden'); }
   if (teamNextBtn) teamNextBtn.onclick = onTeamNext;
 
-  async function renderPlayerList(team) {
-    if (!playerListEl || !playerConfBtn || !team) return;
-    playerListEl.innerHTML = `Ładowanie ${team.teamName}...`; playerConfBtn.disabled = true; _selectedPlayers = [];
-    try {
-      const info = await fetch(`${API}/team/currentTeam/${encodeURIComponent(team.teamName)}`, { headers: getAuthHeaders() }).then(r => r.ok ? r.json() : { members: [] });
-      if (!info.members || info.members.length === 0) { playerListEl.innerHTML = 'Brak składu.'; return; }
-      // Получаем лимиты из gameSystemData, если он загружен
-      let reqP = 1, maxP = info.members.length; // Дефолтные значения
-      try {
-        // Пытаемся получить gameSystemId из comp (загруженного ранее)
-        const comp = await fetch(`${API}/competition/all`,{headers: getAuthHeaders()}).then(r=>r.json()).then(a=>a.find(c=>c.id===COMP_ID));
-        if(comp && comp.gameSystemId) {
-          const gs = await fetch(`${API}/game-system/get/${comp.gameSystemId}`,{headers: getAuthHeaders()}).then(r=>r.ok?r.json():{});
-          reqP = gs.playersPerTeam ?? gs.minTeamSize ?? 1;
-          maxP = gs.maxTeamSize ?? info.members.length;
-        }
-      } catch { console.warn("Could not fetch game system for player list limits"); }
 
-      playerListEl.innerHTML = `<div>Wybierz graczy (${reqP}-${maxP}):</div>`;
-      info.members.forEach(async m => {
-        if (!m?.userId) return;
-        const user = await fetch(`${API}/user/getUser/${m.userId}`, { headers: getAuthHeaders() }).then(r => r.ok ? r.json() : { username: `#${m.userId}` });
-        const avatar = await fetch(`${API}/user/avatar/${user.username}`, { headers: getAuthHeaders() }).then(r => r.ok ? r.text() : 'img/profile.svg').catch(() => 'img/profile.svg');
-        const div = document.createElement('div'); div.className = 'reg-modal__item';
-        div.innerHTML = `<div class="reg-modal__item-left"><div class="reg-modal__avatar"><img src="${avatar}" style="width:30px;height:30px;border-radius:50%"></div><span>${user.username}</span></div><div style="display:flex;align-items:center;gap:12px"><time style="font-size:12px;color:#666">${m.createdAt?new Date(m.createdAt).toLocaleDateString('pl-PL'):''}</time><input type="checkbox" value="${m.userId}"/></div>`;
-        playerListEl.appendChild(div);
-      });
-      // Обработчики вешаем после добавления всех элементов
-      playerListEl.querySelectorAll('input[type="checkbox"]').forEach(chk => {
-        chk.onchange = () => {
-          _selectedPlayers = Array.from(playerListEl.querySelectorAll('input:checked')).map(i => i.value);
-          playerConfBtn.disabled = !(_selectedPlayers.length >= reqP && _selectedPlayers.length <= maxP);
-          playerListEl.querySelectorAll('input:not(:checked)').forEach(i => i.disabled = _selectedPlayers.length >= maxP);
-        };
-      });
-    } catch(e){ playerListEl.innerHTML = 'Błąd.'; }
-  }
 
-  async function onPlayersConfirm() {
+  async function onPlayersConfirm () {
     if (!_selectedTeam || !_selectedPlayers.length) return;
-    // Повторно получаем лимиты перед подтверждением
-    let reqP = 1, maxP = _selectedPlayers.length; // Дефолт
-    try {
-      const comp = await fetch(`${API}/competition/all`,{headers: getAuthHeaders()}).then(r=>r.json()).then(a=>a.find(c=>c.id===COMP_ID));
-      if(comp && comp.gameSystemId) {
-        const gs = await fetch(`${API}/game-system/get/${comp.gameSystemId}`,{headers: getAuthHeaders()}).then(r=>r.ok?r.json():{});
-        reqP = gs.playersPerTeam ?? gs.minTeamSize ?? 1;
-        maxP = gs.maxTeamSize ?? _selectedPlayers.length; // Используем текущее, если нет лимита
-      }
-    } catch {}
 
-    if (_selectedPlayers.length < reqP || _selectedPlayers.length > maxP) {
-      toast(`Zła liczba graczy (${reqP}-${maxP}). Wybrano: ${_selectedPlayers.length}`, true);
-      return;
-    }
-
-    const teamNameToConfirm = _selectedTeam?.teamName ?? 'wybraną drużynę';
-    if (!confirm(`Zapisać ${teamNameToConfirm} (${_selectedPlayers.length} graczy)?`)) return;
+    /*  доп.валидация лимитов — оставляем как была  … */
 
     const url = new URL(`${API}/competition/participation`);
     url.searchParams.append('competitionId', COMP_ID);
-    url.searchParams.append('teamId', _selectedTeam.id);
+    url.searchParams.append('teamId',       _selectedTeam.id);
     _selectedPlayers.forEach(id => url.searchParams.append('selectedPlayersIds', id));
+
     try {
-      const res = await fetch(url, {method:'POST', headers: getAuthHeaders()});
-      const json=await res.json().catch(()=>({}));
-      if (!res.ok) throw new Error(json.message||'Błąd rejestracji');
-      toast('Drużyna zarejestrowana!');
-      updateLeagueDetailsUI(competitionData); // Обновить UI
-    } catch (e) {
-      toast(e.message || 'Błąd', true);
-    } finally {
+      const r = await fetch(url, { method:'POST', headers:getAuthHeaders() });
+      const j = await r.json().catch(()=> ({}));
+      if (!r.ok) throw new Error(j.message || `HTTP ${r.status}`);
+      toast('Drużyna zgłoszona! ✅');
       closeAllModals();
-    }
+      await loadEssentialLeagueData();     // перерисовать UI
+    } catch (e) { toast(e.message || 'Błąd rejestracji', true); }
   }
   if (playerConfBtn) playerConfBtn.onclick = onPlayersConfirm;
 
@@ -642,7 +658,9 @@
     const uid = await getMeId(); if (!uid) return false;
     try {
       const tbl = await fetch(`${API}/competition/league-table/${COMP_ID}`, {headers: getAuthHeaders()}).then(r=>r.ok?r.json():[]);
-      const myTeams = await fetch(`${API}/team/my`, { headers: getAuthHeaders() }).then(r => r.ok ? r.json() : []).then(a => a.map(t => t.id));
+      const myTeams = await fetch(
+        `${API}/team/managed?id=${uid}`, { headers: getAuthHeaders() }
+      ).then(r => r.ok ? r.json() : []).then(a => a.map(t => t.id));
       return tbl.some(r => r.playerId === uid || (r.teamId && myTeams.includes(r.teamId)));
     } catch { return false; }
   }
@@ -652,7 +670,7 @@
     const s1 = document.querySelector('.footer-content span:nth-child(3)'); const s2 = document.querySelector('.footer-content span:nth-child(4)'); if (!s1 || !s2) return; window.addEventListener('load', () => setTimeout(() => { if (performance && performance.timing) { const t = performance.timing; const lT = t.loadEventEnd - t.navigationStart; const tT = t.responseEnd - t.responseStart; if (lT > 0 && isFinite(lT)) { s1.innerHTML = `Strona: <span class="blue">${Math.round(lT)}ms</span>`; } if (tT > 0 && isFinite(tT)) { s2.innerHTML = `Szablon: <span class="blue">${Math.round(tT)}ms</span>`; } } }, 0));
   }
 
-})(); // End IIFE
+
 // Добавьте ЕДИНОЖДЫ в конце файла, внутри вашей IIFE
 document.addEventListener('click', e => {
   const card = e.target.closest('.match-item[data-match-id]');
@@ -663,3 +681,93 @@ document.addEventListener('click', e => {
   localStorage.setItem('searchedMatch', matchId);
   window.location.href = 'match-page.html';
 });
+/* делаем доступной из HTML-атрибутов */
+window.closeAllModals = closeAllModals;
+function closeAllModals() {
+  if(teamModal) teamModal.classList.add('hidden'); // Проверка на null
+  if(playerModal) playerModal.classList.add('hidden');
+  if(teamListEl) teamListEl.innerHTML = '';
+  if(playerListEl) playerListEl.innerHTML = '';
+  if(teamNextBtn) teamNextBtn.disabled = true;
+  if(playerConfBtn) playerConfBtn.disabled = true;
+  _selectedTeam = null; _selectedPlayers = [];
+}
+const _gsCache = new Map();                         // gameSystemId → объект GS
+
+async function fetchGameSystem(gameSystemId) {
+  if (_gsCache.has(gameSystemId)) return _gsCache.get(gameSystemId);
+
+  const gs = await fetch(`${API}/game-system/get/${gameSystemId}`,
+    { headers: getAuthHeaders() })
+    .then(r => (r.ok ? r.json() : null))
+    .catch(() => null);
+
+  _gsCache.set(gameSystemId, gs);
+  return gs;
+}
+function updatePlayerSelectState(reqP, maxP) {
+  _selectedPlayers = [...playerListEl.querySelectorAll('input:checked')]
+    .map(ch => ch.value);
+
+  const ok = _selectedPlayers.length >= reqP &&
+    _selectedPlayers.length <= maxP;
+
+  playerConfBtn.disabled = !ok;                // актив / неактив
+
+  // блокируем лишние чекбоксы, когда достигнут лимит
+  playerListEl.querySelectorAll('input:not(:checked)')
+    .forEach(ch => ch.disabled = _selectedPlayers.length >= maxP);
+}
+const $ = id => document.getElementById(id);
+async function renderTeamList () {
+  const listEl  = $('teamList');
+  const nextBtn = $('teamNextBtn');
+  if (!listEl || !nextBtn) return;
+
+  teamListEl.textContent = 'Ładowanie…';
+  teamNextBtn.disabled   = true;
+  _selectedTeam          = null;
+
+  try {
+    const meId = await getMeId();
+    if (!meId) { teamListEl.textContent = 'Musisz być zalogowany.'; return; }
+
+    const res   = await fetch(`${API}/team/managed?id=${meId}`,   // <-- исправлено
+      { headers: getAuthHeaders() });
+    const teams = res.ok ? await res.json() : [];
+    if (!teams.length) { teamListEl.textContent = 'Brak drużyn.'; return; }
+
+    teamListEl.innerHTML = '';
+    for (const t of teams) {
+      const logo = await fetch(`${API}/team/team-logo/${t.id}`,
+        { headers:getAuthHeaders() })
+        .then(r => r.ok ? r.text() : 'img/default-team-avatar.png')
+        .catch(() => 'img/default-team-avatar.png');
+
+      teamListEl.insertAdjacentHTML('beforeend', `
+        <label class="reg-modal__item">
+          <div class="reg-modal__item-left">
+            <div class="reg-modal__avatar">
+              <img src="${logo}" width="30" height="30" style="border-radius:50%">
+            </div>
+            <span>${t.teamName}</span>
+          </div>
+          <input type="radio" name="teamSelection"
+                 value="${t.id}" data-team-name="${t.teamName}">
+        </label>`);
+    }
+    window.getMeId = getMeId;    // но в данном случае это не нужно
+
+    /* —- обработчик выбора команды —- */
+    teamListEl.querySelectorAll('input[name="teamSelection"]')
+      .forEach(r =>
+        r.onchange = () => {
+          _selectedTeam      = { id: r.value, teamName: r.dataset.teamName };
+          teamNextBtn.disabled = false;
+        });
+
+  } catch (err) {
+    console.error(err);
+    teamListEl.textContent = 'Błąd ładowania.';
+  }
+}

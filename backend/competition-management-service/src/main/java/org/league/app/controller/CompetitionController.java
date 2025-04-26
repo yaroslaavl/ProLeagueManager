@@ -2,6 +2,7 @@ package org.league.app.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.league.app.database.entity.CompetitionParticipant;
 import org.league.app.dto.*;
 import org.league.app.exception.CompetitionNotFoundException;
 import org.league.app.service.CompetitionService;
@@ -102,6 +103,11 @@ public class CompetitionController {
     @GetMapping("/count-of-signed-in")
     public ResponseEntity<Integer> countOfSignedInUsersOrTeams (@RequestParam("competitionId") UUID competitionId) {
         return ResponseEntity.ok(competitionService.countCurrentPlayersPerCompetition(competitionId));
+    }
+
+    @GetMapping("/participants/{competitionId}")
+    public ResponseEntity<List<CompetitionParticipantReadDto>> getAllParticipants(@PathVariable("competitionId") UUID competitionId) {
+        return ResponseEntity.ok(competitionService.findAllParticipantsByCompetitionId(competitionId));
     }
 
     @GetMapping("/players/{competitionId}/{teamId}")
