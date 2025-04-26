@@ -17,6 +17,7 @@ import org.league.app.database.repository.GameSystemRepository;
 import org.league.app.database.repository.LeagueStandingRepository;
 import org.league.app.database.specification.CompetitionSpecification;
 import org.league.app.dto.CompetitionCreateEditDto;
+import org.league.app.dto.CompetitionParticipantReadDto;
 import org.league.app.dto.CompetitionReadDto;
 import org.league.app.dto.LeagueStandingDto;
 import org.league.app.exception.*;
@@ -30,6 +31,7 @@ import org.league.app.feign.teamClient.TeamClientFeign;
 import org.league.app.feign.teamClient.TeamFeignDto;
 import org.league.app.feign.teamClient.TeamMemberFeignDto;
 import org.league.app.mapper.CompetitionMapper;
+import org.league.app.mapper.CompetitionParticipantMapper;
 import org.league.app.mapper.LeagueStandingMapper;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.Authentication;
@@ -59,6 +61,7 @@ public class CompetitionService {
     private final LeagueStandingRepository leagueStandingRepository;
     private final LeagueEventPublisher leagueEventPublisher;
     private final LeagueStandingMapper leagueStandingMapper;
+    private final CompetitionParticipantMapper competitionParticipantMapper;
 
     @Transactional
     public CompetitionReadDto createCompetition(CompetitionCreateEditDto competitionCreate,
@@ -430,6 +433,10 @@ public class CompetitionService {
         return competitionRepository.getActiveCompetitions().stream()
                 .map(competitionMapper::toDto)
                 .toList();
+    }
+
+    public List<CompetitionParticipantReadDto> findAllParticipantsByCompetitionId(UUID competitionId) {
+        return competitionParticipantRepository.findAllByCompetitionId(competitionId).stream().map(competitionParticipantMapper::toDto).toList();
     }
 
     public List<UUID> getLastDayActiveLeagues() {

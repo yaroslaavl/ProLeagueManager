@@ -39,7 +39,7 @@ async function Login() {
       // Переход через 500 мс
       setTimeout(() => {
         window.location.href =
-          "main.html";
+          "sport-main-page.html";
       }, 500);
     } else {
       throw new Error("Missing tokens in server response");

@@ -281,3 +281,105 @@ async function logOut(){
     console.error(`${err}`);
   }
 }
+//------------------------------------------------------------------
+//  sport-main-page.js  (добавьте после updateActiveCompetitionsCount)
+//------------------------------------------------------------------
+async function loadNews () {
+  const wrapper = document.querySelector('.news-track');
+  if (!wrapper) return;
+
+  try {
+    const acc = localStorage.getItem('accToken');
+    const resp = await fetch('http://localhost:8765/event/pinned',
+      { headers:{ Authorization:`Bearer ${acc}` }});
+    if (!resp.ok) throw new Error(resp.status);
+    let events = await resp.json();                // pinned & published
+
+    /* ---- фильтр: GLOBAL + SPORT (только спорт, не e-sport) ---------- */
+    events = events.filter(e => e.category === 'GLOBAL' || e.category === 'SPORT');
+
+    /* ---- самые свежие сверху --------------------------------------- */
+    events.sort((a,b)=> new Date(b.createdAt) - new Date(a.createdAt));
+
+    /* ---- строим слайды -------------------------------------------- */
+    wrapper.innerHTML = '';
+    for (const ev of events) {
+      let imgUrl = 'img/default-event.png';
+      try {
+        const r = await fetch(`http://localhost:8765/event/image/${ev.id}`,
+          { headers:{ Authorization:`Bearer ${acc}` }});
+        if (r.ok) {
+          const u = await r.text();
+          imgUrl = u && !u.includes('minio:9000') ? u : imgUrl;
+        }
+      } catch {/* ignore */}
+
+      // вместо old wrapper.insertAdjacentHTML(...)
+      wrapper.insertAdjacentHTML('beforeend', `
+        <div class="news-slide" data-id="${ev.id}" data-type="${ev.eventType}" data-type="${ev.eventType}" data-comp ="${ev.competitionId ?? ''}"
+            style="background-image:url('${imgUrl}');">
+            <p>${ev.title}</p>
+            <time>${new Date(ev.createdAt)
+        .toLocaleDateString('pl-PL',{year:'numeric',
+          month:'2-digit',
+          day:'2-digit'})}</time>
+        </div>`);
+
+    }
+
+    initNewsSlider();            // стрелочки
+  } catch (err) { console.error('News error', err); }
+}
+
+/* ---------- лёгкий slider ----------------------------------------- */
+function initNewsSlider(){
+  const track = document.querySelector('.news-track');
+  const prev  = document.querySelector('.news-prev');
+  const next  = document.querySelector('.news-next');
+  if (!track || !prev || !next) return;
+
+  let index = 0;
+  const slideWidth = 900 + 30; // ширина карточки + gap (20px)
+  // ширина слайда + gap
+  const maxIndex = Math.max(0, track.children.length - 1);
+
+  function update(){
+    track.style.transform = `translateX(${-index*slideWidth}px)`;
+    prev.disabled = index === 0;
+    next.disabled = index === maxIndex;
+  }
+  prev.onclick = ()=>{ if(index>0){ index--; update(); }};
+  next.onclick = ()=>{ if(index<maxIndex){ index++; update(); }};
+  update();
+}
+
+/* ------------------------------------------------------------------ */
+/*  ВКЛЮЧАЕМ загрузку новостей вместе с остальной инициализацией      */
+document.addEventListener('DOMContentLoaded', loadNews);
+/* -------- переход по клику на карточку ------------------------- */
+const track = document.querySelector('.news-track');
+track.addEventListener('click', e=>{
+  const slide = e.target.closest('.news-slide');
+  if (!slide) return;
+
+  const type  = slide.dataset.type;          // GLOBAL | LEAGUE | TOURNAMENT …
+  const match = slide.dataset.match;
+  const comp  = slide.dataset.comp;
+
+  if (match) {                               // матч
+    localStorage.setItem('searchedMatch', match);
+    location.href = 'match-page.html';
+    return;
+  }
+
+  if (comp) {                                // лига или турнир
+    if (type === 'LEAGUE') {
+      localStorage.setItem('searchedLeague', comp);
+      location.href = 'leagues.html';
+    } else {                                // считаем всё остальное турниром
+      localStorage.setItem('searchedTournament', comp);
+      location.href = 'tournaments.html';
+    }
+  }
+  /* если GLOBAL — ничего не делаем */
+});

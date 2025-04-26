@@ -222,13 +222,13 @@ async function renderLeagues(leagues) {
         for (const row of top3) {
           if (row.playerId) {
             let userData;
-            let avatarUrl = 'img/http://localhost:9000/user-image-bucket/avatars/default-user.png'; // Дефолтный аватар
+            let avatarUrl = 'http://localhost:9000/user-image-bucket/avatars/default-user.png';
             try {
               const userResponse = await fetch(`http://localhost:8765/user/getUser/${row.playerId}`);
               if (userResponse.ok) {
                 userData = await userResponse.json();
                 const potentialAvatar = `http://localhost:8765/user/avatar/${userData.username}`;
-                avatarUrl = (potentialAvatar && !potentialAvatar.includes('minio:9000')) ? potentialAvatar : 'img/http://localhost:9000/user-image-bucket/avatars/default-user.png';
+                avatarUrl = potentialAvatar && !potentialAvatar.includes('minio:9000') ? potentialAvatar : avatarUrl;
               } else {
                 userData = { username: 'Nieznany' };
               }
@@ -237,16 +237,16 @@ async function renderLeagues(leagues) {
             }
 
             html += `
-              <div class="player">
-                <div class="player-info">
-                  <img src="${avatarUrl}" alt="Player" onerror="this.src='img/http://localhost:9000/user-image-bucket/avatars/default-user.png'>
-                  <p class="player-name">${userData.username}</p>
-                </div>
-                <div class="win-count">
-                  <p>Ilosc zwycienstw:</p>
-                  <p class="count">${row.wins ?? '?'}</p>
-                </div>
-              </div>`;
+                <div class='player'>
+                  <div class='player-info'>
+                    <img src='${avatarUrl}' alt='Player' onerror="this.src='http://localhost:9000/user-image-bucket/avatars/default-user.png'">
+                    <p class='player-name'>${userData.username}</p>
+                  </div>
+                  <div class='win-count'>
+                    <p>Ilosc zwycienstw:</p>
+                    <p class='count'>${row.wins ?? '?'}</p>
+                  </div>
+                </div>`;
           }
         }
         el.querySelector('.top').innerHTML = html;
@@ -257,4 +257,131 @@ async function renderLeagues(leagues) {
 
 if (document.getElementById('log-out') !== null){
   const logOutBtn = document.getElementById('log-out').addEventListener('click',logOut);
+}
+/* ===================================================================== */
+/*  e-sport-main-page.js  – блок работы с новостями                      */
+/* ===================================================================== */
+
+document.addEventListener('DOMContentLoaded', loadEsportNews);
+
+/* ---------- вспомогательный fetch ----------------------------------- */
+async function safeJson (res) {
+  if (res.status === 204 || res.status === 205) return [];
+  const txt = await res.text();
+  return txt.trim() ? JSON.parse(txt) : [];
+}
+
+/* ---------- загружаем и строим слайды ------------------------------- */
+async function loadEsportNews () {
+
+  const track = document.querySelector('.news-track');
+  if (!track) return;                         // на странице нет блока
+
+  try {
+    const token = localStorage.getItem('accToken') ?? '';
+
+    /* 1. получаем закреплённые события */
+    const resp   = await fetch('http://localhost:8765/event/pinned',
+      { headers:{ Authorization:`Bearer ${token}` }});
+    if (!resp.ok) throw new Error(resp.status);
+    let events   = await safeJson(resp);
+
+    /* 2. берём только GLOBAL + E-SPORT */
+    events = events.filter(ev =>
+      ev.category === 'GLOBAL' || ev.category === 'ESPORT');
+
+    /* 3. сортируем по дате (сначала новые) */
+    events.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+    /* 4. генерируем HTML слайдов */
+    track.innerHTML = '';
+    for (const ev of events) {
+
+      /* стараемся взять кастомную картинку события */
+      let imgUrl = 'img/default-event.png';
+      try {
+        const r = await fetch(`http://localhost:8765/event/image/${ev.id}`,
+          { headers:{ Authorization:`Bearer ${token}` }});
+        if (r.ok) {
+          const u = await r.text();
+          if (u && !u.includes('minio:9000')) imgUrl = u;
+        }
+      } catch {/* ignore */ }
+
+      const dateStr = new Date(ev.createdAt).toLocaleDateString('pl-PL',{
+        year:'numeric',month:'2-digit',day:'2-digit'});
+
+      track.insertAdjacentHTML('beforeend', `
+       <div class="news-slide" data-id="${ev.id}" data-type="${ev.eventType}" data-type="${ev.eventType}" data-comp ="${ev.competitionId ?? ''}"
+            style="background-image:url('${imgUrl}');">
+            <p>${ev.title}</p>
+            <time>${new Date(ev.createdAt)
+        .toLocaleDateString('pl-PL',{year:'numeric',
+          month:'2-digit',
+          day:'2-digit'})}</time>
+        </div>`);
+    }
+
+    initNewsSlider();        // активируем стрелки / листание
+    initNewsNavigation();    // навигация по клику на слайд
+
+  } catch (err) {
+    console.error('News (e-sport) error:', err);
+  }
+}
+
+/* ---------- простой слайдер ---------------------------------------- */
+function initNewsSlider () {
+
+  const track = document.querySelector('.news-track');
+  const prev  = document.querySelector('.news-prev');
+  const next  = document.querySelector('.news-next');
+  if (!track || !prev || !next) return;
+
+  const slideW   = 900 + 30;          // ширина слайда + gap (из CSS)
+  const maxIndex = Math.max(0, track.children.length - 1);
+  let   index    = 0;
+
+  const update = () => {
+    track.style.transform = `translateX(${-index * slideW}px)`;
+    prev.disabled = (index === 0);
+    next.disabled = (index === maxIndex);
+  };
+
+  prev.addEventListener('click', () => { if (index > 0)      { index--; update(); }});
+  next.addEventListener('click', () => { if (index < maxIndex){ index++; update(); }});
+  update();
+}
+
+/* ---------- переходы по клику на карточку -------------------------- */
+function initNewsNavigation () {
+
+  const track = document.querySelector('.news-track');
+  if (!track) return;
+
+  track.addEventListener('click', e => {
+    const slide = e.target.closest('.news-slide');
+    if (!slide) return;
+
+    const type  = slide.dataset.type;     // GLOBAL | LEAGUE | TOURNAMENT | MATCH …
+    const match = slide.dataset.match;
+    const comp  = slide.dataset.comp;
+
+    if (match) {                          //  🔸 матч
+      localStorage.setItem('searchedMatch', match);
+      location.href = 'match-page.html';
+      return;
+    }
+
+    if (comp) {                           //  🔸 лига или турнир
+      if (type === 'LEAGUE') {
+        localStorage.setItem('searchedLeague', comp);
+        location.href = 'leagues.html';
+      } else {                            //  считаем остальное турниром
+        localStorage.setItem('searchedTournament', comp);
+        location.href = 'tournaments.html';
+      }
+    }
+    /* GLOBAL –– остаёмся на странице */
+  });
 }
