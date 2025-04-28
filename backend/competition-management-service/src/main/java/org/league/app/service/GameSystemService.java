@@ -50,6 +50,10 @@ public class GameSystemService {
         return gameSystemMapper.toDto(gameSystem);
     }
 
+    public List<GameSystemReadDto> getAllGameSystems() {
+        return gameSystemRepository.findAll().stream().map(gameSystemMapper::toDto).toList();
+    }
+
     @Transactional
     public void deleteGameSystemById(Integer id) {
         GameSystem gameSystem = gameSystemRepository.findById(id)

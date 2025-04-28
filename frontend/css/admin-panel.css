@@ -1,0 +1,928 @@
+body {
+  font-family: Inter,sans-serif;
+  background-color: #ffffff;
+  animation: fadeIn 0.3s ease-in forwards;
+  margin: 0;
+  overflow-x: hidden;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+/* Стили для хедера */
+.header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ffffff;
+  border-bottom: 1px solid #EFF2F5;
+  width: 100%;
+  margin-right: -20px;
+
+}
+.logo {
+  height: 60px;
+  margin-right: 20px;
+  margin-top: 10px;
+}
+.nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+.nav-link-header {
+  text-decoration: none;
+  justify-content: center;
+  color: #000;
+  font-weight: bold;
+  font-size: 14px;
+}
+.header-center {
+  justify-content: space-between;
+  display: flex;
+  gap: 150px;
+}
+input
+{
+  color: #808A9D;
+}
+/* Контейнер для поля поиска и иконки */
+.search-container {
+  display: flex;
+  align-items: center; /* Центрируем иконку и инпут по вертикали */
+  position: relative; /* Для позиционирования иконки */
+}
+.search-icon {
+  position: absolute; /* Абсолютное позиционирование иконки */
+  left: 15px; /* Отступ от левого края */
+  width: 18px; /* Размер иконки */
+  height: 18px;
+  pointer-events: none; /* Чтобы клик не взаимодействовал с иконкой */
+}
+/* Поле поиска */
+.search-input {
+  padding: 15px 15px 15px 40px; /* Отступ слева увеличен для иконки */
+  border: none;
+  border-radius: 12px;
+  background-color: #EFF2F5;
+  outline: none;
+  font-family: Inter, sans-serif;
+  color: #808A9D;
+  width: 450px; /* Ширина поля */
+
+  font-size: 14px;
+  font-weight: bold;
+}
+.search-input::placeholder {
+  color: #808A9D; /* Цвет плейсхолдера */
+}
+.icon-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #f0f2f5;
+  border: none;
+  margin-top: 20px;
+}
+.icon-btn img {
+  width: 20px;
+  height: 20px;
+}
+
+
+
+footer {
+  display: flex;
+  justify-content: space-between; /* Располагаем элементы по краям */
+  align-items: center; /* Выравниваем элементы по вертикали */
+  padding: 8px 40px; /* Отступы сверху/снизу и слева/справа */
+  color: #808A9D;
+  font-size: 12px;
+  background-color: #ffffff;
+  border-top: 1px solid #EFF2F5;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+
+}
+
+.footer-content,
+.footer-links {
+  display: flex;
+  flex-wrap: wrap; /* Чтобы элементы переносились на мобильных */
+  gap: 10px; /* Расстояние между элементами */
+  margin-right: 80px;
+}
+
+.footer-content a{
+  color: #3861FB;
+  font-weight: bold;
+
+
+}
+
+.footer-links a {
+  background-color: #EFF2F5;
+  color: #000000;
+  font-weight: bold;
+  text-decoration: none;
+
+  border-radius: 8px;
+  padding: 4px 8px;
+
+}
+
+.blue{
+  color: #3861FB;
+  font-weight:bold ;
+}
+
+@media (max-width: 600px) {
+  footer {
+    flex-direction: column; /* Вертикальное расположение элементов */
+    text-align: center; /* Центрируем текст */
+  }
+  .footer-content,
+  .footer-links {
+    justify-content: center; /* Центрируем контент */
+  }
+}
+.header-right {
+  display: flex;
+  align-items: center; /* Выравнивание по вертикали */
+  justify-content: center;
+  justify-items: center;
+  margin-top: 15px;
+  gap: 10px;
+  background: #EFF2F5;
+  width: 80px;
+  height: 45px;
+  border-radius: 20%;
+  cursor: pointer;
+}/**/
+.header-right > .icon-btn {
+  margin-bottom: 20px;
+}
+.icon-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: #f0f2f5;
+  border: none;
+  transition: background 0.3s ease;
+}
+.notification-btn{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  margin-right: 10px;
+}
+.icon-btn:hover {
+  cursor: pointer;
+}
+
+.icon-btn img {
+  width: 20px;
+  height: 20px;
+}
+.register{
+  width: 120px;
+  background: #3861FB;
+  color: white;
+  border-radius: 12px;
+  border: 0;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 14px;
+  font-size: 14px;
+}
+.blue {
+  color: #3861FB;
+  font-weight: bold;
+}
+.menu-container{
+  cursor: pointer;
+}
+/*menu for sport choose*/
+.sporty-wrapper {
+  position: relative; /* Чтобы позиционировать меню внутри */
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 70%; /* сразу под .sporty-toggle */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: white;
+  border: #CFD6E4 1px solid;
+  border-radius: 6px;
+  padding: 10px 0;
+  display: none;
+  flex-direction: column;
+  z-index: 1000;
+  min-width: 120px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+
+.dropdown-item {
+  padding: 8px 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  display: flex;
+}
+.dropdown-item>img{
+  width: 20px;
+  height: 20px;
+  margin-top: 10px;
+}
+.dropdown-item:hover {
+  background-color: #f0f0f0;
+}
+
+
+
+
+
+.tournament-tittle{
+  width: 100%;
+  height: 120px;
+  background-color: #EFF2F5;
+  display: block;
+
+}
+.content{
+  display: flex;
+}
+.content-left{
+  width: 230px;
+  height: 130px;
+  border: none;
+  display: block;
+  border-radius: 10px;
+  margin-top: 15px;
+  margin-left: 200px;
+
+  background-color: #EFF2F5;
+}
+.side-menu{
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+.side-menu>div>div>div>label{
+  color: #808A9D;
+  font-size: 10px;
+  font-weight: bold;
+  margin-top: 3px;
+}
+
+.createTeam{
+  color: #ffffff;
+  background-color: #3861FB;
+  border: none;
+  cursor: pointer;
+  padding: 15px 40px 15px 40px;
+  text-align: center;
+  justify-content: center;
+  justify-items: center;
+  border-radius: 10px;
+  margin-top: 15px;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+.content-right{
+  display: block;
+  width: 50%;
+  height: 600px;
+  margin-left: 20px;
+  background-color: #EFF2F5;
+  margin-top: 15px;
+  border-radius: 10px;
+  justify-content:  center;
+  overflow-y: auto;
+}
+.main-menu-tittle{
+  justify-items: center;
+  padding: 10px 0;
+  margin-left: 48px;
+  width: 90%;
+  border-bottom: 1px #808A9D solid;
+  font-weight: bold;
+}
+.tournaments-list{
+  justify-items: center;
+  flex-direction: column;
+  display: block;
+  overflow-y: auto;
+}
+.tournament{
+  display: flex;
+  width: 90%;
+  height: 100px;
+  background-color: #ffffff;
+  margin-bottom: 20px;
+  justify-content: space-between;
+  border-radius: 10px;
+}
+.tournament>div{
+  display: flex;
+}
+.tournament>div>img{
+  margin-top:15px;
+  height: 60px;
+  margin-left: 15px;
+  margin-right: 15px;
+}
+.tournament-name{
+  margin-top: 5px;
+}
+.name{
+  font-weight: bold;
+  margin-bottom:5px;
+
+}
+.sporty-toggle{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.zawody-toggle{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+
+
+.content{
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 40px;
+  margin-bottom: 200px;
+}
+
+.sidebar{
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  gap: 10px;
+}
+.sidebar>button{
+  display: flex;
+  background-color: #ffffff;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 22px;
+  padding: 5px;
+  align-items: center;
+  gap: 15px;
+  border: none;
+  transition: 0.5s background-color ease;
+  text-align: left;
+  cursor: pointer;
+}
+.sidebar>button:hover{
+  background-color: #EFF2F5;
+}
+.sidebar button.active{
+  background-color: #eff2f5;
+}
+.sidebar>button>img{
+  margin-left: 10%;
+  width: 25px;
+  height: 25px;
+}
+
+.main-content{
+  padding: 20px;
+  background-color: #eff2f5;
+  width: 1200px;
+  height: auto;
+  border-radius: 12px;
+}
+.head-info{
+  width: 99%;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 5px;
+  border-bottom: 1px solid #808A9D;
+}
+
+/*User admin-panel*/
+.user-admin-panel{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-evenly;
+
+}
+.user-admin-panel-header{
+  font-weight: bold;
+  border-bottom: 1px solid #808A9D;
+  font-size: 14px;
+  padding: 10px;
+}
+.user-deletion{
+  width: 40%;
+  height: 90%;
+
+}
+.search-results{
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  justify-content: center;
+  align-items: center;
+
+}
+.user-search-input{
+  padding: 20px;
+  width: 90%;
+  border-radius: 10px;
+  border: none;
+  color: #808A9D;
+  background-color: #ffffff;
+  outline: none;
+  font-weight: bold;
+  font-size: 16px;
+}
+.search-result{
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 450px;
+  overflow-y: auto;
+  gap: 10px;
+}
+.player{
+
+  background-color: #ffffff;
+  color: #000000;
+  font-weight: bold;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-align: center;
+  width: 90%;
+  height: 60px;
+  padding: 10px;
+  gap: 10px
+}
+.player-avatar{
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+
+
+
+
+
+
+
+/* Обёртка секции изменения ролей — точно такой же бордер и размер, как у .user-deletion */
+.user-admin-change-roles {
+  width: 40%;
+  height: 90%;
+
+}
+
+/* Контейнер поиска и результатов (аналог .search-results) */
+.roles-search {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Само поле поиска */
+.role-search-input {
+  padding: 20px;
+  width: 90%;
+  border-radius: 10px;
+  border: none;
+  background-color: #ffffff;
+  color: #808A9D;
+  outline: none;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+/* Контейнер списка найденных юзеров */
+.role-search-result {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 450px;
+  overflow-y: auto;
+  gap: 10px;
+}
+
+/* Карточка пользователя внутри .role-search-result */
+.role-search-result .player {
+  background-color: #ffffff;
+  color: #000000;
+  font-weight: bold;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-align: center;
+  width: 90%;
+  height: 60px;
+  padding: 10px;
+  gap: 10px;
+}
+
+/* Аватар */
+.role-search-result .player-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+/* обёртка карточки пользователя уже есть .player { position: relative; } */
+
+/* сам дропдаун с ролями */
+.role-dropdown {
+  position: absolute;
+  top: 100%;        /* сразу под .player */
+  left: 0;
+  background: #fff;
+  border: 1px solid #CFD6E4;
+  border-radius: 6px;
+  padding: 10px;
+  z-index: 1000;
+  width: 400px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  text-align: left;
+}
+
+/* чекбоксы в выпадашке */
+.role-dropdown label {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  margin-bottom: 6px;
+  cursor: pointer;
+}
+.role-dropdown input {
+  margin-right: 6px;
+}
+
+/* кнопка подтверждения */
+.role-dropdown .btn-confirm-roles {
+  display: block;
+  width: 100%;
+  padding: 8px;
+  margin-top: 8px;
+  background-color: #3861FB;
+  color: #fff;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.role-dropdown .btn-confirm-roles:hover {
+  background-color: #274cb0;
+}
+
+/* подогнали размеры стрелки */
+.player .role-toggle {
+  width: 20px;
+  height: 20px;
+  rotate: 90deg;
+}
+
+
+
+.sport-main-content{
+  display: flex;
+  gap:20px;
+  justify-content: space-evenly;
+}
+.sport-main-content>div{
+  width: 300px;
+  height: 400px;
+
+  padding: 20px;
+}
+
+.delete-sport{
+
+}
+.sport-search-input{
+  padding: 10px;
+  width: 95%;
+  border-radius: 10px;
+  border: none;
+  background-color: #ffffff;
+  color: #808A9D;
+  outline: none;
+  font-weight: bold;
+  font-size: 14px;
+}
+.sport-name{
+  padding: 10px;
+  width: 95%;
+  border-radius: 10px;
+  border: none;
+  background-color: #ffffff;
+  color: #808A9D;
+  outline: none;
+  font-weight: bold;
+  font-size: 14px;
+}
+.create-sport{
+  padding: 10px;
+  color: #ffffff;
+  background-color: #0d6efd;
+  border: none;
+  border-radius: 12px;
+  font-weight: bold;
+}
+.sports-search-result{
+  display: flex;
+  margin-top: 10px;
+  flex-direction: column;
+  gap:10px;
+  padding: 10px;
+  overflow-y: auto;
+  height: 270px;
+  align-items: center;
+}
+.sport-result{
+  display: flex;
+  width: 90%;
+  padding: 10px;
+  background-color: #ffffff;
+  color: #000000;
+  justify-content: space-between;
+  border-radius: 12px;
+  font-weight: bold;
+  align-items: center;
+}
+.sport-result-delete{
+  display: flex;
+  width: 90%;
+  padding: 10px;
+  background-color: #ffffff;
+  color: #000000;
+  justify-content: space-between;
+  border-radius: 12px;
+  font-weight: bold;
+}
+.sport-result-delete>img{
+  width: 30px;
+}
+.sport-result>img{
+  rotate: 90deg;
+}
+
+.main-content-event{
+  display: flex;
+  flex-direction: row;
+  gap:20px;
+  justify-content: space-evenly;
+}
+.main-content-event>div{
+  width: 400px;
+  height: 500px;
+
+  padding: 10px;
+}
+.main-content-event>div>div>label{
+  display: flex;
+  font-weight: bold;
+  font-size: 12px;
+}
+.input-data-event{
+  background-color: #ffffff;
+  color: #808A9D;
+  font-weight: bold;
+  font-size: 12px;
+  border:none;
+  padding: 5px;
+  border-radius: 5px;
+}
+.all-pins{
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  height: 370px;
+  gap:10px;
+}
+.pin{
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  background-color: #ffffff;
+  color: #000000;
+  font-weight: bold;
+  font-size: 14px;
+  align-items: center;
+  border-radius: 12px;
+}
+.pin>img{
+  border-radius: 20%;
+  width: 40px;
+  height: 40px;
+
+}
+.main-content-competition{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.main-content-competition>div{
+  display: flex;
+  justify-content: space-evenly;
+
+}
+.main-content-competition>div>div{
+  padding: 10px;
+  width: 500px;
+  height: 500px;
+  border: 1px solid black;
+}
+.create-competition>div{
+  justify-content: center;
+  align-items: center;
+}
+.competitions-list{
+  display: flex;
+  flex-direction: column;
+  height: 400px;
+  overflow-y: auto;
+  gap:10px;
+}
+.competition{
+  display: flex;
+  justify-content: space-between;
+  background-color: #ffffff;
+  border-radius: 12px;
+  align-items: center;
+  padding: 10px;
+}
+.competition-name{
+  font-weight: bold;
+}
+.competition-status{
+  color: #0d6efd;
+  font-weight: bold;
+}
+.competition-avatar{
+  width: 45px;
+  height: 45px;
+}
+
+
+
+.create-system{
+  width: 500px;
+  height: 600px;
+
+  padding: 10px;
+}
+.delete-system{
+  width: 500px;
+  height: 600px;
+
+  padding: 10px;
+}
+.edit-system{
+  width: 500px;
+  height: 600px;
+
+  padding: 10px;
+}
+.search-system{
+  width: 500px;
+  height: 600px;
+
+  padding: 10px;
+
+}
+.sport-menu{
+  width: 35%;
+}
+.system-name{
+  width: 40%;
+}
+
+.systems-list{
+  height: 500px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap:10px
+}
+.system{
+  width: 90%;
+  height: 50px;
+  padding: 10px;
+  background-color: #FFFFFF;
+  color: black;
+  font-weight: bold;
+  border-radius: 10px;
+}
+.input-system{
+  font-weight: bold;
+  color: black;
+  font-size: 12px;
+  padding: 10px;
+  background-color: #FFFFFF;
+  border-radius: 10px;
+  border: none;
+  width: 90%;
+  margin-left: 15px;
+  margin-bottom: 10px;
+}
+.search-system>.systems-list{
+  height: 460px;
+}
+/* Контейнер для каждого элемента списка */
+.delete-system .systems-list .system {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* текст слева, кнопка — справа */
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+/* Стили для самой кнопки удаления */
+.delete-system .systems-list .system button {
+  background-color: #d62828;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 12px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+/* Hover-эффект */
+.delete-system .systems-list .system button:hover {
+  background-color: #b31f1f;
+}
+/* === Стили для списка редактирования игровых систем === */
+.edit-system .systems-list .system {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;    /* название слева, кнопка — справа */
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+/* Стили для кнопки «Edytuj» */
+.edit-system .systems-list .system button {
+  background-color: #3861FB;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 12px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+/* Hover-эффект */
+.edit-system .systems-list .system button:hover {
+  background-color: #274cb0;
+}
