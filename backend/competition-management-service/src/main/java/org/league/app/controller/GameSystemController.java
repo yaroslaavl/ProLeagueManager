@@ -33,6 +33,11 @@ public class GameSystemController {
         return ResponseEntity.ok(gameSystem);
     }
 
+    @GetMapping("/get-all")
+    public ResponseEntity<List<GameSystemReadDto>> getAllGameSystems() {
+        return ResponseEntity.ok(gameSystemService.getAllGameSystems());
+    }
+
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteGameSystem(@PathVariable("id") Integer id) {
         gameSystemService.deleteGameSystemById(id);

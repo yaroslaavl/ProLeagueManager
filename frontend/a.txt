@@ -1,0 +1,34 @@
+User:
+  - http://localhost:8765/admin-deletion/{userId} -- удаление аккаунта человека
+  - http://localhost:8765/user/change-user-role/{userId} -- изменение роли человеку
+
+Sport:
+  - http://localhost:8765/sport/create-new-sport -- создание спорта
+  - http://localhost:8765/sport/edit-sport/{sportName} -- изменение спорта
+  - http://localhost:8765/sport/delete-sport/{sportName} -- удаление спорта
+
+Match:
+  - http://localhost:8765/match/qr-review -- модератор подтверждает что участник/команда пришли на матч
+  - http://localhost:8765/match/{matchId}/score -- изменение счета матча
+
+Feedback:
+  - http://localhost:8765/feedback/all -- все отзывы
+
+Competition:
+  - http://localhost:8765/competition/create -- создать турнир/лигу
+  - http://localhost:8765/competition/edit/{competitionName} -- изменить данные турнира/лиги
+  - http://localhost:8765/competition/delete -- удалить турнир/лигу
+  - http://localhost:8765/competition/upload-image/{competitionId} -- загрузить фотку для турнира/лиги
+  - http://localhost:8765/competition/disqualify/{competitionId} -- дисквалифицировать участника/команду из турнира/лиги
+
+Game System:
+  - http://localhost:8765/game-system/create -- создать систему
+  - http://localhost:8765/game-system/delete/{id} -- удалить систему
+  - http://localhost:8765/game-system/update/{id} -- изменить данные системы
+  - http://localhost:8765/game-system/search -- найти систему
+
+Event:
+  - http://localhost:8765/event/upload-pinned-image/{eventId} --
+  - http://localhost:8765/event/all --
+  - http://localhost:8765/event/pinned --
+  - http://localhost:8765/event/pinned? --

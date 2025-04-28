@@ -576,56 +576,109 @@ async function loadMatches(filter) {
     Elements.matchListContainer.innerHTML = '<div class="error-placeholder">Błąd C.</div>';
     return;
   }
+
   try {
+    // Получаем все матчи, сгруппированные по стадиям
     const gBS = await fetch(`${API}/match/grouped-by-stage/${COMP_ID}`, { headers: authHeaders() })
       .then(r => r.ok ? r.json() : Promise.reject());
     if (!gBS || gBS.length === 0) {
       Elements.matchListContainer.innerHTML = '<div class="info-placeholder">Brak M.</div>';
       return;
     }
+
+    // Флатим список
     const matches = gBS.flatMap(s => (s.matchList || []).map(m => ({ ...m, stageName: s.stageName || `E ${s.stageOrder}` })));
-    if (matches.length === 0) {
+    if (!matches.length) {
       Elements.matchListContainer.innerHTML = '<div class="info-placeholder">Brak M.</div>';
       return;
     }
-    const map = { future: ['SCHEDULED', 'WAITING_FOR_OPPONENT'], present: ['IN_PROGRESS'], past: ['FINISHED', 'CANCELLED', 'BYE', 'AUTO_WIN', 'WALKOVER'] };
-    const fM = matches.filter(m => map[filter] && map[filter].includes(m.matchStatus));
-    if (fM.length === 0) {
+
+    // Фильтруем по статусу
+    const map = {
+      future: ['SCHEDULED','WAITING_FOR_OPPONENT'],
+      present: ['IN_PROGRESS'],
+      past: ['FINISHED','CANCELLED','BYE','AUTO_WIN','WALKOVER']
+    };
+    const filtered = matches.filter(m => map[filter]?.includes(m.matchStatus));
+    if (!filtered.length) {
       Elements.matchListContainer.innerHTML = `<div class="info-placeholder">Brak ${filter} M.</div>`;
       return;
     }
-    fM.sort((a, b) => {
-      const dA = a.matchDate ? new Date(a.matchDate).getTime() : (filter === 'past' ? -Infinity : Infinity);
-      const dB = b.matchDate ? new Date(b.matchDate).getTime() : (filter === 'past' ? -Infinity : Infinity);
-      return filter === 'past' ? dB - dA : dA - dB;
+
+    // Сортировка по дате/времени
+    filtered.sort((a,b) => {
+      const dA = a.matchDate ? new Date(a.matchDate).getTime() : (filter==='past'? -Infinity: Infinity);
+      const dB = b.matchDate ? new Date(b.matchDate).getTime() : (filter==='past'? -Infinity: Infinity);
+      return filter==='past'? dB - dA : dA - dB;
     });
+
+    // Рендер заголовка таблицы
     Elements.matchListContainer.innerHTML = '';
-    Elements.matchListContainer.insertAdjacentHTML('beforeend', `<div class="match-list-header"><div><span>Start:</span></div><div><span>Gra:</span></div><div><span>Runda:</span></div></div>`);
-    const pP = fM.map(m => Promise.all([getParticipant(m.playerAId, m.teamAId), getParticipant(m.playerBId, m.teamBId)]));
-    const pD = await Promise.all(pP);
-    fM.forEach((m, idx) => {
-      const [L, R] = pD[idx];
+    Elements.matchListContainer.insertAdjacentHTML('beforeend', `
+      <div class="match-list-header">
+        <div><span>Start:</span></div>
+        <div><span>Gra:</span></div>
+        <div><span>Runda:</span></div>
+      </div>
+    `);
+
+    // Предварительный загруз участников
+    const participantsData = await Promise.all(
+      filtered.map(m => Promise.all([
+        getParticipant(m.playerAId, m.teamAId),
+        getParticipant(m.playerBId, m.teamBId)
+      ]))
+    );
+
+    // Рендер самих матчей
+    filtered.forEach((m, idx) => {
+      const [L,R] = participantsData[idx];
       const dt = m.matchDate ? new Date(m.matchDate) : null;
-      const tS = dt ? dt.toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit' }) : 'TBD';
+      const tS = dt ? dt.toLocaleTimeString('pl-PL',{hour:'2-digit',minute:'2-digit'}) : 'TBD';
       const dS = dt ? dt.toLocaleDateString('pl-PL') : '';
-      const sAS = m.scoreA !== null ? m.scoreA : '—';
-      const sBS = m.scoreB !== null ? m.scoreB : '—';
-      let scA = '', scB = '';
-      if (['FINISHED', 'AUTO_WIN', 'WALKOVER'].includes(m.matchStatus)) {
-        const wId = m.winnerPlayerId ?? m.winnerTeamId;
-        const pAId = m.playerAId ?? m.teamAId;
-        const pBId = m.playerBId ?? m.teamBId;
-        if (wId && wId === pAId) { scA = 'match-winner'; scB = 'match-loser'; }
-        else if (wId && wId === pBId) { scB = 'match-winner'; scA = 'match-loser'; }
-        else if (m.scoreA !== null && m.scoreB !== null) {
-          if (m.scoreA > m.scoreB) { scA = 'match-winner'; scB = 'match-loser'; }
-          else if (m.scoreB > m.scoreA) { scB = 'match-winner'; scA = 'match-loser'; }
-        }
+      const sA = m.scoreA!==null? m.scoreA : '—';
+      const sB = m.scoreB!==null? m.scoreB : '—';
+
+      // Определяем стили для победителя/проигравшего
+      let clsA='', clsB='';
+      if (['FINISHED','AUTO_WIN','WALKOVER'].includes(m.matchStatus)) {
+        const w = m.winnerPlayerId ?? m.winnerTeamId;
+        const idA = m.playerAId ?? m.teamAId, idB = m.playerBId ?? m.teamBId;
+        if (w===idA) clsA='match-winner', clsB='match-loser';
+        else if (w===idB) clsB='match-winner', clsA='match-loser';
       }
-      Elements.matchListContainer.insertAdjacentHTML('beforeend', `<div class="match"><div class="match-time"><strong>${tS}</strong><span> ${dS}</span></div><div class="team-details"><strong class="${scA}">${nameHTML(L)}</strong><img src="${L.img}" alt=""><strong> ${sAS} : ${sBS} </strong><img src="${R.img}" alt=""><strong class="${scB}">${nameHTML(R)}</strong></div><div class="match-stage"><strong>${m.stageName}</strong></div></div>`);
+
+      Elements.matchListContainer.insertAdjacentHTML('beforeend', `
+        <div class="match">
+          <div class="match-time">
+            <strong>${tS}</strong><span> ${dS}</span>
+          </div>
+          <div class="team-details">
+            <strong class="${clsA}">${nameHTML(L)}</strong>
+            <img src="${L.img}" alt="">
+            <strong> ${sA} : ${sB} </strong>
+            <img src="${R.img}" alt="">
+            <strong class="${clsB}">${nameHTML(R)}</strong>
+          </div>
+          <div class="match-stage">
+            <strong>${m.stageName}</strong>
+          </div>
+        </div>
+      `);
     });
-  } catch (e) {
-    console.error("Load M err:", e);
+
+    // === ВАЖНО: привязываем переход по клику к каждой .match ===
+    Elements.matchListContainer.querySelectorAll('.match').forEach((el, i) => {
+      const matchId = filtered[i].id;
+      el.style.cursor = 'pointer';
+      el.addEventListener('click', () => {
+        localStorage.setItem('searchedMatch', matchId);
+        window.location.href = 'match-page.html';
+      });
+    });
+
+  } catch (err) {
+    console.error("Load M err:", err);
     Elements.matchListContainer.innerHTML = `<div class="error-placeholder">Błąd M.</div>`;
   }
 }
@@ -673,47 +726,85 @@ function handleStageNavClick(event) {
   displayMatchesForStage(stageIndex);
 }
 
-async function displayMatchesForStage(stageIndex) {
+function displayMatchesForStage(stageIndex) {
   if (!Elements.matchListContainer || !allStagesData || stageIndex >= allStagesData.length) {
     Elements.matchListContainer.innerHTML = '<div class="error-placeholder">Błąd: Etap.</div>';
     return;
   }
   const stage = allStagesData[stageIndex];
-  const matchList = stage.matchList || [];
+  const list  = stage.matchList || [];
   Elements.matchListContainer.innerHTML = '';
-  if (matchList.length === 0) {
+
+  if (!list.length) {
     Elements.matchListContainer.innerHTML = '<div class="info-placeholder">Brak meczów.</div>';
     return;
   }
-  Elements.matchListContainer.insertAdjacentHTML('beforeend', `<div class="match-list-header"><div><span>Start:</span></div><div><span>Gra:</span></div><div><span>ID Meczu:</span></div></div>`);
-  try {
-    const participantPromises = matchList.map(m => Promise.all([getParticipant(m.playerAId, m.teamAId), getParticipant(m.playerBId, m.teamBId)]));
-    const participantsData = await Promise.all(participantPromises);
-    matchList.forEach((m, index) => {
-      const [L, R] = participantsData[index];
-      const dt = m.matchDate ? new Date(m.matchDate) : null;
-      const timeStr = dt ? dt.toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit' }) : 'TBD';
-      const dateStr = dt ? dt.toLocaleDateString('pl-PL') : '';
-      const scoreAStr = m.scoreA !== null ? m.scoreA : '—';
-      const scoreBStr = m.scoreB !== null ? m.scoreB : '—';
-      let scoreClassA = '', scB = '';
-      if (['FINISHED', 'AUTO_WIN', 'WALKOVER'].includes(m.matchStatus)) {
-        const wId = m.winnerPlayerId ?? m.winnerTeamId;
-        const pAId = m.playerAId ?? m.teamAId;
-        const pBId = m.playerBId ?? m.teamBId;
-        if (wId && wId === pAId) { scoreClassA = 'match-winner'; scB = 'match-loser'; }
-        else if (wId && wId === pBId) { scB = 'match-winner'; scoreClassA = 'match-loser'; }
-        else if (m.scoreA !== null && m.scoreB !== null) {
-          if (m.scoreA > m.scoreB) { scoreClassA = 'match-winner'; scB = 'match-loser'; }
-          else if (m.scoreB > m.scoreA) { scB = 'match-winner'; scoreClassA = 'match-loser'; }
+
+  // Заголовок
+  Elements.matchListContainer.insertAdjacentHTML('beforeend', `
+    <div class="match-list-header">
+      <div><span>Start:</span></div>
+      <div><span>Gra:</span></div>
+      <div><span>ID Meczu:</span></div>
+    </div>
+  `);
+
+  // Загружаем всех участников
+  Promise.all(list.map(m => Promise.all([
+    getParticipant(m.playerAId, m.teamAId),
+    getParticipant(m.playerBId, m.teamBId)
+  ])))
+    .then(partArr => {
+      list.forEach((m, i) => {
+        const [L,R] = partArr[i];
+        const dt = m.matchDate ? new Date(m.matchDate) : null;
+        const tS = dt ? dt.toLocaleTimeString('pl-PL',{hour:'2-digit',minute:'2-digit'}) : 'TBD';
+        const dS = dt ? dt.toLocaleDateString('pl-PL') : '';
+        const sA = m.scoreA!==null? m.scoreA : '—';
+        const sB = m.scoreB!==null? m.scoreB : '—';
+
+        // Победитель/проигравший
+        let clsA='', clsB='';
+        if (['FINISHED','AUTO_WIN','WALKOVER'].includes(m.matchStatus)) {
+          const w = m.winnerPlayerId ?? m.winnerTeamId;
+          const idA = m.playerAId ?? m.teamAId, idB = m.playerBId ?? m.teamBId;
+          if (w===idA) clsA='match-winner', clsB='match-loser';
+          else if (w===idB) clsB='match-winner', clsA='match-loser';
         }
-      }
-      Elements.matchListContainer.insertAdjacentHTML('beforeend', `<div class="match"><div class="match-time"><strong>${timeStr}</strong><span> ${dateStr}</span></div><div class="team-details"><strong class="${scoreClassA}">${nameHTML(L)}</strong><img src="${L.img}" alt=""><strong> ${scoreAStr} : ${scoreBStr} </strong><img src="${R.img}" alt=""><strong class="${scB}">${nameHTML(R)}</strong></div><div class="match-stage"><strong title="${m.id}">${m.id.substring(0, 8)}...</strong></div></div>`);
+
+        Elements.matchListContainer.insertAdjacentHTML('beforeend', `
+        <div class="match">
+          <div class="match-time">
+            <strong>${tS}</strong><span> ${dS}</span>
+          </div>
+          <div class="team-details">
+            <strong class="${clsA}">${nameHTML(L)}</strong>
+            <img src="${L.img}" alt="">
+            <strong> ${sA} : ${sB} </strong>
+            <img src="${R.img}" alt="">
+            <strong class="${clsB}">${nameHTML(R)}</strong>
+          </div>
+          <div class="match-stage">
+            <strong title="${m.id}">${m.id.substring(0,8)}...</strong>
+          </div>
+        </div>
+      `);
+      });
+
+      // === И тут тоже привязываем переход ===
+      Elements.matchListContainer.querySelectorAll('.match').forEach((el,i) => {
+        const matchId = list[i].id;
+        el.style.cursor = 'pointer';
+        el.addEventListener('click', () => {
+          localStorage.setItem('searchedMatch', matchId);
+          window.location.href = 'match-page.html';
+        });
+      });
+    })
+    .catch(err => {
+      console.error(`Stage ${stageIndex} err:`, err);
+      Elements.matchListContainer.innerHTML = `<div class="error-placeholder">Błąd etapu.</div>`;
     });
-  } catch (e) {
-    console.error(`Stage ${stageIndex} err:`, e);
-    Elements.matchListContainer.innerHTML = `<div class="error-placeholder">Błąd etapu.</div>`;
-  }
 }
 
 // ==================== Participation Check ====================

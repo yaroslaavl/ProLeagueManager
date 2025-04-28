@@ -62,6 +62,7 @@ public class CompetitionManagementConfig {
                                 "/api/game-system/create",
                                 "/api/game-system/delete/**",
                                 "/api/game-system/search",
+                                "/api/game-system/get-all",
                                 "/api/game-system/update/**",
                                 "/api/competition/upload-image/*",
                                 "/api/competition/disqualify/*").hasAuthority("MODERATOR")
