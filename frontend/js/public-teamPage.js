@@ -5,8 +5,8 @@ async function logOut(){
     const response = await fetch('http://localhost:8765/auth/logout',{
       method: 'POST',
       headers: {
-        "Authorization": `Bearer ${accToken}`, // Добавляем заголовок Authorization
-        "Content-Type": "application/json" // Указываем формат данных
+        "Authorization": `Bearer ${accToken}`,
+        "Content-Type": "application/json"
       }
     });
     if (!response.ok) {
@@ -25,19 +25,19 @@ async function logOut(){
     return t ? { Authorization:`Bearer ${t}` } : {};
   };
 
-  /* ───────────────── DOM ready ───────────────── */
+
   document.addEventListener('DOMContentLoaded', async () => {
     const teamName = localStorage.getItem('searchedTeam');
     if (!teamName){ location.href = 'main.html'; return; }
 
     const teamData = await loadTeam(teamName);         if(!teamData) return;
-    const myId     = await getMyId();                  // null — если гость
+    const myId     = await getMyId();
     const memberIds= teamData.members.map(m => m.userId);
 
     renderTeamHeader(teamData, memberIds.includes(myId));
     renderMembers(teamData.members);
 
-    /* кнопка JOIN */
+
     if (myId && !memberIds.includes(myId)){
       enableJoinButton(teamData.team.id, memberIds);
     }
@@ -45,7 +45,7 @@ async function logOut(){
 
   });
 
-  /* ───────────── API helpers ───────────── */
+
   async function loadTeam(name){
     try{
       const r = await fetch(`${API}/team/currentTeam/${encodeURIComponent(name)}`,{headers:hdr()});
@@ -74,7 +74,7 @@ async function logOut(){
   }
 
   async function renderTeamHeader({ team, members = [] }, isMember) {
-    /* название, дата создания, лого */
+
     $('#team_name').textContent = team.teamName;
     $('#createdAt').textContent = team.createdAt
       ? new Date(team.createdAt).toLocaleDateString('pl-PL')
@@ -84,13 +84,13 @@ async function logOut(){
       const logoUrl = await fetch(`${API}/team/team-logo/${team.id}`)
         .then(r => r.ok ? r.text() : '');
       if (logoUrl) $('#team_img').src = logoUrl;
-    } catch {/* игнорируем ошибки лого */ }
+    } catch { }
 
-    /* ---------- менеджер команды ---------- */
-    /* массив участников может называться team.teamMembers ИЛИ members */
+
+
     const membersArr =
-      team.teamMembers           // новая структура
-      ?? members                 // старая структура (параметр из loadTeam)
+      team.teamMembers
+      ?? members
       ?? [];
 
     const managerMember = membersArr.find(m =>
@@ -104,20 +104,20 @@ async function logOut(){
       $('#manager_name').textContent = '—';
     }
 
-    /* ---------- кнопка JOIN ---------- */
+
     const joinBtn = $('#joinTeamBtn');
-    if (!joinBtn) return;               // кнопки нет в шаблоне
+    if (!joinBtn) return;
 
     if (isMember) {
-      joinBtn.classList.add('hidden');  // уже в команде → скрываем
+      joinBtn.classList.add('hidden');
     } else {
       joinBtn.classList.remove('hidden');
     }
   }
-  /* ───────────── JOIN button ───────────── */
+
   function enableJoinButton(teamId){
     const btn = $('#joinTeamBtn');
-    if (!btn) return;                 // ← кнопки нет – просто выходим
+    if (!btn) return;
 
     btn.classList.remove('hidden');
     btn.disabled = false;
@@ -144,7 +144,7 @@ async function logOut(){
   }
   async function renderMembers(members){
     const box = $('#players');
-    // удалить старое, оставить заголовок
+
     box.querySelectorAll('.player').forEach((p,i)=>{ if(i) p.remove(); });
 
     for(const m of members){
@@ -171,26 +171,26 @@ async function logOut(){
     const htmlLoadSpan = document.querySelector(".footer-content span:nth-child(4)");
 
     if (pageLoadSpan && htmlLoadSpan) {
-      // Ждём окончания полной загрузки страницы
+
       window.addEventListener("load", () => {
         setTimeout(() => {
           const performanceTiming = performance.timing;
 
-          // Время полной загрузки страницы
+
           const pageLoadTime = performanceTiming.loadEventEnd - performanceTiming.navigationStart;
 
-          // Время загрузки HTML
+
           const htmlLoadTime = performanceTiming.responseEnd - performanceTiming.responseStart;
 
-          // Проверяем, что значения корректны
-          const validPageLoadTime = pageLoadTime > 0 ? pageLoadTime : performance.now(); // Используем performance.now() как fallback
+
+          const validPageLoadTime = pageLoadTime > 0 ? pageLoadTime : performance.now();
           const validHtmlLoadTime = htmlLoadTime > 0 ? htmlLoadTime : 0;
 
-          // Обновляем значения в DOM с обёрткой для стилей
+
           pageLoadSpan.innerHTML = `Strona: <span class="blue">${Math.round(validPageLoadTime)}ms</span>`;
           htmlLoadSpan.innerHTML = `Szablon: <span class="blue">${Math.round(validHtmlLoadTime)}ms</span>`;
 
-          // Логируем значения для отладки
+
           console.log("Page Load Time (ms):", validPageLoadTime);
           console.log("HTML Load Time (ms):", validHtmlLoadTime);
         }, 0);
@@ -199,7 +199,7 @@ async function logOut(){
   });
 
 
-  /* ───────────── toast ───────────── */
+
   function toast(txt, err=false){
     const c = document.getElementById('toastContainer') || (() => {
       const d=document.createElement('div');d.id='toastContainer';
@@ -211,7 +211,7 @@ async function logOut(){
     b.textContent=txt;c.prepend(b);setTimeout(()=>b.remove(),4000);
   }
 
-  /* jquery-style $ */
+
   function $(sel){ return document.querySelector(sel); }
 
 })();

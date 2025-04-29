@@ -63,9 +63,9 @@ h1 {
 .nav-links {
   display: flex;
   justify-content: center;
-  align-items: center; /* Выравнивание элементов по вертикали */
-  gap: 10px; /* Уменьшенный зазор между элементами */
-  font-size: 22px; /* Размер шрифта для всего содержимого */
+  align-items: center;
+  gap: 10px;
+  font-size: 22px;
 
 }
 
@@ -80,16 +80,16 @@ h1 {
   text-decoration: none;
   font-weight: bold;
   color: #000000;
-  transition: opacity 0.3s ease; /* Плавный переход прозрачности */
+  transition: opacity 0.3s ease;
 }
 
 .nav-links .link.dimmed {
 
-  color: #CFD6E4/* Полупрозрачная ссылка */
+  color: #CFD6E4
 }
 
 .nav-links .link.active {
-  opacity: 1; /* Полностью видимая ссылка */
+  opacity: 1;
 }
 
 
@@ -149,7 +149,7 @@ form button:hover {
   background-color: #3861FB;
 }
 
-/* Социальные кнопки */
+
 .social-buttons {
   display: flex;
   align-items: center;
@@ -202,7 +202,7 @@ form button:hover {
   border: 1px solid #3861FB;
 }
 
-/* Специальные элементы */
+
 .bold {
   font-weight: bold;
 }
@@ -252,11 +252,11 @@ form input:focus {
   border-color:#3861FB;
 }
 .input-container {
-  margin-bottom: 15px; /* Расстояние между полями */
+  margin-bottom: 15px;
 }
 
 .input-container p {
-  margin: 0 0 5px; /* Отступ снизу, чтобы текст был чуть выше поля */
+  margin: 0 0 5px;
   font-size: 14px;
   font-weight: bold;
 }
@@ -283,7 +283,7 @@ form input:focus {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px; /* Расстояние между текстом и линиями */
+  gap: 10px;
 
   font-size: 10px;
 
@@ -292,34 +292,34 @@ form input:focus {
 .line-text::before,
 .line-text::after {
   content: "";
-  flex: 1; /* Линии занимают доступное пространство */
+  flex: 1;
   height: 1px;
   width: 100px;
-  background-color: #58667E;; /* Цвет линий */
+  background-color: #58667E;;
 }
-/* Скрываем стандартный вид чекбокса */
-/* Скрываем стандартный вид чекбокса */
+
+
 #remember-me {
   appearance: none;
   margin-top: 8px;
   width: 10px;
   height: 10px;
   border: 1px solid #808A9D;
-  border-radius: 4px; /* Закругленные углы */
+  border-radius: 4px;
   outline: none;
   cursor: pointer;
-  position: relative; /* Для псевдоэлемента ::after */
+  position: relative;
   transition: background-color 0.3s, border-color 0.3s;
   padding: 6px;
 }
 
-/* Цвет чекбокса при активации */
+
 #remember-me:checked {
-  background-color: #3861FB; /* Цвет при активации */
+  background-color: #3861FB;
   border-color: #3861FB;
 }
 
-/* Галочка внутри чекбокса */
+
 #remember-me:checked::after {
   content: '';
   position: absolute;
@@ -331,18 +331,18 @@ form input:focus {
   border: solid white;
   border-width: 0 2px 2px 0;
 }
-/* Устанавливаем отступы для текстового поля */
+
 input {
-  font-size: 14px; /* Размер шрифта */
+  font-size: 14px;
 }
 
-/* Стилизуем сам текст placeholder */
-input::placeholder {
-  color: #808A9D; /* Цвет текста */
-  padding: 10px 8px; /* Отступы: сверху/снизу 10px, слева/справа 20px */
 
-  font-size: 12px; /* Размер шрифта */
-  opacity: 0.8; /* Прозрачность текста */
+input::placeholder {
+  color: #808A9D;
+  padding: 10px 8px;
+
+  font-size: 12px;
+  opacity: 0.8;
 }
 .register-p
 {
@@ -363,7 +363,7 @@ input::placeholder {
   position: absolute;
   top: 0;
   right: -150px;
-  display: none; /* Скрываем сообщение по умолчанию */
+  display: none;
   width: 130px;
   border: 1px rgb(128, 138, 157);
   border-style: solid;
@@ -375,9 +375,9 @@ input::placeholder {
 
 footer {
   display: flex;
-  justify-content: space-between; /* Располагаем элементы по краям */
-  align-items: center; /* Выравниваем элементы по вертикали */
-  padding: 8px 40px; /* Отступы сверху/снизу и слева/справа */
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 40px;
   color: #808A9D;
   font-size: 12px;
   background-color: #ffffff;
@@ -392,8 +392,8 @@ footer {
 .footer-content,
 .footer-links {
   display: flex;
-  flex-wrap: wrap; /* Чтобы элементы переносились на мобильных */
-  gap: 10px; /* Расстояние между элементами */
+  flex-wrap: wrap;
+  gap: 10px;
   margin-right: 80px;
 }
 
@@ -422,25 +422,25 @@ footer {
 
 @media (max-width: 600px) {
   footer {
-    flex-direction: column; /* Вертикальное расположение элементов */
-    text-align: center; /* Центрируем текст */
+    flex-direction: column;
+    text-align: center;
   }
   .footer-content,
   .footer-links {
-    justify-content: center; /* Центрируем контент */
+    justify-content: center;
   }
 }
 
 
 .Pass {
   display: flex;
-  flex-direction: column; /* Размещаем текст сверху, инпуты снизу */
-  gap: 10px; /* Отступ между текстом и инпутами */
+  flex-direction: column;
+  gap: 10px;
   margin-bottom: -10px;
 }
 .Pass .form-row {
   display: flex;
-  gap: 10px; /* Увеличиваем отступ между полями */
+  gap: 10px;
 }
 
 .register-p {
@@ -451,12 +451,12 @@ footer {
 .form-row {
   display: flex;
 
-  justify-content: space-between; /* Равномерное распределение пространства */
+  justify-content: space-between;
 }
 
 .input-container {
-  position: relative; /* Для размещения иконки внутри инпута */
-  flex: 1; /* Инпуты равной ширины */
+  position: relative;
+  flex: 1;
 
 }
 

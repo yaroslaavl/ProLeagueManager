@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const htmlLoadSpan = document.querySelector(".footer-content span:nth-child(4)");
 
   if (pageLoadSpan && htmlLoadSpan) {
-    // Ждем полной загрузки страницы
+
     window.addEventListener("load", () => {
       setTimeout(() => {
         const performanceTiming = performance.timing;
@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 document.addEventListener('DOMContentLoaded', () => {
-  // 1) Считываем из localStorage искомый логин/юзернэйм
+
   const searchedUsername = localStorage.getItem('searchedProfile');
   if (!searchedUsername) {
     console.warn('Нет searchedProfile в localStorage!');
@@ -29,17 +29,15 @@ document.addEventListener('DOMContentLoaded', () => {
     return;
   }
 
-  // 2) Загружаем публичные данные
+
   loadPublicUserData(searchedUsername);
 
 });
 
-/**
- * Запрашиваем публичные данные пользователя по юзернэйму.
- */
+
 async function loadPublicUserData(username) {
   try {
-    // Пример: GET /user/profile/public/{username}
+
     const response = await fetch(`http://localhost:8765/user/profile/public/${username}`, {
       method: 'GET'
     });
@@ -49,32 +47,32 @@ async function loadPublicUserData(username) {
 
     const data = await response.json();
     console.log('Публичные данные пользователя:', data);
-    // Пример структуры data:
-    // {
-    //   "id": 4,
-    //   "username": "Tester",
-    //   "firstName": "Tester",
-    //   "lastName": "Testerov",
-    //   "birthDate": "2008-01-01",
-    //   "avatar": "http://...png",
-    //   "createdAt": "2025-01-28T23:05:46.69417"
-    // }
 
-    // 1) Заполняем ФИО, ник, даты
+
+
+
+
+
+
+
+
+
+
+
     document.getElementById('first_last_name').textContent = `${data.firstName} ${data.lastName}`;
     document.getElementById('nickname').textContent = data.username;
 
-    // Дата рождения (YYYY-MM-DD -> DD.MM.YYYY)
+
     if (data.birthDate) {
       const [yyyy, mm, dd] = data.birthDate.split('-');
       document.getElementById('date_of_birth').textContent = `${dd}.${mm}.${yyyy}`;
     }
-    // Дата создания профиля
+
     if (data.createdAt) {
       const dateObj = new Date(data.createdAt);
       document.getElementById('creation-date').textContent = dateObj.toLocaleDateString();
     }
-    // Аватар
+
     if (data.avatar) {
       document.getElementById('profile_img').src = data.avatar;
     }
@@ -82,30 +80,24 @@ async function loadPublicUserData(username) {
 
     if (data.id) {
       loadPublicUserTeamsByUserId(data.id);
-      initPublicTabs(data.id);          // ← вот эта строчка
+      initPublicTabs(data.id);
     }
 
   } catch (err) {
     console.error('Ошибка при загрузке публичного профиля:', err);
-    // Перенаправляем на главную или показываем ошибку
-    // window.location.href = 'main.html';
+
+
   }
 }
 
-/**
- * Запрашиваем команды по userId: GET /team/get-teams-by-userId?userId=...
- * По ответу отрисовываем их в #teams-container.
- * Затем для каждой команды делаем доп.запрос
- * GET /team/get-team-member-by-team-and-userId?teamId=...&userId=...
- * чтобы загрузить роли.
- */
+
 async function loadPublicUserTeamsByUserId(userId) {
   try {
     const url = `http://localhost:8765/team/get-teams-by-userId?userId=${userId}`;
     const response = await fetch(url, {
       method: 'GET'
-      // Если нужен заголовок Authorization, добавить:
-      // headers: { 'Authorization': 'Bearer ...' }
+
+
     });
     if (!response.ok) {
       console.warn('Не удалось загрузить команды публичного пользователя');
@@ -119,20 +111,20 @@ async function loadPublicUserTeamsByUserId(userId) {
     teamsContainer.innerHTML = '';
 
     if (!teams || teams.length === 0) {
-      // Нет команд
+
       return;
     }
 
-    // Перебираем массив команд
+
     for (const team of teams) {
-      // Создаем div-контейнер для одной команды
+
       const teamEl = document.createElement('div');
       teamEl.classList.add('teams');
 
-      // Логотип команды
+
       const teamImg = document.createElement('img');
       teamImg.alt = 'Team_avatar';
-      // Пытаемся загрузить реальный логотип
+
       try {
         const logoResponse = await fetch(`http://localhost:8765/team/team-logo/${team.id}`);
         if (logoResponse.ok) {
@@ -145,46 +137,46 @@ async function loadPublicUserTeamsByUserId(userId) {
         teamImg.src = 'img/default-team-avatar.png';
       }
 
-      // Название команды
-      // Вместо простого <p> с названием команды создаём ссылку
+
+
       const teamNameLink = document.createElement("a");
-      teamNameLink.href = "public-teamPage.html"; // переход на публичную страницу команды
+      teamNameLink.href = "public-teamPage.html";
       teamNameLink.textContent = team.teamName;
       teamNameLink.style.color = "#000000";
       teamNameLink.style.fontWeight = "bold";
-// При клике сохраняем в localStorage "searchedTeam"
+
       teamNameLink.addEventListener("click", () => {
         localStorage.setItem("searchedTeam", team.teamName);
       });
 
 
-      // Плейсхолдер для вывода ролей
+
       const roleP = document.createElement('p');
       roleP.textContent = 'Ładowanie ról...';
 
-      // Добавляем элементы в DOM
+
       teamEl.appendChild(teamImg);
       teamEl.appendChild(teamNameLink);
       teamEl.appendChild(roleP);
 
       teamsContainer.appendChild(teamEl);
 
-      // 3) Запрашиваем роли пользователя в этой команде
+
       try {
-        // GET /team/get-team-member-by-team-and-userId?teamId=...&userId=...
+
         const roleUrl = `http://localhost:8765/team/get-team-member-by-team-and-userId?teamId=${team.id}&userId=${userId}`;
         const roleResp = await fetch(roleUrl, { method: 'GET' });
         if (roleResp.ok) {
           const roleData = await roleResp.json();
-          // Пример структуры roleData:
-          // {
-          //   "id": 1,
-          //   "userId": 4,
-          //   "roles": [
-          //     { "id": 1, "name": "MANAGER" },
-          //     { "id": 2, "name": "CAPTAIN" }
-          //   ]
-          // }
+
+
+
+
+
+
+
+
+
           if (roleData.roles && roleData.roles.length > 0) {
             const rolesText = roleData.roles.map(r => r.name).join(', ');
             roleP.textContent = rolesText;
@@ -205,19 +197,9 @@ async function loadPublicUserTeamsByUserId(userId) {
   }
 }
 
-/**
- * Если нужно удалять searchedProfile при клике на ссылки <a>, можете добавить:
- *
- * document.querySelectorAll('a').forEach(link => {
- *   link.addEventListener('click', () => {
- *     localStorage.removeItem('searchedProfile');
- *   });
- * });
- */
 
-/**
- * Функция выхода из системы (если нужна)
- */
+
+
 function logOut() {
   localStorage.clear();
   window.location.href = 'main.html';
@@ -228,9 +210,9 @@ async function safeJson(res) {
   return txt.trim() ? JSON.parse(txt) : [];
 }
 
-/* ======= запросы ======================================================= */
-const gridMatch = '120px 1fr 70px';            // дата | статус | счёт
-const gridComp  = '45px 1fr 80px 130px';       // баннер | название | статус | даты
+
+const gridMatch = '120px 1fr 70px';
+const gridComp  = '45px 1fr 80px 130px';
 
 function fetchPublicMatches(userId) {
   return fetch(`http://localhost:8765/match/user?userId=${userId}`)
@@ -242,7 +224,7 @@ function fetchPublicCompetitions(userId, type) {
     .then(safeJson);
 }
 
-/* ======= рендер матча ================================================== */
+
 function renderPublicMatches(list) {
   const title = document.querySelector('.content-placeholder .title');
   const cols  = document.querySelector('.content-placeholder .columns');
@@ -257,9 +239,9 @@ function renderPublicMatches(list) {
     return;
   }
 
-  /* ---------- 1. строим строки ---------- */
+
   body.innerHTML = list.map(m => {
-    /* выбираем корректный идентификатор матча */
+
     const matchId = m.id ?? m.matchId ?? m.stageId ?? m.nextMatchId;
 
     const score   = `${m.scoreA ?? 0}:${m.scoreB ?? 0}`;
@@ -273,10 +255,10 @@ function renderPublicMatches(list) {
         <span style="font-weight:bold;color:#000000">${score}</span>
       </div>`;}).join('');
 
-  /* ---------- 2. вешаем переход ---------- */
+
   body.querySelectorAll('.public-match-row').forEach(row=>{
     const id = row.dataset.id;
-    if (!id) return;                           // если id нет – не кликаем
+    if (!id) return;
 
     row.addEventListener('click', () => {
       localStorage.setItem('searchedMatch', id);
@@ -285,7 +267,7 @@ function renderPublicMatches(list) {
   });
 }
 
-/* ======= рендер лиг/турниров ========================================== */
+
 async function renderPublicCompetitions(list, type) {
   const title = document.querySelector('.content-placeholder .title');
   const cols  = document.querySelector('.content-placeholder .columns');
@@ -312,17 +294,17 @@ async function renderPublicCompetitions(list, type) {
       <span style="font-weight:bold;color: #000000">${c.startDate.slice(0,10)} ➜ ${c.endDate.slice(0,10)}</span>
     </div>`).join('');
 
-  /* догружаем баннер */
+
   await Promise.all(list.map(async c=>{
     try{
       const res = await fetch(`http://localhost:8765/competition/get-image/${c.id}`);
       const url = res.ok ? await res.text() : null;
       const img = body.querySelector(`.public-comp-row[data-id="${c.id}"] .comp-banner`);
       if (url && img) img.src = url;
-    }catch(e){/* ignore */}
+    }catch(e){}
   }));
 
-  /* переход на лигу/турнир */
+
   body.querySelectorAll('.public-comp-row').forEach(row=>{
     const id = row.dataset.id;
     row.addEventListener('click',()=>{
@@ -337,7 +319,7 @@ async function renderPublicCompetitions(list, type) {
   });
 }
 
-/* ======= инициализируем табы после того, как знаем userId ================ */
+
 function initPublicTabs(userId) {
 
   async function handleTab(e){
@@ -348,7 +330,7 @@ function initPublicTabs(userId) {
     if      (txt==='Mecze')   renderPublicMatches(await fetchPublicMatches(userId));
     else if (txt==='Ligi')    renderPublicCompetitions(await fetchPublicCompetitions(userId,'LEAGUE'),'LEAGUE');
     else if (txt==='Turnieje')renderPublicCompetitions(await fetchPublicCompetitions(userId,'TOURNAMENT'),'TOURNAMENT');
-    else if (txt==='Drużyny') {                // перерисовываем команды
+    else if (txt==='Drużyny') {
       document.querySelector('.content-placeholder .title').textContent = 'Drużyny';
       document.querySelector('.content-placeholder .columns').innerHTML =
         '<p>Zdjęcie:</p><p>Nazwa:</p><p>Role:</p>';

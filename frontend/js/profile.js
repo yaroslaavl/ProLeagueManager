@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", async () => {
   try {
-    // Проверяем наличие токенов
+
     const accToken = localStorage.getItem("accToken");
     const refToken = localStorage.getItem("refToken");
 
@@ -9,10 +9,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       return;
     }
 
-    // Обновляем токены перед загрузкой данных
+
     await refreshToken();
 
-    // Загружаем данные пользователя
+
     await getUsername();
 
 
@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 });
 
-// Функция обновления токена
+
 async function refreshToken() {
   try {
     const url = "http://localhost:8765/auth/refresh-token";
@@ -54,26 +54,26 @@ document.addEventListener("DOMContentLoaded", () => {
   const htmlLoadSpan = document.querySelector(".footer-content span:nth-child(4)");
 
   if (pageLoadSpan && htmlLoadSpan) {
-    // Ждём окончания полной загрузки страницы
+
     window.addEventListener("load", () => {
       setTimeout(() => {
         const performanceTiming = performance.timing;
 
-        // Время полной загрузки страницы
+
         const pageLoadTime = performanceTiming.loadEventEnd - performanceTiming.navigationStart;
 
-        // Время загрузки HTML
+
         const htmlLoadTime = performanceTiming.responseEnd - performanceTiming.responseStart;
 
-        // Проверяем, что значения корректны
-        const validPageLoadTime = pageLoadTime > 0 ? pageLoadTime : performance.now(); // Используем performance.now() как fallback
+
+        const validPageLoadTime = pageLoadTime > 0 ? pageLoadTime : performance.now();
         const validHtmlLoadTime = htmlLoadTime > 0 ? htmlLoadTime : 0;
 
-        // Обновляем значения в DOM с обёрткой для стилей
+
         pageLoadSpan.innerHTML = `Strona: <span class="blue">${Math.round(validPageLoadTime)}ms</span>`;
         htmlLoadSpan.innerHTML = `Szablon: <span class="blue">${Math.round(validHtmlLoadTime)}ms</span>`;
 
-        // Логируем значения для отладки
+
         console.log("Page Load Time (ms):", validPageLoadTime);
         console.log("HTML Load Time (ms):", validHtmlLoadTime);
       }, 0);
@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-// Функция получения данных пользователя
+
 async function getUsername() {
   try {
     const url = "http://localhost:8765/user/profile";
@@ -99,19 +99,19 @@ async function getUsername() {
 
     const data = await response.json();
 
-    // Заполняем данные пользователя в форме
+
     document.getElementById("nickname").value = data.username;
     document.getElementById("email").value = data.email;
     document.getElementById("firstName").value = data.firstName;
     document.getElementById("lastName").value = data.lastName;
 
-    // Устанавливаем дату рождения
+
     const [year, month, day] = data.birthDate.split("-");
     document.getElementById("dayInput").value = day;
     document.getElementById("monthInput").value = month;
     document.getElementById("yearInput").value = year;
 
-    // Загружаем аватар
+
     const avatarResponse = await fetch(`http://localhost:8765/user/avatar/${data.username}`);
     if (avatarResponse.ok) {
       const blob = await avatarResponse.text();
@@ -125,7 +125,7 @@ async function getUsername() {
   }
 }
 
-// Функция обновления данных пользователя
+
 async function updateUserProfile() {
   try {
     const accToken = localStorage.getItem('accToken');
@@ -163,28 +163,28 @@ async function updateUserProfile() {
   }
 }
 document.addEventListener("DOMContentLoaded", () => {
-  const editAvatarBtn = document.getElementById("editAvatarBtn"); // Кнопка "Edytuj"
-  const avatarInput = document.getElementById("avatarInput"); // Скрытый input type="file"
-  const avatarPreview = document.getElementById("avatarPreview"); // Изображение для превью
-  const accessToken = localStorage.getItem("accToken"); // Укажите ваш access token
+  const editAvatarBtn = document.getElementById("editAvatarBtn");
+  const avatarInput = document.getElementById("avatarInput");
+  const avatarPreview = document.getElementById("avatarPreview");
+  const accessToken = localStorage.getItem("accToken");
 
-  // Обработчик нажатия на кнопку "Edytuj"
+
   editAvatarBtn.addEventListener("click", () => {
-    avatarInput.click(); // Открыть диалог выбора файла
+    avatarInput.click();
   });
 
-  // Обработчик выбора файла
+
   avatarInput.addEventListener("change", async () => {
-    const file = avatarInput.files[0]; // Получаем выбранный файл
+    const file = avatarInput.files[0];
     if (file) {
-      // Предварительный просмотр
+
       const reader = new FileReader();
       reader.onload = (e) => {
-        avatarPreview.src = e.target.result; // Устанавливаем выбранное изображение как превью
+        avatarPreview.src = e.target.result;
       };
-      reader.readAsDataURL(file); // Читаем файл как Data URL
+      reader.readAsDataURL(file);
 
-      // Отправка файла на сервер
+
       try {
         const formData = new FormData();
         formData.append("avatar", file);
@@ -218,7 +218,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
-// Функция выхода из системы
+
 async function logOut() {
   try {
     const accToken = localStorage.getItem("accToken");
@@ -241,7 +241,7 @@ async function logOut() {
   }
 }
 
-// Ограничение ввода чисел в полях даты
+
 function enforceNumberLimits(input, min, max) {
   input.addEventListener('input', () => {
     const value = parseInt(input.value, 10);
@@ -255,12 +255,12 @@ function enforceNumberLimits(input, min, max) {
   });
 }
 
-// Применение ограничений к полям даты
+
 document.addEventListener('DOMContentLoaded', () => {
   enforceNumberLimits(document.getElementById('dayInput'), 1, 31);
   enforceNumberLimits(document.getElementById('monthInput'), 1, 12);
   enforceNumberLimits(document.getElementById('yearInput'), 1900, 2025);
 });
 
-// Привязываем обновление профиля к кнопке
+
 document.getElementById("submit").addEventListener('click', updateUserProfile);

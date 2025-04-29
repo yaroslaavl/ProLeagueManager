@@ -13,7 +13,7 @@ body {
     opacity: 1;
   }
 }
-/* Стили для хедера */
+
 .header {
   display: flex;
   justify-content: center;
@@ -51,35 +51,35 @@ input
 {
   color: #808A9D;
 }
-/* Контейнер для поля поиска и иконки */
+
 .search-container {
   display: flex;
-  align-items: center; /* Центрируем иконку и инпут по вертикали */
-  position: relative; /* Для позиционирования иконки */
+  align-items: center;
+  position: relative;
 }
 .search-icon {
-  position: absolute; /* Абсолютное позиционирование иконки */
-  left: 15px; /* Отступ от левого края */
-  width: 18px; /* Размер иконки */
+  position: absolute;
+  left: 15px;
+  width: 18px;
   height: 18px;
-  pointer-events: none; /* Чтобы клик не взаимодействовал с иконкой */
+  pointer-events: none;
 }
-/* Поле поиска */
+
 .search-input {
-  padding: 15px 15px 15px 40px; /* Отступ слева увеличен для иконки */
+  padding: 15px 15px 15px 40px;
   border: none;
   border-radius: 12px;
   background-color: #EFF2F5;
   outline: none;
   font-family: Inter, sans-serif;
   color: #808A9D;
-  width: 450px; /* Ширина поля */
+  width: 450px;
 
   font-size: 14px;
   font-weight: bold;
 }
 .search-input::placeholder {
-  color: #808A9D; /* Цвет плейсхолдера */
+  color: #808A9D;
 }
 .icon-btn {
   display: flex;
@@ -101,9 +101,9 @@ input
 
 footer {
   display: flex;
-  justify-content: space-between; /* Располагаем элементы по краям */
-  align-items: center; /* Выравниваем элементы по вертикали */
-  padding: 8px 40px; /* Отступы сверху/снизу и слева/справа */
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 40px;
   color: #808A9D;
   font-size: 12px;
   background-color: #ffffff;
@@ -118,8 +118,8 @@ footer {
 .footer-content,
 .footer-links {
   display: flex;
-  flex-wrap: wrap; /* Чтобы элементы переносились на мобильных */
-  gap: 10px; /* Расстояние между элементами */
+  flex-wrap: wrap;
+  gap: 10px;
   margin-right: 80px;
 }
 
@@ -148,17 +148,17 @@ footer {
 
 @media (max-width: 600px) {
   footer {
-    flex-direction: column; /* Вертикальное расположение элементов */
-    text-align: center; /* Центрируем текст */
+    flex-direction: column;
+    text-align: center;
   }
   .footer-content,
   .footer-links {
-    justify-content: center; /* Центрируем контент */
+    justify-content: center;
   }
 }
 .header-right {
   display: flex;
-  align-items: center; /* Выравнивание по вертикали */
+  align-items: center;
   justify-content: center;
   justify-items: center;
   margin-top: 15px;
@@ -168,7 +168,7 @@ footer {
   height: 45px;
   border-radius: 20%;
   cursor: pointer;
-}/**/
+}
 .header-right > .icon-btn {
   margin-bottom: 20px;
 }
@@ -221,14 +221,14 @@ footer {
 .menu-container{
   cursor: pointer;
 }
-/*menu for sport choose*/
+
 .sporty-wrapper {
-  position: relative; /* Чтобы позиционировать меню внутри */
+  position: relative;
 }
 
 .dropdown-menu {
   position: absolute;
-  top: 70%; /* сразу под .sporty-toggle */
+  top: 70%;
   left: 50%;
   transform: translateX(-50%);
   background-color: white;
@@ -534,14 +534,14 @@ footer {
   color: #000000;
   font-weight: bold;
 }
-/* ------ NEWS slider ------ */
+
 .news          { position: relative; }
 .news-content  { position: relative; }
 
 .news-track-wrapper{
   overflow: hidden;
   position: relative;
-  padding: 10px 0 25px;          /* место для стрелок */
+  padding: 10px 0 25px;
 }
 .news-track{
   display: flex;
@@ -587,14 +587,14 @@ footer {
   cursor:pointer;
   z-index:2;
 }
-.news-prev{ left:-14px; }      /* половинка ширины */
+.news-prev{ left:-14px; }
 .news-next{ right:-14px; }
 .news-arrow:disabled{ opacity:.35; cursor:default; }
-/* ---- NEWS slide 2.0 ------------------------------------------- */
+
 .news-slide{
   position: relative;
-  flex: 0 0 890px;                 /* <-- ширина карточки  */
-  height: 150px;                   /*   и её высота        */
+  flex: 0 0 890px;
+  height: 150px;
   border-radius: 16px;
   background-size: cover;
   background-position: center;
@@ -602,7 +602,7 @@ footer {
   cursor: pointer;
 }
 
-/* тёмный градиент поверх картинки */
+
 .news-slide::after{
   content:'';
   position:absolute; inset:0;
@@ -610,7 +610,7 @@ footer {
   rgba(0,0,0,0) 40%, rgba(0,0,0,.55) 100%);
 }
 
-/* текст заголовка */
+
 .news-slide p{
   position: absolute;
   left: 12px; right: 12px;
@@ -624,7 +624,7 @@ footer {
   white-space: nowrap;
 }
 
-/* дата под заголовком */
+
 .news-slide time{
   position: absolute;
   left: 12px; bottom: 10px;
@@ -633,5 +633,5 @@ footer {
   z-index: 1;
 }
 
-/* ширина+gap для «шага» в JS-слайдере */
+
 .news-track          { gap: 20px;  }

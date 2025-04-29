@@ -11,26 +11,26 @@ document.addEventListener("DOMContentLoaded", () => {
   const htmlLoadSpan = document.querySelector(".footer-content span:nth-child(4)");
 
   if (pageLoadSpan && htmlLoadSpan) {
-    // Ждём окончания полной загрузки страницы
+
     window.addEventListener("load", () => {
       setTimeout(() => {
         const performanceTiming = performance.timing;
 
-        // Время полной загрузки страницы
+
         const pageLoadTime = performanceTiming.loadEventEnd - performanceTiming.navigationStart;
 
-        // Время загрузки HTML
+
         const htmlLoadTime = performanceTiming.responseEnd - performanceTiming.responseStart;
 
-        // Проверяем, что значения корректны
-        const validPageLoadTime = pageLoadTime > 0 ? pageLoadTime : performance.now(); // Используем performance.now() как fallback
+
+        const validPageLoadTime = pageLoadTime > 0 ? pageLoadTime : performance.now();
         const validHtmlLoadTime = htmlLoadTime > 0 ? htmlLoadTime : 0;
 
-        // Обновляем значения в DOM с обёрткой для стилей
+
         pageLoadSpan.innerHTML = `Strona: <span class="blue">${Math.round(validPageLoadTime)}ms</span>`;
         htmlLoadSpan.innerHTML = `Szablon: <span class="blue">${Math.round(validHtmlLoadTime)}ms</span>`;
 
-        // Логируем значения для отладки
+
         console.log("Page Load Time (ms):", validPageLoadTime);
         console.log("HTML Load Time (ms):", validHtmlLoadTime);
       }, 0);
@@ -80,8 +80,8 @@ async function logOut(){
     const response = await fetch('http://localhost:8765/auth/logout',{
       method: 'POST',
       headers: {
-        "Authorization": `Bearer ${accToken}`, // Добавляем заголовок Authorization
-        "Content-Type": "application/json" // Указываем формат данных
+        "Authorization": `Bearer ${accToken}`,
+        "Content-Type": "application/json"
       }
     });
     if (!response.ok) {
@@ -102,18 +102,18 @@ async function getData() {
     const storedTeam = localStorage.getItem('MyTeam') || localStorage.getItem('SearchResult');
     if (!storedTeam) throw new Error('No selected team');
 
-    // 1. Инфо о команде + массив участников
+
     const res        = await fetch(`${API}/team/currentTeam/${storedTeam}`);
     const {team, members} = await res.json();
     teamInfo = team;
 
-    // 2. Базовые данные в шапку
+
     document.getElementById('team_name').textContent   = team.teamName;
     document.getElementById('createdAt').textContent   = new Date(team.createdAt).toLocaleDateString();
     document.getElementById('team_img').src            =
       await (await fetch(`${API}/team/team-logo/${team.id}`)).text();
 
-    // 3. Готовим HTML для всех игроков ПАРАЛЛЕЛЬНО
+
     const cards = await Promise.all(members.map(async m => {
       const player    = await (await fetch(`${API}/user/getUser/${m.userId}`)).json();
       const avatarUrl = await (await fetch(`${API}/user/avatar/${player.username}`)).text();
@@ -125,7 +125,7 @@ async function getData() {
         document.getElementById('manager_name').textContent = player.username;
       }
 
-      /* цвет имени в зависимости от роли */
+
       const color = isManager ? '#3861FB' :
         isCaptain ? 'darkgoldenrod' : 'inherit';
 
@@ -147,10 +147,10 @@ async function getData() {
         </div>`;
     }));
 
-    // 4. Вставляем ВСЕ карточки одной operацией
+
     document.getElementById('players').innerHTML = cards.join('');
 
-    // 5. Рисуем кнопки настроек (теперь все карточки уже в DOM)
+
     await addRoleEditButtons();
 
   } catch (err) {
@@ -170,7 +170,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 function openConfirmationDialog() {
-  // Затемненный фон
+
   const overlay = document.createElement("div");
   overlay.style.position = "fixed";
   overlay.style.top = "0";
@@ -183,7 +183,7 @@ function openConfirmationDialog() {
   overlay.style.alignItems = "center";
   overlay.style.zIndex = "1000";
 
-  // Диалоговое окно
+
   const dialog = document.createElement("div");
   dialog.style.background = "#fff";
   dialog.style.padding = "20px";
@@ -192,7 +192,7 @@ function openConfirmationDialog() {
   dialog.style.minWidth = "300px";
   dialog.style.textAlign = "center";
 
-  // Заголовок
+
   const title = document.createElement("h2");
   title.textContent = "Czy napewno chcesz kontynuowac?";
   const paragraph = document.createElement("p");
@@ -201,7 +201,7 @@ function openConfirmationDialog() {
   paragraph.style.textAlign = 'left';
   paragraph.style.fontStyle = "bold";
   paragraph.style.fontSize = "12px";
-  // Кнопки
+
   const buttonContainer = document.createElement("div");
   buttonContainer.style.marginTop = "15px";
 
@@ -278,7 +278,7 @@ document.getElementById('usernameInput').addEventListener('input', async functio
 });
 async function displayUsers(users) {
   const usersContainer = document.querySelector('.users_found');
-  usersContainer.innerHTML = ''; // Очищаем предыдущие результаты
+  usersContainer.innerHTML = '';
   for (const user of users) {
     const userElement = document.createElement('div');
     userElement.classList.add('user');
@@ -341,12 +341,12 @@ async function getTeamNotifications() {
     let Team = localStorage.getItem('MyTeam');
     if (!Team) Team = localStorage.getItem('SearchResult');
 
-    // Получаем ID текущей команды
+
     const res = await fetch(`http://localhost:8765/team/currentTeam/${Team}`);
     const receivedData = await res.json();
     const teamId = receivedData.team.id;
 
-    // Запрос на получение уведомлений команды
+
     const url = `http://localhost:8765/my-notifications/get-team/${teamId}`;
     const params = {
       method: 'POST',
@@ -362,14 +362,14 @@ async function getTeamNotifications() {
     const notifications = await response.json();
     console.log("📜 Уведомления команды:", notifications);
 
-    // Вызываем функцию отображения уведомлений
+
     displayTeamNotifications(notifications);
   } catch (err) {
     console.error("❌ Ошибка получения уведомлений команды:", err);
   }
 }
 
-// Загружаем уведомления при загрузке страницы
+
 async function getUserTeamRole() {
   try {
     await refreshToken();
@@ -383,7 +383,7 @@ async function getUserTeamRole() {
       console.error("❌ Ошибка: Токен авторизации отсутствует!");
       return;
     }
-    // Запрашиваем ID команды
+
     const res = await fetch(`http://localhost:8765/team/currentTeam/${Team}`, {
       headers: {
         "Authorization": `Bearer ${token}`,
@@ -400,7 +400,7 @@ async function getUserTeamRole() {
       console.error("❌ Ошибка: ID команды не найден в ответе сервера.");
       return;
     }
-    // Запрос на роль пользователя
+
     const response = await fetch(`http://localhost:8765/team/${teamId}/user-role`, {
       headers: {
         "Authorization": `Bearer ${token}`,
@@ -416,7 +416,7 @@ async function getUserTeamRole() {
       console.error("❌ Ошибка: Некорректный формат данных о ролях.");
       return;
     }
-    // Проверка роли менеджера
+
     if (Role.roles.some(role => role.name === 'MANAGER')) {
       await getTeamNotifications();
 
@@ -428,9 +428,9 @@ async function getUserTeamRole() {
     console.error("❌ Ошибка выполнения getUserTeamRole:", err);
   }
 }
-// Вызываем функцию
+
 getUserTeamRole();
-// Добавляем после загрузки данных о пользователях функцию для рендера кнопки настроек, если роль - менеджер
+
 async function getUserTeamRoleInfo() {
   await refreshToken();
   const res = await fetch(`http://localhost:8765/team/currentTeam/${localStorage.getItem('MyTeam')}`);
@@ -446,13 +446,13 @@ async function getUserTeamRoleInfo() {
   const Role = await response.json();
   return { isManager: Role.roles.some(r => r.name === 'MANAGER'), teamId };
 }
-// Добавляем после загрузки данных о пользователях функцию для рендера кнопки настроек, если роль - менеджер
+
 async function addRoleEditButtons() {
   const { isManager, teamId } = await getUserTeamRoleInfo();
   if (!isManager) return;
 
   document.querySelectorAll('.player').forEach(card => {
-    if (card.querySelector('.role-button')) return;            // уже есть
+    if (card.querySelector('.role-button')) return;
 
     const nick = card.querySelector('.player-nickname')?.textContent;
     if (!nick) return;
@@ -509,7 +509,7 @@ async function toggleRoleEditor(playerCard, username, teamId) {
   playerCard.appendChild(editor);
 }
 async function saveRoles(userId) {
-  const teamId = teamInfo.id; // Используем уже полученный объект teamInfo для ID команды
+  const teamId = teamInfo.id;
 
   const currentRolesResponse = await fetch(`http://localhost:8765/team/get-team-member-by-team-and-userId?teamId=${teamId}&userId=${userId}`, {
     headers: {
@@ -595,6 +595,7 @@ async function saveTeamName() {
   }
 }
 async function saveTeamLogo() {
+  await refreshToken();
   const fileInput = document.getElementById('teamLogoInput');
   const file = fileInput.files[0];
   const formData = new FormData();
@@ -639,7 +640,7 @@ async function processJoin(teamId, userId, decision) {
 
     toast(decision ? 'Gracz zaakceptowany 👍'
       : 'Prośba odrzucona 👋');
-    await getTeamNotifications();        // перечитать список
+    await getTeamNotifications();
   } catch (e) {
     console.error(e);
     toast(`Błąd operacji (${e.message})`, true);
@@ -672,10 +673,10 @@ function displayTeamNotifications(list) {
         ${new Date(n.createdAt).toLocaleDateString('pl-PL')}
       </span>`;
 
-    /* Кнопки выводим только на запросы о вступлении */
+
     if (n.eventType === 'PLAYER_JOIN_REQUEST') {
-      const teamId = n.teamId || teamInfo?.id;   // бекенд шлёт прямо teamId
-      const userId = n.userId || n.data?.userId; // и id кандидата
+      const teamId = n.teamId || teamInfo?.id;
+      const userId = n.userId || n.data?.userId;
 
       const grp = document.createElement('div');
       grp.className = 'notif-btn-group';

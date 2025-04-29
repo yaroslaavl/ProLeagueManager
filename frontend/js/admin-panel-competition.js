@@ -1,3 +1,4 @@
+
 if (localStorage.getItem('accToken') !== null && localStorage.getItem('refToken') !== null) {
   refreshToken();
 }
@@ -84,35 +85,41 @@ if (document.getElementById('log-out') !== null) {
 }
 
 
-// js/admin-panel-competition.js
+
 (() => {
+  let gameSystemsMap = {};
   const API = 'http://localhost:8765';
 
-  // Хелпер для заголовков с токеном
   function hdr(contentType = 'application/json') {
     const t = localStorage.getItem('accToken');
     const h = t ? { 'Authorization': `Bearer ${t}` } : {};
     if (contentType) h['Content-Type'] = contentType;
     return h;
   }
+  initGameSystemsMap();
 
-  // DOM-кеш
+  async function initGameSystemsMap() {
+    await refreshToken();
+    const systems = await fetch(`${API}/game-system/get-all`, { headers: hdr() }).then(r => r.json());
+    systems.forEach(s => gameSystemsMap[s.id] = s);
+  }
+
   const createForm      = document.querySelector('.create-competition');
   const nameInput       = createForm.querySelector('.competition-name-input input');
   const gameSystemSel   = createForm.querySelector('.competition-game-system select');
   const typeCheckboxes  = createForm.querySelectorAll(
     'input[type="checkbox"][value="LEAGUE"], input[type="checkbox"][value="TURNAMENT"]'
   );
-  const dateInputs      = createForm.querySelectorAll('input[type="date"]'); // [0]=start, [1]=end
+  const dateInputs      = createForm.querySelectorAll('input[type="date"]');
   const btnCreate       = createForm.querySelector('button.create-sport');
 
   const editListDom     = document.querySelector('.change-competition .competitions-list');
   const deleteListDom   = document.querySelector('.delete-competition .competitions-list');
 
-  // Спорт (константа, заменить на нужный ID из UI если нужно)
+
   const SPORT_ID = 2;
 
-  // Получить и отрисовать список игровых систем
+
   async function fetchGameSystems() {
     await refreshToken();
     const res = await fetch(`${API}/game-system/get-all`, { headers: hdr() });
@@ -130,7 +137,7 @@ if (document.getElementById('log-out') !== null) {
     }
   }
 
-  // Создать новое соревнование
+
   async function createCompetition() {
     const name         = nameInput.value.trim();
     const gameSystemId = gameSystemSel.value;
@@ -157,7 +164,7 @@ if (document.getElementById('log-out') !== null) {
       if (!res.ok) throw new Error(await res.text());
       alert('Zawody utworzone!');
       await fetchAndRenderCompetitions();
-      // сброс формы
+
       nameInput.value = '';
       typeCheckboxes.forEach(cb => cb.checked = false);
       dateInputs.forEach(i => i.value = '');
@@ -167,14 +174,14 @@ if (document.getElementById('log-out') !== null) {
     }
   }
 
-  // Получить все соревнования
+
   async function fetchCompetitions() {
     const res = await fetch(`${API}/competition/all`, { headers: hdr() });
     if (!res.ok) throw new Error(`Competitions: ${res.status}`);
     return await res.json();
   }
 
-  // Загрузить изображение для одного соревнования
+
   function uploadCompetitionImage(compId) {
     const input = document.createElement('input');
     input.type = 'file';
@@ -189,7 +196,7 @@ if (document.getElementById('log-out') !== null) {
           `${API}/competition/upload-image/${encodeURIComponent(compId)}`,
           {
             method: 'POST',
-            headers: hdr(null),  // без Content-Type, чтобы браузер сам проставил multipart
+            headers: hdr(null),
             body: fd
           }
         );
@@ -204,25 +211,25 @@ if (document.getElementById('log-out') !== null) {
     input.click();
   }
 
-  // Рендер списка для редактирования
-  // ===== Рендер списка для редактирования (с кнопками «✎» и «⬆️» загрузки) =====
+
+
   function renderEditList(comps) {
     editListDom.innerHTML = '';
     comps.forEach(c => {
       const div = document.createElement('div');
       div.className = 'competition';
 
-      // создаём img элемент программно, чтобы повесить onerror
+
       const imgEl = document.createElement('img');
       imgEl.className = 'competition-avatar';
       imgEl.style.cssText = 'border-radius:50%;width:40px;height:40px;object-fit:cover;';
-      imgEl.src = 'img/blogo 2.png'; // дефолт
-      // пробуем подменить на реальный URL
+      imgEl.src = 'img/blogo 2.png';
+
       fetch(`${API}/competition/get-image/${encodeURIComponent(c.id)}`, { headers: hdr() })
         .then(r => r.ok ? r.text() : Promise.reject())
         .then(url => { if (url) imgEl.src = url; })
-        .catch(() => {/* оставляем дефолт */});
-      // если картинка не загрузилась (404, неверный URL и т.п.) — вернуть дефолт
+        .catch(() => {});
+
       imgEl.onerror = () => { imgEl.src = 'img/blogo 2.png'; };
 
       div.appendChild(imgEl);
@@ -245,37 +252,37 @@ if (document.getElementById('log-out') !== null) {
 
 
 
-  // Рендер списка для удаления
+
   function renderDeleteList(comps) {
     deleteListDom.innerHTML = '';
     comps.forEach(c => {
       const div = document.createElement('div');
       div.className = 'competition';
 
-      // 1) создаём <img> с дефолтной иконкой
+
       const imgEl = document.createElement('img');
       imgEl.className = 'competition-avatar';
       imgEl.style.cssText = 'border-radius:50%; width:40px; height:40px; object-fit:cover;';
       imgEl.src = 'img/blogo 2.png';
 
-      // 2) пытаемся получить реальный URL из API
+
       fetch(`${API}/competition/get-image/${encodeURIComponent(c.id)}`, { headers: hdr() })
         .then(r => r.ok ? r.text() : Promise.reject())
         .then(url => {
           if (url) imgEl.src = url;
         })
         .catch(() => {
-          // оставляем дефолт
+
         });
 
-      // 3) на случай, если картинка не загрузилась в <img> напрямую
+
       imgEl.onerror = () => {
         imgEl.src = 'img/blogo 2.png';
       };
 
       div.appendChild(imgEl);
 
-      // остальная разметка
+
       div.insertAdjacentHTML('beforeend', `
       <p class="competition-name">${c.name}</p>
       <p class="competition-status">${c.status || '-'}</p>
@@ -289,7 +296,7 @@ if (document.getElementById('log-out') !== null) {
     });
   }
 
-  // Редактирование соревнования через prompt
+
   async function editCompetition(comp) {
     const newName = prompt('Nowa nazwa:', comp.name);
     if (newName == null) return;
@@ -316,13 +323,13 @@ if (document.getElementById('log-out') !== null) {
     }
   }
 
-  // Удаление соревнования
-  // ===== Удалить соревнование =====
+
+
   async function deleteCompetition(name) {
     if (!confirm(`Usunąć zawody "${name}"?`)) return;
 
     try {
-      // Собираем URL под @DeleteMapping("/delete")
+
       const url = `${API}/competition/delete?competitionName=${encodeURIComponent(name)}`;
 
       const res = await fetch(url, {
@@ -338,7 +345,7 @@ if (document.getElementById('log-out') !== null) {
         throw new Error(txt || `Status ${res.status}`);
       }
 
-      // Обновляем списки
+
       await fetchAndRenderCompetitions();
 
     } catch (err) {
@@ -348,10 +355,10 @@ if (document.getElementById('log-out') !== null) {
   }
 
 
-  // Fetch + render обеих списков
 
 
-  // Инициализация
+
+
   document.addEventListener('DOMContentLoaded', async () => {
     await renderGameSystems();
     btnCreate.addEventListener('click', createCompetition);
@@ -359,8 +366,8 @@ if (document.getElementById('log-out') !== null) {
   });
   const disqListDom = document.querySelector('.disqualification-competition .competitions-list');
 
-// ----------------------------
-// Получить участников конкретного соревнования
+
+
   async function fetchParticipants(compId) {
     const res = await fetch(`${API}/competition/participants/${encodeURIComponent(compId)}`, {
       headers: hdr()
@@ -369,8 +376,8 @@ if (document.getElementById('log-out') !== null) {
     return await res.json();
   }
 
-// ----------------------------
-// Отправить запрос на дисквалификацию
+
+
   async function disqualifyParticipant(compId, teamId, userId) {
     const url = new URL(`${API}/competition/disqualify/${encodeURIComponent(compId)}`);
     if (teamId) url.searchParams.set('teamId', teamId);
@@ -386,81 +393,87 @@ if (document.getElementById('log-out') !== null) {
     }
   }
 
-// ----------------------------
-// Рендер блока дисквалификации
+
+
   function renderDisqList(comps) {
+    const disqListDom = document.querySelector('.disqualification-competition .competitions-list');
     disqListDom.innerHTML = '';
+
     comps.forEach(c => {
       const div = document.createElement('div');
-      div.style.justifyContent = "space-between";
       div.className = 'competition';
+      div.style.justifyContent = "space-between";
       div.innerHTML = `
-      <img src="img/blogo 2.png" class="competition-avatar"
-           style="border-radius:50%;width:40px;height:40px;object-fit:cover;">
+      <img src="img/blogo 2.png" class="competition-avatar">
       <p class="competition-name">${c.name}</p>
       <p class="competition-status">${c.status || '-'}</p>
-      <button class="view-btn" title="Pokaż uczestników"
-              style="cursor:pointer;">🕵️‍♂️</button>
+      <button class="view-btn" title="Pokaż uczestników">🔍</button>
       <div class="participants-list" style="display:none;padding-left:20px;"></div>
     `;
-      // клик по «🕵️‍♂️» — загрузить и показать участников
-      const viewBtn = div.querySelector('.view-btn');
-      const partList = div.querySelector('.participants-list');
-      viewBtn.onclick = async () => {
-        try {
-          // переключить видимость при повторном клике
-          if (partList.style.display === 'block') {
-            partList.style.display = 'none';
-            return;
-          }
-          partList.innerHTML = '<em>Ładowanie uczestników…</em>';
-          partList.style.display = 'block';
 
+      const viewBtn  = div.querySelector('.view-btn');
+      const partList = div.querySelector('.participants-list');
+
+      viewBtn.onclick = async () => {
+        // переключаем видимость
+        if (partList.style.display === 'block') {
+          partList.style.display = 'none';
+          return;
+        }
+        partList.innerHTML = '<em>Ładowanie uczestników…</em>';
+        partList.style.display = 'block';
+
+        try {
           const parts = await fetchParticipants(c.id);
-          if (!parts.length) {
+          // узнаём, командный ли это турнир
+          const sys = gameSystemsMap[c.gameSystemId];
+          const isTeamComp = sys && !sys.isIndividual;
+
+          // создаём объект для дедупа:
+          const unique = {};
+          parts.forEach(p => {
+            const key = isTeamComp
+              ? `team_${p.teamId}`
+              : `player_${p.playerId}`;
+            if (p.teamId || p.playerId) unique[key] = p;
+          });
+          const toShow = Object.values(unique);
+
+          if (!toShow.length) {
             partList.innerHTML = '<p><i>Brak zarejestrowanych uczestników</i></p>';
             return;
           }
-          // отрисовать каждого с кнопкой «Diskwalifikuj»
+
           partList.innerHTML = '';
-          for (const p of parts) {
-            // подгружаем имя игрока, если есть playerId
-            let label;
-            if (p.playerId) {
-              const u = await fetch(`${API}/user/getUser/${p.playerId}`, { headers: hdr() }).then(r => r.json());
-              label = `Gracz: ${u.username}`;
-            } else if (p.teamId) {
-              // либо команда
-              const t = await fetch(`${API}/team/current/${p.teamId}`, { headers: hdr() }).then(r => r.json());
-              label = `Zespół: ${t.teamName}`;
+          for (const p of toShow) {
+            // получаем мета-данные
+            let info, label;
+            if (p.teamId) {
+              info = await fetch(`${API}/team/current/${p.teamId}`, { headers: hdr() }).then(r => r.json());
+              label = `Zespół: ${info.teamName}`;
+            } else {
+              info = await fetch(`${API}/user/getUser/${p.playerId}`, { headers: hdr() }).then(r => r.json());
+              label = `Gracz: ${info.username}`;
             }
+
             const item = document.createElement('div');
-            item.style.display = 'flex';
-            item.style.alignItems = 'center';
-            item.style.margin = '4px 0';
+            item.className = 'participant-item';
             item.innerHTML = `
-            <span style="flex:1;">${label}</span>
-            <button class="dq-btn" style="margin-left:10px;">Diskwalifikuj</button>
+            <span class="participant-label">${label}</span>
+            <button class="dq-btn">Diskwalifikuj</button>
           `;
-            // дисквалифицировать при клике
             item.querySelector('.dq-btn').onclick = async () => {
               if (!confirm(`Na pewno dyskwalifikować ${label}?`)) return;
-              try {
-                await disqualifyParticipant(c.id, p.teamId, p.playerId);
-                alert(`${label} został(a) zdyskwalifikowany(a).`);
-                // пересоздать список участников после дискв.
-                viewBtn.click();     // скрыть
-                viewBtn.click();     // показать заново
-              } catch (e) {
-                console.error(e);
-                alert('Błąd podczas dyskwalifikacji.');
-              }
+              await disqualifyParticipant(c.id, p.teamId, p.playerId);
+              alert(`${label} został(a) zdyskwalifikowany(a).`);
+              viewBtn.click(); // перекрываем и заново открываем, чтобы перерендерить
+              viewBtn.click();
             };
             partList.appendChild(item);
           }
         } catch (e) {
           console.error(e);
-          partList.innerHTML = '<p style="color:red;">Błąd ładowania uczestników.</p>';
+          partList.innerHTML = '<p style="color:red;">Błąд ładowania uczestników.</p>';
         }
       };
 
@@ -468,14 +481,14 @@ if (document.getElementById('log-out') !== null) {
     });
   }
 
-// ----------------------------
-// В fetchAndRenderCompetitions() в конце добавить вызов renderDisqList:
+
+
   async function fetchAndRenderCompetitions() {
     try {
       const comps = await fetchCompetitions();
       renderEditList(comps);
       renderDeleteList(comps);
-      renderDisqList(comps);       // <-- вот сюда
+      renderDisqList(comps);
     } catch (err) {
       console.error('Failed to fetch/render competitions:', err);
     }

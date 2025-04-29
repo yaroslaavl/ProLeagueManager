@@ -1,6 +1,4 @@
-/* tournaments‑list.js */
 
-/* ──────────── авторизация / refresh ──────────── */
 if (localStorage.accToken && localStorage.refToken) refreshToken();
 
 async function refreshToken(){
@@ -16,9 +14,8 @@ async function refreshToken(){
   }catch(e){console.error(e);}
 }
 
-/* ──────────────── DOM ready ─────────────────── */
 document.addEventListener('DOMContentLoaded',()=>{
-  /* метрики */
+
   const p=document.querySelector('.footer-content span:nth-child(3)');
   const h=document.querySelector('.footer-content span:nth-child(4)');
   if(p&&h) window.addEventListener('load',()=>setTimeout(()=>{
@@ -27,7 +24,6 @@ document.addEventListener('DOMContentLoaded',()=>{
     h.innerHTML=`Szablon: <span class="blue">${Math.round(t.responseEnd-t.responseStart)}ms</span>`;
   },0));
 
-  /* чек‑боксы + переключатель */
   ['active','future','past','isIndividual'].forEach(id=>{
     document.getElementById(id)?.addEventListener('change',getTournamentsByFilter);
   });
@@ -36,11 +32,9 @@ document.addEventListener('DOMContentLoaded',()=>{
     getTournamentsByFilter();
   });
 
-  /* первый рендер */
   getTournamentsByFilter();
 });
 
-/* ─────────────── caches ─────────────── */
 const sysCache   = new Map();
 const imgCache   = new Map();
 const cntCache   = new Map();
@@ -66,7 +60,7 @@ async function getCount(cid){
   cntCache.set(cid,arr.length); return arr.length;
 }
 
-/* ───────────── фильтрация ───────────── */
+
 async function getTournamentsByFilter(){
   const active = document.getElementById('active')?.checked;
   const future = document.getElementById('future')?.checked;
@@ -79,7 +73,7 @@ async function getTournamentsByFilter(){
     return;
   }
   const statuses=[]; if(active)statuses.push('ACTIVE');
-  if(future)statuses.push('UPCOMING'); if(past)statuses.push('FINISHED');
+  if(future)statuses.push('UPCOMING'); if(past)statuses.push('COMPLETED'); if(onlyInd)statuses.push('true')
 
   const all = await fetchJSON('http://localhost:8765/competition/all') || [];
   const tournaments = all.filter(c=>c.competitionType==='TOURNAMENT' && statuses.includes(c.status));
@@ -89,7 +83,6 @@ async function getTournamentsByFilter(){
     const sys = await getSystem(t.gameSystemId);
     if(onlyInd && !sys?.isIndividual) continue;
 
-    /* проверка e‑sport / sporty через sportId */
     const sport = await fetchJSON(`http://localhost:8765/sport/id/${t.sportId}`);
     if(sport?.isEsport!==undefined && sport.isEsport!==wantEs) continue;
 
@@ -97,10 +90,8 @@ async function getTournamentsByFilter(){
   }
   renderTournamentCards(out);
 }
-/* делаем функцию глобальной, чтобы inline‑onclick тоже работали */
 window.getTournamentsByFilter = getTournamentsByFilter;
 
-/* ─────────────── render ─────────────── */
 async function renderTournamentCards(arr){
   const wrap=document.getElementById('tournaments-list');
   wrap.innerHTML='';
@@ -143,8 +134,8 @@ async function logOut(){
     const response = await fetch('http://localhost:8765/auth/logout',{
       method: 'POST',
       headers: {
-        "Authorization": `Bearer ${accToken}`, // Добавляем заголовок Authorization
-        "Content-Type": "application/json" // Указываем формат данных
+        "Authorization": `Bearer ${accToken}`,
+        "Content-Type": "application/json"
       }
     });
     if (!response.ok) {

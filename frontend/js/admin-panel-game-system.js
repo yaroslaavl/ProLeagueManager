@@ -6,26 +6,26 @@ document.addEventListener("DOMContentLoaded", () => {
   const htmlLoadSpan = document.querySelector(".footer-content span:nth-child(4)");
 
   if (pageLoadSpan && htmlLoadSpan) {
-    // Ждём окончания полной загрузки страницы
+
     window.addEventListener("load", () => {
       setTimeout(() => {
         const performanceTiming = performance.timing;
 
-        // Время полной загрузки страницы
+
         const pageLoadTime = performanceTiming.loadEventEnd - performanceTiming.navigationStart;
 
-        // Время загрузки HTML
+
         const htmlLoadTime = performanceTiming.responseEnd - performanceTiming.responseStart;
 
-        // Проверяем, что значения корректны
-        const validPageLoadTime = pageLoadTime > 0 ? pageLoadTime : performance.now(); // Используем performance.now() как fallback
+
+        const validPageLoadTime = pageLoadTime > 0 ? pageLoadTime : performance.now();
         const validHtmlLoadTime = htmlLoadTime > 0 ? htmlLoadTime : 0;
 
-        // Обновляем значения в DOM с обёрткой для стилей
+
         pageLoadSpan.innerHTML = `Strona: <span class="blue">${Math.round(validPageLoadTime)}ms</span>`;
         htmlLoadSpan.innerHTML = `Szablon: <span class="blue">${Math.round(validHtmlLoadTime)}ms</span>`;
 
-        // Логируем значения для отладки
+
         console.log("Page Load Time (ms):", validPageLoadTime);
         console.log("HTML Load Time (ms):", validHtmlLoadTime);
       }, 0);
@@ -75,8 +75,8 @@ async function logOut(){
     const response = await fetch('http://localhost:8765/auth/logout',{
       method: 'POST',
       headers: {
-        "Authorization": `Bearer ${accToken}`, // Добавляем заголовок Authorization
-        "Content-Type": "application/json" // Указываем формат данных
+        "Authorization": `Bearer ${accToken}`,
+        "Content-Type": "application/json"
       }
     });
     if (!response.ok) {
@@ -91,10 +91,10 @@ async function logOut(){
 if (document.getElementById('log-out') !== null){
   const logOutBtn = document.getElementById('log-out').addEventListener('click',logOut);
 }
-// js/admin-panel-game-system.js
+
 (() => {
   const API = 'http://localhost:8765';
-  // Хелпер для заголовков с токеном
+
   function hdr(contentType = 'application/json') {
     const t = localStorage.getItem('accToken');
     const h = t ? { 'Authorization': `Bearer ${t}` } : {};
@@ -102,7 +102,7 @@ if (document.getElementById('log-out') !== null){
     return h;
   }
 
-  // DOM-кеш
+
   const sportsSelect     = document.querySelector('.sport-menu select');
   const createNameInput  = document.querySelector('.create-system .system-name input');
   const createRulesInput = document.querySelector('.create-system .system-rules input');
@@ -118,7 +118,7 @@ if (document.getElementById('log-out') !== null){
   const searchInput      = document.querySelector('.search-system .input-system');
   const searchListDom    = document.querySelector('.search-system .systems-list');
 
-  // Загрузка списка спортов
+
   async function fetchSports() {
     const res = await fetch(`${API}/sport/allSports`, { headers: hdr() });
     if (!res.ok) throw new Error('Cannot load sports');
@@ -135,14 +135,14 @@ if (document.getElementById('log-out') !== null){
     }
   }
 
-  // Загрузка игровых систем
+
   async function fetchSystems() {
     const res = await fetch(`${API}/game-system/get-all`, { headers: hdr() });
     if (!res.ok) throw new Error('Cannot load game-systems');
     return res.json();
   }
 
-  // Рендер в любой контейнер .systems-list
+
   function renderSystemsList(container, systems, { onDelete, onEdit } = {}) {
     container.innerHTML = '';
     systems.forEach(sys => {
@@ -163,7 +163,7 @@ if (document.getElementById('log-out') !== null){
     });
   }
 
-  // Создание
+
   async function createSystem() {
     const body = {
       sportId:       +sportsSelect.value,
@@ -175,7 +175,7 @@ if (document.getElementById('log-out') !== null){
       minAge:        +createMinAge.value,
       maxAge:        +createMaxAge.value
     };
-    // простая валидация
+
     if (!body.systemName || isNaN(body.sportId)) {
       return alert('Wypełnij nazwę i sport');
     }
@@ -190,12 +190,12 @@ if (document.getElementById('log-out') !== null){
     }
     alert('System utworzony!');
     await reloadAll();
-    // сброс полей
+
     createNameInput.value = '';
     createRulesInput.value = '';
   }
 
-  // Удаление
+
   async function deleteSystem(id) {
     if (!confirm('Na pewno usunąć?')) return;
     const res = await fetch(`${API}/game-system/delete/${id}`, {
@@ -211,17 +211,17 @@ if (document.getElementById('log-out') !== null){
     }
   }
 
-  // Редактирование названия через prompt
+
   async function editSystem(sys) {
     await refreshToken();
-    // Спрашиваем у пользователя поле и значение в формате "rules:Only deagles"
+
     const input = prompt(
       'Wprowadź aktualizację в формате "pole:wartość" (np. rules:Only deagles):',
       'rules:'
     );
     if (!input) return;
 
-    // Парсим "pole:wartość" в объект { pole: "wartość" }
+
     const [rawKey, ...rest] = input.split(':');
     const key   = rawKey.trim();
     const value = rest.join(':').trim();
@@ -245,23 +245,23 @@ if (document.getElementById('log-out') !== null){
     }
   }
 
-  // Поиск
 
 
-  // Полная перезагрузка всех списков
+
+
   async function reloadAll() {
     const all = await fetchSystems();
     renderSystemsList(deleteListDom, all, { onDelete: deleteSystem });
     renderSystemsList(editListDom,   all, { onEdit:   editSystem });
   }
 
-  // Инициализация
+
   document.addEventListener('DOMContentLoaded', async () => {
     await renderSports();
     createBtn.addEventListener('click', createSystem);
     await reloadAll();
 
-    // поиск
+
     let timeout;
 
   });
