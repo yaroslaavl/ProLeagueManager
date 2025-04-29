@@ -1,15 +1,12 @@
-/* ───────────────────────────── league.js ─────────────────────────────
-   Strona ligi – baner, detale, uczestnicy, mecze, TOP, feedback,
-   rejestracja (indywidualna / drużynowa) + przejścia do profili
-────────────────────────────────────────────────────────────────────── */
+
 let API = 'http://localhost:8765';
 function getAuthHeaders() {
-  const token = localStorage.getItem('accToken');   // берём access-token,
-  return token                                       // если он есть —
-    ? { Authorization: `Bearer ${token}` }     //        кладём в header
-    : {};                                      // если нет — пустой объект
+  const token = localStorage.getItem('accToken');
+  return token
+    ? { Authorization: `Bearer ${token}` }
+    : {};
 }
-// Ссылки на элементы модалок (можно оставить здесь или перенести в Elements cache)
+
 const teamModal = document.getElementById('teamModal');
 const playerModal = document.getElementById('playerModal');
 const teamListEl = document.getElementById('teamList');
@@ -20,7 +17,7 @@ const teamModalClose = document.getElementById('teamModalClose');
 const playerModalClose = document.getElementById('playerModalClose');
 
 
-  /* ╔═ 0. KONFIG ─────────────────────────────────────────────────────── */
+
 
   const COMP_ID = localStorage.getItem('searchedLeague');
   if (!COMP_ID) {
@@ -29,23 +26,23 @@ const playerModalClose = document.getElementById('playerModalClose');
 
   }
 
-  // Переменная для хранения заголовков авторизации
+
   let currentAuthHeaders = {};
 
-  // Функция для получения актуальных заголовков
+
   function getAuthHeaders() {
     const token = localStorage.getItem('accToken');
     return token ? { Authorization: `Bearer ${token}` } : {};
   }
 
-  // --- Global State ---
-  let meId = null; // Кэшированный ID текущего пользователя
 
-  /* ╔═ 1. AUTH & HEADER UI ──────────────────────────────────────────── */
+  let meId = null;
+
+
   if (localStorage.accToken && localStorage.refToken) {
-    refreshToken().then(setupHeaderBasedOnAuth); // Обновляем токен, затем настраиваем хедер
+    refreshToken().then(setupHeaderBasedOnAuth);
   } else {
-    setupHeaderBasedOnAuth(); // Просто настраиваем хедер для гостя
+    setupHeaderBasedOnAuth();
   }
 
   async function refreshToken () {
@@ -71,7 +68,7 @@ const playerModalClose = document.getElementById('playerModalClose');
       localStorage.setItem('accToken', t.accessToken);
       localStorage.setItem('refToken', t.refreshToken);
       console.log("Token refreshed successfully.");
-      currentAuthHeaders = getAuthHeaders(); // Обновляем глобальные заголовки
+      currentAuthHeaders = getAuthHeaders();
     } catch (error) {
       console.warn('Token refresh process failed:', error);
     }
@@ -107,13 +104,13 @@ const playerModalClose = document.getElementById('playerModalClose');
       if(feedbackInput) feedbackInput.style.display = 'none';
     }
     const logoutBtnMenu = document.getElementById('logOut');
-    if (logoutBtnMenu) { // Убедимся что кнопка есть прежде чем вешать обработчик
+    if (logoutBtnMenu) {
       logoutBtnMenu.onclick = logOut;
     }
   }
 
 
-  /* ╔═ 2. UTILITY: toast ────────────────────────────────────────────── */
+
   function toast (txt, err = false) {
     const wrap = document.getElementById('toastContainer') ||
       (() => {
@@ -137,13 +134,13 @@ const playerModalClose = document.getElementById('playerModalClose');
 
   function handleFatalError(message, details = "") {
     console.error("Fatal Error:", message, details);
-    const container = document.querySelector('.container'); // Найдем контейнер здесь
+    const container = document.querySelector('.container');
     if (container) {
       container.innerHTML = `<div class='error-fatal'><h1>Błąd Krytyczny</h1><p>${message}</p>${details ? `<p><small>${details}</small></p>` : ''}<p><a href="main.html">Powrót do strony głównej</a></p></div>`;
     }
   }
 
-  /* ╔═ 3. DOM READY ─────────────────────────────────────────────────── */
+
   document.addEventListener('DOMContentLoaded', () => {
     footerTimings();
     loadEssentialLeagueData().then(success => {
@@ -154,14 +151,14 @@ const playerModalClose = document.getElementById('playerModalClose');
       }
     });
 
-    // Привязка logOut здесь, если не сработало в setupHeaderBasedOnAuth
+
     const logoutBtn = document.getElementById('logOut');
     if (logoutBtn && !logoutBtn.onclick) {
       logoutBtn.onclick = logOut;
     }
   });
 
-  /* ╔═ 4. FOOTER TIMINGS ────────────────────────────────────────────── */
+
   function footerTimings () {
     const s1 = document.querySelector('.footer-content span:nth-child(3)');
     const s2 = document.querySelector('.footer-content span:nth-child(4)');
@@ -179,13 +176,13 @@ const playerModalClose = document.getElementById('playerModalClose');
     });
   }
 
-  /* ╔═ 5. BANNER & DETAILS ──────────────────────────────────────────── */
+
   async function loadBanner () {
     try {
       const url = await fetch(`${API}/competition/get-image/${COMP_ID}`, {headers: getAuthHeaders()})
         .then(r=>r.ok?r.text():null);
       const bannerImg = document.querySelector('.banner img');
-      const avatarImg = document.querySelector('.avatar img'); // Находим аватар по классу .avatar
+      const avatarImg = document.querySelector('.avatar img');
       if (url) {
         if (bannerImg) bannerImg.src=url; else document.querySelector('.banner').style.backgroundImage = `url(${url})`;
         if (avatarImg) avatarImg.src=url;
@@ -218,7 +215,7 @@ const playerModalClose = document.getElementById('playerModalClose');
         .then(r=>r.ok ? r.json() : Promise.reject(`HTTP ${r.status}`))
         .then(a=>a.find(c=>c.id===COMP_ID));
       if (!comp) throw new Error(`League ${COMP_ID} not found.`);
-      updateLeagueDetailsUI(comp); // Обновляем UI
+      updateLeagueDetailsUI(comp);
       return true;
     } catch(error) {
       console.error("Error loading essential league data:", error);
@@ -235,14 +232,14 @@ const playerModalClose = document.getElementById('playerModalClose');
 
     const regBtn = document.querySelector('.register-btn');
     if(regBtn) {
-      try { // Обернем проверку участия в try-catch
+      try {
         const participating = await userParticipates();
         const canRegister = !['ACTIVE', 'COMPLETED', 'CANCELLED'].includes(comp.status?.toUpperCase()) && !participating;
         regBtn.style.display = canRegister ? 'block' : 'none';
         if(canRegister) regBtn.onclick = () => openRegistration(comp);
       } catch(e) {
         console.error("Error checking participation for reg button:", e);
-        regBtn.style.display = 'none'; // Скрыть кнопку при ошибке
+        regBtn.style.display = 'none';
       }
     }
 
@@ -265,20 +262,20 @@ const playerModalClose = document.getElementById('playerModalClose');
     if(detailMode) detailMode.textContent = modeStr;
 
     const detailCount = document.querySelector('[data-field="count"]');
-    if(detailCount) updateLeagueCountDisplay(comp); // Вызываем асинхронное обновление
+    if(detailCount) updateLeagueCountDisplay(comp);
 
     const dateStr = comp.startDate ? new Date(comp.startDate).toLocaleDateString('pl-PL') : '?';
     const detailDate = document.querySelector('[data-field="date"]');
     if(detailDate) detailDate.textContent = dateStr;
 
-    // feedback visibility
+
     const fb=document.querySelector('.feedback-input');
     if(fb){
       try {
         if(await userParticipates()){
           fb.style.display='flex';
           const inp=fb.querySelector('input'), btn=fb.querySelector('button');
-          btn.disabled = !(inp.value.trim()); // Установить начальное состояние
+          btn.disabled = !(inp.value.trim());
           inp.oninput=()=>btn.disabled=!inp.value.trim();
           btn.onclick=()=>sendFeedback(inp,btn);
         } else {
@@ -286,7 +283,7 @@ const playerModalClose = document.getElementById('playerModalClose');
         }
       } catch (e) {
         console.error("Error setting up feedback input:", e);
-        fb.style.display = 'none'; // Скрыть при ошибке
+        fb.style.display = 'none';
       }
     }
   }
@@ -309,25 +306,25 @@ const playerModalClose = document.getElementById('playerModalClose');
 
 
   async function competitionIsIndividual(comp) {
-    /* 1) пробуем взять Game-System */
-    const gs = await fetchGameSystem(comp.gameSystemId);
-    if (!gs) return false;               // не смогли получить – считаем командным
 
-    /* 2) back уже поместил в GS прямой флаг — это самый надёжный вариант */
+    const gs = await fetchGameSystem(comp.gameSystemId);
+    if (!gs) return false;
+
+
     if (typeof gs.isIndividual === 'boolean') return gs.isIndividual;
 
-    /* 3) вычисляем по ограничениям */
+
     const min = +(gs.minTeamSize    ?? gs.playersPerTeam ?? 1);
     const max = +(gs.maxTeamSize    ?? gs.playersPerTeam ?? 1);
 
-    // solo-соревнование, если в команде может быть только 1 человек
+
     return min === 1 && max === 1;
   }
   async function openRegistration(comp) {
     const headers = getAuthHeaders();
-    const isInd   = await competitionIsIndividual(comp);  // <-- новый helper
+    const isInd   = await competitionIsIndividual(comp);
 
-    /* SOLO: регистрируем одним POST’ом */
+
     if (isInd) {
       if (!await getMeId()) { toast('Zaloguj się, aby dołączyć.', true); return; }
       if (!confirm('Dołączyć do zawodów?')) return;
@@ -342,12 +339,12 @@ const playerModalClose = document.getElementById('playerModalClose');
 
         toast('Zarejestrowano ✅');
         closeAllModals?.();
-        await loadEssentialLeagueData();            // перерисовать UI
+        await loadEssentialLeagueData();
       } catch (e) { toast(e.message || 'Błąd rejestracji', true); }
       return;
     }
 
-    /* TEAM: запускаем мастер выбора */
+
     try {
       await renderTeamList();
       teamModal.classList.remove('hidden');
@@ -384,7 +381,7 @@ const playerModalClose = document.getElementById('playerModalClose');
         return;
       }
 
-      /* --- лимиты --- */
+
       let reqP = 1, maxP = info.members.length;
       try {
         const comp = await fetch(`${API}/competition/all`,
@@ -397,12 +394,12 @@ const playerModalClose = document.getElementById('playerModalClose');
           reqP = +(gs.playersPerTeam ?? gs.minTeamSize ?? 1);
           maxP = +(gs.maxTeamSize    ?? info.members.length);
         }
-      } catch { /* noop */ }
+      } catch {  }
 
       playerListEl.innerHTML =
         `<div>Wybierz graczy (${reqP}-${maxP}):</div>`;
 
-      /* --- вывод игроков --- */
+
       const avatarPromises = info.members.map(async m => {
         const user   = await fetch(`${API}/user/getUser/${m.userId}`,
           { headers: getAuthHeaders() })
@@ -429,14 +426,14 @@ const playerModalClose = document.getElementById('playerModalClose');
           <input type="checkbox" value="${m.userId}">
         </div>`;
 
-        /* —- ставим обработчик СРАЗУ, как только чекбокс появился —- */
+
         div.querySelector('input[type="checkbox"]').onchange =
           () => updatePlayerSelectState(reqP, maxP);
 
         playerListEl.appendChild(div);
       });
 
-      await Promise.all(avatarPromises);          // дожидаемся вывода всех
+      await Promise.all(avatarPromises);
 
     } catch { playerListEl.textContent = 'Błąd.'; }
   }
@@ -449,7 +446,7 @@ const playerModalClose = document.getElementById('playerModalClose');
   async function onPlayersConfirm () {
     if (!_selectedTeam || !_selectedPlayers.length) return;
 
-    /*  доп.валидация лимитов — оставляем как была  … */
+
 
     const url = new URL(`${API}/competition/participation`);
     url.searchParams.append('competitionId', COMP_ID);
@@ -462,24 +459,24 @@ const playerModalClose = document.getElementById('playerModalClose');
       if (!r.ok) throw new Error(j.message || `HTTP ${r.status}`);
       toast('Drużyna zgłoszona! ✅');
       closeAllModals();
-      await loadEssentialLeagueData();     // перерисовать UI
+      await loadEssentialLeagueData();
     } catch (e) { toast(e.message || 'Błąd rejestracji', true); }
   }
   if (playerConfBtn) playerConfBtn.onclick = onPlayersConfirm;
 
 
-  /* ╔═ 7. FEEDBACK (send / list / like / delete) ────────────────────── */
-  async function sendFeedback (inp, btn) { /* ... как раньше ... */ const txt=inp.value.trim();if(!txt)return;try{const r=await fetch(`${API}/feedback/create/${COMP_ID}`,{method:'POST',headers:{'Content-Type':'application/json',...getAuthHeaders()},body:JSON.stringify({message:txt})});const res=await r.json().catch(()=>({message:'OK'}));if(!r.ok)throw new Error(res.message);toast('Wysłano');inp.value='';btn.disabled=true;loadFeedbackList();}catch(e){toast(e.message||'Błąd',true);}}
-  async function loadFeedbackList () { /* ... как раньше ... */ const wrap=document.querySelector('.feedback');if(!wrap)return;wrap.querySelectorAll('.comment').forEach(n=>n.remove());const myId=await getMeId();const rows=await fetch(`${API}/feedback/get-by-competition?competitionId=${COMP_ID}`,{headers:getAuthHeaders()}).then(r=>r.ok?r.json():[]);const toneEmoji={'very positive':'😍',positive:'😊',neutral:'😐',negative:'😕','very negative':'😡'};for(const row of rows){const u=await fetch(`${API}/user/getUser/${row.userId}`,{headers:getAuthHeaders()}).then(r=>r.json());const av=await fetch(`${API}/user/avatar/${u.username}`,{headers:getAuthHeaders()}).then(r=>r.text()).catch(()=>'img/profile.svg');const when=new Date(row.createdAt).toLocaleString('pl-PL',{hour:'2-digit',minute:'2-digit',day:'2-digit',month:'short'});const card=document.createElement('div');card.className='comment';card.dataset.id=row.id;card.innerHTML=`<div class="comment-header"><div class="avatar-comment"><img src="${av}" style="width:35px;height:35px;border-radius:50%"></div><span>${u.username}</span><span class="timestamp">${when}</span>${myId===row.userId?'<button class="fb-del" style="background:none;border:none;font-size:18px;cursor:pointer">🗑️</button>':''}</div><p style="margin:10px 0 0 45px">${row.message}</p><div class="comment-reactions"><span style="font-size:20px">${toneEmoji[row.tonality?.toLowerCase()]||'😐'}</span><button class="fb-like"><img src="img/thumbs-up.svg" style="width:20px;height:20px"><span>${row.likes}</span></button></div>`;wrap.appendChild(card);}wrap.querySelectorAll('.fb-like').forEach(b=>b.onclick=async e=>{e.stopPropagation();const id=b.closest('.comment').dataset.id;try{await fetch(`${API}/feedback/like/${id}`,{method:'PUT',headers:getAuthHeaders()});const s=b.querySelector('span');s.textContent=+s.textContent+1;}catch{toast('Błąd',true);}});wrap.querySelectorAll('.fb-del').forEach(b=>b.onclick=async e=>{e.stopPropagation();if(!confirm('Usunąć?'))return;const id=b.closest('.comment').dataset.id;try{await fetch(`${API}/feedback/delete/${id}`,{method:'DELETE',headers:getAuthHeaders()});b.closest('.comment').remove();toast('Usunięto');}catch{toast('Błąd',true);}});}
+
+  async function sendFeedback (inp, btn) {  const txt=inp.value.trim();if(!txt)return;try{const r=await fetch(`${API}/feedback/create/${COMP_ID}`,{method:'POST',headers:{'Content-Type':'application/json',...getAuthHeaders()},body:JSON.stringify({message:txt})});const res=await r.json().catch(()=>({message:'OK'}));if(!r.ok)throw new Error(res.message);toast('Wysłano');inp.value='';btn.disabled=true;loadFeedbackList();}catch(e){toast(e.message||'Błąd',true);}}
+  async function loadFeedbackList () {  const wrap=document.querySelector('.feedback');if(!wrap)return;wrap.querySelectorAll('.comment').forEach(n=>n.remove());const myId=await getMeId();const rows=await fetch(`${API}/feedback/get-by-competition?competitionId=${COMP_ID}`,{headers:getAuthHeaders()}).then(r=>r.ok?r.json():[]);const toneEmoji={'very positive':'😍',positive:'😊',neutral:'😐',negative:'😕','very negative':'😡'};for(const row of rows){const u=await fetch(`${API}/user/getUser/${row.userId}`,{headers:getAuthHeaders()}).then(r=>r.json());const av=await fetch(`${API}/user/avatar/${u.username}`,{headers:getAuthHeaders()}).then(r=>r.text()).catch(()=>'img/profile.svg');const when=new Date(row.createdAt).toLocaleString('pl-PL',{hour:'2-digit',minute:'2-digit',day:'2-digit',month:'short'});const card=document.createElement('div');card.className='comment';card.dataset.id=row.id;card.innerHTML=`<div class="comment-header"><div class="avatar-comment"><img src="${av}" style="width:35px;height:35px;border-radius:50%"></div><span>${u.username}</span><span class="timestamp">${when}</span>${myId===row.userId?'<button class="fb-del" style="background:none;border:none;font-size:18px;cursor:pointer">🗑️</button>':''}</div><p style="margin:10px 0 0 45px">${row.message}</p><div class="comment-reactions"><span style="font-size:20px">${toneEmoji[row.tonality?.toLowerCase()]||'😐'}</span><button class="fb-like"><img src="img/thumbs-up.svg" style="width:20px;height:20px"><span>${row.likes}</span></button></div>`;wrap.appendChild(card);}wrap.querySelectorAll('.fb-like').forEach(b=>b.onclick=async e=>{e.stopPropagation();const id=b.closest('.comment').dataset.id;try{await fetch(`${API}/feedback/like/${id}`,{method:'PUT',headers:getAuthHeaders()});const s=b.querySelector('span');s.textContent=+s.textContent+1;}catch{toast('Błąd',true);}});wrap.querySelectorAll('.fb-del').forEach(b=>b.onclick=async e=>{e.stopPropagation();if(!confirm('Usunąć?'))return;const id=b.closest('.comment').dataset.id;try{await fetch(`${API}/feedback/delete/${id}`,{method:'DELETE',headers:getAuthHeaders()});b.closest('.comment').remove();toast('Usunięto');}catch{toast('Błąd',true);}});}
   async function handleLikeClick(e){ e.stopPropagation();const btn=e.currentTarget;if(!await getMeId()){toast('Zaloguj się.',true);return;}const c=btn.closest('.comment');if(!c)return;const id=c.dataset.id;btn.disabled=true;try{const r=await fetch(`${API}/feedback/like/${id}`,{method:'PUT',headers:getAuthHeaders()});if(r.ok){const s=btn.querySelector('span');s.textContent=parseInt(s.textContent)+1;toast('Polubiono');}else{toast(`Błąd: ${r.statusText}`,true);btn.disabled=false;}}catch(e){toast("Błąd sieci.",true);btn.disabled=false;}}
   async function handleDeleteClick(e){ e.stopPropagation();const btn=e.currentTarget;if(!confirm('Usunąć?'))return;const c=btn.closest('.comment');if(!c)return;const id=c.dataset.id;btn.disabled=true;try{const r=await fetch(`${API}/feedback/delete/${id}`,{method:'DELETE',headers:getAuthHeaders()});if(r.ok){c.remove();toast('Usunięto');}else{toast(`Błąd: ${r.statusText}`,true);btn.disabled=false;}}catch(e){toast("Błąd sieci.",true);btn.disabled=false;}}
 
 
-  /* ╔═ 8. PARTICIPANT HELPERS ───────────────────────────────────────── */
+
   async function fetchParticipant (playerId, teamId) {
     const headers = getAuthHeaders();
 
-    /* ---- игрок ---- */
+
     if (playerId) {
       try {
         const u   = await fetch(`${API}/user/getUser/${playerId}`, { headers }).then(r => r.json());
@@ -492,10 +489,10 @@ const playerModalClose = document.getElementById('playerModalClose');
       }
     }
 
-    /* ---- команда ---- */
+
     if (teamId) {
       try {
-        // ⚠️  новый правильный энд-поинт
+
         const meta     = await fetch(`${API}/team/current/${teamId}`, { headers })
           .then(r => r.ok ? r.json() : null);
         const teamName = meta?.teamName || `Drużyna #${teamId}`;
@@ -510,7 +507,7 @@ const playerModalClose = document.getElementById('playerModalClose');
       }
     }
 
-    /* ---- fallback ---- */
+
     return { type: 'unknown', name: '—', img: 'img/default-team-avatar.png', id: null };
   }
 
@@ -518,7 +515,7 @@ const playerModalClose = document.getElementById('playerModalClose');
   const nameHTML=p=>`<a href="${linkToProfile(p)}" style="color:inherit;text-decoration:none"><strong>${p.name}</strong></a>`;
   const arrowHTML=p=>`<a href="${linkToProfile(p)}"><img src="img/chevron-right.svg" style="width:18px;height:18px"></a>`;
 
-  /* ╔═ 9. TEAMS & TOP ───────────────────────────────────────────────── */
+
   async function loadTeams () {
     const list = document.querySelector('.match-list'); if(!list) return; list.innerHTML = '<div class="loading-placeholder">Ładowanie...</div>'; list.style.display = 'block'; try {const tbl = await fetch(`${API}/competition/league-table/${COMP_ID}`, {headers: getAuthHeaders()}).then(r=>r.ok?r.json():[]); const arr = await Promise.all(tbl.map(r => fetchParticipant(r.playerId, r.teamId))); arr.sort((a,b) => a.name.localeCompare(b.name, 'pl-PL')); list.innerHTML = ''; arr.forEach(p => { list.insertAdjacentHTML('beforeend', `<div class="match participant-item" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; border-bottom: 1px solid #eee; width: auto;  margin-bottom: 10px;border-radius: 10px;height: 50px"><div class="team-details" style="width: auto; padding: 0; display: flex; align-items: center; gap: 10px;" ><img src="${p.img}" style="width:32px;height:32px;border-radius:50%; object-fit: cover;">${nameHTML(p)}</div>${arrowHTML(p)}</div>`); }); } catch (e) { list.innerHTML = '<div class="error-placeholder">Błąd ładowania uczestników.</div>'; }
   }
@@ -526,7 +523,7 @@ const playerModalClose = document.getElementById('playerModalClose');
     const list = document.querySelector('.match-list'); if(!list) return; list.innerHTML = '<div class="loading-placeholder">Ładowanie...</div>'; list.style.display = 'block'; try { const tbl = await fetch(`${API}/competition/league-table/${COMP_ID}`, {headers: getAuthHeaders()}).then(r=>r.ok?r.json():[]); tbl.sort((a,b) => (b.wins*3 + b.draws) - (a.wins*3 + a.draws) || b.wins - a.wins); list.innerHTML = ''; for (const [index, row] of tbl.entries()) { const p = await fetchParticipant(row.playerId, row.teamId); list.insertAdjacentHTML('beforeend', `<div class="match top-item" style="display: flex; justify-content: space-between; align-items: center; padding: 15px; width: auto; background: white; border-radius: 10px; margin-bottom: 15px;"><div class="team-details" style="width: auto; padding: 0; display: flex; align-items: center; gap: 10px; flex-grow: 1;"><img src="${p.img}" style="width:35px;height:35px;border-radius:50%; object-fit: cover;">${nameHTML(p)}</div><div class="team-place" style="display: flex; align-items: center; gap: 8px; margin-left: 20px; flex-shrink: 0;"><span>Miejsce:</span><strong style="font-size: 1.1em;">${index + 1}</strong></div><div class="team-victories" style="display: flex; align-items: center; gap: 8px; margin-left: 20px; flex-shrink: 0;"><span>Punkty:</span><strong style="font-size: 1.1em;">${row.wins*3 + row.draws}</strong></div><div class="team-victories" style="display: flex; align-items: center; gap: 8px; margin-left: 20px; flex-shrink: 0;"><span>Zwycięstwa:</span><strong style="font-size: 1.1em;">${row.wins}</strong></div><div style="margin-left: 20px;">${arrowHTML(p)}</div></div>`); } } catch (e) { list.innerHTML = '<div class="error-placeholder">Błąd ładowania rankingu.</div>';}
   }
 
-  /* ╔═ 10. MATCHES (roundy) ─────────────────────────────────────────── */
+
   let totalR = 1, curR = 1;
 
   async function setupMatches () {
@@ -617,7 +614,7 @@ const playerModalClose = document.getElementById('playerModalClose');
     }
   }
 
-  // ==================== Sidebar ====================
+
   function setupSidebar () {
     const [btnTeams, btnGames, btnTop] = document.querySelectorAll('.sidebar button');
     const h = document.querySelector('.match-header h3');
@@ -629,31 +626,31 @@ const playerModalClose = document.getElementById('playerModalClose');
       document.querySelector('.round-controls')?.remove();
       if(listContainer) listContainer.style.display = 'block';
       const headerEl = listContainer?.querySelector('.match-list-header');
-      if(headerEl) headerEl.style.display = (b === btnGames) ? 'grid' : 'none'; // Показываем заголовок только для матчей
+      if(headerEl) headerEl.style.display = (b === btnGames) ? 'grid' : 'none';
 
       callback();
     }
 
-    // --- Изначально активная вкладка ---
-    // Проверяем, есть ли уже активная кнопка (например, после перезагрузки)
+
+
     const currentlyActive = document.querySelector('.sidebar button.active');
     if (currentlyActive === btnTeams) {
       act(btnTeams, 'Uczestnicy:', loadTeams);
     } else if (currentlyActive === btnGames) {
       act(btnGames, 'Mecze:', setupMatches);
-    } else { // По умолчанию или если активна Top
+    } else {
       act(btnTop, 'Top:', loadTop);
     }
 
 
-    // --- Обработчики кликов ---
+
     btnTeams.onclick = () => { act(btnTeams, 'Uczestnicy:', loadTeams); };
     btnGames.onclick = () => { act(btnGames, 'Mecze:', setupMatches); };
     btnTop.onclick = () => { act(btnTop, 'Top:', loadTop); };
   }
 
 
-  // ==================== Participation Check ====================
+
   async function userParticipates () {
     const uid = await getMeId(); if (!uid) return false;
     try {
@@ -665,26 +662,26 @@ const playerModalClose = document.getElementById('playerModalClose');
     } catch { return false; }
   }
 
-  // ==================== Footer ====================
+
   function footerMetrics() {
     const s1 = document.querySelector('.footer-content span:nth-child(3)'); const s2 = document.querySelector('.footer-content span:nth-child(4)'); if (!s1 || !s2) return; window.addEventListener('load', () => setTimeout(() => { if (performance && performance.timing) { const t = performance.timing; const lT = t.loadEventEnd - t.navigationStart; const tT = t.responseEnd - t.responseStart; if (lT > 0 && isFinite(lT)) { s1.innerHTML = `Strona: <span class="blue">${Math.round(lT)}ms</span>`; } if (tT > 0 && isFinite(tT)) { s2.innerHTML = `Szablon: <span class="blue">${Math.round(tT)}ms</span>`; } } }, 0));
   }
 
 
-// Добавьте ЕДИНОЖДЫ в конце файла, внутри вашей IIFE
+
 document.addEventListener('click', e => {
   const card = e.target.closest('.match-item[data-match-id]');
-  if (!card) return;                           // кликнули не по матчу
+  if (!card) return;
   const matchId = card.dataset.matchId;
   if (!matchId) return;
 
   localStorage.setItem('searchedMatch', matchId);
   window.location.href = 'match-page.html';
 });
-/* делаем доступной из HTML-атрибутов */
+
 window.closeAllModals = closeAllModals;
 function closeAllModals() {
-  if(teamModal) teamModal.classList.add('hidden'); // Проверка на null
+  if(teamModal) teamModal.classList.add('hidden');
   if(playerModal) playerModal.classList.add('hidden');
   if(teamListEl) teamListEl.innerHTML = '';
   if(playerListEl) playerListEl.innerHTML = '';
@@ -692,7 +689,7 @@ function closeAllModals() {
   if(playerConfBtn) playerConfBtn.disabled = true;
   _selectedTeam = null; _selectedPlayers = [];
 }
-const _gsCache = new Map();                         // gameSystemId → объект GS
+const _gsCache = new Map();
 
 async function fetchGameSystem(gameSystemId) {
   if (_gsCache.has(gameSystemId)) return _gsCache.get(gameSystemId);
@@ -712,9 +709,9 @@ function updatePlayerSelectState(reqP, maxP) {
   const ok = _selectedPlayers.length >= reqP &&
     _selectedPlayers.length <= maxP;
 
-  playerConfBtn.disabled = !ok;                // актив / неактив
+  playerConfBtn.disabled = !ok;
 
-  // блокируем лишние чекбоксы, когда достигнут лимит
+
   playerListEl.querySelectorAll('input:not(:checked)')
     .forEach(ch => ch.disabled = _selectedPlayers.length >= maxP);
 }
@@ -732,7 +729,7 @@ async function renderTeamList () {
     const meId = await getMeId();
     if (!meId) { teamListEl.textContent = 'Musisz być zalogowany.'; return; }
 
-    const res   = await fetch(`${API}/team/managed?id=${meId}`,   // <-- исправлено
+    const res   = await fetch(`${API}/team/managed?id=${meId}`,
       { headers: getAuthHeaders() });
     const teams = res.ok ? await res.json() : [];
     if (!teams.length) { teamListEl.textContent = 'Brak drużyn.'; return; }
@@ -756,9 +753,9 @@ async function renderTeamList () {
                  value="${t.id}" data-team-name="${t.teamName}">
         </label>`);
     }
-    window.getMeId = getMeId;    // но в данном случае это не нужно
+    window.getMeId = getMeId;
 
-    /* —- обработчик выбора команды —- */
+
     teamListEl.querySelectorAll('input[name="teamSelection"]')
       .forEach(r =>
         r.onchange = () => {

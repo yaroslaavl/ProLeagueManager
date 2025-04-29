@@ -4,59 +4,59 @@ function togglePassword(inputId, toggleButton) {
 
   if (passwordField.type === "password") {
     passwordField.type = "text";
-    toggleButton.src = "img/eye-open.svg"; // Устанавливаем картинку "скрыть"
+    toggleButton.src = "img/eye-open.svg";
   } else {
     passwordField.type = "password";
-    toggleButton.src = "img/eye-close.svg"; // Устанавливаем картинку "показать"
+    toggleButton.src = "img/eye-close.svg";
   }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
   const links = document.querySelectorAll(".nav-links .link");
 
-  // Получаем текущий URL
+
   const currentPage = window.location.pathname;
 
   links.forEach(link => {
-    // Проверяем, соответствует ли href текущему пути
+
     if (link.href.includes(currentPage)) {
-      link.classList.add("active"); // Добавляем активный класс
+      link.classList.add("active");
     } else {
-      link.classList.add("dimmed"); // Делаем остальные ссылки полупрозрачными
+      link.classList.add("dimmed");
     }
   });
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-  const links = document.querySelectorAll("a"); // Все ссылки на странице
+  const links = document.querySelectorAll("a");
 
   links.forEach(link => {
     link.addEventListener("click", (e) => {
-      // Исключаем переходы с якорями или внешние ссылки
+
       if (!link.href.startsWith(window.location.origin) || link.href.includes("#")) {
         return;
       }
 
-      e.preventDefault(); // Отменяем стандартный переход
+      e.preventDefault();
 
-      // Добавляем класс для анимации
+
       document.body.classList.add("fade-out");
 
-      // Переходим на новую страницу после завершения анимации
+
       setTimeout(() => {
         window.location.href = link.href;
-      }, 500); // Время должно совпадать с длительностью анимации
+      }, 500);
     });
   });
 });
 
 
 document.addEventListener("DOMContentLoaded", () => {
-  const emailInput = document.getElementById("emailInput"); // Поле для ввода email
-  const sendButton = document.getElementById("sendButton"); // Кнопка "Wyślij"
+  const emailInput = document.getElementById("emailInput");
+  const sendButton = document.getElementById("sendButton");
 
   function toggleSendButton() {
-    // Проверяем, заполнено ли поле email
+
     if (emailInput.value.trim() !== "") {
       sendButton.disabled = false;
       sendButton.style.opacity = "1";
@@ -68,10 +68,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Добавляем обработчик на изменение поля email
+
   emailInput.addEventListener("input", toggleSendButton);
 
-  // Проверяем кнопку при загрузке страницы
+
   toggleSendButton();
 });
 

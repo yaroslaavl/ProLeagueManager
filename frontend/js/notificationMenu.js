@@ -1,10 +1,10 @@
-// 🔹 Функция открытия/закрытия меню уведомлений
+
 window.toggleNotifications = function (event) {
   const notificationPopup = document.getElementById("notificationPopup");
   notificationPopup.classList.toggle("active");
   event.stopPropagation();
 };
-// 🔹 Закрытие меню при клике вне его
+
 document.addEventListener("click", function (event) {
   const notificationPopup = document.getElementById("notificationPopup");
   const notificationButton = document.getElementById("notification_button");
@@ -13,12 +13,12 @@ document.addEventListener("click", function (event) {
     notificationPopup.classList.remove("active");
   }
 });
-// 🔹 Предотвращение закрытия меню при клике внутри
+
 document.getElementById("notificationPopup").addEventListener("click", function (event) {
   event.stopPropagation();
 });
-// 🔹 Функция подключения к SSE
-// 🔹 Функция подключения к SSE
+
+
 async function connectSSE(userId, token) {
   const eventSource = new EventSource(`http://localhost:8765/my-notifications/subscribe/${userId}?token=${token}`);
 
@@ -48,7 +48,7 @@ async function connectSSE(userId, token) {
   };
 }
 
-// 🔹 Получение всех уведомлений
+
 async function getAllNotifications(userId, token) {
   try {
     const response = await fetch("http://localhost:8765/my-notifications/get-all-notifications", {
@@ -71,7 +71,7 @@ async function getAllNotifications(userId, token) {
   }
 }
 
-// 🔹 Функция добавления уведомлений в меню
+
 function addNotificationToMenu(notification) {
   const notificationList = document.querySelector(".notification-list");
   const notificationItem = document.createElement("div");
@@ -81,13 +81,13 @@ function addNotificationToMenu(notification) {
     notificationItem.classList.add("unread");
   }
 
-  // Формируем HTML для уведомления
+
   let notificationHTML = `
         <p class="notification-message"><strong>${notification.eventType}</strong>: ${notification.message}</p>
         <span class="notification-time">${new Date(notification.createdAt).toLocaleDateString()}</span>
     `;
 
-  // Если уведомление о приглашении в команду, добавляем кнопки "Принять" и "Отклонить"
+
   if (notification.eventType === "TEAM_INVITATION") {
     const teamNameMatch = notification.message.match(/team:\s(.+)/);
     const teamName = teamNameMatch ? teamNameMatch[1] : "Nieznana drużyna";
@@ -103,13 +103,13 @@ function addNotificationToMenu(notification) {
   notificationItem.innerHTML = notificationHTML;
   notificationList.prepend(notificationItem);
 
-  // Удаление старых уведомлений, если их больше 20
+
   if (notificationList.children.length > 20) {
     notificationList.removeChild(notificationList.lastChild);
   }
 }
 
-// 🔹 Функция обработки принятия или отклонения приглашения
+
 async function handleTeamInviteAccept(teamName, accept) {
   try {
     const token = localStorage.getItem("accToken");
@@ -126,7 +126,7 @@ async function handleTeamInviteAccept(teamName, accept) {
     if (!response.ok) throw new Error(`Ошибка ${response.status}`);
 
     alert(`Zaproszenie ${accept ? "zaakceptowane" : "odrzucone"} do drużyny: ${teamName}`);
-    location.reload(); // Обновление страницы для синхронизации данных
+    location.reload();
   } catch (err) {
     console.error("❌ Ошибка обработки приглашения:", err);
     alert("Nie udało się przetworzyć zaproszenia. Spróbuj ponownie.");
@@ -148,13 +148,13 @@ async function handleTeamInviteDecline(teamName, accept) {
     if (!response.ok) throw new Error(`Ошибка ${response.status}`);
 
     alert(`Zaproszenie ${accept ? "zaakceptowane" : "odrzucone"} do drużyny: ${teamName}`);
-    location.reload(); // Обновление страницы для синхронизации данных
+    location.reload();
   } catch (err) {
     console.error("❌ Ошибка обработки приглашения:", err);
     alert("Nie udało się przetworzyć zaproszenia. Spróbuj ponownie.");
   }
 }
-// 🔹 Инициализация уведомлений
+
 document.addEventListener("DOMContentLoaded", async () => {
   await refreshtoken();
   const token = localStorage.getItem("accToken");
@@ -187,5 +187,5 @@ async function GetUserId(token) {
     return null;
   }
 }
-// 🔹 Получение всех уведомлений
+
 

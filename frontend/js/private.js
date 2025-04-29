@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", async () => {
   try {
-    // Проверяем наличие токенов
+
     const accToken = localStorage.getItem("accToken");
     const refToken = localStorage.getItem("refToken");
 
@@ -9,15 +9,15 @@ document.addEventListener("DOMContentLoaded", async () => {
       return;
     }
 
-    // Обновляем токены перед загрузкой данных
+
     await refreshToken();
 
-    // Загружаем данные пользователя
+
     await getUserData();
 
 
 
-    // Проверяем сохранённый таймаут кнопки верификации
+
     checkVerifyButtonState();
 
   } catch (err) {
@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 });
 
-// Функция обновления токена
+
 async function refreshToken() {
   try {
     const url = "http://localhost:8765/auth/refresh-token";
@@ -52,7 +52,7 @@ async function refreshToken() {
   }
 }
 
-// Функция получения данных пользователя
+
 async function getUserData() {
   try {
     const url = "http://localhost:8765/user/profile";
@@ -70,7 +70,6 @@ async function getUserData() {
 
     const data = await response.json();
 
-    // Обновляем UI
     document.getElementById('e-mail').innerText = data.email;
     const statusElement = document.getElementById('status');
     const verifyBtn = document.getElementById('verify');
@@ -89,7 +88,7 @@ async function getUserData() {
   }
 }
 
-// Функция выхода из системы
+
 async function logOut() {
   try {
     const accToken = localStorage.getItem("accToken");
@@ -112,32 +111,29 @@ async function logOut() {
   }
 }
 
-// Функция измерения времени загрузки страницы
+
 document.addEventListener("DOMContentLoaded", () => {
   const pageLoadSpan = document.querySelector(".footer-content span:nth-child(3)");
   const htmlLoadSpan = document.querySelector(".footer-content span:nth-child(4)");
 
   if (pageLoadSpan && htmlLoadSpan) {
-    // Ждём окончания полной загрузки страницы
     window.addEventListener("load", () => {
       setTimeout(() => {
         const performanceTiming = performance.timing;
 
-        // Время полной загрузки страницы
         const pageLoadTime = performanceTiming.loadEventEnd - performanceTiming.navigationStart;
 
-        // Время загрузки HTML
         const htmlLoadTime = performanceTiming.responseEnd - performanceTiming.responseStart;
 
-        // Проверяем, что значения корректны
-        const validPageLoadTime = pageLoadTime > 0 ? pageLoadTime : performance.now(); // Используем performance.now() как fallback
+
+        const validPageLoadTime = pageLoadTime > 0 ? pageLoadTime : performance.now();
         const validHtmlLoadTime = htmlLoadTime > 0 ? htmlLoadTime : 0;
 
-        // Обновляем значения в DOM с обёрткой для стилей
+
         pageLoadSpan.innerHTML = `Strona: <span class="blue">${Math.round(validPageLoadTime)}ms</span>`;
         htmlLoadSpan.innerHTML = `Szablon: <span class="blue">${Math.round(validHtmlLoadTime)}ms</span>`;
 
-        // Логируем значения для отладки
+
         console.log("Page Load Time (ms):", validPageLoadTime);
         console.log("HTML Load Time (ms):", validHtmlLoadTime);
       }, 0);
@@ -145,7 +141,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-// Функция верификации email
+
 async function verifyEmail() {
   try {
     const accToken = localStorage.getItem('accToken');
@@ -163,7 +159,7 @@ async function verifyEmail() {
 
     alert("Powiadomienie o weryfikacji było wysłane");
 
-    // Устанавливаем таймаут
+
     const timeoutEnd = Date.now() + 60000;
     localStorage.setItem("verifyTimeout", timeoutEnd);
     updateVerifyButtonState(timeoutEnd);
@@ -173,7 +169,7 @@ async function verifyEmail() {
   }
 }
 
-// Функция обновления состояния кнопки верификации
+
 function updateVerifyButtonState(timeoutEnd) {
   const verifyButton = document.getElementById("verify");
   const interval = setInterval(() => {
@@ -191,7 +187,7 @@ function updateVerifyButtonState(timeoutEnd) {
   }, 1000);
 }
 
-// Проверяем сохранённый таймаут при загрузке страницы
+
 function checkVerifyButtonState() {
   const savedTimeout = localStorage.getItem("verifyTimeout");
   if (savedTimeout && Date.now() < savedTimeout) {
@@ -199,7 +195,7 @@ function checkVerifyButtonState() {
   }
 }
 
-// Функции для работы с паролями и удалением аккаунта
+
 async function updatePassword() {
   try {
     const accToken = localStorage.getItem('accToken');
@@ -227,8 +223,54 @@ async function updatePassword() {
   }
 }
 
-// Открытие/закрытие оверлеев
+
 function openOverlay() { document.getElementById('passwordOverlay').style.display = 'flex'; }
 function closeOverlay() { document.getElementById('passwordOverlay').style.display = 'none'; }
 function changePasswordOpenOverlay() { document.getElementById('changePasswordOverlay').style.display = 'flex'; }
 function changePasswordCloseOverlay() { document.getElementById('changePasswordOverlay').style.display = 'none'; }
+async function delAcc() {
+  const passInput = document.getElementById('pass');
+  const password = passInput.value.trim();
+  if (!password) {
+    alert('Пожалуйста, введите пароль.');
+    return;
+  }
+
+  try {
+
+    await refreshtoken();
+    const accToken = localStorage.getItem('accToken');
+    if (!accToken) throw new Error('Нет access token');
+
+
+    const res = await fetch('http://localhost:8765/user/delete-user-account', {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${accToken}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ password })
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      alert('Ошибка при удалении аккаунта: ' + (err.message || res.statusText));
+      return;
+    }
+
+
+    closeOverlay();
+    localStorage.removeItem('accToken');
+    localStorage.removeItem('refToken');
+
+
+
+    window.location.href = 'login.html';
+  }
+  catch (e) {
+    console.error('delAcc error:', e);
+    alert('Не удалось удалить аккаунт. Смотрите консоль для деталей.');
+  }
+}
+
+window.delAcc = delAcc;

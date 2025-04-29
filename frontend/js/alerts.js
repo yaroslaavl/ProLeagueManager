@@ -41,26 +41,26 @@ document.addEventListener("DOMContentLoaded", () => {
   const htmlLoadSpan = document.querySelector(".footer-content span:nth-child(4)");
 
   if (pageLoadSpan && htmlLoadSpan) {
-    // Ждём окончания полной загрузки страницы
+
     window.addEventListener("load", () => {
       setTimeout(() => {
         const performanceTiming = performance.timing;
 
-        // Время полной загрузки страницы
+
         const pageLoadTime = performanceTiming.loadEventEnd - performanceTiming.navigationStart;
 
-        // Время загрузки HTML
+
         const htmlLoadTime = performanceTiming.responseEnd - performanceTiming.responseStart;
 
-        // Проверяем, что значения корректны
-        const validPageLoadTime = pageLoadTime > 0 ? pageLoadTime : performance.now(); // Используем performance.now() как fallback
+
+        const validPageLoadTime = pageLoadTime > 0 ? pageLoadTime : performance.now();
         const validHtmlLoadTime = htmlLoadTime > 0 ? htmlLoadTime : 0;
 
-        // Обновляем значения в DOM с обёрткой для стилей
+
         pageLoadSpan.innerHTML = `Strona: <span class="blue">${Math.round(validPageLoadTime)}ms</span>`;
         htmlLoadSpan.innerHTML = `Szablon: <span class="blue">${Math.round(validHtmlLoadTime)}ms</span>`;
 
-        // Логируем значения для отладки
+
         console.log("Page Load Time (ms):", validPageLoadTime);
         console.log("HTML Load Time (ms):", validHtmlLoadTime);
       }, 0);
@@ -79,44 +79,44 @@ document.addEventListener("DOMContentLoaded", () => {
 
   toggleCheckbox.addEventListener("change", () => {
     if (toggleCheckbox.checked) {
-      console.log("Toggle: ON"); // Сообщение при включении
+      console.log("Toggle: ON");
     } else {
-      console.log("Toggle: OFF"); // Сообщение при выключении
+      console.log("Toggle: OFF");
     }
   });
 });
-// Найти все чекбоксы с классом toggle-checkbox
+
 const checkboxes = document.querySelectorAll('.toggle-checkbox');
-// Функция для обработки изменений состояния чекбоксов
+
 checkboxes.forEach((checkbox) => {
   checkbox.addEventListener('change', (event) => {
 
-    const id = event.target.id; // ID чекбокса
-    const isChecked = event.target.checked; // Состояние чекбокса (true или false)
+    const id = event.target.id;
+    const isChecked = event.target.checked;
     const accToken = localStorage.getItem('accToken');
-    // Преобразование ID чекбокса в eventCategory для запроса
+
     let eventCategory;
     if (id === 'toggle1') {
-      eventCategory = 'GENERAL'; // Пример категории
+      eventCategory = 'GENERAL';
     } else if (id === 'toggle3') {
-      eventCategory = 'MATCH'; // Пример категории
+      eventCategory = 'MATCH';
     } else if (id === 'toggle4') {
-      eventCategory = 'TOURNAMENT'; // Пример категории
+      eventCategory = 'TOURNAMENT';
     }else if (id === 'toggle5'){
-      eventCategory = 'LEAGUE'; // Пример категории
+      eventCategory = 'LEAGUE';
     }else if (id === 'toggle6'){
-      eventCategory = 'TEAM'; // Пример категории
+      eventCategory = 'TEAM';
     } else {
       console.error(`${id}`);
       return;
     }
 
-    // Подготовка данных для отправки
+
     const formData = new URLSearchParams();
     formData.append('eventCategory', eventCategory);
     formData.append('isActive', isChecked);
 
-    // Отправка POST-запроса
+
     fetch('http://localhost:8765/my-notifications/subscribeToNotification', {
       method: 'POST',
       headers: {
@@ -165,8 +165,8 @@ async function logOut(){
     const response = await fetch('http://localhost:8765/auth/logout',{
       method: 'POST',
       headers: {
-        "Authorization": `Bearer ${accToken}`, // Добавляем заголовок Authorization
-        "Content-Type": "application/json" // Указываем формат данных
+        "Authorization": `Bearer ${accToken}`,
+        "Content-Type": "application/json"
       }
     });
     if (!response.ok) {

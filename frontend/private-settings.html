@@ -20,7 +20,7 @@
         <a href="main.html"><img src="img/blogo_text.svg" alt="Logo" class="logo"></a>
         <div style="margin-top: 25px;margin-right: 10px;color: #808A9D;font-size: 25px">|</div>
         <div style="display: flex;gap: 60px">
-          <nav class="nav" style="gap: 0px">
+          <nav class="nav">
             <img src="img/home.png" alt="" style="height: 20px">
             <a href="#" class="nav-link-header" onclick="toMain()">Glówna</a>
           </nav>
@@ -110,6 +110,7 @@
               <div class="menu-links">
                 <a href="public-profile.html" class="menu-link">Profil publiczny</a>
                 <a href="profile-settings.html" class="menu-link">Ustawienie</a>
+                <a href="admin-panel-user.html" class="menu-link" style="color: #EA3943" id="adminPanelLink">Admin Panel</a>
                 <a href="#" class="menu-link" id="logOut" onclick="logOut()">Log Out</a>
               </div>
             </div>
@@ -153,7 +154,7 @@
         <p>Weryfikacja adresu e-mail  <span style="margin-left: 40px">Status: <span style="color: #EA3943" id="status">Off</span></span></p>
         <div class="underver-text">
         <p class="under-text">Jesli chcesz zmienié swój adres e-mail,<br>skontaktuj sie z <a href="main.html">Customer Service</a></p>
-        <button id="verify">Zweryfikować</button>
+        <button id="verify" onclick="verifyEmail()">Zweryfikować</button>
         </div>
       </div>
       </div>
@@ -161,14 +162,14 @@
           <p>Hasło</p>
           <div style="display: flex;border-bottom:1px solid #EFF2F5;padding: 0px 0px 12px 0px">
           <p class="under-text">Ustaw unikalne hasło dla lepszej ochrony</p>
-          <button id="changePassword">Zmień hasło</button>
+          <button id="changePassword" onclick="changePasswordOpenOverlay()">Zmień hasło</button>
           </div>
       </div>
       <div class="delete">
         <p>Usuwanie konta</p>
         <div style="display: flex">
           <p class="under-text">Usuwanie konta</p>
-          <button id="deleteAcc">Usuń konto</button>
+          <button id="deleteAcc" onclick="openOverlay()">Usuń konto</button>
         </div>
       </div>
   </div>
@@ -185,7 +186,7 @@
         <h2>Wprowadź hasło</h2>
         <input type="password" class="password-input" placeholder="Stare hasło" id="oldPass">
         <input type="password" class="password-input" placeholder="Nowe hasło" id="newPass">
-        <button id="updatePassword" class="submit" onclick="">Zmienić hasło</button>
+        <button id="updatePassword" class="submit" onclick="updatePassword()">Zmienić hasło</button>
         <button class="close-overlay-btn" onclick="changePasswordCloseOverlay()">Zamknac</button>
       </div>
     </div>

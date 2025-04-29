@@ -1,5 +1,5 @@
 const API = 'http://localhost:8765';
-let currentUserId = null;                 // сюда запишем id пользователя
+let currentUserId = null;
 
 function authHeaders () {
   return {
@@ -10,7 +10,7 @@ function authHeaders () {
 
 document.addEventListener("DOMContentLoaded", async () => {
   try {
-    // Проверяем наличие токенов
+
     const accToken = localStorage.getItem("accToken");
     const refToken = localStorage.getItem("refToken");
 
@@ -19,10 +19,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       return;
     }
 
-    // Обновляем токены перед загрузкой данных
+
     await refreshToken();
 
-    // Загружаем данные пользователя
+
     await getUserData();
 
 
@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 });
 
-// Функция обновления токена
+
 async function refreshToken() {
   try {
     const url = "http://localhost:8765/auth/refresh-token";
@@ -59,7 +59,7 @@ async function refreshToken() {
   }
 }
 
-// Функция получения данных пользователя
+
 async function getUserData() {
   try {
     const url = `http://localhost:8765/user/profile`;
@@ -76,18 +76,18 @@ async function getUserData() {
     if (!response.ok) throw new Error(`Ошибка загрузки данных пользователя: ${response.status}`);
 
     const data = await response.json();
-    currentUserId = data.id;      // ← понадобится для запросов соревнований
+    currentUserId = data.id;
 
-    // Устанавливаем данные пользователя в UI
+
     document.getElementById('first_last_name').innerHTML = `${data.firstName} ${data.lastName}`;
     document.getElementById("nickname").innerHTML = data.username;
     document.getElementById("date_of_birth").innerHTML = data.birthDate.split('-').reverse().join('.');
     document.getElementById("creation-date").innerHTML = new Date(data.createdAt).toLocaleDateString();
 
-    // Загружаем команды пользователя
+
     await getTeam(data.id);
 
-    // Загружаем аватар
+
     try {
       const res = await fetch(`http://localhost:8765/user/avatar/${data.username}`);
       const urlImg = await res.text();
@@ -101,7 +101,7 @@ async function getUserData() {
   }
 }
 
-// Функция выхода из системы
+
 async function logOut() {
   try {
     const accToken = localStorage.getItem("accToken");
@@ -124,7 +124,7 @@ async function logOut() {
   }
 }
 
-// Функция загрузки команд пользователя
+
 async function getTeam(userId) {
   try {
     const url = `http://localhost:8765/team/get-teams-by-userId?userId=${userId}`;
@@ -206,26 +206,26 @@ document.addEventListener("DOMContentLoaded", () => {
   const htmlLoadSpan = document.querySelector(".footer-content span:nth-child(4)");
 
   if (pageLoadSpan && htmlLoadSpan) {
-    // Ждём окончания полной загрузки страницы
+
     window.addEventListener("load", () => {
       setTimeout(() => {
         const performanceTiming = performance.timing;
 
-        // Время полной загрузки страницы
+
         const pageLoadTime = performanceTiming.loadEventEnd - performanceTiming.navigationStart;
 
-        // Время загрузки HTML
+
         const htmlLoadTime = performanceTiming.responseEnd - performanceTiming.responseStart;
 
-        // Проверяем, что значения корректны
-        const validPageLoadTime = pageLoadTime > 0 ? pageLoadTime : performance.now(); // Используем performance.now() как fallback
+
+        const validPageLoadTime = pageLoadTime > 0 ? pageLoadTime : performance.now();
         const validHtmlLoadTime = htmlLoadTime > 0 ? htmlLoadTime : 0;
 
-        // Обновляем значения в DOM с обёрткой для стилей
+
         pageLoadSpan.innerHTML = `Strona: <span class="blue">${Math.round(validPageLoadTime)}ms</span>`;
         htmlLoadSpan.innerHTML = `Szablon: <span class="blue">${Math.round(validHtmlLoadTime)}ms</span>`;
 
-        // Логируем значения для отладки
+
         console.log("Page Load Time (ms):", validPageLoadTime);
         console.log("HTML Load Time (ms):", validHtmlLoadTime);
       }, 0);
@@ -233,7 +233,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-// Обработчик для кнопки создания команды
+
 document.addEventListener("DOMContentLoaded", function () {
   const createTeamBtn = document.getElementById("create_team_btn");
   if (createTeamBtn) {
@@ -244,7 +244,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function openCreateTeamDialog() {
-  // Создание затемненного фона
+
   const overlay = document.createElement("div");
   overlay.style.position = "fixed";
   overlay.style.top = "0";
@@ -257,7 +257,7 @@ function openCreateTeamDialog() {
   overlay.style.alignItems = "center";
   overlay.style.zIndex = "1000";
 
-  // Создание диалогового окна
+
   const dialog = document.createElement("div");
   dialog.style.background = "#fff";
   dialog.style.padding = "20px 20px";
@@ -266,7 +266,7 @@ function openCreateTeamDialog() {
   dialog.style.minWidth = "400px";
   dialog.style.textAlign = "center";
 
-  // Заголовок
+
   const title = document.createElement("h2");
   title.textContent = "Stworzenie zespolu";
   const paragraph = document.createElement("p");
@@ -274,7 +274,7 @@ function openCreateTeamDialog() {
   paragraph.style.color = "#808A9D";
   paragraph.style.textIndent = "20px";
 
-  // Поле ввода
+
   const input = document.createElement("input");
   input.type = "text";
   input.placeholder = "Nazwa zespołu";
@@ -284,7 +284,7 @@ function openCreateTeamDialog() {
   input.style.border = "1px solid #ccc";
   input.style.borderRadius = "4px";
 
-  // Кнопка подтверждения
+
   const confirmBtn = document.createElement("button");
   confirmBtn.textContent = "Potwierdzić";
   confirmBtn.style.padding = "8px 16px";
@@ -325,7 +325,7 @@ function openCreateTeamDialog() {
     }
   });
 
-  // Кнопка закрытия окна
+
   const closeButton = document.createElement("button");
   closeButton.textContent = "X";
   closeButton.style.position = "absolute";
@@ -354,10 +354,10 @@ function openCreateTeamDialog() {
 async function safeJson (res) {
   if (res.status === 204 || res.status === 205) return [];
   const text = await res.text();
-  if (!text.trim()) return [];          // пустая строка
+  if (!text.trim()) return [];
   return JSON.parse(text);
 }
-/* ─── безопасный JSON уже есть (safeJson) ─── */
+
 async function fetchMatches () {
   const url = `${API}/match/user?userId=${currentUserId}`;
   const res = await fetch(url, { headers: authHeaders() });
@@ -370,9 +370,9 @@ async function fetchCompetitions (type) {
     `&competitionType=${type}`;
   const res = await fetch(url, { headers: authHeaders() });
   if (!res.ok) throw new Error(res.status);
-  return safeJson(res);                 // ← теперь безопасно
+  return safeJson(res);
 }
-/* ───────── выровненные матчи + переход ───────── */
+
 function renderMatches(list) {
   const title = document.querySelector('.content-placeholder .title');
   const cols  = document.querySelector('.content-placeholder .columns');
@@ -382,8 +382,8 @@ function renderMatches(list) {
   title.textContent = 'Mecze';
   createBtn.style.display = 'none';
 
-  /* 1. шапка таблицы */
-  const gridDef = '120px 1fr 70px';               // дата | статус | wynik
+
+  const gridDef = '120px 1fr 70px';
   cols.innerHTML = `
       <span>Data:</span>
       <span>Status:</span>
@@ -397,13 +397,13 @@ function renderMatches(list) {
     width               : '100%'
   });
 
-  /* 2. если матчей нет */
+
   if (!list.length) {
     body.innerHTML = '<p style="padding:20px 0;">Brak danych</p>';
     return;
   }
 
-  /* 3. строки с матчами */
+
   body.innerHTML = list.map(m => {
     const score = `${m.scoreA ?? 0}:${m.scoreB ?? 0}`;
     return `
@@ -423,9 +423,9 @@ function renderMatches(list) {
         <span style="font-weight:bold;color: #000000;">${score}</span>
       </div>`;}).join('');
 
-  /* 4. кликаем по строке → переходим на страницу матча */
+
   body.querySelectorAll('.match-row').forEach(row => {
-    const id = row.dataset.id;          // id матча (или stageId)
+    const id = row.dataset.id;
     row.addEventListener('click', () => {
       localStorage.setItem('searchedMatch', id);
       location.href = 'match-page.html';
@@ -434,20 +434,20 @@ function renderMatches(list) {
 }
 
 
-/* ─────────────  новый renderCompetitions()  ───────────── */
-/* ───── новая версия renderCompetitions ───── */
-/* ───────── renderCompetitions — без стрелки ───────── */
-/* ─────  align-grid renderCompetitions  ───── */
+
+
+
+
 async function renderCompetitions(list, type) {
   const title  = document.querySelector('.content-placeholder .title');
   const cols   = document.querySelector('.content-placeholder .columns');
   const body   = document.getElementById('teams-container');
   const create = document.getElementById('create_team_btn');
 
-  /* шаблон колонок: 45px – баннер, 1fr – название, 80px – статус, 130px – даты */
+
   const gridDef = '45px 1fr 80px 130px';
 
-  /* заголовок + стили шапки */
+
   title.textContent = type === 'LEAGUE' ? 'Ligi' : 'Turnieje';
   cols.innerHTML = `
       <span>Baner</span>
@@ -470,7 +470,7 @@ async function renderCompetitions(list, type) {
     return;
   }
 
-  /* строки */
+
   body.innerHTML = list.map(c => `
     <div class="competition-row" data-id="${c.id}"
          style="
@@ -492,7 +492,7 @@ async function renderCompetitions(list, type) {
       <span style="color: #000000;font-weight: bold">${c.startDate.slice(0,10)} ➜ ${c.endDate.slice(0,10)}</span>
     </div>`).join('');
 
-  /* подгружаем баннеры */
+
   await Promise.all(list.map(async c => {
     try {
       const res = await fetch(`${API}/competition/get-image/${c.id}`);
@@ -507,7 +507,7 @@ async function renderCompetitions(list, type) {
     }
   }));
 
-  /* кликаем по строке */
+
   body.querySelectorAll('.competition-row').forEach(row => {
     const id = row.dataset.id;
     row.addEventListener('click', () => {
@@ -528,7 +528,7 @@ async function renderCompetitions(list, type) {
 async function handleTabClick (e) {
   const tabText = e.target.textContent.trim();
 
-  // снимаем/ставим класс active
+
   document.querySelectorAll('.profile-tabs .tab')
     .forEach(t => t.classList.toggle('active', t === e.target));
 
@@ -545,13 +545,13 @@ async function handleTabClick (e) {
         break;
       }
       case 'Drużyny': {
-        // возвращаем исходный вид («команды»)
+
         document.querySelector('.content-placeholder .title').textContent = 'Drużyny';
         document.querySelector('.content-placeholder .columns').innerHTML = `
              <p>Zdjęcie:</p><p>Nazwa:</p><p>Role:</p>`;
         document.getElementById('teams-container').innerHTML = '';
         document.getElementById('create_team_btn').style.display = 'block';
-        await getTeam(currentUserId);                  // перерисовать список команд
+        await getTeam(currentUserId);
         break;
       }
       case 'Mecze': {
@@ -570,19 +570,14 @@ async function handleTabClick (e) {
 }
 document.querySelectorAll('.profile-tabs .tab')
   .forEach(t => t.addEventListener('click', handleTabClick));
-/* ─── Fallback для toast() ───────────────────────────────────────── */
-/* вставьте этот блок один раз — например, в самый конец publicProfile.js */
+
+
 
 if (typeof toast !== 'function') {
-  /**
-   * Показывает всплывающее сообщение.
-   * @param {string} txt  — текст сообщения
-   * @param {boolean} err — true ⇒ красный фон (ошибка), false ⇒ зелёный
-   * @param {number} ms   — время показа, мс (по умолчанию 3 сек)
-   */
+
   function toast (txt, err = false, ms = 3000) {
 
-    // контейнер под все тосты
+
     let box = document.getElementById('toastContainer');
     if (!box) {
       box = document.createElement('div');
@@ -600,7 +595,7 @@ if (typeof toast !== 'function') {
       document.body.appendChild(box);
     }
 
-    // сам тост
+
     const item = document.createElement('div');
     item.textContent = txt;
     Object.assign(item.style, {
@@ -618,10 +613,10 @@ if (typeof toast !== 'function') {
 
     box.appendChild(item);
 
-    // анимация появления
+
     requestAnimationFrame(() => { item.style.opacity = '1'; });
 
-    // удаляем по таймеру
+
     setTimeout(() => {
       item.style.opacity = '0';
       item.addEventListener('transitionend', () => item.remove());

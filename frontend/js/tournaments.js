@@ -1,7 +1,6 @@
 const API = 'http://localhost:8765';
 const COMP_ID = localStorage.getItem('searchedTournament');
 
-// --- Global State ---
 let meId = null;
 let competitionData = null;
 let gameSystemData = null;
@@ -9,7 +8,6 @@ let allStagesData = [];
 let _team = null;
 let _players = [];
 
-// --- DOM Element Cache ---
 const Elements = {
   container: document.querySelector('.container'),
   tournamentNameStrong: document.querySelector('.tournament-name strong'),
@@ -37,7 +35,6 @@ const Elements = {
   playerModalClose: document.getElementById('playerModalClose'),
 };
 
-// ==================== HELPER FUNCTIONS ====================
 function authHeaders() {
   const t = localStorage.getItem('accToken');
   return t ? { Authorization: `Bearer ${t}` } : {};
@@ -128,7 +125,6 @@ function handleFatalError(msg, det = "") {
   }
 }
 
-// ==================== Initialization ====================
 document.addEventListener('DOMContentLoaded', initializePage);
 
 async function initializePage() {
@@ -150,7 +146,6 @@ async function initializePage() {
   }
 }
 
-// ==================== Auth & Header ====================
 async function setupHeaderBasedOnAuth() {
   if (localStorage.getItem('accToken') && localStorage.getItem('refToken')) {
     await refreshToken();
@@ -199,7 +194,6 @@ async function logOutShareLink() {
   finally { location.href = 'main.html'; }
 }
 
-// ==================== Core Data Loading ====================
 async function loadEssentialData() {
   console.log(`Finding comp ID: ${COMP_ID}`);
   try {
@@ -229,7 +223,6 @@ async function loadEssentialData() {
   }
 }
 
-// ==================== UI Updates ====================
 async function updateCompetitionUI() {
   if (!competitionData || !gameSystemData) return;
   const comp = competitionData, gs = gameSystemData, isInd = gs.isIndividual;
@@ -289,8 +282,7 @@ async function updateRegistrationButtonVisibility() {
       && !(await userParticipates());
     console.log(`Can join: ${canJoin}, Competition status: ${competitionData.status}, User participates: ${await userParticipates()}`);
     if (canJoin) {
-      // Check participant count against maxTeamSize
-      let currentCount = 0;
+            let currentCount = 0;
       if (gameSystemData.isIndividual) {
         const players = await fetch(`${API}/competition/players/${COMP_ID}`, { headers: authHeaders() })
           .then(r => r.ok ? r.json() : []);
@@ -362,7 +354,6 @@ async function loadBanner() {
   }
 }
 
-// ==================== Feedback ====================
 async function loadFeedback() {
   const wrap = Elements.feedbackContainer;
   if (!wrap) return;
@@ -468,7 +459,6 @@ async function handleDeleteClick(e) {
   }
 }
 
-// ==================== Sidebar & Content Loading ====================
 function initSidebar() {
   if (Elements.sidebarButtons.length < 3) return;
   const [teamsBtn, gamesBtn, netBtn] = Elements.sidebarButtons;
@@ -532,23 +522,18 @@ async function loadParticipantsList () {
   Elements.matchListContainer.innerHTML = '<div class="loading-placeholder">Ładowanie…</div>';
 
   try {
-    const ids = await fetchParticipantIds();           // ← новый вызов
-    if (!ids.length) {
+    const ids = await fetchParticipantIds();               if (!ids.length) {
       Elements.matchListContainer.innerHTML = '<div class="info-placeholder">Brak.</div>';
       return;
     }
 
-    // превращаем ID → объекты {type,name,img,…}
-    const parts = await Promise.all(
+        const parts = await Promise.all(
       ids.map(id => gameSystemData.isIndividual
-        ? getParticipant(id, null)      // игрок
-        : getParticipant(null, id))     // команда
-    );
+        ? getParticipant(id, null)              : getParticipant(null, id))         );
 
     parts.sort((a,b) => (a.name || '').localeCompare(b.name || ''));
 
-    Elements.matchListContainer.innerHTML = '';        // очищаем
-    for (const p of parts) {
+    Elements.matchListContainer.innerHTML = '';            for (const p of parts) {
       Elements.matchListContainer.insertAdjacentHTML(
         'beforeend',
         `<div class="match participant-item">
@@ -578,23 +563,20 @@ async function loadMatches(filter) {
   }
 
   try {
-    // Получаем все матчи, сгруппированные по стадиям
-    const gBS = await fetch(`${API}/match/grouped-by-stage/${COMP_ID}`, { headers: authHeaders() })
+        const gBS = await fetch(`${API}/match/grouped-by-stage/${COMP_ID}`, { headers: authHeaders() })
       .then(r => r.ok ? r.json() : Promise.reject());
     if (!gBS || gBS.length === 0) {
       Elements.matchListContainer.innerHTML = '<div class="info-placeholder">Brak M.</div>';
       return;
     }
 
-    // Флатим список
-    const matches = gBS.flatMap(s => (s.matchList || []).map(m => ({ ...m, stageName: s.stageName || `E ${s.stageOrder}` })));
+        const matches = gBS.flatMap(s => (s.matchList || []).map(m => ({ ...m, stageName: s.stageName || `E ${s.stageOrder}` })));
     if (!matches.length) {
       Elements.matchListContainer.innerHTML = '<div class="info-placeholder">Brak M.</div>';
       return;
     }
 
-    // Фильтруем по статусу
-    const map = {
+        const map = {
       future: ['SCHEDULED','WAITING_FOR_OPPONENT'],
       present: ['IN_PROGRESS'],
       past: ['FINISHED','CANCELLED','BYE','AUTO_WIN','WALKOVER']
@@ -605,15 +587,13 @@ async function loadMatches(filter) {
       return;
     }
 
-    // Сортировка по дате/времени
-    filtered.sort((a,b) => {
+        filtered.sort((a,b) => {
       const dA = a.matchDate ? new Date(a.matchDate).getTime() : (filter==='past'? -Infinity: Infinity);
       const dB = b.matchDate ? new Date(b.matchDate).getTime() : (filter==='past'? -Infinity: Infinity);
       return filter==='past'? dB - dA : dA - dB;
     });
 
-    // Рендер заголовка таблицы
-    Elements.matchListContainer.innerHTML = '';
+        Elements.matchListContainer.innerHTML = '';
     Elements.matchListContainer.insertAdjacentHTML('beforeend', `
       <div class="match-list-header">
         <div><span>Start:</span></div>
@@ -622,16 +602,14 @@ async function loadMatches(filter) {
       </div>
     `);
 
-    // Предварительный загруз участников
-    const participantsData = await Promise.all(
+        const participantsData = await Promise.all(
       filtered.map(m => Promise.all([
         getParticipant(m.playerAId, m.teamAId),
         getParticipant(m.playerBId, m.teamBId)
       ]))
     );
 
-    // Рендер самих матчей
-    filtered.forEach((m, idx) => {
+        filtered.forEach((m, idx) => {
       const [L,R] = participantsData[idx];
       const dt = m.matchDate ? new Date(m.matchDate) : null;
       const tS = dt ? dt.toLocaleTimeString('pl-PL',{hour:'2-digit',minute:'2-digit'}) : 'TBD';
@@ -639,8 +617,7 @@ async function loadMatches(filter) {
       const sA = m.scoreA!==null? m.scoreA : '—';
       const sB = m.scoreB!==null? m.scoreB : '—';
 
-      // Определяем стили для победителя/проигравшего
-      let clsA='', clsB='';
+            let clsA='', clsB='';
       if (['FINISHED','AUTO_WIN','WALKOVER'].includes(m.matchStatus)) {
         const w = m.winnerPlayerId ?? m.winnerTeamId;
         const idA = m.playerAId ?? m.teamAId, idB = m.playerBId ?? m.teamBId;
@@ -667,8 +644,7 @@ async function loadMatches(filter) {
       `);
     });
 
-    // === ВАЖНО: привязываем переход по клику к каждой .match ===
-    Elements.matchListContainer.querySelectorAll('.match').forEach((el, i) => {
+        Elements.matchListContainer.querySelectorAll('.match').forEach((el, i) => {
       const matchId = filtered[i].id;
       el.style.cursor = 'pointer';
       el.addEventListener('click', () => {
@@ -683,7 +659,6 @@ async function loadMatches(filter) {
   }
 }
 
-// ==================== Bracket Logic (Stage Navigation View) ====================
 async function loadStageDataAndNav() {
   const stageNavContainer = Elements.stageNavContainer;
   if (!stageNavContainer || !Elements.matchListContainer) return;
@@ -740,8 +715,7 @@ function displayMatchesForStage(stageIndex) {
     return;
   }
 
-  // Заголовок
-  Elements.matchListContainer.insertAdjacentHTML('beforeend', `
+    Elements.matchListContainer.insertAdjacentHTML('beforeend', `
     <div class="match-list-header">
       <div><span>Start:</span></div>
       <div><span>Gra:</span></div>
@@ -749,8 +723,7 @@ function displayMatchesForStage(stageIndex) {
     </div>
   `);
 
-  // Загружаем всех участников
-  Promise.all(list.map(m => Promise.all([
+    Promise.all(list.map(m => Promise.all([
     getParticipant(m.playerAId, m.teamAId),
     getParticipant(m.playerBId, m.teamBId)
   ])))
@@ -763,8 +736,7 @@ function displayMatchesForStage(stageIndex) {
         const sA = m.scoreA!==null? m.scoreA : '—';
         const sB = m.scoreB!==null? m.scoreB : '—';
 
-        // Победитель/проигравший
-        let clsA='', clsB='';
+                let clsA='', clsB='';
         if (['FINISHED','AUTO_WIN','WALKOVER'].includes(m.matchStatus)) {
           const w = m.winnerPlayerId ?? m.winnerTeamId;
           const idA = m.playerAId ?? m.teamAId, idB = m.playerBId ?? m.teamBId;
@@ -791,8 +763,7 @@ function displayMatchesForStage(stageIndex) {
       `);
       });
 
-      // === И тут тоже привязываем переход ===
-      Elements.matchListContainer.querySelectorAll('.match').forEach((el,i) => {
+            Elements.matchListContainer.querySelectorAll('.match').forEach((el,i) => {
         const matchId = list[i].id;
         el.style.cursor = 'pointer';
         el.addEventListener('click', () => {
@@ -807,7 +778,6 @@ function displayMatchesForStage(stageIndex) {
     });
 }
 
-// ==================== Participation Check ====================
 async function userParticipates() {
   const uid = await getMeId();
   if (!uid) return false;
@@ -837,7 +807,6 @@ async function userParticipates() {
   }
 }
 
-// ==================== Registration Logic ====================
 function closeAllRegModals() {
   ['teamModal', 'playerModal'].forEach(id => {
     if (Elements[id]) {
@@ -873,8 +842,7 @@ async function openRegistration() {
   const isIndividual = gameSystemData.isIndividual;
   console.log('Tournament type:', isIndividual ? 'Individual' : 'Team');
 
-  // Refresh token before registration
-  await refreshToken();
+    await refreshToken();
   const token = localStorage.getItem('accToken');
   if (!token) {
     console.error('No valid token after refresh');
@@ -917,8 +885,7 @@ async function openRegistration() {
     return;
   }
 
-  // Team registration
-  try {
+    try {
     if (!Elements.teamModal) {
       console.error('Team modal not found');
       toast('Błąd: Brak modala drużyny. Skontaktuj się z administratorem.', true);
@@ -1114,8 +1081,7 @@ Elements.playerConfBtn?.addEventListener('click', async () => {
     return;
   }
 
-  // Check if the team is already registered
-  try {
+    try {
     const teamsInCompetition = await fetch(`${API}/competition/league-table/${COMP_ID}`, { headers: authHeaders() })
       .then(r => r.ok ? r.json() : []);
     if (teamsInCompetition.includes(_team.id)) {
@@ -1131,8 +1097,7 @@ Elements.playerConfBtn?.addEventListener('click', async () => {
 
   console.log('Submitting team registration:', { team: _team, players: _players });
   try {
-    // Refresh token before registration
-    await refreshToken();
+        await refreshToken();
     const token = localStorage.getItem('accToken');
     if (!token) {
       console.error('No valid token after refresh');
@@ -1141,8 +1106,7 @@ Elements.playerConfBtn?.addEventListener('click', async () => {
     }
     console.log('Authorization token for registration:', token);
 
-    // Construct the URL with query parameters
-    const playerParams = _players.map(id => `selectedPlayersIds=${encodeURIComponent(id)}`).join('&');
+        const playerParams = _players.map(id => `selectedPlayersIds=${encodeURIComponent(id)}`).join('&');
     const url = `${API}/competition/participation?competitionId=${encodeURIComponent(COMP_ID)}&teamId=${encodeURIComponent(_team.id)}&${playerParams}`;
     console.log('Team registration URL:', url);
 
@@ -1211,7 +1175,5 @@ async function fetchParticipantIds () {
   const onlyRegistered = rows.filter(r => r.competitionParticipantStatus === 'REGISTERED');
 
   if (gameSystemData.isIndividual) {
-    return [...new Set(onlyRegistered.map(r => r.playerId).filter(Boolean))]; // [playerId,…]
-  }
-  return [...new Set(onlyRegistered.map(r => r.teamId).filter(Boolean))];      // [teamId,…]
-}
+    return [...new Set(onlyRegistered.map(r => r.playerId).filter(Boolean))];   }
+  return [...new Set(onlyRegistered.map(r => r.teamId).filter(Boolean))];      }

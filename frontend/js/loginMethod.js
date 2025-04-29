@@ -29,14 +29,14 @@ async function Login() {
     console.log("Server response:", data);
 
     if (data.accessToken && data.refreshToken) {
-      // Сохранение токенов
+
       localStorage.setItem("refToken", data.refreshToken);
       localStorage.setItem("accToken", data.accessToken);
 
-      // Эффект fade-out перед переходом
+
       document.body.classList.add("fade-out");
 
-      // Переход через 500 мс
+
       setTimeout(() => {
         window.location.href =
           "sport-main-page.html";
@@ -52,7 +52,7 @@ async function Login() {
   }
 }
 
-// Активация кнопки "Войти" при заполнении полей
+
 document.querySelectorAll("input").forEach((input) => {
   input.addEventListener("input", () => {
     const emailOrUsername = document.getElementById("emailOrUsername").value.trim();
@@ -66,8 +66,8 @@ document.querySelectorAll("input").forEach((input) => {
   });
 });
 
-// Обработчик события
+
 submit.addEventListener("click", (e) => {
-  e.preventDefault(); // Предотвращает перезагрузку формы
+  e.preventDefault();
   Login();
 });

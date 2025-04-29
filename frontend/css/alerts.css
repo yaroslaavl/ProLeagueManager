@@ -12,7 +12,7 @@ body {
     opacity: 1;
   }
 }
-/* Стили для хедера */
+
 .header {
   display: flex;
   justify-content: center;
@@ -50,35 +50,35 @@ input
 {
   color: #808A9D;
 }
-/* Контейнер для поля поиска и иконки */
+
 .search-container {
   display: flex;
-  align-items: center; /* Центрируем иконку и инпут по вертикали */
-  position: relative; /* Для позиционирования иконки */
+  align-items: center;
+  position: relative;
 }
 .search-icon {
-  position: absolute; /* Абсолютное позиционирование иконки */
-  left: 15px; /* Отступ от левого края */
-  width: 18px; /* Размер иконки */
+  position: absolute;
+  left: 15px;
+  width: 18px;
   height: 18px;
-  pointer-events: none; /* Чтобы клик не взаимодействовал с иконкой */
+  pointer-events: none;
 }
-/* Поле поиска */
+
 .search-input {
-  padding: 15px 15px 15px 40px; /* Отступ слева увеличен для иконки */
+  padding: 15px 15px 15px 40px;
   border: none;
   border-radius: 12px;
   background-color: #EFF2F5;
   outline: none;
   font-family: Inter, sans-serif;
   color: #808A9D;
-  width: 450px; /* Ширина поля */
+  width: 450px;
 
   font-size: 14px;
   font-weight: bold;
 }
 .search-input::placeholder {
-  color: #808A9D; /* Цвет плейсхолдера */
+  color: #808A9D;
 }
 .icon-btn {
   display: flex;
@@ -100,9 +100,9 @@ input
 
 footer {
   display: flex;
-  justify-content: space-between; /* Располагаем элементы по краям */
-  align-items: center; /* Выравниваем элементы по вертикали */
-  padding: 8px 40px; /* Отступы сверху/снизу и слева/справа */
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 40px;
   color: #808A9D;
   font-size: 12px;
   background-color: #ffffff;
@@ -117,8 +117,8 @@ footer {
 .footer-content,
 .footer-links {
   display: flex;
-  flex-wrap: wrap; /* Чтобы элементы переносились на мобильных */
-  gap: 10px; /* Расстояние между элементами */
+  flex-wrap: wrap;
+  gap: 10px;
   margin-right: 80px;
 }
 
@@ -147,17 +147,17 @@ footer {
 
 @media (max-width: 600px) {
   footer {
-    flex-direction: column; /* Вертикальное расположение элементов */
-    text-align: center; /* Центрируем текст */
+    flex-direction: column;
+    text-align: center;
   }
   .footer-content,
   .footer-links {
-    justify-content: center; /* Центрируем контент */
+    justify-content: center;
   }
 }
 .header-right {
   display: flex;
-  align-items: center; /* Выравнивание по вертикали */
+  align-items: center;
   justify-content: center;
   justify-items: center;
   margin-top: 15px;
@@ -167,7 +167,7 @@ footer {
   height: 45px;
   border-radius: 20%;
   cursor: pointer;
-}/**/
+}
 .header-right > .icon-btn {
   margin-bottom: 20px;
 }
@@ -220,14 +220,14 @@ footer {
 .menu-container{
   cursor: pointer;
 }
-/*menu for sport choose*/
+
 .sporty-wrapper {
-  position: relative; /* Чтобы позиционировать меню внутри */
+  position: relative;
 }
 
 .dropdown-menu {
   position: absolute;
-  top: 70%; /* сразу под .sporty-toggle */
+  top: 70%;
   left: 50%;
   transform: translateX(-50%);
   background-color: white;
@@ -268,38 +268,38 @@ footer {
   align-items: center;
 }
 .main {
-  display: flex; /* Используем Flexbox */
-  justify-content: center; /* Центрируем содержимое по горизонтали */
-  align-items: flex-start; /* Выравниваем элементы по верхнему краю */
-  gap: 40px; /* Отступ между блоками */
-  height: auto; /* Автоматическая высота */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 40px;
+  height: auto;
   background-color: #ffffff;
 }
 
 
 .side-bar-left{
-  padding: 20px; /* Внутренние отступы */
-  min-width: 200px; /* Минимальная ширина */
-  text-align: left; /* Выравнивание текста по левому краю */
+  padding: 20px;
+  min-width: 200px;
+  text-align: left;
   font-size: 16px;
 }
 .side-bar-right {
 
-  padding: 20px; /* Внутренние отступы */
-  min-width: 200px; /* Минимальная ширина */
-  text-align: left; /* Выравнивание текста по левому краю */
+  padding: 20px;
+  min-width: 200px;
+  text-align: left;
 }
 .nav-icon {
-  width: 20px; /* Размер иконок */
+  width: 20px;
   height: 20px;
-  flex-shrink: 0; /* Предотвращаем сжатие иконок */
+  flex-shrink: 0;
   margin-bottom: -5px;
 
 }
 .side-bar-left > nav {
   display: flex;
-  flex-direction: column; /* Колонка для навигации */
-  row-gap: 10px; /* Отступ между элементами */
+  flex-direction: column;
+  row-gap: 10px;
   align-items: flex-start;
 }
 
@@ -313,11 +313,11 @@ footer {
   justify-content: left;
   width: 200px;
   height: 70px;
-  gap: 10px; /* Отступ между иконкой и текстом */
+  gap: 10px;
   text-decoration: none;
-  color: #000; /* Цвет текста */
+  color: #000;
   font-weight: bold;
-  border-radius: 12px; /* Скруглённые углы */
+  border-radius: 12px;
   transition: background-color 0.3s ease;
   transition: color 0.3s ease, background-color 0.3s ease;
 }
@@ -325,20 +325,20 @@ footer {
   margin-left: 30px;
 }
 .nav-link.active {
-  background-color: #EFF2F5; /* Слегка серый фон */
+  background-color: #EFF2F5;
   font-weight: bold;
 }
 
 .nav-link:hover {
-  color: #3861FB; /* Цвет текста при наведении */
-  background-color: #f1f1f1; /* Слегка серый фон при наведении */
+  color: #3861FB;
+  background-color: #f1f1f1;
   cursor: pointer;
 }
 
-/* Для мобильных устройств до 768px */
+
 @media (max-width: 768px) {
   .header {
-    flex-direction: column; /* Переводим хедер в вертикальный режим */
+    flex-direction: column;
     height: auto;
     gap: 10px;
   }
@@ -349,15 +349,15 @@ footer {
   }
 }
 .side-bar-right {
-  border: none; /* Убрал границы */
+  border: none;
   padding: 20px;
   width: 60%;
-  max-width: 600px; /* Ограничиваем ширину */
-  margin: 0; /* Центрируем блок по горизонтали */
+  max-width: 600px;
+  margin: 0;
 }
 .side-bar-right h2 {
   font-size: 22px;
-  margin-bottom: 20px; /* Отступ снизу для заголовка */
+  margin-bottom: 20px;
 }
 .side-bar-right
 {
@@ -409,12 +409,12 @@ footer {
   margin-top: -30px;
 }
 
-/* Исходное состояние чекбокса */
+
 .toggle-checkbox {
   display: none;
 }
 
-/* Переключатель (сам бегунок) */
+
 .toggle-switch {
   position: absolute;
   cursor: pointer;
@@ -425,7 +425,7 @@ footer {
   transition: background-color 0.3s;
 }
 
-/* Круг внутри переключателя */
+
 .toggle-switch::before {
   content: "";
   position: absolute;
@@ -438,9 +438,9 @@ footer {
   transition: transform 0.3s;
 }
 
-/* Стили при включённом состоянии */
+
 .toggle-checkbox:checked + .toggle-switch {
-  background-color: #3861FB; /* Синий цвет можно заменить на #007bff */
+  background-color: #3861FB;
 }
 
 .toggle-checkbox:checked + .toggle-switch::before {
@@ -448,7 +448,7 @@ footer {
 }
 .header-right {
   display: flex;
-  align-items: center; /* Выравнивание по вертикали */
+  align-items: center;
   justify-content: center;
   justify-items: center;
   margin-top: 15px;

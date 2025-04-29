@@ -25,7 +25,7 @@ async function refreshToken() {
 }
 document.addEventListener("DOMContentLoaded", async () => {
   try {
-    // Проверяем наличие токенов
+
     const accToken = localStorage.getItem("accToken");
     const refToken = localStorage.getItem("refToken");
 
@@ -34,10 +34,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       return;
     }
 
-    // Обновляем токены перед выполнением запроса
+
     await refreshToken();
 
-    // Загружаем роли пользователя
+
     await getRoles();
 
 
@@ -52,26 +52,26 @@ document.addEventListener("DOMContentLoaded", () => {
   const htmlLoadSpan = document.querySelector(".footer-content span:nth-child(4)");
 
   if (pageLoadSpan && htmlLoadSpan) {
-    // Ждём окончания полной загрузки страницы
+
     window.addEventListener("load", () => {
       setTimeout(() => {
         const performanceTiming = performance.timing;
 
-        // Время полной загрузки страницы
+
         const pageLoadTime = performanceTiming.loadEventEnd - performanceTiming.navigationStart;
 
-        // Время загрузки HTML
+
         const htmlLoadTime = performanceTiming.responseEnd - performanceTiming.responseStart;
 
-        // Проверяем, что значения корректны
-        const validPageLoadTime = pageLoadTime > 0 ? pageLoadTime : performance.now(); // Используем performance.now() как fallback
+
+        const validPageLoadTime = pageLoadTime > 0 ? pageLoadTime : performance.now();
         const validHtmlLoadTime = htmlLoadTime > 0 ? htmlLoadTime : 0;
 
-        // Обновляем значения в DOM с обёрткой для стилей
+
         pageLoadSpan.innerHTML = `Strona: <span class="blue">${Math.round(validPageLoadTime)}ms</span>`;
         htmlLoadSpan.innerHTML = `Szablon: <span class="blue">${Math.round(validHtmlLoadTime)}ms</span>`;
 
-        // Логируем значения для отладки
+
         console.log("Page Load Time (ms):", validPageLoadTime);
         console.log("HTML Load Time (ms):", validHtmlLoadTime);
       }, 0);
@@ -79,7 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-// Функция получения ролей пользователя
+
 async function getRoles() {
   try {
     const url = 'http://localhost:8765/user/role-group';
@@ -95,10 +95,10 @@ async function getRoles() {
 
     const data = await response.json();
 
-    // Отображение названия группы
+
     document.getElementById('user_group').innerText = data.name.replace('_', ' ');
 
-    // Очистка контейнера и добавление ролей
+
     const rolesContainer = document.getElementById('roles_list');
     rolesContainer.innerHTML = '';
 
@@ -117,7 +117,7 @@ async function getRoles() {
   }
 }
 
-// Функция выхода из системы
+
 async function logOut() {
   try {
     const accToken = localStorage.getItem("accToken");

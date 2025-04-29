@@ -1,4 +1,4 @@
-// js/match-page.js
+
 async function refreshToken(){
   try{
     const r = await fetch('http://localhost:8765/auth/refresh-token',{
@@ -19,7 +19,7 @@ async function refreshToken(){
     return;
   }
 
-  // хедер для fetch
+
   const hdr = () => {
     const t = localStorage.getItem('accToken');
     return t
@@ -27,13 +27,13 @@ async function refreshToken(){
       : {};
   };
 
-  // короткая функция для document.querySelector
+
   const $ = selector => document.querySelector(selector);
 
-  // хранит текущий матч для редактора
+
   let currentMatch = null;
 
-  /* ===== GET участник (игрок или команда) ===== */
+
   async function getParticipant(playerId, teamId) {
     if (playerId) {
       const u   = await fetch(`${API}/user/getUser/${playerId}`, { headers: hdr() }).then(r => r.json());
@@ -59,7 +59,7 @@ async function refreshToken(){
     return { type: 'unknown', id: null, name: '—', img: 'img/profile.svg', members: [] };
   }
 
-  /* ===== GET ролей текущего пользователя ===== */
+
   async function getUserRoles() {
     await refreshToken();
     const res = await fetch(`${API}/user/role-group`, { headers: hdr() });
@@ -68,9 +68,9 @@ async function refreshToken(){
     return (group.roles || []).map(r => r.name);
   }
 
-  /* ===== Показываем попап для редактирования счёта ===== */
+
   function showScoreEditor() {
-    if ($('#score-editor-modal')) return; // уже открыт
+    if ($('#score-editor-modal')) return;
 
     const modal = document.createElement('div');
     modal.id = 'score-editor-modal';
@@ -109,7 +109,7 @@ async function refreshToken(){
     $('#save-score-btn').onclick   = updateMatchScore;
   }
 
-  /* ===== Отправка изменённого счёта ===== */
+
   async function updateMatchScore() {
     const a = parseInt($('#edit-score-a').value, 10);
     const b = parseInt($('#edit-score-b').value, 10);
@@ -135,18 +135,18 @@ async function refreshToken(){
     }
   }
 
-  /* ===== Инициализация страницы матча ===== */
+
   async function initMatchPage() {
     try {
       refreshToken();
       const match = await fetch(`${API}/match/id/${MATCH_ID}`, { headers: hdr() }).then(r => r.json());
       currentMatch = match;
 
-      // проверяем, может ли юзер менять счёт
+
       const roles = await getUserRoles();
       const canEdit = roles.includes('ADMIN') || roles.includes('MODERATOR');
 
-      // Получаем данные турнира и спорта для заголовков
+
       const comp  = await fetch(`${API}/competition/get/${match.competitionId}`, { headers: hdr() }).then(r => r.json());
       const sport = await fetch(`${API}/sport/id/${comp.sportId}`, { headers: hdr() }).then(r => r.json());
 
@@ -155,23 +155,23 @@ async function refreshToken(){
         getParticipant(match.playerBId, match.teamBId)
       ]);
 
-      // Заголовки
+
       $('.main-info').textContent       = comp.name;
       $('.main-info-sport').textContent = sport.name;
 
-      // Даты
+
       const fmt = d => d
         ? new Date(d).toLocaleString('pl-PL', { dateStyle:'short', timeStyle:'short' })
         : '—';
       $('.start-date').textContent = `Start:  ${fmt(match.createdAt)}`;
       $('.end-date').textContent   = `Koniec: ${fmt(match.updatedAt)}`;
 
-      // Статус
+
       const st = $('.match-status');
       st.textContent = match.matchStatus;
       st.classList.add('blue');
 
-      // Счёт + кнопка редактировать
+
       const scoreEl = $('.score');
       scoreEl.textContent = `${match.scoreA ?? '—'} : ${match.scoreB ?? '—'}`;
       if (canEdit) {
@@ -183,15 +183,15 @@ async function refreshToken(){
         scoreEl.parentNode.insertBefore(btn, scoreEl.nextSibling);
       }
 
-      // Имена сторон
+
       $('.playerA').textContent = A.name;
       $('.playerB').textContent = B.name;
 
-      // Списки участников
+
       renderList('.playerLeft  .playerList', A, false);
       renderList('.playerRight .playerList', B, true);
 
-      // Подсветка победителя
+
       paintWinner(match, A, B);
 
     } catch (e) {
@@ -201,7 +201,7 @@ async function refreshToken(){
     }
   }
 
-  /* ===== Рендер списка участников ===== */
+
   function renderList(sel, part, right = false) {
     const box = $(sel);
     if (!box) return;
@@ -217,7 +217,7 @@ async function refreshToken(){
     });
   }
 
-  /* ===== Подкрашиваем победителя ===== */
+
   function paintWinner(match, A, B) {
     const winnerId = match.winnerPlayerId || match.winnerTeamId;
     if (!winnerId) return;
@@ -235,7 +235,7 @@ async function refreshToken(){
   document.addEventListener('DOMContentLoaded', initMatchPage);
 })();
 
-// ===== Footer Metrics =====
+
 document.addEventListener("DOMContentLoaded", () => {
   const sp1 = document.querySelector(".footer-content span:nth-child(3)");
   const sp2 = document.querySelector(".footer-content span:nth-child(4)");

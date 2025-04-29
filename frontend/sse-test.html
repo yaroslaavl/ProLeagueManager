@@ -30,7 +30,7 @@
         .error {
             color: red;
         }
-        /* ✅ Стили для всплывающих уведомлений */
+
         .toast {
             position: fixed;
             top: 20px;
@@ -64,7 +64,7 @@
     eventSource.onmessage = (event) => {
         console.log("Notification received: ", event.data);
         displayNotification(event.data);
-        showToast(event.data);  // ✅ Показываем всплывающее уведомление
+        showToast(event.data);
     };
 
     eventSource.onerror = () => {
@@ -90,7 +90,7 @@
         statusElement.style.color = isError ? "red" : "green";
     }
 
-    // ✅ Функция показа всплывающего уведомления
+
     function showToast(message) {
         const toast = document.createElement("div");
         toast.classList.add("toast");
@@ -100,7 +100,7 @@
         setTimeout(() => {
             toast.style.opacity = "0";
             setTimeout(() => toast.remove(), 500);
-        }, 5000); // Через 5 секунд удаляем уведомление
+        }, 5000);
     }
 </script>
 </body>

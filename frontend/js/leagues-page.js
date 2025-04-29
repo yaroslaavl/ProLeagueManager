@@ -1,6 +1,6 @@
-/* league‑list.js */
 
-/* ───────────────────  auth helper  ─────────────────── */
+
+
 if (localStorage.accToken && localStorage.refToken) refreshToken();
 
 async function refreshToken() {
@@ -16,7 +16,7 @@ async function refreshToken() {
   } catch(e){ console.error(e); }
 }
 
-/* ─────────────────── UI helpers ───────────────────── */
+
 document.addEventListener('DOMContentLoaded', () => {
   const p = document.querySelector('.footer-content span:nth-child(3)');
   const h = document.querySelector('.footer-content span:nth-child(4)');
@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
   applyFilters();
 });
 
-/* ───────────── caches for repeat requests ──────────── */
+
 const sysCache   = new Map();
 const sportCache = new Map();
 const cntCache   = new Map();
@@ -63,7 +63,7 @@ async function getCount(cid){
   cntCache.set(cid,arr.length); return arr.length;
 }
 
-/* ─────────────────── filter/loader ────────────────── */
+
 async function applyFilters(){
   const active=document.getElementById('active')?.checked;
   const future=document.getElementById('future')?.checked;
@@ -89,9 +89,9 @@ async function applyFilters(){
   }
   renderList(result);
 }
-window.getLeaguesByFilter=applyFilters;       // поддержка старых inline onclick
+window.getLeaguesByFilter=applyFilters;
 
-/* ─────────────── render cards ─────────────────────── */
+
 async function renderList(listData){
   const wrap=document.getElementById('leagues-list');
   wrap.innerHTML='';
@@ -127,7 +127,7 @@ async function renderList(listData){
         </a>
       </div>
     `;
-    /* при клике — кладём id и переходим */
+
     card.querySelector('.goto-league').addEventListener('click',()=>{
       localStorage.setItem('searchedLeague',c.id);
     });

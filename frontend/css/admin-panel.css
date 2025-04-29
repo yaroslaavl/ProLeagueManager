@@ -13,7 +13,7 @@ body {
     opacity: 1;
   }
 }
-/* Стили для хедера */
+
 .header {
   display: flex;
   justify-content: center;
@@ -51,35 +51,35 @@ input
 {
   color: #808A9D;
 }
-/* Контейнер для поля поиска и иконки */
+
 .search-container {
   display: flex;
-  align-items: center; /* Центрируем иконку и инпут по вертикали */
-  position: relative; /* Для позиционирования иконки */
+  align-items: center;
+  position: relative;
 }
 .search-icon {
-  position: absolute; /* Абсолютное позиционирование иконки */
-  left: 15px; /* Отступ от левого края */
-  width: 18px; /* Размер иконки */
+  position: absolute;
+  left: 15px;
+  width: 18px;
   height: 18px;
-  pointer-events: none; /* Чтобы клик не взаимодействовал с иконкой */
+  pointer-events: none;
 }
-/* Поле поиска */
+
 .search-input {
-  padding: 15px 15px 15px 40px; /* Отступ слева увеличен для иконки */
+  padding: 15px 15px 15px 40px;
   border: none;
   border-radius: 12px;
   background-color: #EFF2F5;
   outline: none;
   font-family: Inter, sans-serif;
   color: #808A9D;
-  width: 450px; /* Ширина поля */
+  width: 450px;
 
   font-size: 14px;
   font-weight: bold;
 }
 .search-input::placeholder {
-  color: #808A9D; /* Цвет плейсхолдера */
+  color: #808A9D;
 }
 .icon-btn {
   display: flex;
@@ -101,9 +101,9 @@ input
 
 footer {
   display: flex;
-  justify-content: space-between; /* Располагаем элементы по краям */
-  align-items: center; /* Выравниваем элементы по вертикали */
-  padding: 8px 40px; /* Отступы сверху/снизу и слева/справа */
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 40px;
   color: #808A9D;
   font-size: 12px;
   background-color: #ffffff;
@@ -118,8 +118,8 @@ footer {
 .footer-content,
 .footer-links {
   display: flex;
-  flex-wrap: wrap; /* Чтобы элементы переносились на мобильных */
-  gap: 10px; /* Расстояние между элементами */
+  flex-wrap: wrap;
+  gap: 10px;
   margin-right: 80px;
 }
 
@@ -148,17 +148,17 @@ footer {
 
 @media (max-width: 600px) {
   footer {
-    flex-direction: column; /* Вертикальное расположение элементов */
-    text-align: center; /* Центрируем текст */
+    flex-direction: column;
+    text-align: center;
   }
   .footer-content,
   .footer-links {
-    justify-content: center; /* Центрируем контент */
+    justify-content: center;
   }
 }
 .header-right {
   display: flex;
-  align-items: center; /* Выравнивание по вертикали */
+  align-items: center;
   justify-content: center;
   justify-items: center;
   margin-top: 15px;
@@ -168,7 +168,7 @@ footer {
   height: 45px;
   border-radius: 20%;
   cursor: pointer;
-}/**/
+}
 .header-right > .icon-btn {
   margin-bottom: 20px;
 }
@@ -221,14 +221,14 @@ footer {
 .menu-container{
   cursor: pointer;
 }
-/*menu for sport choose*/
+
 .sporty-wrapper {
-  position: relative; /* Чтобы позиционировать меню внутри */
+  position: relative;
 }
 
 .dropdown-menu {
   position: absolute;
-  top: 70%; /* сразу под .sporty-toggle */
+  top: 70%;
   left: 50%;
   transform: translateX(-50%);
   background-color: white;
@@ -431,7 +431,7 @@ footer {
   border-bottom: 1px solid #808A9D;
 }
 
-/*User admin-panel*/
+
 .user-admin-panel{
   width: 100%;
   height: 100%;
@@ -506,14 +506,14 @@ footer {
 
 
 
-/* Обёртка секции изменения ролей — точно такой же бордер и размер, как у .user-deletion */
+
 .user-admin-change-roles {
   width: 40%;
   height: 90%;
 
 }
 
-/* Контейнер поиска и результатов (аналог .search-results) */
+
 .roles-search {
   display: flex;
   flex-direction: column;
@@ -522,7 +522,7 @@ footer {
   align-items: center;
 }
 
-/* Само поле поиска */
+
 .role-search-input {
   padding: 20px;
   width: 90%;
@@ -535,7 +535,7 @@ footer {
   font-size: 16px;
 }
 
-/* Контейнер списка найденных юзеров */
+
 .role-search-result {
   margin-top: 10px;
   display: flex;
@@ -547,7 +547,7 @@ footer {
   gap: 10px;
 }
 
-/* Карточка пользователя внутри .role-search-result */
+
 .role-search-result .player {
   background-color: #ffffff;
   color: #000000;
@@ -563,18 +563,18 @@ footer {
   gap: 10px;
 }
 
-/* Аватар */
+
 .role-search-result .player-avatar {
   width: 30px;
   height: 30px;
   border-radius: 50%;
 }
-/* обёртка карточки пользователя уже есть .player { position: relative; } */
 
-/* сам дропдаун с ролями */
+
+
 .role-dropdown {
   position: absolute;
-  top: 100%;        /* сразу под .player */
+  top: 100%;
   left: 0;
   background: #fff;
   border: 1px solid #CFD6E4;
@@ -586,7 +586,7 @@ footer {
   text-align: left;
 }
 
-/* чекбоксы в выпадашке */
+
 .role-dropdown label {
   display: flex;
   align-items: center;
@@ -598,7 +598,7 @@ footer {
   margin-right: 6px;
 }
 
-/* кнопка подтверждения */
+
 .role-dropdown .btn-confirm-roles {
   display: block;
   width: 100%;
@@ -615,7 +615,7 @@ footer {
   background-color: #274cb0;
 }
 
-/* подогнали размеры стрелки */
+
 .player .role-toggle {
   width: 20px;
   height: 20px;
@@ -870,11 +870,11 @@ footer {
 .search-system>.systems-list{
   height: 460px;
 }
-/* Контейнер для каждого элемента списка */
+
 .delete-system .systems-list .system {
   display: flex;
   align-items: center;
-  justify-content: space-between; /* текст слева, кнопка — справа */
+  justify-content: space-between;
   background-color: #ffffff;
   border-radius: 8px;
   padding: 10px 12px;
@@ -882,7 +882,7 @@ footer {
   box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
 
-/* Стили для самой кнопки удаления */
+
 .delete-system .systems-list .system button {
   background-color: #d62828;
   color: #ffffff;
@@ -894,15 +894,15 @@ footer {
   transition: background-color 0.2s ease;
 }
 
-/* Hover-эффект */
+
 .delete-system .systems-list .system button:hover {
   background-color: #b31f1f;
 }
-/* === Стили для списка редактирования игровых систем === */
+
 .edit-system .systems-list .system {
   display: flex;
   align-items: center;
-  justify-content: space-between;    /* название слева, кнопка — справа */
+  justify-content: space-between;
   background-color: #ffffff;
   border-radius: 8px;
   padding: 10px 12px;
@@ -910,7 +910,7 @@ footer {
   box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
 
-/* Стили для кнопки «Edytuj» */
+
 .edit-system .systems-list .system button {
   background-color: #3861FB;
   color: #ffffff;
@@ -922,7 +922,24 @@ footer {
   transition: background-color 0.2s ease;
 }
 
-/* Hover-эффект */
+
 .edit-system .systems-list .system button:hover {
   background-color: #274cb0;
+}
+.view-btn{
+  cursor: pointer;
+  color: #FFFFFF;
+  background-color: #0d6efd;
+  border-radius: 5px;
+  border: none;
+}
+.dq-btn{
+  color: #FFFFFF;
+  background-color: #c82333;
+  border-radius: 5px;
+  border: none;
+}
+.participant-item{
+  display: flex;
+  margin: 5px;
 }

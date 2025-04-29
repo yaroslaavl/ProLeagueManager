@@ -6,26 +6,26 @@ document.addEventListener("DOMContentLoaded", () => {
   const htmlLoadSpan = document.querySelector(".footer-content span:nth-child(4)");
 
   if (pageLoadSpan && htmlLoadSpan) {
-    // Ждём окончания полной загрузки страницы
+
     window.addEventListener("load", () => {
       setTimeout(() => {
         const performanceTiming = performance.timing;
 
-        // Время полной загрузки страницы
+
         const pageLoadTime = performanceTiming.loadEventEnd - performanceTiming.navigationStart;
 
-        // Время загрузки HTML
+
         const htmlLoadTime = performanceTiming.responseEnd - performanceTiming.responseStart;
 
-        // Проверяем, что значения корректны
-        const validPageLoadTime = pageLoadTime > 0 ? pageLoadTime : performance.now(); // Используем performance.now() как fallback
+
+        const validPageLoadTime = pageLoadTime > 0 ? pageLoadTime : performance.now();
         const validHtmlLoadTime = htmlLoadTime > 0 ? htmlLoadTime : 0;
 
-        // Обновляем значения в DOM с обёрткой для стилей
+
         pageLoadSpan.innerHTML = `Strona: <span class="blue">${Math.round(validPageLoadTime)}ms</span>`;
         htmlLoadSpan.innerHTML = `Szablon: <span class="blue">${Math.round(validHtmlLoadTime)}ms</span>`;
 
-        // Логируем значения для отладки
+
         console.log("Page Load Time (ms):", validPageLoadTime);
         console.log("HTML Load Time (ms):", validHtmlLoadTime);
       }, 0);
@@ -75,8 +75,8 @@ async function logOut(){
     const response = await fetch('http://localhost:8765/auth/logout',{
       method: 'POST',
       headers: {
-        "Authorization": `Bearer ${accToken}`, // Добавляем заголовок Authorization
-        "Content-Type": "application/json" // Указываем формат данных
+        "Authorization": `Bearer ${accToken}`,
+        "Content-Type": "application/json"
       }
     });
     if (!response.ok) {
@@ -91,12 +91,12 @@ async function logOut(){
 if (document.getElementById('log-out') !== null){
   const logOutBtn = document.getElementById('log-out').addEventListener('click',logOut);
 }
-// js/admin-panel-event.js
+
 
 (() => {
   const API = 'http://localhost:8765';
 
-  // auth headers helper
+
   function hdr(contentType = 'application/json') {
     const t = localStorage.getItem('accToken');
     const h = t ? { 'Authorization': `Bearer ${t}` } : {};
@@ -104,22 +104,22 @@ if (document.getElementById('log-out') !== null){
     return h;
   }
 
-  // DOM caches
+
   const createForm    = document.querySelector('.create-event');
   const uploadListDom = document.querySelector('.upload-event-img .all-pins');
   const deleteListDom = document.querySelector('.delete-event   .all-pins');
   const btnCreate     = createForm.querySelector('button.create-sport');
 
-  // inputs in create form
+
   const inputs = createForm.querySelectorAll('input.input-data-event');
-  // order: [ title, ttl, timeUnit, matchId, competitionId ]
+
 
   function getCheckedValue(container, selector) {
     const cb = container.querySelector(`${selector}:checked`);
     return cb ? cb.value : null;
   }
 
-  // ===== Create new pinned event =====
+
   async function createPinned() {
 
     const [ titleIn, ttlIn, unitIn, matchIn, compIn ] = inputs;
@@ -161,14 +161,14 @@ if (document.getElementById('log-out') !== null){
     }
   }
 
-  // ===== Fetch all pinned events =====
+
   async function fetchPins() {
     const res = await fetch(`${API}/event/pinned`, { headers: hdr() });
     if (!res.ok) throw new Error(res.status);
     return await res.json();
   }
 
-  // ===== Render upload list =====
+
   function renderUploadList(pins) {
     uploadListDom.innerHTML = '';
     pins.forEach(pin => {
@@ -185,7 +185,7 @@ if (document.getElementById('log-out') !== null){
     });
   }
 
-  // ===== Render delete list =====
+
   function renderDeleteList(pins) {
     deleteListDom.innerHTML = '';
     pins.forEach(pin => {
@@ -202,9 +202,9 @@ if (document.getElementById('log-out') !== null){
     });
   }
 
-  // ===== Upload image for one pin =====
+
   function uploadImageFor(pinId) {
-    // создаём <input type="file">
+
     const input = document.createElement('input');
     input.type = 'file';
     input.accept = 'image/*';
@@ -213,7 +213,7 @@ if (document.getElementById('log-out') !== null){
       if (!input.files.length) return;
       const file = input.files[0];
 
-      // сразу показать превью (если нужно — ищем <img> в .pin и меняем src)
+
       const pinDiv = document.querySelector(`.upload-event-img .pin[data-id="${pinId}"]`);
       if (pinDiv) {
         const imgEl = pinDiv.querySelector('img');
@@ -222,17 +222,17 @@ if (document.getElementById('log-out') !== null){
         reader.readAsDataURL(file);
       }
 
-      // загружаем на сервер
+
       try {
         const fd = new FormData();
-        // ключ "eventimage" в lower-case, без заголовка Content-Type
+
         fd.append('eventImage', file);
 
         const res = await fetch(
           `${API}/event/upload-pinned-image/${pinId}`,
           {
             method: 'POST',
-            headers: hdr(null), // hdr(undefined) или hdr(null) пропустит Content-Type
+            headers: hdr(null),
             body: fd
           }
         );
@@ -245,11 +245,11 @@ if (document.getElementById('log-out') !== null){
       }
     };
 
-    // открываем диалог выбора
+
     input.click();
   }
 
-  // ===== Delete a pinned event =====
+
   async function deletePinned(pinId) {
     if (!confirm('Na pewno usunąć ten pin?')) return;
     try {
@@ -263,7 +263,7 @@ if (document.getElementById('log-out') !== null){
     }
   }
 
-  // ===== Fetch + render both lists =====
+
   async function fetchAndRenderAll() {
     try {
       const pins = await fetchPins();
@@ -271,11 +271,11 @@ if (document.getElementById('log-out') !== null){
       renderDeleteList(pins);
     } catch (err) {
       console.error('Failed to fetch/render pins:', err);
-      // optionally show placeholder
+
     }
   }
 
-  // ===== Init =====
+
   document.addEventListener('DOMContentLoaded', () => {
     btnCreate.addEventListener('click', createPinned);
     fetchAndRenderAll();

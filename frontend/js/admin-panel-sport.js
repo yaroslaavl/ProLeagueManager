@@ -6,26 +6,26 @@ document.addEventListener("DOMContentLoaded", () => {
   const htmlLoadSpan = document.querySelector(".footer-content span:nth-child(4)");
 
   if (pageLoadSpan && htmlLoadSpan) {
-    // Ждём окончания полной загрузки страницы
+
     window.addEventListener("load", () => {
       setTimeout(() => {
         const performanceTiming = performance.timing;
 
-        // Время полной загрузки страницы
+
         const pageLoadTime = performanceTiming.loadEventEnd - performanceTiming.navigationStart;
 
-        // Время загрузки HTML
+
         const htmlLoadTime = performanceTiming.responseEnd - performanceTiming.responseStart;
 
-        // Проверяем, что значения корректны
-        const validPageLoadTime = pageLoadTime > 0 ? pageLoadTime : performance.now(); // Используем performance.now() как fallback
+
+        const validPageLoadTime = pageLoadTime > 0 ? pageLoadTime : performance.now();
         const validHtmlLoadTime = htmlLoadTime > 0 ? htmlLoadTime : 0;
 
-        // Обновляем значения в DOM с обёрткой для стилей
+
         pageLoadSpan.innerHTML = `Strona: <span class="blue">${Math.round(validPageLoadTime)}ms</span>`;
         htmlLoadSpan.innerHTML = `Szablon: <span class="blue">${Math.round(validHtmlLoadTime)}ms</span>`;
 
-        // Логируем значения для отладки
+
         console.log("Page Load Time (ms):", validPageLoadTime);
         console.log("HTML Load Time (ms):", validHtmlLoadTime);
       }, 0);
@@ -75,8 +75,8 @@ async function logOut(){
     const response = await fetch('http://localhost:8765/auth/logout',{
       method: 'POST',
       headers: {
-        "Authorization": `Bearer ${accToken}`, // Добавляем заголовок Authorization
-        "Content-Type": "application/json" // Указываем формат данных
+        "Authorization": `Bearer ${accToken}`,
+        "Content-Type": "application/json"
       }
     });
     if (!response.ok) {
@@ -92,16 +92,16 @@ if (document.getElementById('log-out') !== null){
   const logOutBtn = document.getElementById('log-out').addEventListener('click',logOut);
 }
 
-// js/admin-panel-sport.js
+
 
 document.addEventListener('DOMContentLoaded', () => {
-  // общий заголовок авторизации
+
   const authHeader = () => ({
     'Authorization': `Bearer ${localStorage.getItem('accToken')}`,
     'Content-Type': 'application/json'
   });
 
-  // ===== 1) Создание нового спорта =====
+
   const createNameInput = document.querySelector('.create-new-sport .sport-name');
   const createEsportChk = document.querySelector('.create-new-sport input[type=checkbox]');
   const createBtn       = document.querySelector('.create-new-sport .create-sport');
@@ -133,7 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // вспомогательный fetch для поиска по названию
+
   async function searchSports(query) {
     const res = await fetch(
       `http://localhost:8765/sport/get-sports-by-name?sportName=${encodeURIComponent(query)}`,
@@ -143,7 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return await res.json();
   }
 
-  // ===== 2) Редактирование спорта =====
+
   const editInput   = document.querySelector('.edit-sport .sport-search-input');
   const editResults = document.querySelector('.edit-sport .sports-search-result');
 
@@ -179,7 +179,7 @@ document.addEventListener('DOMContentLoaded', () => {
           toggleEditMenu(card);
         });
 
-      // клик вне — закрываем все редакторы
+
       document.addEventListener('click', () => {
         const open = card.querySelector('.edit-dropdown');
         if (open) open.remove();
@@ -195,7 +195,7 @@ document.addEventListener('DOMContentLoaded', () => {
       existing.remove();
       return;
     }
-    // закроем другие
+
     document.querySelectorAll('.edit-dropdown').forEach(d => d.remove());
 
     const oldName   = card.dataset.name;
@@ -216,7 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     menu.addEventListener('click', e => e.stopPropagation());
 
-    // новое имя
+
     const nameInput = document.createElement('input');
     nameInput.type  = 'text';
     nameInput.value = oldName;
@@ -229,7 +229,7 @@ document.addEventListener('DOMContentLoaded', () => {
     nameInput.style.color = '#808A9D';
     menu.appendChild(nameInput);
 
-    // isEsport checkbox
+
     const label = document.createElement('label');
     label.style.display = 'block';
     label.style.margin = '8px 0';
@@ -237,7 +237,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const chk = label.querySelector('input');
     menu.appendChild(label);
 
-    // кнопка save
+
     const btn = document.createElement('button');
     btn.textContent = 'Zapisz';
     btn.style.display = 'block';
@@ -293,7 +293,7 @@ document.addEventListener('DOMContentLoaded', () => {
     card.appendChild(menu);
   }
 
-  // ===== 3) Удаление спорта =====
+
   const delInput   = document.querySelector('.delete-sport .sport-search-input');
   const delResults = document.querySelector('.delete-sport .sports-search-result');
 

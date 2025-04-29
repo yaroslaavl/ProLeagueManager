@@ -1,28 +1,28 @@
-// Глобальная регистрация функций
+
 window.toggleMenu = function(event) {
   const menuPopup = document.getElementById('menuPopup');
   menuPopup.classList.toggle('active');
 
-  // Останавливаем всплытие события, чтобы меню не закрылось сразу же после открытия
+
   event.stopPropagation();
 };
 
-// Закрытие меню при клике вне его
+
 document.addEventListener('click', function(event) {
   const menuPopup = document.getElementById('menuPopup');
-  const menuContainer = document.querySelector('.menu-container'); // Включает кнопку меню и само меню
+  const menuContainer = document.querySelector('.menu-container');
 
-  // Если меню активно и клик был не внутри меню и не по кнопке открытия, то закрываем меню
+
   if (menuPopup.classList.contains('active') && !menuContainer.contains(event.target)) {
     menuPopup.classList.remove('active');
   }
 });
 
-// Назначаем обработчик клика на кнопку меню и иконку пользователя
+
 document.querySelector('.menu-btn').addEventListener('click', window.toggleMenu);
 document.querySelector('.profile-btn').addEventListener('click', window.toggleMenu);
 
-// Обновление информации о пользователе
+
 window.updateUser = function(name, email, avatar) {
   document.getElementById('userName').textContent = name;
   document.getElementById('userEmail').textContent = email;
@@ -52,8 +52,8 @@ async function fetchUserInfo() {
     const data = await response.json();
     if (!data.username) throw new Error("Username is missing in response");
 
-    // Получаем URL аватара из MinIO
-    const userAvatar = await fetchUserAvatar(data.username) || "default-avatar.png"; // Подстраховка
+
+    const userAvatar = await fetchUserAvatar(data.username) || "default-avatar.png";
 
     updateUser(data.username, data.email, userAvatar);
   } catch (error) {
@@ -65,13 +65,13 @@ async function fetchUserAvatar(username) {
     const res = await fetch(`http://localhost:8765/user/avatar/${username}`);
     if (!res.ok) throw new Error(`Avatar request failed with status: ${res.status}`);
 
-    const urlImg = await res.text(); // Получаем строку вместо JSON
+    const urlImg = await res.text();
     console.log("Fetched avatar URL:", urlImg);
 
-    return urlImg.startsWith("http") ? urlImg : "default-avatar.png"; // Проверяем, вернулся ли URL
+    return urlImg.startsWith("http") ? urlImg : "default-avatar.png";
   } catch (err) {
     console.warn("Error while receiving user photo:", err);
-    return "default-avatar.png"; // Возвращаем дефолтный аватар при ошибке
+    return "default-avatar.png";
   }
 }
 async function refreshtoken() {
@@ -93,5 +93,41 @@ async function refreshtoken() {
     console.error(err);
   }
 }
-// Вызов fetchUserInfo при загрузке
+
 fetchUserInfo();
+async function fetchUserRoles() {
+  try {
+    const accToken = localStorage.getItem('accToken');
+    if (!accToken) return;
+
+    const res = await fetch('http://localhost:8765/user/role-group', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accToken}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    if (!res.ok) throw new Error('Не удалось получить роли');
+
+    const data = await res.json();
+    const roles = data.roles.map(r => r.name);
+
+
+    const adminLink = document.getElementById('adminPanelLink');
+    if (adminLink && !roles.includes('ADMIN') && !roles.includes('MODERATOR')) {
+
+      adminLink.remove();
+
+
+    }
+  } catch (err) {
+    console.error('Ошибка при проверке ролей:', err);
+  }
+}
+
+
+document.addEventListener('DOMContentLoaded', () => {
+  fetchUserInfo().finally(() => {
+    fetchUserRoles();
+  });
+});

@@ -1,4 +1,4 @@
-/* esport-main-page.js – версия с подсчётом количества активных матчей */
+
 
 document.addEventListener('DOMContentLoaded', loadMainPageCompetitions);
 document.addEventListener('DOMContentLoaded', () => {
@@ -24,17 +24,17 @@ async function loadMainPageCompetitions() {
   try {
     const accToken = localStorage.getItem('accToken');
 
-    // 1) Получаем все соревнования
+
     const resp = await fetch('http://localhost:8765/competition/all', {
       headers: { Authorization: `Bearer ${accToken}` },
     });
     if (!resp.ok) throw new Error(`Ошибка: ${resp.status}`);
     let comps = await resp.json();
 
-    // 🔥 Выводим количество активных е‑спортивных соревнований
+
     await updateActiveEsportCount(comps);
 
-    // 2) Для каждого соревнования подтягиваем спорт + баннер
+
     await Promise.all(
       comps.map(async (c) => {
         try {
@@ -65,17 +65,17 @@ async function loadMainPageCompetitions() {
       })
     );
 
-    // 3) Оставляем только е‑спорт
+
     comps = comps.filter((c) => c.isEsport === true);
 
-    // 4) Сортировка
+
     comps.sort((a, b) => {
       if (a.sportName < b.sportName) return -1;
       if (a.sportName > b.sportName) return 1;
       return new Date(a.startDate) - new Date(b.startDate);
     });
 
-    // 5) Разделяем
+
     const tours = comps.filter((c) => c.competitionType === 'TOURNAMENT').slice(0, 3);
     const leagues = comps.filter((c) => c.competitionType === 'LEAGUE').slice(0, 2);
 
@@ -97,12 +97,12 @@ function formatDateTime(d) {
   });
 }
 
-// ---------------------------
-// Подсчёт активных е‑спорт соревнований
-// ---------------------------
+
+
+
 async function updateActiveEsportCount(allCompetitions) {
   try {
-    const isEsportRequired = true; // Страница e‑sport всегда ищет только e‑sport
+    const isEsportRequired = true;
     const cache = new Map();
     let total = 0;
 
@@ -119,7 +119,7 @@ async function updateActiveEsportCount(allCompetitions) {
           if (sd.isEsport === isEsportRequired) total++;
         }
       } catch {
-        /* пропускаем при ошибке */
+
       }
     }
 
@@ -132,7 +132,7 @@ async function updateActiveEsportCount(allCompetitions) {
   }
 }
 
-/* ---------- renderTournaments / renderLeagues остаются без изменений ниже ---------- */
+
 
 async function renderTournaments(tours) {
   const cont = document.querySelector('.tournaments');
@@ -158,7 +158,7 @@ async function renderTournaments(tours) {
     `;
     cont.appendChild(el);
 
-    // Подсчёт участников
+
     try {
       const tr = await fetch(`http://localhost:8765/competition/count-of-signed-in?competitionId=${t.id}`, {
         headers: { 'Authorization': `Bearer ${localStorage.getItem('accToken')}` }
@@ -169,7 +169,7 @@ async function renderTournaments(tours) {
         if (span) span.textContent = cnt;
       }
     } catch {
-      // Оставляем "?" при ошибке
+
     }
   }
 }
@@ -205,7 +205,7 @@ async function renderLeagues(leagues) {
     `;
     cont.appendChild(el);
 
-    // Топ-3 и участники
+
     try {
       const tr = await fetch(`http://localhost:8765/competition/league-table/${l.id}`);
       if (tr.ok) {
@@ -258,46 +258,46 @@ async function renderLeagues(leagues) {
 if (document.getElementById('log-out') !== null){
   const logOutBtn = document.getElementById('log-out').addEventListener('click',logOut);
 }
-/* ===================================================================== */
-/*  e-sport-main-page.js  – блок работы с новостями                      */
-/* ===================================================================== */
+
+
+
 
 document.addEventListener('DOMContentLoaded', loadEsportNews);
 
-/* ---------- вспомогательный fetch ----------------------------------- */
+
 async function safeJson (res) {
   if (res.status === 204 || res.status === 205) return [];
   const txt = await res.text();
   return txt.trim() ? JSON.parse(txt) : [];
 }
 
-/* ---------- загружаем и строим слайды ------------------------------- */
+
 async function loadEsportNews () {
 
   const track = document.querySelector('.news-track');
-  if (!track) return;                         // на странице нет блока
+  if (!track) return;
 
   try {
     const token = localStorage.getItem('accToken') ?? '';
 
-    /* 1. получаем закреплённые события */
+
     const resp   = await fetch('http://localhost:8765/event/pinned',
       { headers:{ Authorization:`Bearer ${token}` }});
     if (!resp.ok) throw new Error(resp.status);
     let events   = await safeJson(resp);
 
-    /* 2. берём только GLOBAL + E-SPORT */
+
     events = events.filter(ev =>
       ev.category === 'GLOBAL' || ev.category === 'ESPORT');
 
-    /* 3. сортируем по дате (сначала новые) */
+
     events.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
 
-    /* 4. генерируем HTML слайдов */
+
     track.innerHTML = '';
     for (const ev of events) {
 
-      /* стараемся взять кастомную картинку события */
+
       let imgUrl = 'img/default-event.png';
       try {
         const r = await fetch(`http://localhost:8765/event/image/${ev.id}`,
@@ -306,7 +306,7 @@ async function loadEsportNews () {
           const u = await r.text();
           if (u && !u.includes('minio:9000')) imgUrl = u;
         }
-      } catch {/* ignore */ }
+      } catch { }
 
       const dateStr = new Date(ev.createdAt).toLocaleDateString('pl-PL',{
         year:'numeric',month:'2-digit',day:'2-digit'});
@@ -322,15 +322,15 @@ async function loadEsportNews () {
         </div>`);
     }
 
-    initNewsSlider();        // активируем стрелки / листание
-    initNewsNavigation();    // навигация по клику на слайд
+    initNewsSlider();
+    initNewsNavigation();
 
   } catch (err) {
     console.error('News (e-sport) error:', err);
   }
 }
 
-/* ---------- простой слайдер ---------------------------------------- */
+
 function initNewsSlider () {
 
   const track = document.querySelector('.news-track');
@@ -338,7 +338,7 @@ function initNewsSlider () {
   const next  = document.querySelector('.news-next');
   if (!track || !prev || !next) return;
 
-  const slideW   = 900 + 30;          // ширина слайда + gap (из CSS)
+  const slideW   = 900 + 30;
   const maxIndex = Math.max(0, track.children.length - 1);
   let   index    = 0;
 
@@ -353,7 +353,7 @@ function initNewsSlider () {
   update();
 }
 
-/* ---------- переходы по клику на карточку -------------------------- */
+
 function initNewsNavigation () {
 
   const track = document.querySelector('.news-track');
@@ -363,25 +363,25 @@ function initNewsNavigation () {
     const slide = e.target.closest('.news-slide');
     if (!slide) return;
 
-    const type  = slide.dataset.type;     // GLOBAL | LEAGUE | TOURNAMENT | MATCH …
+    const type  = slide.dataset.type;
     const match = slide.dataset.match;
     const comp  = slide.dataset.comp;
 
-    if (match) {                          //  🔸 матч
+    if (match) {
       localStorage.setItem('searchedMatch', match);
       location.href = 'match-page.html';
       return;
     }
 
-    if (comp) {                           //  🔸 лига или турнир
+    if (comp) {
       if (type === 'LEAGUE') {
         localStorage.setItem('searchedLeague', comp);
         location.href = 'leagues.html';
-      } else {                            //  считаем остальное турниром
+      } else {
         localStorage.setItem('searchedTournament', comp);
         location.href = 'tournaments.html';
       }
     }
-    /* GLOBAL –– остаёмся на странице */
+
   });
 }
