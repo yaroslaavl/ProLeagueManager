@@ -1,6 +1,7 @@
 name: "CodeQL – Backend Scan"
 
 on:
+  workflow_dispatch:
   push:
     branches: [ "master" ]
     paths:
