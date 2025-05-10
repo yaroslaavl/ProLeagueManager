@@ -5,13 +5,13 @@ on:
   push:
     branches: [ "master" ]
     paths:
-      - "backend/**"          # реагируем только на изменения в backend
+      - "backend/**"
   pull_request:
     branches: [ "master" ]
     paths:
       - "backend/**"
   schedule:
-    - cron: '0 3 * * 1'       # еженедельно по понедельникам в 03:00 UTC
+    - cron: '0 3 * * 1'
 
 jobs:
   analyze-backend:
@@ -32,9 +32,8 @@ jobs:
         languages: java-kotlin
         build-mode: manual
 
-    - name: Build backend module
-      # собираем только папку backend, пропуская тесты для скорости
-      run: mvn -f backend/pom.xml clean install -DskipTests
+    - name: Build backend module (skip Flyway)
+      run: mvn -f backend/pom.xml clean install -DskipTests -Dflyway.skip=true
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
