@@ -194,7 +194,7 @@ function openConfirmationDialog() {
 
 
   const title = document.createElement("h2");
-  title.textContent = "Czy napewno chcesz kontynuowac?";
+  title.textContent = "Czy napewno chcesz kontynuować?";
   const paragraph = document.createElement("p");
   paragraph.innerHTML = " - Opuścisz drużynę i nie będziesz już mógł uczestniczyć w przyszłych turniejach ani meczach. <br> - Jeśli jesteś menadżerem drużyny, Twoja rola zostanie przeniesiona na kapitana lub starszego gracza. <br> - Jeśli jesteś jedynym graczem w drużynie, Twoja drużyna zostanie usunięta z listy zespolow!"
   paragraph.style.color = "#808A9D";

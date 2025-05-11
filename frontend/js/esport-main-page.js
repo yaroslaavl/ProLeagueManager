@@ -28,7 +28,7 @@ async function loadMainPageCompetitions() {
     const resp = await fetch('http://localhost:8765/competition/all', {
       headers: { Authorization: `Bearer ${accToken}` },
     });
-    if (!resp.ok) throw new Error(`Ошибка: ${resp.status}`);
+    if (!resp.ok) throw new Error(`Error: ${resp.status}`);
     let comps = await resp.json();
 
 
@@ -125,7 +125,7 @@ async function updateActiveEsportCount(allCompetitions) {
 
     const tittleDown = document.querySelector('.tittle-down p');
     if (tittleDown) {
-      tittleDown.innerHTML = `Aktywnych zawodow: <strong>${total}</strong>`;
+      tittleDown.innerHTML = `Aktywnych zawodów: <strong>${total}</strong>`;
     }
   } catch (err) {
     console.error('Ошибка при подсчёте активных матчей (e‑sport):', err);
@@ -151,7 +151,7 @@ async function renderTournaments(tours) {
       <div class="start-date"><p class="tournament-tittle">Start:</p><p>${start}</p></div>
       <div class="end-date"><p class="tournament-tittle">Koniec:</p><p>${end}</p></div>
       <div class="game-system"><p class="tournament-tittle">Sport:</p><p class="system">${t.sportName ?? '?'}</p></div>
-      <div class="teams"><p class="tournament-tittle">Zespoly:</p><p class="count">?</p></div>
+      <div class="teams"><p class="tournament-tittle">Zespoły:</p><p class="count">?</p></div>
       <a href="tournaments.html" onclick="localStorage.setItem('searchedTournament','${t.id}');">
         <img src="img/style=linear.svg" alt="" style="height:20px;margin-top:40px">
       </a>
@@ -199,7 +199,7 @@ async function renderLeagues(leagues) {
         <div class="start-date"><p class="tournament-tittle">Start:</p><p>${start}</p></div>
         <div class="end-date"><p class="tournament-tittle">Koniec:</p><p>${end}</p></div>
         <div class="game-system"><p class="tournament-tittle">Sport:</p><p class="system">${l.sportName ?? '?'}</p></div>
-        <div class="teams"><p class="tournament-tittle">Zespoly:</p><p class="count">?</p></div>
+        <div class="teams"><p class="tournament-tittle">Zespoły:</p><p class="count">?</p></div>
       </div>
       <div class="top"></div>
     `;
