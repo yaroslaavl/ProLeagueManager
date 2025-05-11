@@ -117,7 +117,7 @@ if (document.getElementById('log-out') !== null) {
   const deleteListDom   = document.querySelector('.delete-competition .competitions-list');
 
 
-  const SPORT_ID = 2;
+
 
 
   async function fetchGameSystems() {
@@ -150,10 +150,12 @@ if (document.getElementById('log-out') !== null) {
       alert('Wypełnij wszystkie pola.');
       return;
     }
-
+    const res = await fetch(`http://localhost:8765/game-system/get/${gameSystemId}`)
+    let data = await res.json();
+    const sportId = data.sportId;
     try {
       await refreshToken();
-      const url  = `${API}/competition/create?gameSystemId=${encodeURIComponent(gameSystemId)}&sportId=${SPORT_ID}`;
+      const url  = `${API}/competition/create?gameSystemId=${encodeURIComponent(gameSystemId)}&sportId=${sportId}`;
       const body = { name:name, competitionType: type, startDate :   start, endDate: end };
       console.log(body)
       const res  = await fetch(url, {
@@ -395,7 +397,7 @@ if (document.getElementById('log-out') !== null) {
 
 
 
-  function renderDisqList(comps) {
+  function renderDisqList(comps)              {
     const disqListDom = document.querySelector('.disqualification-competition .competitions-list');
     disqListDom.innerHTML = '';
 
